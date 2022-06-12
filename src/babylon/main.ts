@@ -1,9 +1,11 @@
-import { Engine, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Engine, FreeCamera, HemisphericLight, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { addAvatar, Avatar } from "./avatar";
 
 var canvas: HTMLCanvasElement;
 var engine: Engine;
 var scene: Scene;
 var sceneToRender: Scene;
+var sphere1: Mesh;
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
   engine.runRenderLoop(function () {
@@ -16,9 +18,6 @@ var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
 var createDefaultEngine = function () { return new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false }); };
 
 var createScene = function () {
-
-  console.log({ engine, canvas });
-
 
   // This creates a basic Babylon Scene object (non-mesh)
   var scene = new Scene(engine!);
@@ -38,14 +37,10 @@ var createScene = function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
-  var sphere = MeshBuilder.CreateSphere("sphere1", { segments: 16, diameter: 2 }, scene);
+  sphere1 = new Avatar(scene);
 
-  // Move the sphere upward 1/2 its height
-  sphere.position.y = 1;
-
-  // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
-  var ground = MeshBuilder.CreateGround("ground1", { width: 6, height: 6, subdivisions: 2 }, scene);
+  // Our built- shape. Params: name, width, depth, subdivs, scene
+  var ground = MeshBuilder.CreateGround("ground1", { width: 10, height: 10, subdivisions: 2 }, scene);
 
   return scene;
 
@@ -53,6 +48,7 @@ var createScene = function () {
 
 export let initFunction = async function () {
   canvas = document.getElementById("canvas") as HTMLCanvasElement
+
   var asyncEngineCreation = async function () {
     try {
       return createDefaultEngine();
@@ -63,9 +59,22 @@ export let initFunction = async function () {
   }
 
   engine = await asyncEngineCreation();
-  if (!engine) throw 'engine should not be null.';
+  if (!engine) throw new Error('engine should not be null.');
   startRenderLoop(engine, canvas);
   scene = createScene();
+
+  canvas.onkeydown = evt => {
+    if (evt.key == "w") {
+      sphere1.position.z++;
+    } else if (evt.key === "s") {
+      sphere1.position.z--;
+    } else if (evt.key === "d") {
+      sphere1.position.x++;
+    } else if (evt.key === "a") {
+      sphere1.position.x--;
+    }
+  }
+  window.avatar = sphere1
 };
 
 
@@ -77,3 +86,12 @@ initFunction().then(() => {
 window.addEventListener("resize", function () {
   engine.resize();
 });
+
+declare global {
+  interface Window {
+    addAvatar: (() => Avatar),
+    avatar: Mesh
+  }
+}
+
+window.addAvatar = () => addAvatar(scene)
