@@ -5,7 +5,7 @@ var canvas: HTMLCanvasElement;
 var engine: Engine;
 var scene: Scene;
 var sceneToRender: Scene;
-var sphere1: Mesh;
+var sphere1: Avatar;
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
   engine.runRenderLoop(function () {
@@ -53,7 +53,7 @@ export let initFunction = async function () {
     try {
       return createDefaultEngine();
     } catch (e) {
-      console.log("the available createEngine function failed. Creating the default engine instead");
+      console.error("the available createEngine function failed. Creating the default engine instead");
       return createDefaultEngine();
     }
   }
@@ -63,17 +63,7 @@ export let initFunction = async function () {
   startRenderLoop(engine, canvas);
   scene = createScene();
 
-  canvas.onkeydown = evt => {
-    if (evt.key == "w") {
-      sphere1.position.z++;
-    } else if (evt.key === "s") {
-      sphere1.position.z--;
-    } else if (evt.key === "d") {
-      sphere1.position.x++;
-    } else if (evt.key === "a") {
-      sphere1.position.x--;
-    }
-  }
+  canvas.onkeydown = evt => sphere1.move(evt.key)
   window.avatar = sphere1
 };
 
