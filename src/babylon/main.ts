@@ -1,12 +1,12 @@
 import { Engine, FreeCamera, HemisphericLight, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { addAvatar, Avatar } from "./avatar";
-import { connect_to_ws } from "./connectionWS";
+import { ws, player_list, username, connect_to_ws } from "./connectionWS";
 
 var canvas: HTMLCanvasElement;
 var engine: Engine;
-var scene: Scene;
+export var scene: Scene;
 var sceneToRender: Scene;
-var sphere1: Avatar;
+export var sphere1: Avatar;
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
   engine.runRenderLoop(function () {
@@ -72,6 +72,12 @@ export let initFunction = async function () {
   canvas.onkeydown = evt => sphere1.move(evt.key)
   window.avatar = sphere1
 };
+
+export function set_my_sphere() {
+  if (sphere1) sphere1.dispose();
+  let player_sphere = player_list.get(username);
+  if (player_sphere != undefined) sphere1 = player_sphere;
+}
 
 
 initFunction().then(() => {
