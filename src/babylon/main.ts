@@ -1,5 +1,6 @@
 import { Engine, FreeCamera, HemisphericLight, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { addAvatar, Avatar } from "./avatar";
+import { connect_to_ws } from "./connectionWS";
 
 var canvas: HTMLCanvasElement;
 var engine: Engine;
@@ -62,6 +63,8 @@ export let initFunction = async function () {
   if (!engine) throw new Error('engine should not be null.');
   startRenderLoop(engine, canvas);
   scene = createScene();
+
+  connect_to_ws();
 
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
