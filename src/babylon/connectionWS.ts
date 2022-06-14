@@ -14,5 +14,5 @@ export function connect_to_ws() {
                 route: "login",
                 content: username
             })),
-        10000);
+        10);
 }
