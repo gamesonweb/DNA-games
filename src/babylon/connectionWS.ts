@@ -9,9 +9,9 @@ export var username: string;
 
 export function connect_to_ws() {
     //RUNNING SERVER ON LOCAL FOR DEV
-    ws = new WebSocket("ws://127.0.0.1:8080");
+    //ws = new WebSocket("ws://127.0.0.1:8080");
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    //var ws = new WebSocket("ws://babylongameserver.herokuapp.com/");
+    var ws = new WebSocket("ws://babylongameserver.herokuapp.com/");
     var username_entry = prompt("Enter your username: ");
     username = username_entry ? username_entry : "";
     if (username == "") {
