@@ -1,6 +1,6 @@
 import { Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
-import { scene, set_my_sphere, sphere1 } from "./main";
+import { scene, set_my_sphere } from "./main";
 import { makeid } from "./tools";
 
 export var ws: WebSocket;
