@@ -25,7 +25,7 @@ export function connect_to_ws() {
         username = makeid(10);
     }
 
-    //small timeout to give the websocket the time to open
+    //small timeout to give the websocket the time to open, then login with the given username
     setTimeout(() => {
         ws.send(
             JSON.stringify(
@@ -36,11 +36,12 @@ export function connect_to_ws() {
     },
         1000);
 
-    //procedure on message received from server
+    //procedure on messages received from server
     ws.addEventListener('message', function (event) {
-        //console.log("received message: " + event.data);
         let messageReceived = JSON.parse(event.data);
         switch (messageReceived.route) {
+
+            //login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
             case 'login': {
                 var sphere = new Avatar(scene);
                 var sender_name = messageReceived.content;
@@ -49,31 +50,35 @@ export function connect_to_ws() {
                 console.log("LOGIN IN: " + sender_name + ", new player list: " + player_list);
                 break;
             }
+
+            //logout route: dispose player's avatar, remove player's entry in the player_list map
             case 'logout': {
                 //console.log("received logout message: " + messageReceived.content);
                 let avatar_to_disconnect = player_list.get(messageReceived.content);
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
+                player_list.delete(messageReceived.content);
                 break;
             }
+
+            //message: TODO?
             case 'message': {
                 //let messaSgeContent = JSON.parse(messageReceived.content);
                 //console.log("received message message: " + messageReceived.content);
                 break;
             }
+
+            //message: TODO? might get removed
             case 'userlist': {
                 //console.log("received userlist message: " + messageReceived.content);
                 break;
             }
+
+            //position: add the player if they aren't in our list yet, move the avatar to the input position
             case 'position': {
                 //We parse the message's content to get something of the form:
                 //{pos_x: int, pos_y: int, pos_z: int, username: string}
                 let messageContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
-
-                //for debugging
-                // console.log("received position update message: " + messageReceived.content);
-                // console.log("player_list: " + [...player_list.keys()]);
-                // console.log("message's username: " + messageContent.username);
 
                 //We find the avatar linked to the username in our player_list map
                 let avatar_to_move = player_list.get(messageContent.username);
@@ -95,6 +100,8 @@ export function connect_to_ws() {
 
                 break;
             }
+
+            //default: the route received does not exist. Should not happen, look for debugging!
             default: console.log("received a message from server with an invalid route: ");
         }
     });
@@ -107,7 +114,7 @@ export function connect_to_ws() {
                 pos_z: player_list.get(username)?.position.z,
                 username: username,
             })
-            console.log("will send " + position_player);
+            //console.log("will send " + position_player);
             ws.send(
                 JSON.stringify({
                     route: "position",
