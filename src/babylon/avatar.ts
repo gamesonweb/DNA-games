@@ -6,7 +6,7 @@ export class Avatar extends Mesh {
   counter: number;
   sphere: Mesh;
   avatar_username: String;
-  cameraAvatar: FollowCamera;
+  // cameraAvatar: FollowCamera;
 
   constructor(scene: Scene, avatar_username: String) {
     super("Avatar" + Avatar.counter, scene);
@@ -20,12 +20,12 @@ export class Avatar extends Mesh {
     this.sphere = sphere;
 
     this.avatar_username = avatar_username;
-    this.cameraAvatar = new FollowCamera(this.name + "Camera", this.position.multiply(new Vector3(1, -1, 1)), scene, this);
-    this.cameraAvatar.rotationOffset = 180;
-    var text1 = new BABYLON.GUI.TextBlock();
-    text1.text = this.avatar_username.toString();
-    text1.color = "white";
-    text1.fontSize = 24;
+    // this.cameraAvatar = new FollowCamera(this.name + "Camera", this.position.multiply(new Vector3(1, -1, 1)), scene, this);
+    // this.cameraAvatar.rotationOffset = 180;
+    // var text1 = new BABYLON.GUI.TextBlock();
+    // text1.text = this.avatar_username.toString();
+    // text1.color = "white";
+    // text1.fontSize = 24;
     //var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
     // this.addChild(text1);
     //text1.parent = this.sphere;
@@ -59,7 +59,7 @@ export class Avatar extends Mesh {
 
   dispose(doNotRecurse?: boolean | undefined, disposeMaterialAndTextures?: boolean | undefined): void {
     super.dispose(doNotRecurse, disposeMaterialAndTextures)
-    this.cameraAvatar.dispose()
+    // this.cameraAvatar.dispose()
   }
 }
 

@@ -1,4 +1,4 @@
-import { Engine, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Engine, FreeCamera, FollowCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
 import { connect_to_ws, player_list, username } from "./connectionWS";
 
@@ -82,8 +82,11 @@ export function set_my_sphere() {
   sphere1?.dispose();
   let player_sphere = player_list.get(username);
   if (player_sphere) {
-    scene.setActiveCameraByName(player_sphere.cameraAvatar.name)
+    //scene.setActiveCameraByName(player_sphere.cameraAvatar.name)
     sphere1 = player_sphere;
+    let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.position.multiply(new Vector3(1, -1, 1)), scene, sphere1);
+    cameraBuilder.rotationOffset = 180;
+    scene.activeCamera = cameraBuilder;
   }
 }
 
