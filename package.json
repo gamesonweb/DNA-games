@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "babylonjs": "^5.10.0",
+    "babylonjs-gui": "^5.10.0",
     "downloadjs": "^1.4.7",
     "pdf-lib": "^1.17.1",
     "react": "^16.13.1",

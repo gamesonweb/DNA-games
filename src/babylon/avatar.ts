@@ -1,4 +1,5 @@
 import { FollowCamera, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import * as GUI from 'babylonjs-gui';
 
 export class Avatar extends Mesh {
   static counter = 0;
@@ -21,6 +22,18 @@ export class Avatar extends Mesh {
     this.avatar_username = avatar_username;
     this.cameraAvatar = new FollowCamera(this.name + "Camera", this.position.multiply(new Vector3(1, -1, 1)), scene, this);
     this.cameraAvatar.rotationOffset = 180;
+    var text1 = new BABYLON.GUI.TextBlock();
+    text1.text = this.avatar_username.toString();
+    text1.color = "white";
+    text1.fontSize = 24;
+    //var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
+    // this.addChild(text1);
+    //text1.parent = this.sphere;
+    // J'ai essayé ça en l'initalisisant dans la scene mais ça n'a pas marché: advancedTexture.addControl(text1);
+    // text1.linkWithMesh(this.sphere);
+    // text1.parent(sphere);
+    // text1.linkOffsetX = 0;
+    // text1.linkOffsetY = -150;
   }
 
   move(evt: string) {
