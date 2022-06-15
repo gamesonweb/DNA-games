@@ -8,10 +8,17 @@ export var player_list: Map<string, Avatar> = new Map();
 export var username: string;
 
 export function connect_to_ws() {
+
+    // !!!!!! CHANGE COMMENTED LINE TO CONNECT TO HEROKU BEFORE PUSHING A BUILD !!!!! \\
+    //first line is to connect on a local server for testing, second is to connect on the heroku server
+
     //RUNNING SERVER ON LOCAL FOR DEV
-    //ws = new WebSocket("ws://127.0.0.1:8080");
+    ws = new WebSocket("ws://127.0.0.1:8080");
+
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    var ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    //var ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+
+    //Ask username to user. If they fail to give one, give them a random id
     var username_entry = prompt("Enter your username: ");
     username = username_entry ? username_entry : "";
     if (username == "") {
