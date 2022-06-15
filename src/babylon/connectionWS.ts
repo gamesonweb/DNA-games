@@ -25,17 +25,28 @@ export function connect_to_ws() {
         username = makeid(10);
     }
 
-    //small timeout to give the websocket the time to open, then login with the given username
+    //small timeout to give the websocket the time to open
     setTimeout(() => {
-        ws.send(
-            JSON.stringify(
-                {
-                    route: "login",
-                    content: username
-                }));
+        setUsername();
+        setSocketMessageListener();
+        //setPositionUpdateSender();
     },
-        1000);
+        100);
 
+}
+
+//login to the server with the given username
+function setUsername() {
+    ws.send(
+        JSON.stringify(
+            {
+                route: "login",
+                content: username
+            }));
+}
+
+//our websocket listen to incoming messages
+function setSocketMessageListener() {
     //procedure on messages received from server
     ws.addEventListener('message', function (event) {
         let messageReceived = JSON.parse(event.data);
@@ -46,9 +57,20 @@ export function connect_to_ws() {
                 var sphere = new Avatar(scene);
                 var sender_name = messageReceived.content;
                 player_list.set(sender_name, sphere);
-                if (sender_name == username) set_my_sphere();
-                console.log("LOGIN IN: " + sender_name + ", new player list: " + player_list);
+                if (sender_name == username) {
+                    set_my_sphere();
+                    setPositionUpdateSender()
+                }
+                console.log("LOGIN IN: " + messageReceived.content + ", new player list: " + player_list);
                 break;
+            }
+
+            case 'usernameSetter': {
+                // var sphere = new Avatar(scene);
+                console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
+                username = messageReceived.content;
+                // player_list.set(username, sphere);
+                // set_my_sphere();
             }
 
             //logout route: dispose player's avatar, remove player's entry in the player_list map
@@ -85,7 +107,7 @@ export function connect_to_ws() {
 
                 //if we found nothing, we add the username in the player_list map, and associate it with a new avatar
                 if (avatar_to_move == undefined) {
-                    console.log("FAILED TO FIND PLAYER, ADDING IT TO THE LIST");
+                    console.log("failed ot find player " + messageContent.username + ", adding him to the list.");
                     player_list.set(messageContent.username, new Avatar(scene));
                     avatar_to_move = player_list.get(messageContent.username);
                 }
@@ -96,7 +118,7 @@ export function connect_to_ws() {
                 //for debugging, should NOT happen ever
                 else { console.log("WTF???????") }
 
-                console.log("position avatar to move: " + avatar_to_move?.position);
+                //console.log("position avatar to move: " + avatar_to_move?.position);
 
                 break;
             }
@@ -104,8 +126,11 @@ export function connect_to_ws() {
             //default: the route received does not exist. Should not happen, look for debugging!
             default: console.log("received a message from server with an invalid route: ");
         }
-    });
+    })
+}
 
+//the client regularly send its player's position
+function setPositionUpdateSender() {
     setInterval(() => {
         if (username && player_list.get(username)) {
             var position_player = JSON.stringify({
@@ -121,8 +146,8 @@ export function connect_to_ws() {
                     content: position_player
                 }))
         }
+        else { console.log("player not in his own client DEBUG: " + username + ", " + player_list.get(username) + ", in " + [...player_list.entries()]); }
 
     },
         100);
-
 }
