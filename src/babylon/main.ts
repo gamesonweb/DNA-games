@@ -39,7 +39,7 @@ var createScene = function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  sphere1 = new Avatar(scene);
+  sphere1 = new Avatar(scene, "");
 
   // Our built- shape. Params: name, width, depth, subdivs, scene
   var ground = MeshBuilder.CreateGround("ground1", { width: 10, height: 10, subdivisions: 2 }, scene);
@@ -99,4 +99,4 @@ declare global {
   }
 }
 
-window.addAvatar = () => addAvatar(scene)
+//window.addAvatar = (avatar_username: String) => addAvatar(scene, avatar_username)

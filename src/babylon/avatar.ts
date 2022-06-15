@@ -4,8 +4,9 @@ export class Avatar extends Mesh {
   static counter = 0;
   counter: number;
   sphere: Mesh;
+  avatar_username: String;
 
-  constructor(scene: Scene) {
+  constructor(scene: Scene, avatar_username: String) {
     super("Avatar" + Avatar.counter, scene);
     this.counter = Avatar.counter;
     Avatar.counter++;
@@ -14,6 +15,7 @@ export class Avatar extends Mesh {
     sphere.parent = this;
     this.addChild(sphere)
     this.sphere = sphere;
+    this.avatar_username = avatar_username;
   }
 
   move(evt: string) {
@@ -38,6 +40,6 @@ export class Avatar extends Mesh {
   }
 }
 
-export function addAvatar(scene: Scene) {
-  return new Avatar(scene)
+export function addAvatar(scene: Scene, avatar_username: String) {
+  return new Avatar(scene, avatar_username)
 }
