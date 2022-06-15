@@ -1,11 +1,22 @@
-import { Vector3 } from "babylonjs";
+import { Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
+import { Bullet } from "./bullet";
 import { scene, set_my_sphere } from "./main";
 import { makeid } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
 export var username: string;
+export var meshes: Mesh[] = [];
+
+window.playerList = player_list;
+
+type position = { pos_x: number, pos_y: number, pos_z: number, }
+
+type receiveContent = {
+    pos_x: number, pos_y: number, pos_z: number,
+    username: string, bullets: position[]
+}
 
 export function connect_to_ws() {
 
@@ -16,7 +27,7 @@ export function connect_to_ws() {
     ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    //ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    // ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
     //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
@@ -101,7 +112,7 @@ function setSocketMessageListener() {
             case 'position': {
                 //We parse the message's content to get something of the form:
                 //{pos_x: int, pos_y: int, pos_z: int, username: string}
-                let messageContent = JSON.parse(messageReceived.content);
+                let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
 
                 //We find the avatar linked to the username in our player_list map
@@ -115,7 +126,16 @@ function setSocketMessageListener() {
                 }
 
                 //avatar_to_move should now be affected and we can give it the new position
-                if (avatar_to_move) avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
+                if (avatar_to_move) {
+                    avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
+
+                    // NOE : comment montrer les boulette aux autres ?
+                    messageContent.bullets.forEach(({ pos_x, pos_y, pos_z }) => {
+                        let b = new Bullet(avatar_to_move!);
+                        b.speedCoeff = -1
+                        b.position = new Vector3(pos_x, pos_y, pos_z)
+                    })
+                }
 
                 //for debugging, should NOT happen ever
                 else { console.log("WTF???????") }
@@ -134,12 +154,15 @@ function setSocketMessageListener() {
 //the client regularly send its player's position
 function setPositionUpdateSender() {
     setInterval(() => {
-        if (username && player_list.get(username)) {
+        let player: Avatar | undefined;
+
+        if (username && (player = player_list.get(username))) {
             var position_player = JSON.stringify({
-                pos_x: player_list.get(username)?.position.x,
-                pos_y: player_list.get(username)?.position.y,
-                pos_z: player_list.get(username)?.position.z,
+                pos_x: player.position.x,
+                pos_y: player.position.y,
+                pos_z: player.position.z,
                 username: username,
+                bullets: player.bulletList.map(e => objToPosition(e))
             })
             //console.log("will send " + position_player);
             ws.send(
@@ -152,4 +175,8 @@ function setPositionUpdateSender() {
 
     },
         50);
+}
+
+export function objToPosition({ position }: Mesh): position {
+    return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }

@@ -1,4 +1,4 @@
-import { Engine, FreeCamera, FollowCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
 import { connect_to_ws, player_list, username } from "./connectionWS";
 
@@ -12,6 +12,7 @@ var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
+      player_list.forEach(e => e.updateBulletPosition())
     }
   });
   engine.resize()
@@ -74,7 +75,7 @@ export let initFunction = async function () {
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
   // OF evt.key. That means AVATARS[PLAYER-X].move(evt.key)
-  canvas.onkeydown = evt => sphere1?.move(evt.key)
+  canvas.onkeydown = evt => sphere1?.move(evt.code)
   return scene
 };
 
@@ -106,7 +107,9 @@ declare global {
     playerList: Map<string, Avatar>,
     scene: Scene,
     engine: Engine
+    BABYLON: any;
   }
 }
 
+window.BABYLON = BABYLON;
 //window.addAvatar = (avatar_username: String) => addAvatar(scene, avatar_username)
