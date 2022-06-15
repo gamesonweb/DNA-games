@@ -44,6 +44,8 @@ export function connect_to_ws() {
             }
             case 'logout': {
                 //console.log("received logout message: " + messageReceived.content);
+                let avatar_to_disconnect = player_list.get(messageReceived.content);
+                if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 break;
             }
             case 'message': {
@@ -62,16 +64,16 @@ export function connect_to_ws() {
                 if (messageContent.username == username) break;
 
                 //for debugging
-                console.log("received position update message: " + messageReceived.content);
-                console.log("player_list: " + [...player_list.keys()]);
-                console.log("message's username: " + messageContent.username);
+                // console.log("received position update message: " + messageReceived.content);
+                // console.log("player_list: " + [...player_list.keys()]);
+                // console.log("message's username: " + messageContent.username);
 
                 //We find the avatar linked to the username in our player_list map
                 let avatar_to_move = player_list.get(messageContent.username);
 
                 //if we found nothing, we add the username in the player_list map, and associate it with a new avatar
                 if (avatar_to_move == undefined) {
-                    console.log("FAILED DE FIND PLAYER, ADDING IT TO THE LIST");
+                    console.log("FAILED TO FIND PLAYER, ADDING IT TO THE LIST");
                     player_list.set(messageContent.username, new Avatar(scene));
                     avatar_to_move = player_list.get(messageContent.username);
                 }
