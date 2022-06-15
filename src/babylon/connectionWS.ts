@@ -18,9 +18,11 @@ export function connect_to_ws() {
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
     ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
-    //Ask username to user. If they fail to give one, give them a random id
+    //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
-    username = username_entry ? username_entry : "";
+    var formatted_username_entry = username_entry?.replace(/["']/g, "");
+    username = formatted_username_entry ? formatted_username_entry : "";
+
     if (username == "") {
         username = makeid(10);
     }
