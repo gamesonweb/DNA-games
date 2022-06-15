@@ -1,13 +1,15 @@
-import { Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { FollowCamera, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
 
 export class Avatar extends Mesh {
   static counter = 0;
   counter: number;
   sphere: Mesh;
   avatar_username: String;
+  cameraAvatar: FollowCamera;
 
   constructor(scene: Scene, avatar_username: String) {
     super("Avatar" + Avatar.counter, scene);
+    this.name = "Avatar" + Avatar.counter
     this.counter = Avatar.counter;
     Avatar.counter++;
     this.position = new Vector3(this.counter, 1, 0);
@@ -15,7 +17,10 @@ export class Avatar extends Mesh {
     sphere.parent = this;
     this.addChild(sphere)
     this.sphere = sphere;
+
     this.avatar_username = avatar_username;
+    this.cameraAvatar = new FollowCamera(this.name + "Camera", this.position.multiply(new Vector3(1, -1, 1)), scene, this);
+    this.cameraAvatar.rotationOffset = 180;
   }
 
   move(evt: string) {
@@ -37,6 +42,11 @@ export class Avatar extends Mesh {
         break;
       }
     }
+  }
+
+  dispose(doNotRecurse?: boolean | undefined, disposeMaterialAndTextures?: boolean | undefined): void {
+    super.dispose(doNotRecurse, disposeMaterialAndTextures)
+    this.cameraAvatar.dispose()
   }
 }
 
