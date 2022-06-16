@@ -24,10 +24,10 @@ export function connect_to_ws() {
     //first line is to connect on a local server for testing, second is to connect on the heroku server
 
     //RUNNING SERVER ON LOCAL FOR DEV
-    ws = new WebSocket("ws://127.0.0.1:8080");
+    //ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    //ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
     //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
@@ -129,23 +129,23 @@ function setSocketMessageListener() {
                     avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
                     let target = avatar_to_move.position.add(messageContent.direction);
                     avatar_to_move.lookAt(target);
-
-                    //console.log(new Vector3(messageContent.direction.x, messageContent.direction.y, messageContent.direction.z));
-                    //avatar_to_move.setDirection(new Vector3(messageContent.direction.x, messageContent.direction.y, messageContent.direction.z));
                 }
 
                 //for debugging, should NOT happen ever
                 else { console.log("WTF???????") }
 
-                //console.log("position avatar to move: " + avatar_to_move?.position);
-
                 break;
             }
 
             case 'fireBullet': {
-                if (messageReceived.username != username) {
-                    let firing_player = player_list.get(messageReceived.username)
-                    if (firing_player) { firing_player.addBullet(true); }
+                console.log("received fireBullet route from " + messageReceived.content);
+                if (messageReceived.content != username) {
+                    console.log("fireBullet is not from ourselves");
+                    let firing_player = player_list.get(messageReceived.content)
+                    if (firing_player) {
+                        console.log("firing player exists, we add bullet");
+                        firing_player.addBullet(true);
+                    }
                 }
                 break
             }
