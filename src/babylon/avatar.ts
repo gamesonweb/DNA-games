@@ -10,6 +10,7 @@ export class Avatar extends Mesh {
   avatar_username: string;
   bulletList: Bullet[];
   speed_coeff: number;
+  didSomething: Boolean;
 
   constructor(scene: Scene, avatar_username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -25,6 +26,7 @@ export class Avatar extends Mesh {
     this.sphere = sphere;
     this.bulletList = [];
     this.speed_coeff = 0.15;
+    this.didSomething = false;
 
     this.avatar_username = avatar_username;
 
@@ -35,6 +37,7 @@ export class Avatar extends Mesh {
   }
 
   move(evt: string) {
+    this.didSomething = true;
     let direction = this.getDirection(Axis.Z)
     switch (evt) {
       case "KeyW": {

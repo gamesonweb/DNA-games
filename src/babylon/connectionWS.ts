@@ -24,10 +24,10 @@ export function connect_to_ws() {
     //first line is to connect on a local server for testing, second is to connect on the heroku server
 
     //RUNNING SERVER ON LOCAL FOR DEV
-    //ws = new WebSocket("ws://127.0.0.1:8080");
+    ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    //ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
     //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
@@ -161,7 +161,8 @@ function setPositionUpdateSender() {
     setInterval(() => {
         let player: Avatar | undefined;
 
-        if (username && (player = player_list.get(username))) {
+        if (username && (player = player_list.get(username)) && player.didSomething) {
+            player.didSomething = false;
             var position_player = JSON.stringify({
                 pos_x: player.position.x,
                 pos_y: player.position.y,
@@ -170,15 +171,14 @@ function setPositionUpdateSender() {
                 direction: player.getDirection(Axis.Z)
             })
 
-            //console.log("will send " + position_player);
+            //console.log("sending " + position_player);
+
             ws.send(
                 JSON.stringify({
                     route: "position",
                     content: position_player
                 }))
         }
-        else { console.log("player not in his own client DEBUG: " + username + ", " + player_list.get(username) + ", in " + [...player_list.entries()]); }
-
     },
         30);
 }
