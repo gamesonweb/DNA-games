@@ -16,7 +16,7 @@ export class Bullet extends Mesh {
 
     this.myShooter = myShooter;
     this.addChild(this.createSphere())
-    this.angle = myShooter.getDirection(Axis.X)
+    this.angle = myShooter.getDirection(Axis.Z)
     this.position = this.myShooter.position.clone();
     this.speedCoeff = 0.05;
     meshes.push(this)
@@ -31,12 +31,9 @@ export class Bullet extends Mesh {
   }
 
   update() {
-    if (this.speedCoeff < 0) return
-    // NOE !
-    let x = this.position.x + Math.sin(this.angle.x) * this.speedCoeff;
-    let z = this.position.z + Math.cos(this.angle.z) * this.speedCoeff;
-    this.position.x = x;
-    this.position.z = z;
+    if (this.speedCoeff <= 0.02) this.dispose();
+    this.position.x = this.position.x + this.angle.x * this.speedCoeff;
+    this.position.z = this.position.z + this.angle.z * this.speedCoeff;
     if (distance(this.position, this.myShooter.position) > 10) {
       this.dispose()
     }

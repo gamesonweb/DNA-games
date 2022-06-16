@@ -1,4 +1,4 @@
-import { Axis, Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix } from "babylonjs";
 import { Bullet } from "./bullet";
 import { createTextOnPlane } from "./tools";
 
@@ -8,6 +8,7 @@ export class Avatar extends Mesh {
   sphere: Mesh;
   avatar_username: string;
   bulletList: Bullet[];
+  speed_coeff: number;
 
   constructor(scene: Scene, avatar_username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -22,38 +23,9 @@ export class Avatar extends Mesh {
     queue.position = new Vector3(0, 0, -1);
     this.sphere = sphere;
     this.bulletList = [];
+    this.speed_coeff = 0.15;
 
     this.avatar_username = avatar_username;
-    // this.cameraAvatar = new FollowCamera(this.name + "Camera", this.position.multiply(new Vector3(1, -1, 1)), scene, this);
-    // this.cameraAvatar.rotationOffset = 180;
-    // var text1 = new BABYLON.GUI.TextBlock();
-    // text1.text = this.avatar_username.toString();
-    // text1.color = "white";
-    // text1.fontSize = 24;
-    //var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
-    // this.addChild(text1);
-    //text1.parent = this.sphere;
-    // J'ai essayé ça en l'initalisisant dans la scene mais ça n'a pas marché: advancedTexture.addControl(text1);
-    // text1.linkWithMesh(this.sphere);
-    // text1.parent(sphere);
-    // text1.linkOffsetX = 0;
-    // text1.linkOffsetY = -150;
-
-    //data reporter
-    // var outputplane = MeshBuilder.CreatePlane("outputplane", { width: 3, height: 1 });
-    // outputplane.billboardMode = AbstractMesh.BILLBOARDMODE_ALL;
-    // //Create dynamic texture
-    // var textureGround = new DynamicTexture("dynamic texture", { width: 512, height: 256 });
-
-    // var materialGround = new StandardMaterial("Mat");
-    // materialGround.diffuseTexture = textureGround;
-    // outputplane.material = materialGround;
-
-    // outputplane.position.y = 2;
-
-    // //Add text to dynamic texture
-    // var font = "bold 3px monospace";
-    // textureGround.drawText("Grass", 1, 1, font, "green", "white", true, true);
 
     let plane = createTextOnPlane(this.avatar_username, scene)
     this.addChild(plane)
@@ -62,21 +34,28 @@ export class Avatar extends Mesh {
   }
 
   move(evt: string) {
+    let direction = this.getDirection(Axis.Z)
     switch (evt) {
       case "KeyW": {
-        this.position.z++;
+        this.position.x = this.position.x + direction.x * this.speed_coeff;
+        this.position.z = this.position.z + direction.z * this.speed_coeff;
         break;
       }
       case "KeyS": {
-        this.position.z--;
+        this.position.x = this.position.x - direction.x * this.speed_coeff;
+        this.position.z = this.position.z - direction.z * this.speed_coeff;
         break;
       }
       case "KeyD": {
-        this.position.x++;
+        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+        this.position.x = this.position.x + direction.x * this.speed_coeff;
+        this.position.z = this.position.z + direction.z * this.speed_coeff;
         break;
       }
       case "KeyA": {
-        this.position.x--;
+        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+        this.position.x = this.position.x - direction.x * this.speed_coeff;
+        this.position.z = this.position.z - direction.z * this.speed_coeff;
         break;
       }
       case "Space": {
@@ -84,11 +63,11 @@ export class Avatar extends Mesh {
         break;
       }
       case "ArrowRight": {
-        this.rotate(Axis.Y, -0.5)
+        this.rotate(Axis.Y, +0.5)
         break
       }
       case "ArrowLeft": {
-        this.rotate(Axis.Y, +0.5)
+        this.rotate(Axis.Y, -0.5)
         break
       }
     }
