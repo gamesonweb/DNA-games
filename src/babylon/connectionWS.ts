@@ -76,7 +76,7 @@ function setSocketMessageListener() {
 
             //login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
             case 'login': {
-                var sphere = new Avatar(scene, messageReceived.content);
+                var sphere = new Avatar(scene, messageReceived.content, username);
                 var sender_name = messageReceived.content;
                 player_list.set(sender_name, sphere);
                 if (sender_name == username) {
@@ -133,7 +133,7 @@ function setSocketMessageListener() {
                 //if we found nothing, we add the username in the player_list map, and associate it with a new avatar
                 if (avatar_to_move == undefined) {
                     console.log("failed ot find player " + messageContent.username + ", adding him to the list.");
-                    player_list.set(messageContent.username, new Avatar(scene, messageContent.username));
+                    player_list.set(messageContent.username, new Avatar(scene, messageContent.username, username));
                     avatar_to_move = player_list.get(messageContent.username);
                 }
 

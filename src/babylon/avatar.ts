@@ -12,16 +12,18 @@ export class Avatar extends Mesh {
   speed_coeff: number;
   didSomething: Boolean;
 
-  constructor(scene: Scene, avatar_username: string) {
+  constructor(scene: Scene, avatar_username: string, username: string) {
     super("Avatar" + Avatar.counter, scene);
     this.name = "Avatar" + Avatar.counter
     this.counter = Avatar.counter;
-    Avatar.counter++;
+    Avatar.counter += 3;
     let sphere = MeshBuilder.CreateSphere(this.name + "sp1", { segments: 16, diameter: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     this.checkCollisions = true;
-
+    if (avatar_username != username) {
+      sphere.checkCollisions = true;
+    }
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
     myMaterial.diffuseColor = new Color3(0, 1, 0);
@@ -108,5 +110,5 @@ export class Avatar extends Mesh {
 }
 
 export function addAvatar(scene: Scene, avatar_username: string) {
-  return new Avatar(scene, avatar_username)
+  return new Avatar(scene, avatar_username, "")
 }

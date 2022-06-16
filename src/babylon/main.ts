@@ -41,10 +41,10 @@ var createScene = function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  sphere1 = new Avatar(scene, "Well");
+  sphere1 = new Avatar(scene, "Well", "");
 
   let wall = MeshBuilder.CreateBox("wall", { size: 2 }, scene);
-  wall.position = new Vector3(5, 1, 0)
+  wall.position = new Vector3(1, 1, 5)
   wall.checkCollisions = true;
 
   var wallMaterial = new StandardMaterial("wallMat", scene);
@@ -54,8 +54,9 @@ var createScene = function () {
 
   // Our built- shape. Params: name, width, depth, subdivs, scene
   var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, scene);
+  ground.checkCollisions = true;
 
-  scene.collisionsEnabled = true
+  scene.collisionsEnabled = true;
 
   return scene;
 
