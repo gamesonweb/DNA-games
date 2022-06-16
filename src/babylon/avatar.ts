@@ -1,4 +1,4 @@
-import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix } from "babylonjs";
+import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix, StandardMaterial, Color3 } from "babylonjs";
 import { Bullet } from "./bullet";
 import { createTextOnPlane } from "./tools";
 import { ws } from "./connectionWS";
@@ -19,6 +19,11 @@ export class Avatar extends Mesh {
     Avatar.counter++;
     let sphere = MeshBuilder.CreateSphere(this.name + "sp1", { segments: 16, diameter: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+    var myMaterial = new StandardMaterial("myMaterial", scene);
+
+    myMaterial.diffuseColor = new Color3(0, 1, 0);
+    sphere.material = myMaterial;
+
     sphere.parent = this;
     this.addChild(sphere)
     this.addChild(queue)
