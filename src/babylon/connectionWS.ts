@@ -138,7 +138,7 @@ function setSocketMessageListener() {
                     //console.log("test")
                     if (avatar_to_move.position.x != messageContent.pos_x || avatar_to_move.position.y != messageContent.pos_y || avatar_to_move.position.z != messageContent.pos_z) {
                         //console.log("position changed!")
-                        Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 900, 30, avatar_to_move.position, new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
+                        Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
                     }
                     //avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
                     let target = avatar_to_move.position.add(messageContent.direction);
@@ -178,7 +178,7 @@ function setPositionUpdateSender() {
         let player: Avatar | undefined;
         if (username && (player = player_list.get(username)) && player.didSomething) sendPosition(player);
     },
-        30);
+        50);
 }
 
 function sendPosition(player: Avatar) {
