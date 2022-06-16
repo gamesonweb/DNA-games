@@ -180,7 +180,7 @@ function setPositionUpdateSender() {
         else { console.log("player not in his own client DEBUG: " + username + ", " + player_list.get(username) + ", in " + [...player_list.entries()]); }
 
     },
-        50);
+        30);
 }
 
 export function objToPosition({ position }: Mesh): position {
