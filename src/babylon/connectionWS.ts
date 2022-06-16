@@ -34,6 +34,10 @@ export function connect_to_ws() {
     var formatted_username_entry = username_entry?.replace(/["']/g, "");
     username = formatted_username_entry ? formatted_username_entry : "";
 
+    if (username.length > 12) {
+        username = username.slice(0, 12);
+    }
+
     if (username == "") {
         username = makeid(10);
     }
