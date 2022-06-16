@@ -1,7 +1,8 @@
 import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix, StandardMaterial, Color3 } from "babylonjs";
 import { Bullet } from "./bullet";
-import { createTextOnPlane } from "./tools";
-import { ws } from "./connectionWS";
+import { createTextOnPlane, getTime, makeInputVisible, writeMessageInChat } from "./tools";
+import { sendMessage, ws } from "./connectionWS";
+import { sphere1 } from "./main";
 
 export class Avatar extends Mesh {
   static counter = 0;
@@ -93,6 +94,10 @@ export class Avatar extends Mesh {
         this.rotate(Axis.Y, -0.5)
         break
       }
+
+      case "Enter": {
+        makeInputVisible()
+      }
     }
   }
 
@@ -111,4 +116,12 @@ export class Avatar extends Mesh {
 
 export function addAvatar(scene: Scene, avatar_username: string) {
   return new Avatar(scene, avatar_username, "")
+}
+
+export function sendMessageFromPlayer(msg: string) {
+  var time = getTime()
+  if (sphere1) {
+    writeMessageInChat(time, sphere1.avatar_username, msg, true)
+    sendMessage(time, msg)
+  }
 }

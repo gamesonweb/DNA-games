@@ -1,6 +1,7 @@
 import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3, StandardMaterial, Color3 } from "babylonjs";
-import { Avatar } from "./avatar";
+import { Avatar, sendMessageFromPlayer } from "./avatar";
 import { connect_to_ws, player_list, username } from "./connectionWS";
+import { getTime, makeInputVisible, writeMessageInChat } from "./tools";
 
 var canvas: HTMLCanvasElement;
 var engine: Engine;
@@ -63,9 +64,35 @@ var createScene = function () {
 };
 
 export let initFunction = async function () {
-  if (doneOnce) return;
+  if (doneOnce) return
   doneOnce = true
   canvas = document.getElementById("canvas") as HTMLCanvasElement
+  let chatbox = document.getElementById("chatbox")
+  let input = document.getElementById("message") as HTMLInputElement
+
+  if (chatbox) {
+    chatbox.onclick = () => {
+      makeInputVisible()
+    }
+  }
+
+  chatbox?.addEventListener("onclick", function (event) {
+    makeInputVisible()
+  })
+
+  input?.addEventListener("keypress", function (event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      // Cancel the default action, if needed
+      event.preventDefault()
+      if (input.value != "") {
+        sendMessageFromPlayer(input.value)
+        input.value = ""
+        input.style.visibility = "hidden"
+        canvas.focus()
+      }
+    }
+  });
 
   var asyncEngineCreation = async function () {
     try {

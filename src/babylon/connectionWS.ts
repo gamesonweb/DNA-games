@@ -2,7 +2,7 @@ import { Mesh, Vector3, Axis, Animation } from "babylonjs";
 import { Avatar } from "./avatar";
 import { Bullet } from "./bullet";
 import { scene, set_my_sphere } from "./main";
-import { makeid } from "./tools";
+import { makeid, writeMessageInChat } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
@@ -108,6 +108,11 @@ function setSocketMessageListener() {
             case 'message': {
                 //let messaSgeContent = JSON.parse(messageReceived.content);
                 //console.log("received message message: " + messageReceived.content);
+
+                let messageContent = JSON.parse(messageReceived.content);
+                if (messageContent.username == username) break;
+                writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
+
                 break;
             }
 
@@ -204,6 +209,19 @@ function sendPosition(player: Avatar) {
         }))
 }
 
+export function sendMessage(time: string, msg: string) {
+    var message_player = JSON.stringify({
+        username: username,
+        time: time,
+        message: msg
+    })
+
+    ws.send(
+        JSON.stringify({
+            route: "message",
+            content: message_player
+        }))
+}
 
 export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
