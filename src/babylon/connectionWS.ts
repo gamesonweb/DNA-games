@@ -120,7 +120,7 @@ function setSocketMessageListener() {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
 
-                console.log("received position update: ", messageContent.username);
+                //console.log("received position update: ", messageContent.username);
 
 
                 //We find the avatar linked to the username in our player_list map
