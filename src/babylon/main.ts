@@ -1,4 +1,4 @@
-import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3, StandardMaterial, Color3 } from "babylonjs";
 import { Avatar } from "./avatar";
 import { connect_to_ws, player_list, username } from "./connectionWS";
 
@@ -43,8 +43,19 @@ var createScene = function () {
 
   sphere1 = new Avatar(scene, "Well");
 
+  let wall = MeshBuilder.CreateBox("wall", { size: 2 }, scene);
+  wall.position = new Vector3(5, 1, 0)
+  wall.checkCollisions = true;
+
+  var wallMaterial = new StandardMaterial("wallMat", scene);
+
+  wallMaterial.diffuseColor = new Color3(1, 0, 0);
+  wall.material = wallMaterial;
+
   // Our built- shape. Params: name, width, depth, subdivs, scene
-  var ground = MeshBuilder.CreateGround("ground1", { width: 10, height: 10, subdivisions: 2 }, scene);
+  var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, scene);
+
+  scene.collisionsEnabled = true
 
   return scene;
 

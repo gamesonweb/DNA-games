@@ -19,6 +19,9 @@ export class Avatar extends Mesh {
     Avatar.counter++;
     let sphere = MeshBuilder.CreateSphere(this.name + "sp1", { segments: 16, diameter: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+
+    this.checkCollisions = true;
+
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
     myMaterial.diffuseColor = new Color3(0, 1, 0);
@@ -46,25 +49,29 @@ export class Avatar extends Mesh {
     let direction = this.getDirection(Axis.Z)
     switch (evt) {
       case "KeyW": {
-        this.position.x = this.position.x + direction.x * this.speed_coeff;
-        this.position.z = this.position.z + direction.z * this.speed_coeff;
+        //this.position.x = this.position.x + direction.x * this.speed_coeff;
+        //this.position.z = this.position.z + direction.z * this.speed_coeff;
+        this.moveWithCollisions(direction.scale(this.speed_coeff));
         break;
       }
       case "KeyS": {
-        this.position.x = this.position.x - direction.x * this.speed_coeff;
-        this.position.z = this.position.z - direction.z * this.speed_coeff;
+        //this.position.x = this.position.x - direction.x * this.speed_coeff;
+        //this.position.z = this.position.z - direction.z * this.speed_coeff;
+        this.moveWithCollisions(direction.scale(-this.speed_coeff));
         break;
       }
       case "KeyD": {
         direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-        this.position.x = this.position.x + direction.x * this.speed_coeff;
-        this.position.z = this.position.z + direction.z * this.speed_coeff;
+        //this.position.x = this.position.x + direction.x * this.speed_coeff;
+        //this.position.z = this.position.z + direction.z * this.speed_coeff;
+        this.moveWithCollisions(direction.scale(this.speed_coeff));
         break;
       }
       case "KeyA": {
         direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-        this.position.x = this.position.x - direction.x * this.speed_coeff;
-        this.position.z = this.position.z - direction.z * this.speed_coeff;
+        //this.position.x = this.position.x - direction.x * this.speed_coeff;
+        //this.position.z = this.position.z - direction.z * this.speed_coeff;
+        this.moveWithCollisions(direction.scale(-this.speed_coeff));
         break;
       }
       case "Space": {
