@@ -120,6 +120,9 @@ function setSocketMessageListener() {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
 
+                console.log("received position update: ", messageContent.username);
+
+
                 //We find the avatar linked to the username in our player_list map
                 let avatar_to_move = player_list.get(messageContent.username);
 
@@ -164,30 +167,34 @@ function setSocketMessageListener() {
 
 //the client regularly send its player's position
 function setPositionUpdateSender() {
+    let player: Avatar | undefined;
+    if (username && (player = player_list.get(username))) sendPosition(player);
     setInterval(() => {
         let player: Avatar | undefined;
-
-        if (username && (player = player_list.get(username)) && player.didSomething) {
-            player.didSomething = false;
-            var position_player = JSON.stringify({
-                pos_x: player.position.x,
-                pos_y: player.position.y,
-                pos_z: player.position.z,
-                username: username,
-                direction: player.getDirection(Axis.Z)
-            })
-
-            //console.log("sending " + position_player);
-
-            ws.send(
-                JSON.stringify({
-                    route: "position",
-                    content: position_player
-                }))
-        }
+        if (username && (player = player_list.get(username)) && player.didSomething) sendPosition(player);
     },
         30);
 }
+
+function sendPosition(player: Avatar) {
+    player.didSomething = false;
+    var position_player = JSON.stringify({
+        pos_x: player.position.x,
+        pos_y: player.position.y,
+        pos_z: player.position.z,
+        username: username,
+        direction: player.getDirection(Axis.Z)
+    })
+
+    //console.log("sending " + position_player);
+
+    ws.send(
+        JSON.stringify({
+            route: "position",
+            content: position_player
+        }))
+}
+
 
 export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
