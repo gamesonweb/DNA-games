@@ -38,12 +38,18 @@ export function connect_to_ws() {
         username = makeid(10);
     }
 
-    //small timeout to give the websocket the time to open
-    setTimeout(() => {
+    //we start our request process when the connection is established
+    ws.onopen = (e) => {
+        console.log("connection successfully established!");
         setUsername();
         setSocketMessageListener();
-    },
-        100);
+    };
+
+    // setTimeout(() => {
+    //     setUsername();
+    //     setSocketMessageListener();
+    // },
+    //     100);
 
 }
 
