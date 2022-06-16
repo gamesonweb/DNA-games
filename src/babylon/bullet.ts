@@ -9,10 +9,12 @@ export class Bullet extends Mesh {
   static id = 0;
   angle: Vector3;
   speedCoeff: number;
+  displayOnly: Boolean;
 
-  constructor(myShooter: Avatar) {
+  constructor(myShooter: Avatar, displayOnly: Boolean) {
     super("Bullet" + Bullet.id + myShooter.name);
     this.name = "Bullet" + Bullet.id + myShooter.name;
+    this.displayOnly = displayOnly;
 
     this.myShooter = myShooter;
     this.addChild(this.createSphere())

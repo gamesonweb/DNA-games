@@ -1,4 +1,4 @@
-import { Mesh, Vector3 } from "babylonjs";
+import { Mesh, Vector3, Axis } from "babylonjs";
 import { Avatar } from "./avatar";
 import { Bullet } from "./bullet";
 import { scene, set_my_sphere } from "./main";
@@ -15,7 +15,7 @@ type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, bullets: position[]
+    username: string, direction: Vector3
 }
 
 export function connect_to_ws() {
@@ -24,10 +24,10 @@ export function connect_to_ws() {
     //first line is to connect on a local server for testing, second is to connect on the heroku server
 
     //RUNNING SERVER ON LOCAL FOR DEV
-    //ws = new WebSocket("ws://127.0.0.1:8080");
+    ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    //ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
     //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
@@ -42,7 +42,6 @@ export function connect_to_ws() {
     setTimeout(() => {
         setUsername();
         setSocketMessageListener();
-        //setPositionUpdateSender();
     },
         100);
 
@@ -128,13 +127,11 @@ function setSocketMessageListener() {
                 //avatar_to_move should now be affected and we can give it the new position
                 if (avatar_to_move) {
                     avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
+                    let target = avatar_to_move.position.add(messageContent.direction);
+                    avatar_to_move.lookAt(target);
 
-                    // NOE : comment montrer les boulette aux autres ?
-                    messageContent.bullets.forEach(({ pos_x, pos_y, pos_z }) => {
-                        let b = new Bullet(avatar_to_move!);
-                        b.speedCoeff = -1
-                        b.position = new Vector3(pos_x, pos_y, pos_z)
-                    })
+                    //console.log(new Vector3(messageContent.direction.x, messageContent.direction.y, messageContent.direction.z));
+                    //avatar_to_move.setDirection(new Vector3(messageContent.direction.x, messageContent.direction.y, messageContent.direction.z));
                 }
 
                 //for debugging, should NOT happen ever
@@ -145,8 +142,16 @@ function setSocketMessageListener() {
                 break;
             }
 
+            case 'fireBullet': {
+                if (messageReceived.username != username) {
+                    let firing_player = player_list.get(messageReceived.username)
+                    if (firing_player) { firing_player.addBullet(true); }
+                }
+                break
+            }
+
             //default: the route received does not exist. Should not happen, look for debugging!
-            default: console.log("received a message from server with an invalid route: ");
+            default: console.log("received a message from server with an invalid route: " + messageReceived.route);
         }
     })
 }
@@ -162,8 +167,9 @@ function setPositionUpdateSender() {
                 pos_y: player.position.y,
                 pos_z: player.position.z,
                 username: username,
-                bullets: player.bulletList.map(e => objToPosition(e))
+                direction: player.getDirection(Axis.Z)
             })
+
             //console.log("will send " + position_player);
             ws.send(
                 JSON.stringify({

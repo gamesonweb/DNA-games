@@ -1,6 +1,7 @@
 import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix } from "babylonjs";
 import { Bullet } from "./bullet";
 import { createTextOnPlane } from "./tools";
+import { ws } from "./connectionWS";
 
 export class Avatar extends Mesh {
   static counter = 0;
@@ -60,6 +61,11 @@ export class Avatar extends Mesh {
       }
       case "Space": {
         this.addBullet()
+        ws.send(
+          JSON.stringify({
+            route: "fireBullet",
+            content: this.avatar_username
+          }))
         break;
       }
       case "ArrowRight": {
@@ -73,8 +79,8 @@ export class Avatar extends Mesh {
     }
   }
 
-  addBullet() {
-    this.bulletList.push(new Bullet(this))
+  addBullet(displayOnly = false) {
+    this.bulletList.push(new Bullet(this, displayOnly))
   }
 
   updateBulletPosition() {
