@@ -18,11 +18,8 @@ export function initChat() {
 
     input?.addEventListener("keypress", function (event) {
         // If the user presses the "Enter" key on the keyboard
-        //console.log(event.key);
-
-        if (event.key === "Enter" || (event.keyCode === 13) && (event.location === 3)) {
+        if (event.code === "Enter" || event.code === "NumpadEnter") {
             // Cancel the default action, if needed
-
             event.preventDefault()
             if (input.value != "") {
                 sendMessageFromPlayer(input.value)

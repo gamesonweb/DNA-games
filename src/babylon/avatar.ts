@@ -1,8 +1,7 @@
-import { Axis, Mesh, MeshBuilder, Quaternion, Scene, Vector3, Matrix, StandardMaterial, Color3 } from "babylonjs";
+import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { Bullet } from "./bullet";
-import { createTextOnPlane } from "./tools";
 import { ws } from "./connectionWS";
-import { makeInputVisible } from "./chat";
+import { createTextOnPlane } from "./tools";
 
 export class Avatar extends Mesh {
   static counter = 0;
@@ -87,20 +86,13 @@ export class Avatar extends Mesh {
         break;
       }
       case "ArrowRight": {
-        this.rotate(Axis.Y, +0.5)
+        this.rotate(Axis.Y, +0.05)
         break
       }
       case "ArrowLeft": {
-        this.rotate(Axis.Y, -0.5)
+        this.rotate(Axis.Y, -0.05)
         break
       }
-
-      case "Enter": {
-        makeInputVisible()
-      }
-    }
-    if (event.key === "Enter" || (event.keyCode === 13) && (event.location === 3)) {
-      makeInputVisible()
     }
   }
 

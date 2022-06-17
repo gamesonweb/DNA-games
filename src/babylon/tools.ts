@@ -12,7 +12,7 @@ export function makeid(length: number) {
 }
 
 export function distance(a: Vector3, b: Vector3) {
-    return Math.sqrt((a.x - b.x) ** 2 + (a.y + b.y) ** 2 + (a.z + b.z) ** 2);
+    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2);
 }
 
 /** Remove elt from L with side effect */
