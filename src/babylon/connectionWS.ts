@@ -2,6 +2,7 @@ import { Mesh, Vector3, Axis, Animation } from "babylonjs";
 import { Avatar } from "./avatar";
 import { writeMessageInChat } from "./chat";
 import { scene, set_my_sphere } from "./main";
+import { updateHour } from "./time";
 import { makeid } from "./tools";
 
 export var ws: WebSocket;
@@ -153,6 +154,10 @@ function setSocketMessageListener() {
                     }
                 }
                 break
+            }
+
+            case 'hour': {
+                updateHour(messageReceived.content)
             }
 
             //default: the route received does not exist. Should not happen, look for debugging!

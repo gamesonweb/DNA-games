@@ -8,6 +8,7 @@ export var canvas: HTMLCanvasElement;
 var engine: Engine;
 export var scene: Scene;
 export var sphere1: Avatar | undefined;
+export var light: HemisphericLight;
 let doneOnce = false;
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
@@ -39,7 +40,7 @@ var createScene = function () {
   camera.attachControl(canvas, true);
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  var light = new HemisphericLight("light1", new Vector3(0, 1, 0), scene);
+  light = new HemisphericLight("light1", new Vector3(0, 1, 0), scene);
 
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
