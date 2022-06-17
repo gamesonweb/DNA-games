@@ -93,7 +93,7 @@ export let initFunction = async function () {
   canvas.onkeydown = evt => sphere1?.move(evt.code, evt)
 
   canvas.requestPointerLock = canvas.requestPointerLock ||
-    canvas.mozRequestPointerLock;
+    canvas.mozRequestPointerLock; // || (<any>canvas).webkitPointerLockElement
 
   //turret direction is responding to cursor movements
   window.addEventListener("mousemove", (evt) => {
@@ -109,10 +109,10 @@ export let initFunction = async function () {
     }
   });
 
-  let isLocked = () => document.pointerLockElement === canvas;
+  let isLocked = () => document.pointerLockElement === canvas; // || (<any>document).mozPointerLockElement === canvas
 
   canvas.onpointerdown = function () {
-    if (!isLocked()) canvas.requestPointerLock();;
+    if (!isLocked()) canvas.requestPointerLock();
   }
 
   return scene
