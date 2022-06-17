@@ -46,7 +46,7 @@ export function writeMessageInChat(time: string, author: string, msg: string, is
     let chat = document.getElementById("chatbox")
     let content = chat?.innerHTML
     if (chat != null) {
-        chat.innerHTML = content + time + " " + "<span style='color: " + (isSender ? "#0ca418ee" : "#2162fbee") + ";'>" + author + " (Mage): " + "</span>" + msg + "<br />"
+        chat.innerHTML = content + time + " " + "<span style='color: " + (isSender ? "#0ca418ee" : "#2162fbee") + ";'>" + author + " (Mage): " + "</span>" + msg.replace(/</g, "&lt;") + "<br />"
         chat.scrollTop = chat.scrollHeight;
     }
 }
