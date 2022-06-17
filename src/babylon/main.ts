@@ -1,4 +1,4 @@
-import { Axis, Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
 import { initChat, makeInputVisible } from "./chat";
 import { connect_to_ws, player_list, username } from "./connectionWS";
@@ -44,7 +44,7 @@ var createScene = function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  sphere1 = new Avatar(scene, "Well", "");
+  // sphere1 = new Avatar(scene, "Well", "");
 
   let wall = MeshBuilder.CreateBox("wall", { size: 2 }, scene);
   wall.position = new Vector3(1, 1, 5)

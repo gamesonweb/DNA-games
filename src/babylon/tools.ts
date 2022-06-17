@@ -1,4 +1,6 @@
-import { DynamicTexture, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Vector3 } from "babylonjs";
+import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
+import { Avatar } from "./avatar";
 
 export function makeid(length: number) {
     var result = '';
@@ -30,41 +32,27 @@ export function getTime() {
     return time
 }
 
-export function createTextOnPlane(txt: string, scene: Scene) {
-    //Set font
-    var font_size = 10;
-    var font = "bold " + font_size + "px Arial";
 
-    //Set height for plane
-    var planeHeight = 0.5;
+export var createLabel = function (text: string, mesh: Avatar) {
+    var advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("PlaneFor" + mesh.avatar_username);
 
-    //Set height for dynamic texture
-    var DTHeight = 1.5 * font_size; //or set as wished
+    var rect1 = new Rectangle();
+    rect1.width = 0.2;
+    rect1.height = "40px";
+    rect1.cornerRadius = 20;
+    rect1.color = "White";
+    rect1.thickness = 0;
+    rect1.background = "transparent";
+    advancedTexture.addControl(rect1);
+    rect1.linkWithMesh(mesh);
+    rect1.linkOffsetY = -80;
 
-    //Calcultae ratio
-    var ratio = planeHeight / DTHeight;
+    const label = new TextBlock();
+    label.text = text;
+    label.color = "white"
+    rect1.addControl(label);
 
-    //Set text
-    var text = txt;
-
-    //Use a temporay dynamic texture to calculate the length of the text on the dynamic texture canvas
-    var temp = new DynamicTexture("DynamicTexture", 64, scene);
-    var tmpctx = temp.getContext();
-    tmpctx.font = font;
-    var DTWidth = tmpctx.measureText(text).width + 8;
-
-    //Calculate width the plane has to be 
-    var planeWidth = DTWidth * ratio;
-
-    //Create dynamic texture and write the text
-    var dynamicTexture = new DynamicTexture("DynamicTexture", { width: DTWidth, height: DTHeight }, scene, false);
-    dynamicTexture.hasAlpha = true;
-    var mat = new StandardMaterial("mat", scene);
-    mat.diffuseTexture = dynamicTexture;
-    dynamicTexture.drawText(text, null, null, font, "#000000", "transparent", true);
-
-    //Create plane and set dynamic texture as material
-    var plane = MeshBuilder.CreatePlane("plane", { width: planeWidth, height: planeHeight }, scene);
-    plane.material = mat;
-    return plane;
+    label.outlineWidth = 4;
+    label.outlineColor = "black";
+    return rect1
 }

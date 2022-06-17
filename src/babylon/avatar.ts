@@ -1,9 +1,9 @@
 import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Container } from "babylonjs-gui";
 import { Bullet } from "./bullet";
 import { ws } from "./connectionWS";
-import { createTextOnPlane } from "./tools";
-import { makeInputVisible } from "./chat";
 import { inputStates } from "./inputListeners";
+import { createLabel } from "./tools";
 
 export class Avatar extends Mesh {
   static counter = 0;
@@ -13,6 +13,7 @@ export class Avatar extends Mesh {
   bulletList: Bullet[];
   speed_coeff: number;
   didSomething: Boolean;
+  usernamePanel: Container;
 
   constructor(scene: Scene, avatar_username: string, username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -42,9 +43,9 @@ export class Avatar extends Mesh {
 
     this.avatar_username = avatar_username;
 
-    let plane = createTextOnPlane(this.avatar_username, scene)
-    this.addChild(plane)
-    plane.position.y = 2
+    // let plane = createTextOnPlane(this.avatar_username, scene)
+    // this.addChild(plane)
+    this.usernamePanel = createLabel(this.avatar_username, this);
     this.position = new Vector3(this.counter, 1, 0);
   }
 
@@ -155,6 +156,7 @@ export class Avatar extends Mesh {
 
   dispose(): void {
     super.dispose()
+    this.usernamePanel.dispose()
   }
 }
 
