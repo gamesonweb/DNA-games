@@ -76,9 +76,9 @@ export class Avatar extends Mesh {
 
     //Rotation
     if (inputStates.right) {
-      this.rotate(Axis.Y, +0.1)
+      this.rotate(Axis.Y, +0.05)
     } else if (inputStates.left) {
-      this.rotate(Axis.Y, -0.1)
+      this.rotate(Axis.Y, -0.05)
     }
 
     //add bullet -will become jump later => jump on space and attack on leftMouseClick
