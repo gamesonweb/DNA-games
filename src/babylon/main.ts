@@ -2,6 +2,7 @@ import { Axis, Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshB
 import { Avatar } from "./avatar";
 import { initChat, makeInputVisible } from "./chat";
 import { connect_to_ws, player_list, username } from "./connectionWS";
+import { inializeInputListeners } from "./inputListeners";
 
 export var canvas: HTMLCanvasElement;
 var engine: Engine;
@@ -15,7 +16,7 @@ var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
     if (scene && scene.activeCamera) {
       scene.render();
       player_list.forEach(e => e.updateBulletPosition())
-      events.forEach(e => { if (e.type === "keydown") sphere1?.move(e.code, e) });
+      sphere1?.move();
     }
   });
   engine.resize()
@@ -61,6 +62,8 @@ var createScene = function () {
 
   scene.collisionsEnabled = true;
 
+  inializeInputListeners();
+
   return scene;
 
 };
@@ -92,31 +95,8 @@ export let initFunction = async function () {
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
   // OF evt.key. That means AVATARS[PLAYER-X].move(evt.key)
-  canvas.onkeydown = evt => registerEvent(evt);//sphere1?.move(evt.code, evt)
-  canvas.onkeyup = evt => registerEvent(evt);
 
-  canvas.requestPointerLock = canvas.requestPointerLock ||
-    canvas.mozRequestPointerLock; // || (<any>canvas).webkitPointerLockElement
-
-  //turret direction is responding to cursor movements
-  window.addEventListener("mousemove", (evt) => {
-    if (sphere1) {
-      if (evt.movementX > 0) {
-        sphere1.rotate(Axis.Y, Math.sqrt(evt.movementX) / 200);
-        sphere1.didSomething = true;
-      }
-      if (evt.movementX < 0) {
-        sphere1.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
-        sphere1.didSomething = true;
-      }
-    }
-  });
-
-  let isLocked = () => document.pointerLockElement === canvas; // || (<any>document).mozPointerLockElement === canvas
-
-  canvas.onpointerdown = function () {
-    if (!isLocked()) canvas.requestPointerLock();
-  }
+  //canvas.onkeydown = evt => sphere1?.move(evt.code, evt)
 
   return scene
 };
