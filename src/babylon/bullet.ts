@@ -1,7 +1,7 @@
 import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
 import { Avatar } from "./avatar";
 import { meshes } from "./connectionWS";
-import { removeFromList } from "./tools";
+import { distance, removeFromList } from "./tools";
 
 export class Bullet extends Mesh {
   myShooter: Avatar;
@@ -37,9 +37,9 @@ export class Bullet extends Mesh {
     if (this.speedCoeff <= 0.02) this.dispose();
     this.position.x = this.position.x + this.angle.x * this.speedCoeff;
     this.position.z = this.position.z + this.angle.z * this.speedCoeff;
-    // if (distance(this.position, this.originalPositionBullet) > 15) {
-    //   this.dispose()
-    // }
+    if (distance(this.position, this.originalPositionBullet) > 15) {
+      this.dispose()
+    }
   }
 
   dispose(): void {
