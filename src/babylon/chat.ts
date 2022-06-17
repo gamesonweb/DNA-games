@@ -2,9 +2,11 @@ import { sendMessage } from "./connectionWS"
 import { canvas, sphere1 } from "./main"
 import { getTime } from "./tools"
 
+export var input: HTMLInputElement
+
 export function initChat() {
     let chatbox = document.getElementById("chatbox")
-    let input = document.getElementById("message") as HTMLInputElement
+    input = document.getElementById("message") as HTMLInputElement
 
     if (chatbox) {
         chatbox.onclick = () => {
@@ -15,6 +17,12 @@ export function initChat() {
     chatbox?.addEventListener("onclick", function (event) {
         makeInputVisible()
     })
+
+    window.addEventListener('keydown', (evt) => {
+        if ((evt.code === "Enter" || evt.code === "NumpadEnter")) {
+            makeInputVisible()
+        }
+    });
 
     input?.addEventListener("keypress", function (event) {
         // If the user presses the "Enter" key on the keyboard
@@ -32,7 +40,6 @@ export function initChat() {
 }
 
 export function makeInputVisible() {
-    var input = document.getElementById("message")
     if (input) {
         input.style.visibility = "visible";
         input.focus();

@@ -1,4 +1,5 @@
 import { Axis } from "babylonjs";
+import { input } from "./chat";
 import { canvas, sphere1 } from "./main";
 
 export var inputStates: {
@@ -34,6 +35,8 @@ export function inializeInputListeners() {
 }
 
 function keyListener(evt: KeyboardEvent, isPressed: Boolean) {
+
+    if ((input === document.activeElement) && isPressed) { return }
 
     // tirer
     if (evt.code === "Space") {
