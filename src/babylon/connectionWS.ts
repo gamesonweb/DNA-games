@@ -1,8 +1,8 @@
 import { Mesh, Vector3, Axis, Animation } from "babylonjs";
 import { Avatar } from "./avatar";
-import { Bullet } from "./bullet";
+import { writeMessageInChat } from "./chat";
 import { scene, set_my_sphere } from "./main";
-import { makeid, writeMessageInChat } from "./tools";
+import { makeid } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();

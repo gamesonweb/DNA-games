@@ -21,15 +21,6 @@ export function removeFromList<T>(elt: T, l: T[]) {
     if (pos >= 0) l.splice(pos, 1)
 }
 
-export function writeMessageInChat(time: string, author: string, msg: string, isSender: boolean) {
-    let chat = document.getElementById("chatbox")
-    let content = chat?.innerHTML
-    if (chat != null) {
-        chat.innerHTML = content + time + " " + "<span style='color: " + (isSender ? "#0ca418ee" : "#2162fbee") + ";'>" + author + " (Mage): " + "</span>" + msg + "<br />"
-        chat.scrollTop = chat.scrollHeight;
-    }
-}
-
 
 export function getTime() {
     var today = new Date();
@@ -39,13 +30,6 @@ export function getTime() {
     return time
 }
 
-export function makeInputVisible() {
-    var input = document.getElementById("message")
-    if (input) {
-        input.style.visibility = "visible";
-        input.focus();
-    }
-}
 export function createTextOnPlane(txt: string, scene: Scene) {
     //Set font
     var font_size = 12;
