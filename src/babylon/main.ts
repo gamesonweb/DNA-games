@@ -9,7 +9,6 @@ var engine: Engine;
 export var scene: Scene;
 export var sphere1: Avatar | undefined;
 let doneOnce = false;
-export let events: Map<string, KeyboardEvent> = new Map();
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
   engine.runRenderLoop(function () {
@@ -134,12 +133,3 @@ declare global {
 }
 
 window.BABYLON = BABYLON;
-
-function registerEvent(evt: KeyboardEvent): any {
-  if ((evt.code === "Enter" || evt.code === "NumpadEnter") && evt.type === "keydown") {
-    makeInputVisible()
-    events.clear()
-  }
-  else events.set(evt.code, evt)
-}
-//window.addAvatar = (avatar_username: String) => addAvatar(scene, avatar_username)
