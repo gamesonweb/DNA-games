@@ -1,4 +1,4 @@
-import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3, StandardMaterial, Color3 } from "babylonjs";
+import { Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, Vector3, StandardMaterial, Color3, Axis } from "babylonjs";
 import { Avatar } from "./avatar";
 import { initChat } from "./chat";
 import { connect_to_ws, player_list, username } from "./connectionWS";
@@ -91,6 +91,30 @@ export let initFunction = async function () {
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
   // OF evt.key. That means AVATARS[PLAYER-X].move(evt.key)
   canvas.onkeydown = evt => sphere1?.move(evt.code)
+
+  canvas.requestPointerLock = canvas.requestPointerLock ||
+    canvas.mozRequestPointerLock;
+
+  //turret direction is responding to cursor movements
+  window.addEventListener("mousemove", (evt) => {
+    if (sphere1) {
+      if (evt.movementX > 0) {
+        sphere1.rotate(Axis.Y, Math.sqrt(evt.movementX) / 200);
+        sphere1.didSomething = true;
+      }
+      if (evt.movementX < 0) {
+        sphere1.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
+        sphere1.didSomething = true;
+      }
+    }
+  });
+
+  let isLocked = () => document.pointerLockElement === canvas;
+
+  canvas.onpointerdown = function () {
+    if (!isLocked()) canvas.requestPointerLock();;
+  }
+
   return scene
 };
 

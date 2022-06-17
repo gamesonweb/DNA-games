@@ -97,28 +97,17 @@ function setSocketMessageListener() {
 
             //logout route: dispose player's avatar, remove player's entry in the player_list map
             case 'logout': {
-                //console.log("received logout message: " + messageReceived.content);
                 let avatar_to_disconnect = player_list.get(messageReceived.content);
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 player_list.delete(messageReceived.content);
                 break;
             }
 
-            //message: TODO?
+            //message route: write the message content in the chat if the sender isn't us
             case 'message': {
-                //let messaSgeContent = JSON.parse(messageReceived.content);
-                //console.log("received message message: " + messageReceived.content);
-
                 let messageContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
                 writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
-
-                break;
-            }
-
-            //message: TODO? might get removed
-            case 'userlist': {
-                //console.log("received userlist message: " + messageReceived.content);
                 break;
             }
 
@@ -128,9 +117,6 @@ function setSocketMessageListener() {
                 //{pos_x: int, pos_y: int, pos_z: int, username: string}
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
-
-                //console.log("received position update: ", messageContent.username);
-
 
                 //We find the avatar linked to the username in our player_list map
                 let avatar_to_move = player_list.get(messageContent.username);
@@ -144,9 +130,7 @@ function setSocketMessageListener() {
 
                 //avatar_to_move should now be affected and we can give it the new position
                 if (avatar_to_move) {
-                    //console.log("test")
                     if (avatar_to_move.position.x != messageContent.pos_x || avatar_to_move.position.y != messageContent.pos_y || avatar_to_move.position.z != messageContent.pos_z) {
-                        //console.log("position changed!")
                         Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
                     }
                     //avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
@@ -160,13 +144,11 @@ function setSocketMessageListener() {
                 break;
             }
 
+            //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
             case 'fireBullet': {
-                console.log("received fireBullet route from " + messageReceived.content);
                 if (messageReceived.content != username) {
-                    console.log("fireBullet is not from ourselves");
                     let firing_player = player_list.get(messageReceived.content)
                     if (firing_player) {
-                        console.log("firing player exists, we add bullet");
                         firing_player.addBullet(true);
                     }
                 }
