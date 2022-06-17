@@ -32,11 +32,11 @@ export function getTime() {
 
 export function createTextOnPlane(txt: string, scene: Scene) {
     //Set font
-    var font_size = 12;
+    var font_size = 10;
     var font = "bold " + font_size + "px Arial";
 
     //Set height for plane
-    var planeHeight = 1;
+    var planeHeight = 0.5;
 
     //Set height for dynamic texture
     var DTHeight = 1.5 * font_size; //or set as wished
@@ -58,9 +58,10 @@ export function createTextOnPlane(txt: string, scene: Scene) {
 
     //Create dynamic texture and write the text
     var dynamicTexture = new DynamicTexture("DynamicTexture", { width: DTWidth, height: DTHeight }, scene, false);
+    dynamicTexture.hasAlpha = true;
     var mat = new StandardMaterial("mat", scene);
     mat.diffuseTexture = dynamicTexture;
-    dynamicTexture.drawText(text, null, null, font, "#000000", "#ffffff", true);
+    dynamicTexture.drawText(text, null, null, font, "#000000", "transparent", true);
 
     //Create plane and set dynamic texture as material
     var plane = MeshBuilder.CreatePlane("plane", { width: planeWidth, height: planeHeight }, scene);
