@@ -37,7 +37,7 @@ export function getTime() {
 export var createLabel = function (text: string, mesh: Avatar) {
     var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);
     plane.billboardMode = Mesh.BILLBOARDMODE_Y;
-    plane.position.y = 2;
+    plane.position.y = 1.5;
 
     var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
 
@@ -56,7 +56,7 @@ export var createLabel = function (text: string, mesh: Avatar) {
     label.text = text;
     label.color = "white"
     rect1.addControl(label);
-    label.fontSize = 100;
+    label.fontSize = 80;
 
     label.outlineWidth = 10;
     label.outlineColor = "black";
