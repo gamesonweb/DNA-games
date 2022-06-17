@@ -90,7 +90,7 @@ export let initFunction = async function () {
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
   // OF evt.key. That means AVATARS[PLAYER-X].move(evt.key)
-  canvas.onkeydown = evt => sphere1?.move(evt.code)
+  canvas.onkeydown = evt => sphere1?.move(evt.code, evt)
 
   canvas.requestPointerLock = canvas.requestPointerLock ||
     canvas.mozRequestPointerLock;

@@ -47,7 +47,7 @@ export class Avatar extends Mesh {
     this.position = new Vector3(this.counter, 1, 0);
   }
 
-  move(evt: string) {
+  move(evt: string, event: KeyboardEvent) {
     this.didSomething = true;
     let direction = this.getDirection(Axis.Z)
     switch (evt) {
@@ -98,6 +98,9 @@ export class Avatar extends Mesh {
       case "Enter": {
         makeInputVisible()
       }
+    }
+    if (event.key === "Enter" || (event.keyCode === 13) && (event.location === 3)) {
+      makeInputVisible()
     }
   }
 
