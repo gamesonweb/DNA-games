@@ -1,6 +1,7 @@
-import { Vector3 } from "babylonjs";
+import { Mesh, MeshBuilder, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
 import { Avatar } from "./avatar";
+import { scene } from "./main";
 
 export function makeid(length: number) {
     var result = '';
@@ -34,11 +35,15 @@ export function getTime() {
 
 
 export var createLabel = function (text: string, mesh: Avatar) {
-    var advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("PlaneFor" + mesh.avatar_username);
+    var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);
+    plane.billboardMode = Mesh.BILLBOARDMODE_Y;
+    plane.position.y = 2;
+
+    var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
 
     var rect1 = new Rectangle();
-    rect1.width = 0.2;
-    rect1.height = "40px";
+    rect1.width = 1;
+    rect1.height = 1;
     rect1.cornerRadius = 20;
     rect1.color = "White";
     rect1.thickness = 0;
@@ -51,8 +56,9 @@ export var createLabel = function (text: string, mesh: Avatar) {
     label.text = text;
     label.color = "white"
     rect1.addControl(label);
+    label.fontSize = 100;
 
-    label.outlineWidth = 4;
+    label.outlineWidth = 10;
     label.outlineColor = "black";
-    return rect1
+    return plane
 }
