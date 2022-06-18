@@ -1,11 +1,20 @@
 import { light } from "./scene";
 import { Animation } from "babylonjs";
+import { night_monster_list } from "./connectionWS";
 
 export var hour: number
 
 export function updateHour(hourInput: number) {
     console.log("updating time to " + hourInput);
     hour = hourInput;
+
+    //tue les monstres de nuit si il fait jour
+    if (hour > 7 && hour < 22) {
+        for (const [_, value] of night_monster_list.entries()) {
+            value.dispose();
+        }
+        night_monster_list.clear();
+    }
 
     //pleine nuit
     if (hour > 23 || hour < 5) { light.intensity = 0.2; }

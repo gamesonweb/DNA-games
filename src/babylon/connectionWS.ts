@@ -73,8 +73,7 @@ function setUsername() {
 function setSocketMessageListener() {
     //procedure on messages received from server
     ws.addEventListener('message', function (event) {
-        console.log(event.data);
-
+        //console.log(event.data);
         let messageReceived = JSON.parse(event.data);
         switch (messageReceived.route) {
 
@@ -87,16 +86,13 @@ function setSocketMessageListener() {
                     set_my_sphere();
                     setPositionUpdateSender()
                 }
-                console.log("LOGIN IN: " + messageReceived.content + ", new player list: " + player_list);
+                console.log("LOGIN IN: " + messageReceived.content);
                 break;
             }
 
             case 'usernameSetter': {
-                // var sphere = new Avatar(scene);
                 console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
                 username = messageReceived.content;
-                // player_list.set(username, sphere);
-                // set_my_sphere();
             }
 
             //logout route: dispose player's avatar, remove player's entry in the player_list map
@@ -104,6 +100,7 @@ function setSocketMessageListener() {
                 let avatar_to_disconnect = player_list.get(messageReceived.content);
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 player_list.delete(messageReceived.content);
+                console.log("LOGIN OUT: " + messageReceived.content);
                 break;
             }
 
@@ -126,7 +123,6 @@ function setSocketMessageListener() {
             case 'monster_data': {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 position_update(messageContent, night_monster_list);
-                console.log("monster appeared!");
                 break;
             }
 
@@ -135,15 +131,6 @@ function setSocketMessageListener() {
                 let monster_to_kill = night_monster_list.get(messageReceived.content);
                 if (monster_to_kill !== undefined) monster_to_kill.dispose();
                 night_monster_list.delete(messageReceived.content);
-                break;
-            }
-
-            //day: day rise on the world (kill all zombies)
-            case 'day': {
-                for (const [_, value] of night_monster_list.entries()) {
-                    value.dispose();
-                }
-                night_monster_list.clear();
                 break;
             }
 
