@@ -2,9 +2,10 @@ import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, V
 import { Bullet } from "./bullet";
 import { ws } from "./connectionWS";
 import { inputStates } from "./inputListeners";
+import { MeshWithHealth } from "./meshWithHealth";
 import { createLabel } from "./tools";
 
-export class Avatar extends Mesh {
+export class Avatar extends MeshWithHealth {
   static counter = 0;
   counter: number;
   sphere: Mesh;
@@ -24,7 +25,7 @@ export class Avatar extends Mesh {
 
     this.ellipsoid = new Vector3(1, 1, 1);
     this.checkCollisions = true;
-    if (avatar_username != username) {
+    if (avatar_username !== username) {
       sphere.checkCollisions = true;
     }
     var myMaterial = new StandardMaterial("myMaterial", scene);
