@@ -1,5 +1,5 @@
 import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper } from "babylonjs";
-import { canvas, engine, sphere1, scene } from "./main";
+import { canvas, engine, sphere1, scene, ray } from "./main";
 
 export var light: HemisphericLight;
 
@@ -7,6 +7,7 @@ export function createScene() {
 
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new Scene(engine!);
+
     window.scene = scene;
 
     createCamera()
@@ -17,6 +18,7 @@ export function createScene() {
     // sphere1 = new Avatar(scene, "Well", "");
     var gravity = 0.02;
     scene.collisionsEnabled = true;
+
     scene.beforeRender = () => {
         applyGravity(gravity)
     }
@@ -67,7 +69,6 @@ function applyGravity(gravity: number) {
     //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
     if (sphere1) {
         //var origin = sphere1.position.add(new Vector3(0, 0, 0))
-        var ray = new Ray(sphere1.position, new Vector3(0, -1, 0), 1.2);
 
         //let rayHelper = new RayHelper(ray);
         //rayHelper.show(scene);
