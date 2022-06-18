@@ -33,6 +33,10 @@ export function getTime() {
     return time
 }
 
+export function isVector3Equal(v1: Vector3, v2: Vector3) {
+    return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z)
+}
+
 
 export var createLabel = function (text: string, mesh: Avatar) {
     var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);

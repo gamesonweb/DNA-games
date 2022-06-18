@@ -12,6 +12,7 @@ export class Avatar extends Mesh {
   bulletList: Bullet[];
   speed_coeff: number;
   didSomething: Boolean;
+  old_position: Vector3;
 
   constructor(scene: Scene, avatar_username: string, username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -48,6 +49,7 @@ export class Avatar extends Mesh {
 
 
     this.position = new Vector3(this.counter, 1, 0);
+    this.old_position = this.position.clone()
   }
 
   move() {

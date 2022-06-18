@@ -3,7 +3,7 @@ import { Avatar } from "./avatar";
 import { writeMessageInChat } from "./chat";
 import { scene, set_my_sphere } from "./main";
 import { updateHour } from "./time";
-import { makeid } from "./tools";
+import { isVector3Equal, makeid } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
@@ -172,7 +172,11 @@ function setPositionUpdateSender() {
     if (username && (player = player_list.get(username))) sendPosition(player);
     setInterval(() => {
         let player: Avatar | undefined;
-        if (username && (player = player_list.get(username)) && player.didSomething) sendPosition(player);
+        if (username && (player = player_list.get(username)) && (player.didSomething || !isVector3Equal(player.old_position, player.position))) {
+            sendPosition(player);
+            player.old_position = player.position.clone()
+            console.log("sending pos")
+        }
     },
         50);
 }

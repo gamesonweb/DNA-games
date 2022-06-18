@@ -62,6 +62,11 @@ var createScene = function () {
 
   scene.collisionsEnabled = true;
 
+  scene.beforeRender = () => {
+    sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
+
+  }
+
   inializeInputListeners();
 
   return scene;
