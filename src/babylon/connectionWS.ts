@@ -13,6 +13,18 @@ export var meshes: Mesh[] = [];
 
 window.playerList = player_list;
 
+export const serverMessages = {
+    SET_USERNAME: "usernameSetter",
+    LOGIN: "login",
+    LOGOUT: "logout",
+    MESSAGE: "message",
+    POSITION: "position",
+    MONSTER_DATA: "monster_data",
+    KILL_MONSTER: "kill_monster",
+    FIRE_BULLET: "fireBullet",
+    HOUR: "hour"
+}
+
 type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 type receiveContent = {
@@ -64,7 +76,7 @@ function setUsername() {
     ws.send(
         JSON.stringify(
             {
-                route: "login",
+                route: serverMessages.LOGIN,
                 content: username
             }));
 }
@@ -78,7 +90,7 @@ function setSocketMessageListener() {
         switch (messageReceived.route) {
 
             //login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
-            case 'login': {
+            case serverMessages.LOGIN: {
                 var sphere = new Avatar(scene, messageReceived.content, username);
                 var sender_name = messageReceived.content;
                 player_list.set(sender_name, sphere);
@@ -90,14 +102,14 @@ function setSocketMessageListener() {
                 break;
             }
 
-            case 'usernameSetter': {
+            case serverMessages.SET_USERNAME: {
                 console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
                 username = messageReceived.content;
                 break;
             }
 
             //logout route: dispose player's avatar, remove player's entry in the player_list map
-            case 'logout': {
+            case serverMessages.LOGOUT: {
                 let avatar_to_disconnect = player_list.get(messageReceived.content);
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 player_list.delete(messageReceived.content);
@@ -106,7 +118,7 @@ function setSocketMessageListener() {
             }
 
             //message route: write the message content in the chat if the sender isn't us
-            case 'message': {
+            case serverMessages.MESSAGE: {
                 let messageContent = JSON.parse(messageReceived.content);
                 if (messageContent.username === username) break;
                 chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
@@ -114,29 +126,31 @@ function setSocketMessageListener() {
             }
 
             //position: add the player if they aren't in our list yet, move the avatar to the input position
-            case 'position': {
+            case serverMessages.POSITION: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 position_update(messageContent, player_list);
                 break;
             }
 
             //monster_data: update the monster's data
-            case 'monster_data': {
+            case serverMessages.MONSTER_DATA: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 position_update(messageContent, night_monster_list);
                 break;
             }
 
             //kill_monster: kill the monster with passed username
-            case 'kill_monster': {
+            case serverMessages.KILL_MONSTER: {
                 let monster_to_kill = night_monster_list.get(messageReceived.content);
+                console.log(monster_to_kill, messageReceived.content, night_monster_list);
+
                 if (monster_to_kill !== undefined) monster_to_kill.dispose();
                 night_monster_list.delete(messageReceived.content);
                 break;
             }
 
             //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
-            case 'fireBullet': {
+            case serverMessages.FIRE_BULLET: {
                 if (messageReceived.content !== username) {
                     let firing_player = player_list.get(messageReceived.content)
                     if (firing_player) {
@@ -146,7 +160,7 @@ function setSocketMessageListener() {
                 break;
             }
 
-            case 'hour': {
+            case serverMessages.HOUR: {
                 updateHour(messageReceived.content)
                 break;
             }
@@ -185,7 +199,7 @@ function sendPosition(player: Avatar) {
 
     ws.send(
         JSON.stringify({
-            route: "position",
+            route: serverMessages.POSITION,
             content: position_player
         }))
 }
@@ -199,7 +213,7 @@ export function sendMessage(time: string, msg: string) {
 
     ws.send(
         JSON.stringify({
-            route: "message",
+            route: serverMessages.MESSAGE,
             content: message_player
         }))
 }

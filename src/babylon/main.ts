@@ -1,4 +1,4 @@
-import { Engine, FollowCamera, Scene, Vector3, Ray } from "babylonjs";
+import { Engine, FollowCamera, Ray, Scene, Vector3 } from "babylonjs";
 import { initChat } from "../reactComponents/chat";
 import { Avatar } from "./avatar";
 import { connect_to_ws, player_list, username } from "./connectionWS";
@@ -81,6 +81,7 @@ export function set_my_sphere() {
 
 initFunction().then(e => {
   scene = e!
+  scene.collisionsEnabled = true
 });
 
 // Resize

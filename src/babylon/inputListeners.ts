@@ -3,27 +3,29 @@ import { chatRef } from "..";
 import { input } from "../reactComponents/chat";
 import { canvas, sphere1 } from "./main";
 
-export var inputStates: {
-    space: Boolean,
-    Z: Boolean
-    Q: Boolean,
-    S: Boolean,
-    D: Boolean,
-    right: Boolean,
-    left: Boolean
+export type InputStates = {
+    space: boolean,
+    goForeward: boolean
+    goLeft: boolean,
+    goBackward: boolean,
+    goRight: boolean,
+    rotateRight: boolean,
+    rotateLeft: boolean
 }
 
-let createInputStates = () => {
+let createInputStates = (): InputStates => {
     return {
         space: false,
-        Z: false,
-        Q: false,
-        S: false,
-        D: false,
-        right: false,
-        left: false
+        goForeward: false,
+        goLeft: false,
+        goBackward: false,
+        goRight: false,
+        rotateRight: false,
+        rotateLeft: false
     }
 }
+
+export let inputStates: InputStates;
 
 export function inializeInputListeners() {
     inputStates = createInputStates()
@@ -50,7 +52,7 @@ export function inializeInputListeners() {
     pointerLockAndMouseMove();
 }
 
-function keyListener(evt: KeyboardEvent, isPressed: Boolean) {
+function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
     if ((input === document.activeElement) && isPressed) { return }
 
@@ -61,24 +63,24 @@ function keyListener(evt: KeyboardEvent, isPressed: Boolean) {
 
     // movements
     else if (evt.code === "KeyW") {
-        inputStates.Z = isPressed;
+        inputStates.goForeward = isPressed;
     }
     else if (evt.code === "KeyS") {
-        inputStates.S = isPressed;
+        inputStates.goBackward = isPressed;
     }
     else if (evt.code === "KeyA") {
-        inputStates.Q = isPressed;
+        inputStates.goLeft = isPressed;
     }
     else if (evt.code === "KeyD") {
-        inputStates.D = isPressed;
+        inputStates.goRight = isPressed;
     }
 
     //rotation
     else if (evt.code === "ArrowRight") {
-        inputStates.right = isPressed;
+        inputStates.rotateRight = isPressed;
     }
     else if (evt.code === "ArrowLeft") {
-        inputStates.left = isPressed;
+        inputStates.rotateLeft = isPressed;
     }
 }
 

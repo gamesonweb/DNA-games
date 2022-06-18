@@ -1,6 +1,6 @@
-import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, ExecuteCodeAction, ActionManager } from "babylonjs";
+import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { Bullet } from "./bullet";
-import { ws } from "./connectionWS";
+import { serverMessages, ws } from "./connectionWS";
 import { inputStates } from "./inputListeners";
 import { MeshWithHealth } from "./meshWithHealth";
 import { createLabel } from "./tools";
@@ -17,11 +17,13 @@ export class Avatar extends MeshWithHealth {
   isJumping: boolean;
   canJump: boolean;
   timeJumping: number;
+  bulletDelay: number;
+  lastShoot?: number;
 
 
-  constructor(scene: Scene, avatar_username: string, username: string) {
-    super("Avatar" + Avatar.counter, scene);
-    this.name = "Avatar" + Avatar.counter
+  constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay: number }) {
+    super(avatar_username + Avatar.counter, scene);
+    this.name = avatar_username + Avatar.counter
     this.counter = Avatar.counter;
     Avatar.counter += 3;
     let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
@@ -60,119 +62,70 @@ export class Avatar extends MeshWithHealth {
     this.isJumping = false;
     this.canJump = true;
     this.timeJumping = 500;
+    this.bulletDelay = p?.bulletDelay || 500;
   }
 
   move() {
 
-    if (inputStates.D || inputStates.Q || inputStates.S || inputStates.Z || inputStates.right || inputStates.left)
+    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft)
       this.didSomething = true;
 
     let direction = this.getDirection(Axis.Z)
 
     let coeff_diagonal = 1
-    if ((inputStates.Z || inputStates.S) && (inputStates.Q || inputStates.D)) coeff_diagonal = Math.PI / 4;
+    if ((inputStates.goForeward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
 
     //forward/backward movement
-    if (inputStates.Z) {
+    if (inputStates.goForeward) {
       this.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal));
-    } else if (inputStates.S) {
+    } else if (inputStates.goBackward) {
       this.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 2));
     }
 
     //left/right movement
-    if (inputStates.Q) {
+    if (inputStates.goLeft) {
       direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
       this.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 1.5));
-    } else if (inputStates.D) {
+    } else if (inputStates.goRight) {
       direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
       this.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal / 1.5));
     }
 
     //Rotation
-    if (inputStates.right) {
+    if (inputStates.rotateRight) {
       this.rotate(Axis.Y, +0.05)
-    } else if (inputStates.left) {
+    } else if (inputStates.rotateLeft) {
       this.rotate(Axis.Y, -0.05)
     }
 
     //add bullet -will become jump later => jump on space and attack on leftMouseClick
     if (inputStates.space) {
-      if (this.canJump) {
-        this.isJumping = true;
-        this.canJump = false
-        setTimeout(() => {
-          this.isJumping = false
-        }, this.timeJumping / 2.5)
-        setTimeout(() => {
-          this.canJump = true
-        }, this.timeJumping)
-      }
-      /*
+      // if (this.canJump) {
+      //   this.isJumping = true;
+      //   this.canJump = false
+      //   setTimeout(() => {
+      //     this.isJumping = false
+      //   }, this.timeJumping / 2.5)
+      //   setTimeout(() => {
+      //     this.canJump = true
+      //   }, this.timeJumping)
+      // }
+
       this.addBullet()
       ws.send(
         JSON.stringify({
-          route: "fireBullet",
+          route: serverMessages.FIRE_BULLET,
           content: this.avatar_username
         }))
-      */
+
     }
-
-    // switch (evt) {
-    //   case "KeyW": {
-    //     //this.position.x = this.position.x + direction.x * this.speed_coeff;
-    //     //this.position.z = this.position.z + direction.z * this.speed_coeff;
-    //     this.moveWithCollisions(direction.scale(this.speed_coeff));
-    //     break;
-    //   }
-    //   case "KeyS": {
-    //     //this.position.x = this.position.x - direction.x * this.speed_coeff;
-    //     //this.position.z = this.position.z - direction.z * this.speed_coeff;
-    //     this.moveWithCollisions(direction.scale(-this.speed_coeff));
-    //     break;
-    //   }
-    //   case "KeyD": {
-    //     direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-    //     this.moveWithCollisions(direction.scale(this.speed_coeff));
-    //     //this.position.x = this.position.x + direction.x * this.speed_coeff;
-    //     //this.position.z = this.position.z + direction.z * this.speed_coeff;
-    //     break;
-    //   }
-    //   case "KeyA": {
-    //     direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-    //     this.moveWithCollisions(direction.scale(-this.speed_coeff));
-    //     //this.position.x = this.position.x - direction.x * this.speed_coeff;
-    //     //this.position.z = this.position.z - direction.z * this.speed_coeff;
-    //     break;
-    //   }
-    //   case "Space": {
-    //     this.addBullet()
-    //     ws.send(
-    //       JSON.stringify({
-    //         route: "fireBullet",
-    //         content: this.avatar_username
-    //       }))
-    //     break;
-    //   }
-    //   case "ArrowRight": {
-    //     this.rotate(Axis.Y, +0.5)
-    //     break
-    //   }
-    //   case "ArrowLeft": {
-    //     this.rotate(Axis.Y, -0.5)
-    //     break
-    //   }
-
-    //   case "Enter": {
-    //     makeInputVisible()
-    //   }
-    // }
-    // if (event.key === "Enter" || (event.keyCode === 13) && (event.location === 3)) {
-    //   makeInputVisible()
-    // }
   }
 
   addBullet(displayOnly = false) {
-    this.bulletList.push(new Bullet(this, displayOnly))
+    if (this.lastShoot === undefined || this.lastShoot + this.bulletDelay < Date.now()) {
+      this.lastShoot = Date.now()
+      this.bulletList.push(new Bullet(this, displayOnly))
+    }
   }
 
   updateBulletPosition() {
