@@ -1,12 +1,17 @@
+import { createRef, StrictMode } from 'react';
+import { render } from 'react-dom';
 import { initFunction } from './babylon/main';
 import './css/index.css';
+import { Chat } from './reactComponents/chat';
 
-// render(
-//   <React.StrictMode>
-//     <MyBody />
-//   </React.StrictMode>,
-//   document.getElementById("root")
-// );
+export let chatRef = createRef<Chat>();
+
+render(
+  <StrictMode>
+    <Chat ref={chatRef} />
+  </StrictMode>,
+  document.getElementById("chatAnchor")
+);
 
 initFunction()
 

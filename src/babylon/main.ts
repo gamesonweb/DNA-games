@@ -1,10 +1,10 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Engine, FollowCamera, Scene, Vector3 } from "babylonjs";
+import { initChat } from "../reactComponents/chat";
 import { Avatar } from "./avatar";
-import { initChat, makeInputVisible } from "./chat";
 import { connect_to_ws, player_list, username } from "./connectionWS";
 
-import { createScene } from "./scene";
 import { inializeInputListeners } from "./inputListeners";
+import { createScene } from "./scene";
 
 export var canvas: HTMLCanvasElement;
 export var engine: Engine;
