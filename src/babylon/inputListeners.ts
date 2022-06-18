@@ -1,5 +1,6 @@
 import { Axis } from "babylonjs";
-import { input } from "./chat";
+import { chatRef } from "..";
+import { input } from "../reactComponents/chat";
 import { canvas, sphere1 } from "./main";
 
 export var inputStates: {
@@ -12,8 +13,8 @@ export var inputStates: {
     left: Boolean
 }
 
-export function inializeInputListeners() {
-    inputStates = {
+let createInputStates = () => {
+    return {
         space: false,
         Z: false,
         Q: false,
@@ -22,13 +23,28 @@ export function inializeInputListeners() {
         right: false,
         left: false
     }
+}
 
-    window.addEventListener('keydown', (evt) => {
+export function inializeInputListeners() {
+    inputStates = createInputStates()
+
+    canvas.addEventListener('keydown', (evt) => {
         keyListener(evt, true)
     });
 
-    window.addEventListener('keyup', (evt) => {
+    canvas.addEventListener('keyup', (evt) => {
         keyListener(evt, false)
+    });
+
+    canvas.addEventListener("keypress", (evt) => {
+        keyPressListener(evt)
+    })
+
+    canvas.addEventListener('keydown', (evt) => {
+        if ((evt.code === "Enter" || evt.code === "NumpadEnter")) {
+            inputStates = createInputStates()
+            chatRef.current!.enterChat()
+        }
     });
 
     pointerLockAndMouseMove();
@@ -66,12 +82,12 @@ function keyListener(evt: KeyboardEvent, isPressed: Boolean) {
     }
 }
 
-function pointerLockAndMouseMove() {
+export function pointerLockAndMouseMove() {
     canvas.requestPointerLock = canvas.requestPointerLock ||
         canvas.mozRequestPointerLock; // || (<any>canvas).webkitPointerLockElement
 
     //turret direction is responding to cursor movements
-    window.addEventListener("mousemove", (evt) => {
+    canvas.addEventListener("mousemove", (evt) => {
         if (sphere1) {
             if (evt.movementX > 0) {
                 sphere1.rotate(Axis.Y, Math.sqrt(evt.movementX) / 200);
@@ -88,5 +104,11 @@ function pointerLockAndMouseMove() {
 
     canvas.onpointerdown = function () {
         if (!isLocked()) canvas.requestPointerLock();
+    }
+}
+
+let keyPressListener = (evt: KeyboardEvent) => {
+    if (evt.code === "KeyC") {
+        chatRef.current!.toggleChat()
     }
 }

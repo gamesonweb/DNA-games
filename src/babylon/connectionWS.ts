@@ -1,6 +1,6 @@
-import { Mesh, Vector3, Axis, Animation } from "babylonjs";
+import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
+import { chatRef } from "..";
 import { Avatar } from "./avatar";
-import { writeMessageInChat } from "./chat";
 import { scene, set_my_sphere } from "./main";
 import { updateHour } from "./time";
 import { isVector3Equal, makeid } from "./tools";
@@ -108,7 +108,7 @@ function setSocketMessageListener() {
             case 'message': {
                 let messageContent = JSON.parse(messageReceived.content);
                 if (messageContent.username == username) break;
-                writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
+                chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
                 break;
             }
 
