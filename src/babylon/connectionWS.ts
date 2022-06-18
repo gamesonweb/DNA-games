@@ -175,6 +175,7 @@ function setPositionUpdateSender() {
         if (username && (player = player_list.get(username)) && (player.didSomething || !isVector3Equal(player.old_position, player.position))) {
             sendPosition(player);
             player.old_position = player.position.clone()
+            console.log("sending pos")
         }
     },
         50);
