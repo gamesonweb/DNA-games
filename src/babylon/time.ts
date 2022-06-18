@@ -1,4 +1,4 @@
-import { light } from "./main";
+import { light } from "./scene";
 import { Animation } from "babylonjs";
 
 export var hour: number
