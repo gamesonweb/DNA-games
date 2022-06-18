@@ -46,7 +46,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
         if (event.key === "Enter" || event.key === "NumpadEnter") {
             // Cancel the default action, if needed
             event.preventDefault()
-            if (event.currentTarget.value != "") {
+            if (event.currentTarget.value !== "") {
                 this.sendMessageFromPlayer(event.currentTarget.value)
                 event.currentTarget.value = ""
             } else

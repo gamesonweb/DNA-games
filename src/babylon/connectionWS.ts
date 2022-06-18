@@ -40,7 +40,7 @@ export function connect_to_ws() {
         username = username.slice(0, 12);
     }
 
-    if (username == "") {
+    if (username === "") {
         username = makeid(10);
     }
 
@@ -82,7 +82,7 @@ function setSocketMessageListener() {
                 var sphere = new Avatar(scene, messageReceived.content, username);
                 var sender_name = messageReceived.content;
                 player_list.set(sender_name, sphere);
-                if (sender_name == username) {
+                if (sender_name === username) {
                     set_my_sphere();
                     setPositionUpdateSender()
                 }
@@ -93,6 +93,7 @@ function setSocketMessageListener() {
             case 'usernameSetter': {
                 console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
                 username = messageReceived.content;
+                break;
             }
 
             //logout route: dispose player's avatar, remove player's entry in the player_list map
@@ -107,7 +108,7 @@ function setSocketMessageListener() {
             //message route: write the message content in the chat if the sender isn't us
             case 'message': {
                 let messageContent = JSON.parse(messageReceived.content);
-                if (messageContent.username == username) break;
+                if (messageContent.username === username) break;
                 chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
                 break;
             }
@@ -136,7 +137,7 @@ function setSocketMessageListener() {
 
             //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
             case 'fireBullet': {
-                if (messageReceived.content != username) {
+                if (messageReceived.content !== username) {
                     let firing_player = player_list.get(messageReceived.content)
                     if (firing_player) {
                         firing_player.addBullet(true);
@@ -148,10 +149,6 @@ function setSocketMessageListener() {
             case 'hour': {
                 updateHour(messageReceived.content)
                 break;
-            }
-
-            case 'hour': {
-                updateHour(messageReceived.content)
             }
 
             //default: the route received does not exist. Should not happen, look for debugging!
@@ -215,13 +212,13 @@ export function objToPosition({ position }: Mesh): position {
 function position_update(data: receiveContent, list: Map<String, any>) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
-    if (data.username == username) return
+    if (data.username === username) return
 
     //We find the avatar linked to the username in our list parameter map
     let avatar_to_move = list.get(data.username);
 
     //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
-    if (avatar_to_move == undefined) {
+    if (avatar_to_move === undefined) {
         console.log("failed ot find player " + data.username + ", adding him to the list.");
         list.set(data.username, new Avatar(scene, data.username, username));
         avatar_to_move = list.get(data.username);
@@ -229,7 +226,7 @@ function position_update(data: receiveContent, list: Map<String, any>) {
 
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_move) {
-        if (avatar_to_move.position.x != data.pos_x || avatar_to_move.position.y != data.pos_y || avatar_to_move.position.z != data.pos_z) {
+        if (avatar_to_move.position.x !== data.pos_x || avatar_to_move.position.y !== data.pos_y || avatar_to_move.position.z !== data.pos_z) {
             Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
         //avatar_to_move.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
