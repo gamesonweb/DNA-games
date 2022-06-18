@@ -49,7 +49,7 @@ export class Avatar extends Mesh {
     this.addChild(plane)
 
 
-    this.position = new Vector3(this.counter, 1, 0);
+    this.position = new Vector3(this.counter, 2, 0);
     this.old_position = this.position.clone()
   }
 

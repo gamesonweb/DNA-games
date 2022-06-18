@@ -1,4 +1,4 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper } from "babylonjs";
 import { canvas, engine, sphere1, scene } from "./main";
 
 export var light: HemisphericLight;
@@ -15,10 +15,10 @@ export function createScene() {
     createWall()
 
     // sphere1 = new Avatar(scene, "Well", "");
-
+    var gravity = 0.02;
     scene.collisionsEnabled = true;
     scene.beforeRender = () => {
-        sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
+        applyGravity(gravity)
     }
 
     return scene;
@@ -52,12 +52,42 @@ function createGround() {
 }
 
 function createWall() {
-    let wall = MeshBuilder.CreateBox("wall", { size: 2 }, scene);
+    let wall = MeshBuilder.CreateBox("wall", { height: 8, width: 2, depth: 0.2 }, scene);
     wall.position = new Vector3(1, 1, 5)
+    wall.rotate(Axis.X, Math.PI / 3)
     wall.checkCollisions = true;
 
     var wallMaterial = new StandardMaterial("wallMat", scene);
 
     wallMaterial.diffuseColor = new Color3(1, 0, 0);
     wall.material = wallMaterial;
+}
+
+function applyGravity(gravity: number) {
+    //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
+    if (sphere1) {
+        //var origin = sphere1.position.add(new Vector3(0, 0, 0))
+        var ray = new Ray(sphere1.position, new Vector3(0, -1, 0), 1.2);
+
+        //let rayHelper = new RayHelper(ray);
+        //rayHelper.show(scene);
+
+        //var hit = scene.pickWithRay(ray);
+        var hits = scene.multiPickWithRay(ray, (m) => { return m.isPickable });
+
+        var filtered = (hits?.filter(e => e.pickedMesh?.name != sphere1?.sphere.name))
+
+        if (filtered != undefined && filtered.length > 0) {
+            var hit = filtered[0]
+            if (hit != null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
+                sphere1.position.y -= gravity
+            }
+        } else {
+            sphere1.position.y -= gravity * 4
+        }
+
+
+
+
+    }
 }
