@@ -76,7 +76,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 {this.state.content.map(({ content, date, isAuthor, sender }, pos) =>
                     <div key={pos}>
                         {date}
-                        <span style={{ color: isAuthor ? "#0ca418ee" : "#2162fbee" }}> {sender} (Mage:) </span>
+                        <span style={{ color: isAuthor ? "#0ca418ee" : "#2162fbee" }}> {sender} (Mage): </span>
                         {content.replace(/</g, "&lt;")}
                         <br />
                     </div>
