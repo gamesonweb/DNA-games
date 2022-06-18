@@ -6,6 +6,7 @@ import { makeid } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
+export var night_monster_list: Map<string, Avatar> = new Map();
 export var username: string;
 export var meshes: Mesh[] = [];
 
@@ -71,6 +72,8 @@ function setUsername() {
 function setSocketMessageListener() {
     //procedure on messages received from server
     ws.addEventListener('message', function (event) {
+        console.log(event.data);
+
         let messageReceived = JSON.parse(event.data);
         switch (messageReceived.route) {
 
@@ -113,34 +116,33 @@ function setSocketMessageListener() {
 
             //position: add the player if they aren't in our list yet, move the avatar to the input position
             case 'position': {
-                //We parse the message's content to get something of the form:
-                //{pos_x: int, pos_y: int, pos_z: int, username: string}
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                if (messageContent.username == username) break;
+                position_update(messageContent, player_list);
+                break;
+            }
 
-                //We find the avatar linked to the username in our player_list map
-                let avatar_to_move = player_list.get(messageContent.username);
+            //monster_data: update the monster's data
+            case 'monster_data': {
+                let messageContent: receiveContent = JSON.parse(messageReceived.content);
+                position_update(messageContent, night_monster_list);
+                console.log("monster appeared!");
+                break;
+            }
 
-                //if we found nothing, we add the username in the player_list map, and associate it with a new avatar
-                if (avatar_to_move == undefined) {
-                    console.log("failed ot find player " + messageContent.username + ", adding him to the list.");
-                    player_list.set(messageContent.username, new Avatar(scene, messageContent.username, username));
-                    avatar_to_move = player_list.get(messageContent.username);
+            //kill_monster: kill the monster with passed username
+            case 'kill_monster': {
+                let monster_to_kill = night_monster_list.get(messageReceived.content);
+                if (monster_to_kill !== undefined) monster_to_kill.dispose();
+                night_monster_list.delete(messageReceived.content);
+                break;
+            }
+
+            //day: day rise on the world (kill all zombies)
+            case 'day': {
+                for (const [_, value] of night_monster_list.entries()) {
+                    value.dispose();
                 }
-
-                //avatar_to_move should now be affected and we can give it the new position
-                if (avatar_to_move) {
-                    if (avatar_to_move.position.x != messageContent.pos_x || avatar_to_move.position.y != messageContent.pos_y || avatar_to_move.position.z != messageContent.pos_z) {
-                        Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
-                    }
-                    //avatar_to_move.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z);
-                    let target = avatar_to_move.position.add(messageContent.direction);
-                    avatar_to_move.lookAt(target);
-                }
-
-                //for debugging, should NOT happen ever
-                else { console.log("WTF???????") }
-
+                night_monster_list.clear();
                 break;
             }
 
@@ -152,7 +154,12 @@ function setSocketMessageListener() {
                         firing_player.addBullet(true);
                     }
                 }
-                break
+                break;
+            }
+
+            case 'hour': {
+                updateHour(messageReceived.content)
+                break;
             }
 
             //default: the route received does not exist. Should not happen, look for debugging!
@@ -207,4 +214,33 @@ export function sendMessage(time: string, msg: string) {
 
 export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
+}
+
+function position_update(data: receiveContent, list: Map<String, any>) {
+    //We parse the message's content to get something of the form:
+    //{pos_x: int, pos_y: int, pos_z: int, username: string}
+    if (data.username == username) return
+
+    //We find the avatar linked to the username in our list parameter map
+    let avatar_to_move = list.get(data.username);
+
+    //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
+    if (avatar_to_move == undefined) {
+        console.log("failed ot find player " + data.username + ", adding him to the list.");
+        list.set(data.username, new Avatar(scene, data.username, username));
+        avatar_to_move = list.get(data.username);
+    }
+
+    //avatar_to_move should now be affected and we can give it the new position
+    if (avatar_to_move) {
+        if (avatar_to_move.position.x != data.pos_x || avatar_to_move.position.y != data.pos_y || avatar_to_move.position.z != data.pos_z) {
+            Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
+        }
+        //avatar_to_move.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
+        let target = avatar_to_move.position.add(data.direction);
+        avatar_to_move.lookAt(target);
+    }
+
+    //for debugging, should NOT happen ever
+    else { console.log("WTF???????") }
 }
