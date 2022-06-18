@@ -5,7 +5,7 @@ import { light } from "./scene";
 export var hour: number
 
 export function updateHour(hourInput: number) {
-    console.log("updating time to " + hourInput);
+    // console.log("updating time to " + hourInput);
     hour = hourInput;
 
     //tue les monstres de nuit si il fait jour

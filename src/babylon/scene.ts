@@ -1,7 +1,8 @@
 import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper, Mesh } from "babylonjs";
-import { canvas, engine, sphere1, scene, ray } from "./main";
+import { canvas, engine, sphere1, scene, ray, jumpRay } from "./main";
 
 export var light: HemisphericLight;
+export var gravity: number;
 
 export function createScene() {
 
@@ -16,11 +17,12 @@ export function createScene() {
     createWall()
 
     // sphere1 = new Avatar(scene, "Well", "");
-    var gravity = 0.02;
+    gravity = -0.02;
     scene.collisionsEnabled = true;
 
     scene.beforeRender = () => {
-        applyGravity(gravity)
+
+        sphere1?.isJumping ? applyJump() : applyGravity()
     }
 
     return scene;
@@ -65,15 +67,9 @@ function createWall() {
     wall.material = wallMaterial;
 }
 
-function applyGravity(gravity: number) {
+function applyGravity() {
     //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
     if (sphere1) {
-        //var origin = sphere1.position.add(new Vector3(0, 0, 0))
-
-        //let rayHelper = new RayHelper(ray);
-        //rayHelper.show(scene);
-
-        //var hit = scene.pickWithRay(ray);
         var hits = scene.multiPickWithRay(ray, (m) => { return m.isPickable });
 
         var filtered = (hits?.filter(e => e.pickedMesh?.name != sphere1?.sphere.name))
@@ -81,14 +77,27 @@ function applyGravity(gravity: number) {
         if (filtered != undefined && filtered.length > 0) {
             var hit = filtered[0]
             if (hit != null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
+                sphere1.position.y += gravity
+            }
+        } else {
+            sphere1.position.y += gravity * 4
+        }
+    }
+}
+
+function applyJump() {
+    if (sphere1) {
+        var hits = scene.multiPickWithRay(jumpRay, (m) => { return m.isPickable });
+
+        var filtered = (hits?.filter(e => e.pickedMesh?.name != sphere1?.sphere.name))
+
+        if (filtered != undefined && filtered.length > 0) {
+            var hit = filtered[0]
+            if (hit != null && hit.pickedPoint && sphere1.position.y < hit.pickedPoint.y - 1.2) {
                 sphere1.position.y -= gravity
             }
         } else {
-            sphere1.position.y -= gravity * 4
+            sphere1.position.y -= gravity * 6
         }
-
-
-
-
     }
 }

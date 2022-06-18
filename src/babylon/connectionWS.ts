@@ -163,9 +163,9 @@ function setPositionUpdateSender() {
     if (username && (player = player_list.get(username))) sendPosition(player);
     setInterval(() => {
         let player: Avatar | undefined;
-        if (username && (player = player_list.get(username)) && (player.didSomething || !isVector3Equal(player.old_position, player.position))) {
+        if (username && (player = player_list.get(username)) && (player.didSomething || !isVector3Equal(player.oldPosition, player.position))) {
             sendPosition(player);
-            player.old_position = player.position.clone()
+            player.oldPosition = player.position.clone()
         }
     },
         50);

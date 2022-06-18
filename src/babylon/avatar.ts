@@ -13,7 +13,11 @@ export class Avatar extends MeshWithHealth {
   bulletList: Bullet[];
   speed_coeff: number;
   didSomething: Boolean;
-  old_position: Vector3;
+  oldPosition: Vector3;
+  isJumping: boolean;
+  canJump: boolean;
+  timeJumping: number;
+
 
   constructor(scene: Scene, avatar_username: string, username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -51,7 +55,11 @@ export class Avatar extends MeshWithHealth {
 
 
     this.position = new Vector3(this.counter, 2, 0);
-    this.old_position = this.position.clone();
+    this.oldPosition = this.position.clone();
+
+    this.isJumping = false;
+    this.canJump = true;
+    this.timeJumping = 500;
   }
 
   move() {
@@ -89,12 +97,24 @@ export class Avatar extends MeshWithHealth {
 
     //add bullet -will become jump later => jump on space and attack on leftMouseClick
     if (inputStates.space) {
+      if (this.canJump) {
+        this.isJumping = true;
+        this.canJump = false
+        setTimeout(() => {
+          this.isJumping = false
+        }, this.timeJumping / 2.5)
+        setTimeout(() => {
+          this.canJump = true
+        }, this.timeJumping)
+      }
+      /*
       this.addBullet()
       ws.send(
         JSON.stringify({
           route: "fireBullet",
           content: this.avatar_username
         }))
+      */
     }
 
     // switch (evt) {

@@ -11,6 +11,8 @@ export var engine: Engine;
 export var scene: Scene;
 export var sphere1: Avatar | undefined;
 export var ray: Ray;
+export var jumpRay: Ray;
+
 let doneOnce = false;
 
 var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
@@ -68,6 +70,7 @@ export function set_my_sphere() {
     //scene.setActiveCameraByName(player_sphere.cameraAvatar.name)
     sphere1 = player_sphere;
     ray = new Ray(sphere1.position, new Vector3(0, -1, 0), 1.2);
+    jumpRay = new Ray(sphere1.position, new Vector3(0, 1, 0), 1.2);
 
     let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.position.multiply(new Vector3(1, -1, 1)), scene, sphere1);
     cameraBuilder.rotationOffset = 180;
