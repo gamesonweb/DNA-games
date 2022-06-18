@@ -34,7 +34,7 @@ export class Avatar extends MeshWithHealth {
     }
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
-    myMaterial.diffuseColor = new Color3(0, 1, 0);
+    myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
     sphere.material = myMaterial;
 
     sphere.parent = this;

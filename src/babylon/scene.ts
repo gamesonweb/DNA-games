@@ -1,6 +1,5 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper, Mesh } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper, Mesh, Texture, SpriteManager, Sprite } from "babylonjs";
 import { canvas, engine, sphere1, scene, ray, jumpRay } from "./main";
-
 export var light: HemisphericLight;
 export var gravity: number;
 
@@ -15,6 +14,8 @@ export function createScene() {
     createLight()
     createGround()
     createWall()
+
+    createSprites()
 
     // sphere1 = new Avatar(scene, "Well", "");
     gravity = -0.02;
@@ -50,6 +51,9 @@ function createLight() {
 function createGround() {
     // Our built- shape. Params: name, width, depth, subdivs, scene
     var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, scene);
+    const groundMaterial = new StandardMaterial("groundMaterial", scene);
+    groundMaterial.diffuseTexture = new Texture("./img/grass.png");
+    ground.material = groundMaterial;
     ground.checkCollisions = true;
     //ground.rotate(Axis.Z, 0.5)
 
@@ -63,8 +67,22 @@ function createWall() {
 
     var wallMaterial = new StandardMaterial("wallMat", scene);
 
-    wallMaterial.diffuseColor = new Color3(1, 0, 0);
+    wallMaterial.diffuseColor = new Color3(0.6, 0.165, 0.11);
     wall.material = wallMaterial;
+}
+
+function createSprites() {
+    var spriteManagerTrees = new SpriteManager("grassesManager", "./img/herb.png", 2000, 800, scene);
+
+    //Creation of 2000 trees at random positions
+    for (var i = 0; i < 2000; i++) {
+        let herb = new Sprite("herb", spriteManagerTrees);
+        herb.height = Math.random() * 2
+        herb.width = Math.random() * 2
+        herb.position.x = Math.random() * 50 - 25;
+        herb.position.z = Math.random() * 50 - 25;
+        herb.position.y = 0.5;
+    }
 }
 
 function applyGravity() {
