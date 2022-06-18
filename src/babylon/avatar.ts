@@ -22,6 +22,7 @@ export class Avatar extends Mesh {
     let sphere = MeshBuilder.CreateSphere(this.name + "sp1", { segments: 16, diameter: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
+    this.ellipsoid = new Vector3(1, 1.5, 1);
     this.checkCollisions = true;
     if (avatar_username != username) {
       sphere.checkCollisions = true;

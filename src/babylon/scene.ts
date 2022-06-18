@@ -1,4 +1,4 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis } from "babylonjs";
 import { canvas, engine, sphere1, scene } from "./main";
 
 export var light: HemisphericLight;
@@ -47,6 +47,7 @@ function createGround() {
     // Our built- shape. Params: name, width, depth, subdivs, scene
     var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, scene);
     ground.checkCollisions = true;
+    //ground.rotate(Axis.Z, 0.5)
 
 }
 
