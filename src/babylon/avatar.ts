@@ -1,4 +1,4 @@
-import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, ExecuteCodeAction, ActionManager } from "babylonjs";
 import { Bullet } from "./bullet";
 import { ws } from "./connectionWS";
 import { inputStates } from "./inputListeners";
@@ -20,10 +20,10 @@ export class Avatar extends MeshWithHealth {
     this.name = "Avatar" + Avatar.counter
     this.counter = Avatar.counter;
     Avatar.counter += 3;
-    let sphere = MeshBuilder.CreateSphere(this.name + "sp1", { segments: 16, diameter: 2 }, scene);
+    let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
-    this.ellipsoid = new Vector3(1, 1, 1);
+    this.ellipsoid = new Vector3(0.5, 1, 0.5);
     this.checkCollisions = true;
     if (avatar_username !== username) {
       sphere.checkCollisions = true;
@@ -36,7 +36,7 @@ export class Avatar extends MeshWithHealth {
     sphere.parent = this;
     this.addChild(sphere)
     this.addChild(queue)
-    queue.position = new Vector3(0, 0, -1);
+    queue.position = new Vector3(0, 0, -0.3);
     this.sphere = sphere;
     this.bulletList = [];
     this.speed_coeff = 0.20;
@@ -51,7 +51,7 @@ export class Avatar extends MeshWithHealth {
 
 
     this.position = new Vector3(this.counter, 2, 0);
-    this.old_position = this.position.clone()
+    this.old_position = this.position.clone();
   }
 
   move() {

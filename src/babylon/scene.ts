@@ -1,4 +1,4 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper, Mesh } from "babylonjs";
 import { canvas, engine, sphere1, scene, ray } from "./main";
 
 export var light: HemisphericLight;
@@ -56,7 +56,7 @@ function createGround() {
 function createWall() {
     let wall = MeshBuilder.CreateBox("wall", { height: 8, width: 2, depth: 0.2 }, scene);
     wall.position = new Vector3(1, 1, 5)
-    wall.rotate(Axis.X, Math.PI / 3)
+    wall.rotate(Axis.X, Math.PI / 2.5)
     wall.checkCollisions = true;
 
     var wallMaterial = new StandardMaterial("wallMat", scene);
