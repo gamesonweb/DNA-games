@@ -1,8 +1,9 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis } from "babylonjs";
+import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, GroundMesh, Mesh } from "babylonjs";
 import { canvas, engine, sphere1, scene } from "./main";
 
 export var light: HemisphericLight;
-
+export var ground: GroundMesh;
+export var wall: Mesh;
 export function createScene() {
 
     // This creates a basic Babylon Scene object (non-mesh)
@@ -14,12 +15,9 @@ export function createScene() {
     createGround()
     createWall()
 
-    // sphere1 = new Avatar(scene, "Well", "");
+    setPhysics(scene)
 
-    scene.collisionsEnabled = true;
-    scene.beforeRender = () => {
-        sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
-    }
+    // sphere1 = new Avatar(scene, "Well", "");
 
     return scene;
 };
@@ -45,14 +43,14 @@ function createLight() {
 
 function createGround() {
     // Our built- shape. Params: name, width, depth, subdivs, scene
-    var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, scene);
+    ground = MeshBuilder.CreateGround("ground", { width: 50, height: 50, subdivisions: 2 }, scene);
     ground.checkCollisions = true;
-    //ground.rotate(Axis.Z, 0.5)
+    ground.rotate(Axis.Z, 0.5)
 
 }
 
 function createWall() {
-    let wall = MeshBuilder.CreateBox("wall", { size: 2 }, scene);
+    wall = MeshBuilder.CreateBox("wall", { height: 8, width: 2, depth: 0.3 }, scene);
     wall.position = new Vector3(1, 1, 5)
     wall.checkCollisions = true;
 
@@ -60,4 +58,20 @@ function createWall() {
 
     wallMaterial.diffuseColor = new Color3(1, 0, 0);
     wall.material = wallMaterial;
+
+    wall.rotate(Axis.X, 1)
+}
+
+function setPhysics(scene: Scene) {
+    scene.collisionsEnabled = true;
+    scene.beforeRender = () => {
+        console.log("intersect ground:", sphere1?.intersectsMesh(ground, false))
+        console.log("intersect rampe:", sphere1?.intersectsMesh(wall, false))
+
+        if ((sphere1 != undefined) && (!sphere1?.intersectsMesh(ground, false) && !sphere1?.intersectsMesh(wall, false))) {
+            sphere1.gravity = sphere1.default_gravity
+
+        }
+        sphere1?.moveWithCollisions(new Vector3(0, sphere1?.gravity, 0))
+    }
 }

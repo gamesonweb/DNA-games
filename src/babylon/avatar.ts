@@ -13,6 +13,8 @@ export class Avatar extends Mesh {
   speed_coeff: number;
   didSomething: Boolean;
   old_position: Vector3;
+  gravity: number;
+  default_gravity: number;
 
   constructor(scene: Scene, avatar_username: string, username: string) {
     super("Avatar" + Avatar.counter, scene);
@@ -33,8 +35,8 @@ export class Avatar extends Mesh {
     sphere.material = myMaterial;
 
     sphere.parent = this;
-    this.addChild(sphere)
-    this.addChild(queue)
+    this.addChild(sphere);
+    this.addChild(queue);
     queue.position = new Vector3(0, 0, -1);
     this.sphere = sphere;
     this.bulletList = [];
@@ -46,11 +48,24 @@ export class Avatar extends Mesh {
     // let plane = createTextOnPlane(this.avatar_username, scene)
     // this.addChild(plane)
     let plane = createLabel(this.avatar_username, this);
-    this.addChild(plane)
+    this.addChild(plane);
 
 
     this.position = new Vector3(this.counter, 1, 0);
-    this.old_position = this.position.clone()
+    this.old_position = this.position.clone();
+
+
+    this.gravity = -0.5;
+    this.default_gravity = this.gravity;
+
+    //simulate the friction over the ground
+    this.onCollideObservable.add(
+      (m, evt) => {
+        if (m.name == "ground" || m.name == "wall") {
+          this.gravity = -0.05
+        }
+      }
+    )
   }
 
   move() {
