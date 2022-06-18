@@ -47,6 +47,8 @@ export let initFunction = async function () {
   startRenderLoop(engine, canvas);
   let scene = createScene();
 
+  inializeInputListeners();
+
   connect_to_ws();
 
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
