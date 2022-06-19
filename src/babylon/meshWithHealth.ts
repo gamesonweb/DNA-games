@@ -18,8 +18,8 @@ export class MeshWithHealth extends Mesh implements Health {
     super(name, scene);
     this.maxHealth = (healthParam?.maxHealth || healthParam?.currentHealth) || 100
     this.minHealth = healthParam?.minHealth || 0
-    this.currentHealth = this.healthSet(healthParam?.currentHealth || this.maxHealth)
     this.healthBar = new HealthBar(this);
+    this.currentHealth = this.healthSet(healthParam?.currentHealth || this.maxHealth)
   }
 
   healthSetToMax() {

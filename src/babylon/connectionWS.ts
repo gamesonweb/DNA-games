@@ -129,19 +129,14 @@ function setSocketMessageListener() {
             //position: add the player if they aren't in our list yet, move the avatar to the input position
             case serverMessages.POSITION: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                position_update(messageContent, player_list);
+                avatar_update_from_serveur(messageContent, player_list);
                 break;
             }
 
             //monster_data: update the monster's data
             case serverMessages.MONSTER_DATA: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                position_update(messageContent, night_monster_list);
-                var monster: Avatar | undefined;
-                if ((monster = night_monster_list.get(messageContent.username))) {
-                    let health = messageContent.health
-                    monster.healthSet(health)
-                };
+                avatar_update_from_serveur(messageContent, night_monster_list);
                 break;
             }
 
@@ -198,6 +193,8 @@ function sendPosition(player: Avatar) {
         pos_y: player.position.y,
         pos_z: player.position.z,
         username: username,
+        health: player.currentHealth,
+        maxHealth: player.maxHealth,
         direction: player.getDirection(Axis.Z)
     })
 
@@ -228,36 +225,40 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-function position_update(data: receiveContent, list: Map<String, Avatar>) {
+function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
-    if (data.username === username) return
+    if (data.username === username && list === player_list) return
 
     //We find the avatar linked to the username in our list parameter map
-    let avatar_to_move = list.get(data.username);
+    let avatar_to_update = list.get(data.username);
 
     //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
-    if (avatar_to_move === undefined) {
-        console.log("failed ot find player " + data.username + ", adding him to the list.");
+    if (avatar_to_update === undefined) {
+        console.log("failed to find name " + data.username + " in list " + list + ", adding him.");
         list.set(data.username, new Avatar(scene, data.username, username, {
             health: {
                 maxHealth: data.maxHealth,
                 currentHealth: data.health
             }
         }));
-        avatar_to_move = list.get(data.username);
+        avatar_to_update = list.get(data.username);
     }
 
     //avatar_to_move should now be affected and we can give it the new position
-    if (avatar_to_move) {
-        if (avatar_to_move.position.x !== data.pos_x || avatar_to_move.position.y !== data.pos_y || avatar_to_move.position.z !== data.pos_z) {
-            Animation.CreateAndStartAnimation("animMove", avatar_to_move, "position", 60, 3, avatar_to_move.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
+    if (avatar_to_update) {
+        if (avatar_to_update.position.x !== data.pos_x || avatar_to_update.position.y !== data.pos_y || avatar_to_update.position.z !== data.pos_z) {
+            Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, 3, avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
         //avatar_to_move.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
-        let target = avatar_to_move.position.add(data.direction);
-        avatar_to_move.lookAt(target);
-    }
+        let target = avatar_to_update.position.add(data.direction);
+        avatar_to_update.lookAt(target);
 
+        //update the avatar health to the data received
+        let health = data.health
+        avatar_to_update.healthSet(health)
+
+    }
     //for debugging, should NOT happen ever
     else { console.log("WTF???????") }
 }
