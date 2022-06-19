@@ -21,6 +21,7 @@ export const serverMessages = {
     POSITION: "position",
     MONSTER_DATA: "monster_data",
     KILL_MONSTER: "kill_monster",
+    DAMAGE_MONSTER: "damage_monster",
     FIRE_BULLET: "fireBullet",
     HOUR: "hour"
 }
@@ -29,7 +30,7 @@ type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, direction: Vector3
+    username: string, direction: Vector3, health?: number
 }
 
 export function connect_to_ws() {
@@ -38,10 +39,10 @@ export function connect_to_ws() {
     //first line is to connect on a local server for testing, second is to connect on the heroku server
 
     //RUNNING SERVER ON LOCAL FOR DEV
-    ws = new WebSocket("ws://127.0.0.1:8080");
+    //ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    //ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
+    ws = new WebSocket("wss://babylongameserver.herokuapp.com/");
 
     //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
     var username_entry = prompt("Enter your username: ");
@@ -136,6 +137,10 @@ function setSocketMessageListener() {
             case serverMessages.MONSTER_DATA: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 position_update(messageContent, night_monster_list);
+                var monster: Avatar | undefined;
+                if (monster = night_monster_list.get(messageContent.username)) {
+                    monster.updateHealth(messageContent.health)
+                };
                 break;
             }
 

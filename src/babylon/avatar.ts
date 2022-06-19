@@ -19,6 +19,8 @@ export class Avatar extends MeshWithHealth {
   timeJumping: number;
   bulletDelay: number;
   lastShoot?: number;
+  health: number;
+  maxHealth: number;
 
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay: number }) {
@@ -26,6 +28,8 @@ export class Avatar extends MeshWithHealth {
     this.name = avatar_username + Avatar.counter
     this.counter = Avatar.counter;
     Avatar.counter += 3;
+    this.maxHealth = 30;
+    this.health = this.maxHealth;
     let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
@@ -130,6 +134,14 @@ export class Avatar extends MeshWithHealth {
 
   updateBulletPosition() {
     this.bulletList.forEach(e => e.update())
+  }
+
+  updateHealth(newHealth: number | undefined) {
+    if (newHealth !== this.health) {
+      if (newHealth) this.health = newHealth;
+      //TODO: update barre de vie à la place de console.log
+      console.log("avatar " + this.avatar_username + " : " + this.health + "/" + this.maxHealth);
+    }
   }
 
   dispose(): void {

@@ -12,6 +12,7 @@ export class Bullet extends Mesh {
   speedCoeff: number;
   displayOnly: Boolean;
   originalPositionBullet: Vector3;
+  damage: number;
 
   constructor(myShooter: Avatar, displayOnly: Boolean) {
     super("Bullet" + Bullet.id + myShooter.name);
@@ -27,8 +28,10 @@ export class Bullet extends Mesh {
     meshes.push(this)
     this.position.x = this.position.x + this.angle.x * 3;
     this.position.z = this.position.z + this.angle.z * 3;
-    this.checkCollisions = true
+    this.checkCollisions = true;
+    this.damage = 10;
     Bullet.id++;
+
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {
         let avatar = e.parent as Avatar;
@@ -38,8 +41,8 @@ export class Bullet extends Mesh {
 
           ws.send(
             JSON.stringify({
-              route: serverMessages.KILL_MONSTER,
-              content: avatar.name
+              route: serverMessages.DAMAGE_MONSTER,
+              content: JSON.stringify({ username: avatar.avatar_username, damage: this.damage })
             }))
         }
       }
