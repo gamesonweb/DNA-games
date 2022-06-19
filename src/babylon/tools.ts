@@ -29,12 +29,12 @@ export function getTime() {
     var today = new Date();
     var hours = today.getHours().toString()
     var minutes = today.getMinutes().toString()
-    var time = "[" + (hours.length == 2 ? '' : '0') + hours + ":" + (minutes.length == 2 ? '' : '0') + minutes + "]";
+    var time = "[" + (hours.length === 2 ? '' : '0') + hours + ":" + (minutes.length === 2 ? '' : '0') + minutes + "]";
     return time
 }
 
 export function isVector3Equal(v1: Vector3, v2: Vector3) {
-    return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z)
+    return (v1.x === v2.x) && (v1.y === v2.y) && (v1.z === v2.z)
 }
 
 

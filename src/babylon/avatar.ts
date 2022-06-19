@@ -9,7 +9,6 @@ export class Avatar extends MeshWithHealth {
   static counter = 0;
   counter: number;
   sphere: Mesh;
-  avatar_username: string;
   bulletList: Bullet[];
   speed_coeff: number;
   didSomething: Boolean;
@@ -25,7 +24,7 @@ export class Avatar extends MeshWithHealth {
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay: number }) {
     super(avatar_username + Avatar.counter, scene);
-    this.name = avatar_username + Avatar.counter
+    this.name = avatar_username
     this.counter = Avatar.counter;
     Avatar.counter += 3;
     this.maxHealth = 30;
@@ -52,11 +51,9 @@ export class Avatar extends MeshWithHealth {
     this.speed_coeff = 0.20;
     this.didSomething = false;
 
-    this.avatar_username = avatar_username;
-
     // let plane = createTextOnPlane(this.avatar_username, scene)
     // this.addChild(plane)
-    let plane = createLabel(this.avatar_username, this);
+    let plane = createLabel(this.name, this);
     this.addChild(plane)
 
 
@@ -119,7 +116,7 @@ export class Avatar extends MeshWithHealth {
       ws.send(
         JSON.stringify({
           route: serverMessages.FIRE_BULLET,
-          content: this.avatar_username
+          content: this.name
         }))
 
     }
@@ -140,7 +137,7 @@ export class Avatar extends MeshWithHealth {
     if (newHealth !== this.health) {
       if (newHealth) this.health = newHealth;
       //TODO: update barre de vie à la place de console.log
-      console.log("avatar " + this.avatar_username + " : " + this.health + "/" + this.maxHealth);
+      console.log("avatar " + this.name + " : " + this.health + "/" + this.maxHealth);
     }
   }
 

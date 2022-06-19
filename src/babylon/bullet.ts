@@ -35,14 +35,14 @@ export class Bullet extends Mesh {
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {
         let avatar = e.parent as Avatar;
-        if (avatar.avatar_username.includes("zombie") && this.myShooter.name === sphere1!.name) {
+        if (avatar.name.includes("zombie") && this.myShooter.name === sphere1!.name) {
           console.log("HERE");
           console.log(night_monster_list);
 
           ws.send(
             JSON.stringify({
               route: serverMessages.DAMAGE_MONSTER,
-              content: JSON.stringify({ username: avatar.avatar_username, damage: this.damage })
+              content: JSON.stringify({ username: avatar.name, damage: this.damage })
             }))
         }
       }

@@ -138,7 +138,7 @@ function setSocketMessageListener() {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
                 position_update(messageContent, night_monster_list);
                 var monster: Avatar | undefined;
-                if (monster = night_monster_list.get(messageContent.username)) {
+                if ((monster = night_monster_list.get(messageContent.username))) {
                     monster.updateHealth(messageContent.health)
                 };
                 break;

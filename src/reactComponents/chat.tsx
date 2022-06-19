@@ -57,7 +57,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     sendMessageFromPlayer(msg: string) {
         var time = getTime()
         if (sphere1) {
-            this.writeMessageInChat(time, sphere1.avatar_username, msg, true)
+            this.writeMessageInChat(time, sphere1.name, msg, true)
             sendMessage(time, msg)
         }
     }

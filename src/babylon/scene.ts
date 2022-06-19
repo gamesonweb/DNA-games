@@ -1,5 +1,5 @@
-import { Color3, Engine, FollowCamera, FreeCamera, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3, Axis, Ray, RayHelper, Mesh, Texture, SpriteManager, Sprite } from "babylonjs";
-import { canvas, engine, sphere1, scene, ray, jumpRay } from "./main";
+import { Axis, Color3, FreeCamera, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3 } from "babylonjs";
+import { canvas, engine, jumpRay, ray, scene, sphere1 } from "./main";
 export var light: HemisphericLight;
 export var gravity: number;
 
@@ -90,11 +90,11 @@ function applyGravity() {
     if (sphere1) {
         var hits = scene.multiPickWithRay(ray, (m) => { return m.isPickable });
 
-        var filtered = (hits?.filter(e => e.pickedMesh?.name != sphere1?.sphere.name))
+        var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
 
-        if (filtered != undefined && filtered.length > 0) {
+        if (filtered !== undefined && filtered.length > 0) {
             var hit = filtered[0]
-            if (hit != null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
+            if (hit !== null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
                 sphere1.position.y += gravity
             }
         } else {
@@ -107,11 +107,11 @@ function applyJump() {
     if (sphere1) {
         var hits = scene.multiPickWithRay(jumpRay, (m) => { return m.isPickable });
 
-        var filtered = (hits?.filter(e => e.pickedMesh?.name != sphere1?.sphere.name))
+        var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
 
-        if (filtered != undefined && filtered.length > 0) {
+        if (filtered !== undefined && filtered.length > 0) {
             var hit = filtered[0]
-            if (hit != null && hit.pickedPoint && sphere1.position.y < hit.pickedPoint.y - 1.2) {
+            if (hit !== null && hit.pickedPoint && sphere1.position.y < hit.pickedPoint.y - 1.2) {
                 sphere1.position.y -= gravity
             }
         } else {
