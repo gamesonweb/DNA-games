@@ -139,7 +139,8 @@ function setSocketMessageListener() {
                 position_update(messageContent, night_monster_list);
                 var monster: Avatar | undefined;
                 if ((monster = night_monster_list.get(messageContent.username))) {
-                    monster.setHealth(messageContent.health)
+                    let health = messageContent.health
+                    monster.healthSet(health)
                 };
                 break;
             }

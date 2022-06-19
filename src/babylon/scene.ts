@@ -1,5 +1,6 @@
-import { Axis, Color3, FreeCamera, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3 } from "babylonjs";
+import { FreeCamera, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3 } from "babylonjs";
 import { canvas, engine, jumpRay, ray, scene, sphere1 } from "./main";
+import { createWall } from "./tools";
 export var light: HemisphericLight;
 export var gravity: number;
 
@@ -57,18 +58,6 @@ function createGround() {
     ground.checkCollisions = true;
     //ground.rotate(Axis.Z, 0.5)
 
-}
-
-function createWall() {
-    let wall = MeshBuilder.CreateBox("wall", { height: 8, width: 2, depth: 0.2 }, scene);
-    wall.position = new Vector3(1, 1, 5)
-    wall.rotate(Axis.X, Math.PI / 2.5)
-    wall.checkCollisions = true;
-
-    var wallMaterial = new StandardMaterial("wallMat", scene);
-
-    wallMaterial.diffuseColor = new Color3(0.6, 0.165, 0.11);
-    wall.material = wallMaterial;
 }
 
 function createSprites() {

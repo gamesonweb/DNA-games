@@ -1,4 +1,4 @@
-import { Mesh, MeshBuilder, Vector3 } from "babylonjs";
+import { Axis, Color3, Mesh, MeshBuilder, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
 import { Avatar } from "./avatar";
 import { scene } from "./main";
@@ -65,4 +65,17 @@ export var createLabel = function (text: string, mesh: Avatar) {
     label.outlineWidth = 10;
     label.outlineColor = "black";
     return plane
+}
+
+
+export function createWall() {
+    let wall = MeshBuilder.CreateBox("wall", { height: 20, width: 2, depth: 0.2 }, scene);
+    wall.position = new Vector3(1, 1, 5)
+    wall.rotate(Axis.X, Math.PI / 2.5)
+    wall.checkCollisions = true;
+
+    var wallMaterial = new StandardMaterial("wallMat", scene);
+
+    wallMaterial.diffuseColor = new Color3(0.6, 0.165, 0.11);
+    wall.material = wallMaterial;
 }
