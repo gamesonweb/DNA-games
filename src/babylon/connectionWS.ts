@@ -228,7 +228,7 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-function position_update(data: receiveContent, list: Map<String, any>) {
+function position_update(data: receiveContent, list: Map<String, Avatar>) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
     if (data.username === username) return
@@ -239,7 +239,12 @@ function position_update(data: receiveContent, list: Map<String, any>) {
     //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
     if (avatar_to_move === undefined) {
         console.log("failed ot find player " + data.username + ", adding him to the list.");
-        list.set(data.username, new Avatar(scene, data.username, username));
+        list.set(data.username, new Avatar(scene, data.username, username, {
+            health: {
+                maxHealth: data.health,
+                currentHealth: data.health
+            }
+        }));
         avatar_to_move = list.get(data.username);
     }
 
