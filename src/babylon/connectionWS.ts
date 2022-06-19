@@ -30,7 +30,7 @@ type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, direction: Vector3, health?: number
+    username: string, direction: Vector3, health?: number, maxHealth?: number
 }
 
 export function connect_to_ws() {
@@ -241,7 +241,7 @@ function position_update(data: receiveContent, list: Map<String, Avatar>) {
         console.log("failed ot find player " + data.username + ", adding him to the list.");
         list.set(data.username, new Avatar(scene, data.username, username, {
             health: {
-                maxHealth: data.health,
+                maxHealth: data.maxHealth,
                 currentHealth: data.health
             }
         }));
