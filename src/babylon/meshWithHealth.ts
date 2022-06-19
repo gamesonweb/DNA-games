@@ -1,7 +1,7 @@
 import { Color3, DynamicTexture, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { scene } from "./main";
 
-type Health = {
+export type Health = {
   maxHealth?: number;
   minHealth?: number;
   currentHealth?: number;

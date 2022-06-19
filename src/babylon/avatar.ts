@@ -2,7 +2,7 @@ import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, V
 import { Bullet } from "./bullet";
 import { serverMessages, ws } from "./connectionWS";
 import { inputStates } from "./inputListeners";
-import { MeshWithHealth } from "./meshWithHealth";
+import { Health, MeshWithHealth } from "./meshWithHealth";
 import { createLabel } from "./tools";
 
 export class Avatar extends MeshWithHealth {
@@ -20,8 +20,8 @@ export class Avatar extends MeshWithHealth {
   lastShoot?: number;
 
 
-  constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay: number }) {
-    super(avatar_username + Avatar.counter, scene);
+  constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
+    super(avatar_username + Avatar.counter, scene, p?.health);
     this.name = avatar_username
     this.counter = Avatar.counter;
     Avatar.counter += 3;
