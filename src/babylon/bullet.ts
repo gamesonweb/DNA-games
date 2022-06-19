@@ -14,7 +14,7 @@ export class Bullet extends Mesh {
   originalPositionBullet: Vector3;
   damage: number;
 
-  constructor(myShooter: Avatar, displayOnly: Boolean) {
+  constructor(myShooter: Avatar, displayOnly: Boolean, p?: { damage?: number }) {
     super("Bullet" + Bullet.id + myShooter.name);
     this.name = "Bullet" + Bullet.id + myShooter.name;
     this.displayOnly = displayOnly;
@@ -29,7 +29,7 @@ export class Bullet extends Mesh {
     this.position.x = this.position.x + this.angle.x * 3;
     this.position.z = this.position.z + this.angle.z * 3;
     this.checkCollisions = true;
-    this.damage = 10;
+    this.damage = p?.damage || 10;
     Bullet.id++;
 
     this.onCollide = e => {
