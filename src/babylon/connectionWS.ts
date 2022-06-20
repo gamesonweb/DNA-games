@@ -3,7 +3,7 @@ import { chatRef } from "..";
 import { Avatar } from "./avatar";
 import { scene, set_my_sphere } from "./main";
 import { updateHour } from "./time";
-import { isVector3Equal, makeid } from "./tools";
+import { getTime, isVector3Equal, makeid } from "./tools";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
@@ -100,6 +100,7 @@ function setSocketMessageListener() {
                     setPositionUpdateSender()
                 }
                 console.log("LOGIN IN: " + messageReceived.content);
+                chatRef.current!.displayStatusInChat(getTime(), messageReceived.content, true);
                 break;
             }
 
@@ -115,6 +116,7 @@ function setSocketMessageListener() {
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 player_list.delete(messageReceived.content);
                 console.log("LOGIN OUT: " + messageReceived.content);
+                chatRef.current!.displayStatusInChat(getTime(), messageReceived.content, false);
                 break;
             }
 

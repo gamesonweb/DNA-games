@@ -9,7 +9,9 @@ type MessageContent = {
     sender: string,
     isAuthor: boolean,
     date: string,
-    content: string
+    content: string,
+    isStatus: boolean,
+    isConnected: boolean
 }
 
 export class Chat extends Component<{}, { visible: boolean, content: MessageContent[], displayChat: boolean }>{
@@ -65,7 +67,16 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     writeMessageInChat(date: string, sender: string, content: string, isAuthor: boolean) {
         // let chat = document.getElementById("chatbox")
         let msgs = this.state.content;
-        msgs.push({ content, date, sender, isAuthor })
+
+        msgs.push({ content, date, sender, isAuthor, isConnected: true, isStatus: false })
+        this.setState({ content: msgs })
+        this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
+    }
+
+    displayStatusInChat(date: string, sender: string, isConnected: boolean) {
+        let content = (isConnected ? " " : " dis") + "connected."
+        let msgs = this.state.content;
+        msgs.push({ content, date, sender, isAuthor: false, isStatus: true, isConnected })
         this.setState({ content: msgs })
         this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
     }
@@ -73,11 +84,11 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     render(): ReactNode {
         return (<div onClick={() => this.enterChat()} style={{ display: this.state.displayChat ? "" : "none" }}>
             <div id="chatbox" className='sc' ref={this.chatRef}>
-                {this.state.content.map(({ content, date, isAuthor, sender }, pos) =>
+                {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
                     <div key={pos}>
                         {date}
-                        <span style={{ color: isAuthor ? "#0ca418ee" : "#2162fbee" }}> {sender} (Mage): </span>
-                        {content.replace(/</g, "&lt;")}
+                        <span style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}> {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</span>
+                        {isStatus ? "" : content.replace(/</g, "&lt;")}
                         <br />
                     </div>
                 )}

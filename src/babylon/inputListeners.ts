@@ -4,24 +4,26 @@ import { input } from "../reactComponents/chat";
 import { canvas, sphere1 } from "./main";
 
 export type InputStates = {
-    space: boolean,
+    jump: boolean,
     goForeward: boolean
     goLeft: boolean,
     goBackward: boolean,
     goRight: boolean,
     rotateRight: boolean,
-    rotateLeft: boolean
+    rotateLeft: boolean,
+    attack: boolean
 }
 
 let createInputStates = (): InputStates => {
     return {
-        space: false,
+        jump: false,
         goForeward: false,
         goLeft: false,
         goBackward: false,
         goRight: false,
         rotateRight: false,
-        rotateLeft: false
+        rotateLeft: false,
+        attack: false
     }
 }
 
@@ -49,6 +51,14 @@ export function inializeInputListeners() {
         }
     });
 
+    canvas.addEventListener('mousedown', (evt) => {
+        mouseListener(evt, true)
+    });
+
+    canvas.addEventListener('mouseup', (evt) => {
+        mouseListener(evt, false)
+    });
+
     pointerLockAndMouseMove();
 }
 
@@ -58,7 +68,7 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
     // tirer
     if (evt.code === "Space") {
-        inputStates.space = isPressed;
+        inputStates.jump = isPressed;
     }
 
     // movements
@@ -81,6 +91,17 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
     }
     else if (evt.code === "ArrowLeft") {
         inputStates.rotateLeft = isPressed;
+    }
+}
+
+function mouseListener(evt: MouseEvent, isPressed: boolean) {
+    if ((input === document.activeElement) && isPressed) { return }
+    switch (evt.which) {
+        case 1:
+            inputStates.attack = isPressed;
+            break;
+        default:
+            break;
     }
 }
 

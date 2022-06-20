@@ -64,7 +64,7 @@ export class Avatar extends MeshWithHealth {
 
   move() {
 
-    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft)
+    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack)
       this.didSomething = true;
 
     let direction = this.getDirection(Axis.Z)
@@ -88,26 +88,15 @@ export class Avatar extends MeshWithHealth {
       this.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal / 1.5));
     }
 
-    //Rotation
+    //player rotation
     if (inputStates.rotateRight) {
       this.rotate(Axis.Y, +0.05)
     } else if (inputStates.rotateLeft) {
       this.rotate(Axis.Y, -0.05)
     }
 
-    //add bullet -will become jump later => jump on space and attack on leftMouseClick
-    if (inputStates.space) {
-      // if (this.canJump) {
-      //   this.isJumping = true;
-      //   this.canJump = false
-      //   setTimeout(() => {
-      //     this.isJumping = false
-      //   }, this.timeJumping / 2.5)
-      //   setTimeout(() => {
-      //     this.canJump = true
-      //   }, this.timeJumping)
-      // }
-
+    //player's main attack
+    if (inputStates.attack) {
       this.addBullet()
       ws.send(
         JSON.stringify({
@@ -115,6 +104,20 @@ export class Avatar extends MeshWithHealth {
           content: this.name
         }))
 
+    }
+
+    //jump
+    if (inputStates.jump) {
+      if (this.canJump) {
+        this.isJumping = true;
+        this.canJump = false
+        setTimeout(() => {
+          this.isJumping = false
+        }, this.timeJumping / 2.5)
+        setTimeout(() => {
+          this.canJump = true
+        }, this.timeJumping)
+      }
     }
   }
 
