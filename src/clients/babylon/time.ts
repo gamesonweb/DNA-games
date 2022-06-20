@@ -1,5 +1,5 @@
 import { Animation } from "babylonjs";
-import { night_monster_list } from "./connectionWS";
+import { night_monster_list } from "../connectionWS";
 import { light } from "./scene";
 
 export var hour: number

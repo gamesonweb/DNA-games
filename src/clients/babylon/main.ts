@@ -1,7 +1,7 @@
 import { Engine, FollowCamera, Ray, Scene, Vector3 } from "babylonjs";
+import { player_list, username } from "../connectionWS";
 import { initChat } from "../reactComponents/chat";
 import { Avatar } from "./avatar";
-import { connect_to_ws, player_list, username } from "./connectionWS";
 
 import { inializeInputListeners } from "./inputListeners";
 import { createScene } from "./scene";
@@ -45,14 +45,16 @@ export let initFunction = async function () {
   }
 
   engine = await asyncEngineCreation();
+  // Resize
+  window.addEventListener("resize", function () {
+    engine.resize();
+  });
   window.engine = engine;
   if (!engine) throw new Error('engine should not be null.');
   startRenderLoop(engine, canvas);
   let scene = createScene();
 
   inializeInputListeners();
-
-  connect_to_ws();
 
   // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
   // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
@@ -78,16 +80,13 @@ export function set_my_sphere() {
   }
 }
 
-
-initFunction().then(e => {
-  scene = e!
-  scene.collisionsEnabled = true
-});
-
-// Resize
-window.addEventListener("resize", function () {
-  engine.resize();
-});
+export function setScene(e: Scene | undefined) {
+  if (e === undefined) {
+    throw new Error("Undefined Scene")
+  } else {
+    scene = e
+  }
+}
 
 declare global {
   interface Window {

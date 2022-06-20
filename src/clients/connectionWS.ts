@@ -1,9 +1,10 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
-import { chatRef } from "../..";
-import { Avatar } from "./avatar";
-import { scene, set_my_sphere } from "./main";
-import { updateHour } from "./time";
-import { getTime, isVector3Equal, makeid } from "./tools";
+import { chatRef, renderReact } from "..";
+import { Avatar } from "./babylon/avatar";
+import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
+import { updateHour } from "./babylon/time";
+import { getTime, isVector3Equal, makeid } from "./babylon/tools";
+import { ErrorNoServer } from "./reactComponents/noServer";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Avatar> = new Map();
@@ -41,27 +42,36 @@ export function connect_to_ws() {
     //RUNNING SERVER ON LOCAL FOR DEV
     //ws = new WebSocket("ws://127.0.0.1:8080");
 
+    ws.onerror = () => {
+        ErrorNoServer()
+    };
+
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
     ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
 
-    //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
-    var username_entry = prompt("Enter your username: ");
-    var formatted_username_entry = username_entry?.replace(/["']/g, "");
-    username = formatted_username_entry ? formatted_username_entry : "";
-
-    if (username.length > 12) {
-        username = username.slice(0, 12);
-    }
-
-    if (username === "") {
-        username = makeid(10);
-    }
 
     //we start our request process when the connection is established
     ws.onopen = (e) => {
+        //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
+        var username_entry = prompt("Enter your username: ");
+        var formatted_username_entry = username_entry?.replace(/["']/g, "");
+        username = formatted_username_entry ? formatted_username_entry : "";
+
+        if (username.length > 12) {
+            username = username.slice(0, 12);
+        }
+
+        if (username === "") {
+            username = makeid(10);
+        }
         console.log("connection successfully established!");
         setUsername();
         setSocketMessageListener();
+        renderReact()
+        initFunction().then(e => {
+            setScene(e)
+            scene.collisionsEnabled = true
+        });
     };
 
     // setTimeout(() => {
