@@ -3,12 +3,6 @@ import { render, unmountComponentAtNode } from "react-dom";
 import { establishConnection } from "../connectionWS";
 
 export class ReactLogin extends Component<{}, {}> {
-
-  constructor(e: string) {
-    super(e)
-
-  }
-
   inputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     let val = e.currentTarget.value;
     if (val.match(/^([a-z0-9A-Z]|-)*$/) === null) {
