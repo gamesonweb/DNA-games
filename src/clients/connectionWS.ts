@@ -4,6 +4,7 @@ import { Avatar } from "./babylon/avatar";
 import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
 import { updateHour } from "./babylon/time";
 import { getTime, isVector3Equal, makeid } from "./babylon/tools";
+import { askUsername } from "./reactComponents/login";
 import { ErrorNoServer } from "./reactComponents/noServer";
 
 export var ws: WebSocket;
@@ -53,25 +54,7 @@ export function connect_to_ws() {
     //we start our request process when the connection is established
     ws.onopen = (e) => {
         //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
-        var username_entry = prompt("Enter your username: ");
-        var formatted_username_entry = username_entry?.replace(/["']/g, "");
-        username = formatted_username_entry ? formatted_username_entry : "";
-
-        if (username.length > 12) {
-            username = username.slice(0, 12);
-        }
-
-        if (username === "") {
-            username = makeid(10);
-        }
-        console.log("connection successfully established!");
-        setUsername();
-        setSocketMessageListener();
-        renderReact()
-        initFunction().then(e => {
-            setScene(e)
-            scene.collisionsEnabled = true
-        });
+        askUsername()
     };
 
     // setTimeout(() => {
@@ -273,4 +256,26 @@ function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avat
     }
     //for debugging, should NOT happen ever
     else { console.log("WTF???????") }
+}
+
+export function establishConnection(name: string) {
+    var username_entry = name;
+    var formatted_username_entry = username_entry?.replace(/["']/g, "");
+    username = formatted_username_entry ? formatted_username_entry : "";
+
+    if (username.length > 12) {
+        username = username.slice(0, 12);
+    }
+
+    if (username === "") {
+        username = makeid(10);
+    }
+    console.log("connection successfully established!");
+    setUsername();
+    setSocketMessageListener();
+    renderReact()
+    initFunction().then(e => {
+        setScene(e)
+        scene.collisionsEnabled = true
+    });
 }

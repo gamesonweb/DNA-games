@@ -61,6 +61,7 @@ body {
   position: absolute;
 }
 
+.loginReact,
 .no-server {
   background-color: black;
   color: white;
@@ -73,6 +74,10 @@ body {
 
 .no-server img {
   padding: 20px 0;
+}
+
+.loginReact span {
+  margin-top: 10px;
 }
 
 .no-server a {
