@@ -60,3 +60,24 @@ body {
   bottom: 10px;
   position: absolute;
 }
+
+.no-server {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.no-server img {
+  padding: 20px 0;
+}
+
+.no-server a {
+  color: red;
+  font-family: helvetica;
+  text-decoration: none;
+  text-transform: uppercase;
+}

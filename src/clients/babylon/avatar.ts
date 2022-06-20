@@ -1,6 +1,6 @@
 import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { serverMessages, ws } from "../connectionWS";
 import { Bullet } from "./bullet";
-import { serverMessages, ws } from "./connectionWS";
 import { inputStates } from "./inputListeners";
 import { Health, MeshWithHealth } from "./meshWithHealth";
 import { createLabel } from "./tools";

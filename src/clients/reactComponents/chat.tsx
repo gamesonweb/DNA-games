@@ -1,7 +1,7 @@
 import { Component, createRef, ReactNode, RefObject } from "react"
-import { sendMessage } from "../babylon/connectionWS"
 import { canvas, sphere1 } from "../babylon/main"
 import { getTime } from "../babylon/tools"
+import { sendMessage } from "../connectionWS"
 
 export var input: HTMLInputElement
 

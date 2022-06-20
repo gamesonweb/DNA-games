@@ -1,19 +1,22 @@
 import { createRef, StrictMode } from 'react';
 import { render } from 'react-dom';
-import { initFunction } from './clients/babylon/main';
+import { connect_to_ws } from './clients/connectionWS';
 import './clients/css/index.css';
 import { Chat } from './clients/reactComponents/chat';
 
 export let chatRef = createRef<Chat>();
 
-render(
-  <StrictMode>
-    <Chat ref={chatRef} />
-  </StrictMode>,
-  document.getElementById("chatAnchor")
-);
+export function renderReact() {
+  render(
+    <StrictMode>
+      <Chat ref={chatRef} />
+    </StrictMode>,
+    document.getElementById("chatAnchor")
+  );
+}
 
-initFunction()
+
+connect_to_ws();
 
 
 // If you want to start measuring performance in your app, pass a function
