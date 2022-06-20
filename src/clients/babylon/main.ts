@@ -45,6 +45,8 @@ export let initFunction = async function () {
   }
 
   engine = await asyncEngineCreation();
+  // engine.displayLoadingUI();
+
   // Resize
   window.addEventListener("resize", function () {
     engine.resize();
@@ -52,16 +54,10 @@ export let initFunction = async function () {
   window.engine = engine;
   if (!engine) throw new Error('engine should not be null.');
   startRenderLoop(engine, canvas);
+
   let scene = createScene();
 
   inializeInputListeners();
-
-  // HERE PLAYER-X SENDS A REQUEST TO THE SERVER PASSING evt.key
-  // THE SERVER MUST SENDS THE NOTIFICATION TO MOVE THE AVATAR-X
-  // OF evt.key. That means AVATARS[PLAYER-X].move(evt.key)
-
-  //canvas.onkeydown = evt => sphere1?.move(evt.code, evt)
-
   return scene
 };
 
