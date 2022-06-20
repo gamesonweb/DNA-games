@@ -72,6 +72,10 @@ body {
   height: 100vh;
 }
 
+.loginReact input {
+  text-align: center;
+}
+
 .no-server img {
   padding: 20px 0;
 }
