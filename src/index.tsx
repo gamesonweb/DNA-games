@@ -1,8 +1,8 @@
 import { createRef, StrictMode } from 'react';
 import { render } from 'react-dom';
-import { initFunction } from './babylon/main';
-import './css/index.css';
-import { Chat } from './reactComponents/chat';
+import { initFunction } from './clients/babylon/main';
+import './clients/css/index.css';
+import { Chat } from './clients/reactComponents/chat';
 
 export let chatRef = createRef<Chat>();
 

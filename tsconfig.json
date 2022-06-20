@@ -17,7 +17,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+     // Generate d.ts files
+    "declaration": true,
   },
   "include": [
     "src"
