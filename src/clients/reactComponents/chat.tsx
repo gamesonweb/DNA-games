@@ -101,7 +101,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
 
 export let chatRef = createRef<Chat>();
 
-export function renderReact() {
+export function initChat() {
     render(
         <StrictMode>
             <Chat ref={chatRef} />

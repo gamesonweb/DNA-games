@@ -30,7 +30,7 @@ export let initFunction = async function () {
   doneOnce = true
   canvas = document.getElementById("canvas") as HTMLCanvasElement
 
-  initChat();
+  // initChat();
 
   var asyncEngineCreation = async function () {
     try {
@@ -90,7 +90,3 @@ declare global {
 }
 
 window.BABYLON = BABYLON;
-
-function initChat() {
-  throw new Error("Function not implemented.");
-}
