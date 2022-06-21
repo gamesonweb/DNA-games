@@ -1,7 +1,7 @@
 import { Engine, FollowCamera, Ray, Scene, Vector3 } from "babylonjs";
 import { player_list, username } from "../connectionWS";
 import { initChat } from "../reactComponents/chat";
-import { Avatar } from "./avatar";
+import { Avatar } from "./avatars/avatar";
 
 import { inializeInputListeners } from "./inputListeners";
 import { createScene } from "./scene";

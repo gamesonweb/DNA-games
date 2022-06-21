@@ -1,6 +1,6 @@
 import { Axis, Color3, Mesh, MeshBuilder, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
-import { Avatar } from "./avatar";
+import { Avatar } from "./avatars/avatar";
 import { scene } from "./main";
 
 export function makeid(length: number) {
