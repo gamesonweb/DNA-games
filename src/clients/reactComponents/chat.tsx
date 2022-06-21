@@ -1,4 +1,5 @@
-import { Component, createRef, ReactNode, RefObject } from "react"
+import { Component, createRef, ReactNode, RefObject, StrictMode } from "react"
+import { render } from "react-dom"
 import { canvas, sphere1 } from "../babylon/main"
 import { getTime } from "../babylon/tools"
 import { sendMessage } from "../connectionWS"
@@ -98,44 +99,13 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 }
 
-export function initChat() {
-    // let chatbox = document.getElementById("chatbox")
-    // input = document.getElementById("message") as HTMLInputElement
+export let chatRef = createRef<Chat>();
 
-    // if (chatbox) {
-    //     chatbox.onclick = () => {
-    //         makeInputVisible()
-    //     }
-    // }
-
-    // chatbox?.addEventListener("onclick", function (event) {
-    //     makeInputVisible()
-    // })
-
-    // window.addEventListener('keydown', (evt) => {
-    //     if ((evt.code === "Enter" || evt.code === "NumpadEnter")) {
-    //         makeInputVisible()
-    //     }
-    // });
-
-    // input?.addEventListener("keypress", function (event) {
-    //     // If the user presses the "Enter" key on the keyboard
-    //     if (event.code === "Enter" || event.code === "NumpadEnter") {
-    //         // Cancel the default action, if needed
-    //         event.preventDefault()
-    //         if (input.value != "") {
-    //             sendMessageFromPlayer(input.value)
-    //             input.value = ""
-    //             input.style.visibility = "hidden"
-    //             canvas.focus()
-    //         }
-    //     }
-    // });
+export function renderReact() {
+    render(
+        <StrictMode>
+            <Chat ref={chatRef} />
+        </StrictMode>,
+        document.getElementById("chatAnchor")
+    );
 }
-
-// export function makeInputVisible() {
-//     if (input) {
-//         input.style.visibility = "visible";
-//         input.focus();
-//     }
-// }

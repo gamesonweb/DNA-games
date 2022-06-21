@@ -1,9 +1,9 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
-import { chatRef, renderReact } from "..";
 import { Avatar } from "./babylon/avatars/avatar";
 import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
 import { updateHour } from "./babylon/time";
 import { getTime, isVector3Equal, makeid } from "./babylon/tools";
+import { chatRef, renderReact } from "./reactComponents/chat";
 import { askUsername } from "./reactComponents/login";
 import { ErrorNoServer } from "./reactComponents/noServer";
 

@@ -1,20 +1,5 @@
-import { createRef, StrictMode } from 'react';
-import { render } from 'react-dom';
 import { connect_to_ws } from './clients/connectionWS';
 import './clients/css/index.css';
-import { Chat } from './clients/reactComponents/chat';
-
-export let chatRef = createRef<Chat>();
-
-export function renderReact() {
-  render(
-    <StrictMode>
-      <Chat ref={chatRef} />
-    </StrictMode>,
-    document.getElementById("chatAnchor")
-  );
-}
-
 
 connect_to_ws();
 

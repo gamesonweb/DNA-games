@@ -1,6 +1,5 @@
 import { Axis } from "babylonjs";
-import { chatRef } from "../..";
-import { input } from "../reactComponents/chat";
+import { chatRef, input } from "../reactComponents/chat";
 import { canvas, sphere1 } from "./main";
 
 export type InputStates = {

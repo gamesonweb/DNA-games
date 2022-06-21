@@ -1,6 +1,5 @@
-import { Engine, FollowCamera, Ray, Scene, Vector3 } from "babylonjs";
+import { Engine, FollowCamera, Scene, Vector3 } from "babylonjs";
 import { player_list, username } from "../connectionWS";
-import { initChat } from "../reactComponents/chat";
 import { Avatar } from "./avatars/avatar";
 
 import { inializeInputListeners } from "./inputListeners";
@@ -91,3 +90,7 @@ declare global {
 }
 
 window.BABYLON = BABYLON;
+
+function initChat() {
+  throw new Error("Function not implemented.");
+}
