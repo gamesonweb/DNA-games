@@ -1,7 +1,9 @@
 import { connect_to_ws } from './clients/connectionWS';
 import './clients/css/index.css';
 
-connect_to_ws();
+export function main() {
+  connect_to_ws();
+}
 
 
 // If you want to start measuring performance in your app, pass a function
