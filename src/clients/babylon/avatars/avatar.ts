@@ -4,7 +4,7 @@ import { Bullet } from "../bullet";
 import { inputStates } from "../inputListeners";
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { createLabel } from "../tools";
-import { sphere1 } from "../main";
+import { jumpRay, ray, sphere1 } from "../main";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
@@ -150,8 +150,13 @@ export class Avatar extends MeshWithHealth {
 
   knockback(direction: Vector3, power: number) {
     let targetPosition = this.position.add(direction.scale(power))
-    Animation.CreateAndStartAnimation("animMove", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT);
-  }
+    Animation.CreateAndStartAnimation("animMove", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
+      () => {
+        ray.origin = this.position
+        jumpRay.origin = this.position
+      })
+  };
+
 }
 
 export function addAvatar(scene: Scene, avatar_username: string) {
