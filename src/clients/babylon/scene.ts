@@ -2,9 +2,11 @@ import { FreeCamera, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager
 import { canvas, engine, sphere1 } from "./main";
 import { createWall } from "./tools";
 export var light: HemisphericLight;
-export var gravity: number;
 
 export class MyScene extends Scene {
+    gravityIntensity: number;
+    acceleration: number
+
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine!)
@@ -19,7 +21,8 @@ export class MyScene extends Scene {
         this.createSprites()
 
         // sphere1 = new Avatar(scene, "Well", "");
-        gravity = -0.02;
+        this.gravityIntensity = -0.02;
+        this.acceleration = this.gravityIntensity;
         this.collisionsEnabled = true;
 
         this.beforeRender = () => {
@@ -49,7 +52,7 @@ export class MyScene extends Scene {
 
     createGround() {
         // Our built- shape. Params: name, width, depth, subdivs, scene
-        var ground = MeshBuilder.CreateGround("ground1", { width: 50, height: 50, subdivisions: 2 }, this);
+        var ground = MeshBuilder.CreateGround("ground1", { width: 100, height: 100, subdivisions: 2 }, this);
         const groundMaterial = new StandardMaterial("groundMaterial", this);
         groundMaterial.diffuseTexture = new Texture("./img/grass.png");
         ground.material = groundMaterial;
@@ -79,13 +82,19 @@ export class MyScene extends Scene {
 
             var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
 
+            //if object detected but to high
             if (filtered !== undefined && filtered.length > 0) {
                 var hit = filtered[0]
                 if (hit !== null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
-                    sphere1.position.y += gravity
+                    sphere1.position.y += this.acceleration;
+                } else {
+                    this.acceleration = this.gravityIntensity;
+                    sphere1.canJump = true;
                 }
+                //else above the void
             } else {
-                sphere1.position.y += gravity * 4
+                sphere1.position.y += this.acceleration * 2;
+                this.acceleration += this.gravityIntensity * 0.2;
             }
         }
     }
@@ -99,10 +108,10 @@ export class MyScene extends Scene {
             if (filtered !== undefined && filtered.length > 0) {
                 var hit = filtered[0]
                 if (hit !== null && hit.pickedPoint && sphere1.position.y < hit.pickedPoint.y - 1.2) {
-                    sphere1.position.y -= gravity
+                    sphere1.position.y -= this.gravityIntensity
                 }
             } else {
-                sphere1.position.y -= gravity * 6
+                sphere1.position.y -= this.gravityIntensity * 10
             }
         }
     }

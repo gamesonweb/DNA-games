@@ -65,7 +65,7 @@ export class Avatar extends MeshWithHealth {
 
     this.isJumping = false;
     this.canJump = true;
-    this.timeJumping = 500;
+    this.timeJumping = 250;
     this.bulletDelay = p?.bulletDelay || 500;
 
     this.onCollide = e => {
@@ -131,10 +131,10 @@ export class Avatar extends MeshWithHealth {
         this.canJump = false
         setTimeout(() => {
           this.isJumping = false
-        }, this.timeJumping / 2.5)
-        setTimeout(() => {
-          this.canJump = true
         }, this.timeJumping)
+        // setTimeout(() => {
+        //   this.canJump = true
+        // }, this.timeJumping)
       }
     }
   }
