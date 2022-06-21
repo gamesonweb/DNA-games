@@ -1,9 +1,10 @@
-import { Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { serverMessages, ws } from "../connectionWS";
 import { Bullet } from "./bullet";
 import { inputStates } from "./inputListeners";
 import { Health, MeshWithHealth } from "./meshWithHealth";
 import { createLabel } from "./tools";
+import { sphere1 } from "./main";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
@@ -60,6 +61,17 @@ export class Avatar extends MeshWithHealth {
     this.canJump = true;
     this.timeJumping = 500;
     this.bulletDelay = p?.bulletDelay || 500;
+
+    this.onCollide = e => {
+      if (e?.parent instanceof Avatar) {
+        let avatar = e.parent as Avatar;
+        if (avatar.name.includes("zombie") && this?.name === sphere1!.name) {
+          this.healthMinus(5)
+          let direction = this.position.subtract(avatar.position)
+          this.knockback(direction, 2)
+        }
+      }
+    }
   }
 
   move() {
@@ -134,6 +146,11 @@ export class Avatar extends MeshWithHealth {
 
   dispose(): void {
     super.dispose()
+  }
+
+  knockback(direction: Vector3, power: number) {
+    let targetPosition = this.position.add(direction.scale(power))
+    Animation.CreateAndStartAnimation("animMove", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT);
   }
 }
 
