@@ -4,7 +4,7 @@ import { initChat } from "../reactComponents/chat";
 import { Avatar } from "./avatars/avatar";
 
 import { inializeInputListeners } from "./inputListeners";
-import { createScene } from "./scene";
+import { MyScene } from "./scene";
 
 export var canvas: HTMLCanvasElement;
 export var engine: Engine;
@@ -53,7 +53,7 @@ export let initFunction = async function () {
   if (!engine) throw new Error('engine should not be null.');
   startRenderLoop(engine, canvas);
 
-  let scene = createScene();
+  let scene = new MyScene();
 
   inializeInputListeners();
   return scene

@@ -156,7 +156,7 @@ export class Avatar extends MeshWithHealth {
 
   knockback(direction: Vector3, power: number) {
     let targetPosition = this.position.add(direction.scale(power))
-    Animation.CreateAndStartAnimation("animMove", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
+    Animation.CreateAndStartAnimation("animKnockback", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
       () => {
         this.ray.origin = this.position
         this.jumpRay.origin = this.position
