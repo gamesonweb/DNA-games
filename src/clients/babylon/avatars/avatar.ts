@@ -1,10 +1,10 @@
-import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, Ray } from "babylonjs";
 import { serverMessages, ws } from "../../connectionWS";
 import { Bullet } from "../bullet";
 import { inputStates } from "../inputListeners";
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { createLabel } from "../tools";
-import { jumpRay, ray, sphere1 } from "../main";
+import { sphere1 } from "../main";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
@@ -19,6 +19,8 @@ export class Avatar extends MeshWithHealth {
   timeJumping: number;
   bulletDelay: number;
   lastShoot?: number;
+  ray: Ray;
+  jumpRay: Ray
 
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
@@ -56,6 +58,10 @@ export class Avatar extends MeshWithHealth {
 
     this.position = new Vector3(this.counter, 2, 0);
     this.oldPosition = this.position.clone();
+
+
+    this.ray = new Ray(this.position, new Vector3(0, -1, 0), 1.2);
+    this.jumpRay = new Ray(this.position, new Vector3(0, 1, 0), 1.2);
 
     this.isJumping = false;
     this.canJump = true;
@@ -152,8 +158,8 @@ export class Avatar extends MeshWithHealth {
     let targetPosition = this.position.add(direction.scale(power))
     Animation.CreateAndStartAnimation("animMove", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
       () => {
-        ray.origin = this.position
-        jumpRay.origin = this.position
+        this.ray.origin = this.position
+        this.jumpRay.origin = this.position
       })
   };
 

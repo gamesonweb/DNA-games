@@ -1,5 +1,5 @@
 import { FreeCamera, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3 } from "babylonjs";
-import { canvas, engine, jumpRay, ray, scene, sphere1 } from "./main";
+import { canvas, engine, scene, sphere1 } from "./main";
 import { createWall } from "./tools";
 export var light: HemisphericLight;
 export var gravity: number;
@@ -77,7 +77,7 @@ function createSprites() {
 function applyGravity() {
     //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
     if (sphere1) {
-        var hits = scene.multiPickWithRay(ray, (m) => { return m.isPickable });
+        var hits = scene.multiPickWithRay(sphere1.ray, (m) => { return m.isPickable });
 
         var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
 
@@ -94,7 +94,7 @@ function applyGravity() {
 
 function applyJump() {
     if (sphere1) {
-        var hits = scene.multiPickWithRay(jumpRay, (m) => { return m.isPickable });
+        var hits = scene.multiPickWithRay(sphere1.jumpRay, (m) => { return m.isPickable });
 
         var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
 
