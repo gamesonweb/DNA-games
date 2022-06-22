@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fs};
 
 use rand::{distributions::Alphanumeric, Rng};
 
@@ -21,4 +21,24 @@ pub fn merge(v: &serde_json::Value, fields: &HashMap<String, String>) -> serde_j
         }
         v => v.clone(),
     }
+}
+
+pub fn find_js_file() -> String {
+    let mut path = String::from("./build-server/static/js/");
+
+    let mut file_name = fs::read_dir(&path).unwrap();
+
+    let res = file_name
+        .find(|a| match a {
+            Ok(a) => a.path().extension().unwrap().eq("js"),
+            Err(err) => panic!("{}", err),
+        })
+        .unwrap()
+        .unwrap()
+        .file_name()
+        .into_string()
+        .unwrap();
+
+    path.push_str(&String::from(&res));
+    path
 }
