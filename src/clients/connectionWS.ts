@@ -43,8 +43,8 @@ export function connect_to_ws() {
     //RUNNING SERVER ON LOCAL FOR DEV
     ws = new WebSocket("ws://127.0.0.1:8080");
 
-    //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    //ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
+    // RUNNING SERVER ON HEROKU FOR DEPLOYMENT
+    // ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
 
     ws.onerror = () => {
         ErrorNoServer()

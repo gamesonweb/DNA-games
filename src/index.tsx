@@ -1,5 +1,3 @@
 
-import { main } from "./indexClient";
-
-main()
-  
+    import { main } from "./indexClient";
+    main()

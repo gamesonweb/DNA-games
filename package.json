@@ -39,9 +39,9 @@
   },
   "homepage": "./",
   "devDependencies": {
-    "@types/downloadjs": "^1.4.3",
-    "@types/react-dom": "^18.0.5",
     "@babylonjs/core": "^5.10.0",
-    "@babylonjs/gui": "^5.10.0"
+    "@babylonjs/gui": "^5.10.0",
+    "@types/downloadjs": "^1.4.3",
+    "@types/react-dom": "^18.0.5"
   }
 }
