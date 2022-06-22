@@ -5,6 +5,7 @@ import { inputStates } from "../inputListeners";
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { createLabel } from "../tools";
 import { sphere1 } from "../main";
+import { MyScene } from "../scene";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
@@ -23,7 +24,7 @@ export class Avatar extends MeshWithHealth {
   jumpRay: Ray
 
 
-  constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
+  constructor(scene: MyScene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
     super(avatar_username + Avatar.counter, scene, p?.health);
     this.name = avatar_username
     this.counter = Avatar.counter;
@@ -67,6 +68,8 @@ export class Avatar extends MeshWithHealth {
     this.canJump = true;
     this.timeJumping = 250;
     this.bulletDelay = p?.bulletDelay || 500;
+
+    scene.shadowGenerator.addShadowCaster(this)
 
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {
@@ -165,6 +168,6 @@ export class Avatar extends MeshWithHealth {
 
 }
 
-export function addAvatar(scene: Scene, avatar_username: string) {
+export function addAvatar(scene: MyScene, avatar_username: string) {
   return new Avatar(scene, avatar_username, "")
 }

@@ -2,6 +2,7 @@ import { Animation } from "babylonjs";
 import { night_monster_list } from "../connectionWS";
 import { light } from "./scene";
 import { scene } from "./main";
+import { createDayNightCycle } from "./DayNightCycle";
 
 export var hour: number;
 export var skyDefined: boolean = false;
@@ -9,7 +10,7 @@ export var skyDefined: boolean = false;
 export function updateHour(hourInput: number) {
     // console.log("updating time to " + hour);
     if (scene && typeof scene !== 'undefined' && !skyDefined) {
-        scene.createSkyAnimation(hourInput);
+        createDayNightCycle(hourInput);
         skyDefined = true;
     }
     hour = hourInput;
@@ -21,6 +22,7 @@ export function updateHour(hourInput: number) {
         }
         night_monster_list.clear();
     }
+    /*Replaced by dedicated animation in DayNightCycle.js
 
     //pleine nuit
     if (hour > 23 || hour < 5) { light.intensity = 0.2; }
@@ -32,7 +34,7 @@ export function updateHour(hourInput: number) {
     else if (hour > 11 && hour < 17) { light.intensity = 0.8; }
 
     //couché du soleil
-    else if (hour >= 17 && hour <= 23) { smoothLightTransition(light.intensity, (25 - hour) / 10); }
+    else if (hour >= 17 && hour <= 23) { smoothLightTransition(light.intensity, (25 - hour) / 10); }*/
 }
 
 function smoothLightTransition(start: number, end: number) {

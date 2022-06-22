@@ -78,4 +78,7 @@ export function createWall() {
 
     wallMaterial.diffuseColor = new Color3(0.6, 0.165, 0.11);
     wall.material = wallMaterial;
+
+    wall.receiveShadows = true;
+    return wall
 }

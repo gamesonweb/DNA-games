@@ -1,12 +1,12 @@
 import { FreeCamera, DirectionalLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4 } from "babylonjs";
 import { canvas, engine, sphere1 } from "./main";
 import { createWall } from "./tools";
-import { hour } from "./time";
 export var light: DirectionalLight;
 
 export class MyScene extends Scene {
     gravityIntensity: number;
-    acceleration: number
+    acceleration: number;
+    shadowGenerator: ShadowGenerator
 
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -17,7 +17,8 @@ export class MyScene extends Scene {
         this.createCamera()
         this.createLight()
         this.createGround()
-        createWall()
+        this.shadowGenerator = this.createShadows()
+        this.shadowGenerator.addShadowCaster(createWall())
 
         this.createSprites()
 
@@ -60,7 +61,7 @@ export class MyScene extends Scene {
         groundMaterial.diffuseTexture = new Texture("./img/grass.png");
         ground.material = groundMaterial;
         ground.checkCollisions = true;
-        //ground.rotate(Axis.Z, 0.5)
+        ground.receiveShadows = true;
 
     }
 
@@ -78,92 +79,27 @@ export class MyScene extends Scene {
         }
     }
 
-    createShadows() {
-        var shadowGenerator = new ShadowGenerator(1024, light);
+    createShadows(): ShadowGenerator {
+        let shadowGenerator = new ShadowGenerator(1024, light);
+        shadowGenerator.filteringQuality = ShadowGenerator.QUALITY_LOW;
+        shadowGenerator.darkness = 0.3;
+
+        //Makes the shadow blurred (but shadow disappear if above a mesh)
+        // shadowGenerator.useBlurExponentialShadowMap = true;
+        // shadowGenerator.useKernelBlur = true;
+        // shadowGenerator.blurKernel = 4;
+        // shadowGenerator.blurScale = 1;
+
+        //Transparent mesh
+        // shadowGenerator.transparencyShadow = true;
+        // shadowGenerator.enableSoftTransparentShadow = true;
+        return shadowGenerator
     }
 
     /*createSky() {
         this.clearColor = new Color4(135 / 255, 206 / 255, 235 / 255, 1);
     }*/
 
-    createSkyAnimation(beginning: number) {
-        //s = Time Interval Server 24h => 24 * 4 * 0.5 sec = 48 sec
-        //c = Time Interval Client 24h => 2400/60 sec = 40 sec
-        //Ratio = s/c = 1.2
-        var ratio = 1.2
-        //Create a scaling animation at 60 FPS
-        var animationSky = new Animation("animationSky", "clearColor", 60, Animation.ANIMATIONTYPE_COLOR3,
-            Animation.ANIMATIONLOOPMODE_CYCLE);
-
-        // Animation keys
-        var keys = [];
-        //At the animation key 0 (00h00), the value of color is "rgb(0, 0, 0)" (night)
-        keys.push({
-            frame: 0,
-            value: new Color3(0, 0, 0)
-        });
-
-
-        keys.push({
-            frame: 500 * ratio,
-            value: new Color3(0, 0, 0)
-        });
-
-
-        //At the animation key 800 (08h00), the value of color is "rgb(228 / 255, 105 / 255, 46 / 255)" (Sunrise color)
-        keys.push({
-            frame: 800 * ratio,
-            value: new Color3(228 / 255, 105 / 255, 46 / 255)
-        });
-
-        //At the animation key 1100 (11h00), the value of color is "rgb(0, 0, 0)" (blue sky)
-        keys.push({
-            frame: 1100 * ratio,
-            value: new Color3(135 / 255, 206 / 255, 235 / 255)
-        });
-
-        keys.push({
-            frame: 1700 * ratio,
-            value: new Color3(135 / 255, 206 / 255, 235 / 255)
-        });
-
-        //At the animation key 1100 (11h00), the value of color is "rgb(227 / 255, 169 / 255, 136 / 255)" (Sunset color)
-        keys.push({
-            frame: 2000 * ratio,
-            value: new Color3(227 / 255, 169 / 255, 136 / 255)
-        });
-
-        keys.push({
-            frame: 2300 * ratio,
-            value: new Color3(0, 0, 0)
-        });
-
-        keys.push({
-            frame: 2400 * ratio,
-            value: new Color3(0, 0, 0)
-        });
-
-        //Adding keys to the animation object
-        animationSky.setKeys(keys);
-
-        // Create the animation group
-        var animationGroup = new AnimationGroup("skyAnimGroup");
-        animationGroup.addTargetedAnimation(animationSky, this);
-        animationGroup.normalize(0, 2400 * ratio);
-
-        // Start the animation to the current time
-        animationGroup.play()
-        animationGroup.goToFrame(beginning * 100 * ratio);
-
-        //Launch the looping animation
-        animationGroup.play(true);
-
-        //Then add the animation object to scene
-        //this.animations.push(animationSky);
-
-        //Launch animations on scene, from key 0 to key 2400 with loop activated
-        //this.beginAnimation(this, beginning, 2400, true);
-    }
 
     applyGravity() {
         //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
