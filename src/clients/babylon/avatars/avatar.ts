@@ -71,6 +71,13 @@ export class Avatar extends MeshWithHealth {
 
     scene.shadowGenerator.addShadowCaster(this)
 
+    // if (!this.name.includes("zombie")) {
+    //   var flashlight = new SpotLight("spotLight" + this.name, this.position, this.getDirection(Axis.Z), Math.PI / 5, 5, scene);
+    //   flashlight.intensity = 3;
+    //   flashlight.range = 50;
+    //   flashlight.parent = this;
+    // }
+
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {
         let avatar = e.parent as Avatar;

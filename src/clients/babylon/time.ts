@@ -2,7 +2,7 @@ import { Animation } from "babylonjs";
 import { night_monster_list } from "../connectionWS";
 import { light } from "./scene";
 import { scene } from "./main";
-import { createDayNightCycle } from "./DayNightCycle";
+import { createDayNightCycle } from "./dayNightCycle";
 
 export var hour: number;
 export var skyDefined: boolean = false;
@@ -22,7 +22,7 @@ export function updateHour(hourInput: number) {
         }
         night_monster_list.clear();
     }
-    /*Replaced by dedicated animation in DayNightCycle.js
+    /*Replaced by dedicated animation in dayNightCycle.js
 
     //pleine nuit
     if (hour > 23 || hour < 5) { light.intensity = 0.2; }
