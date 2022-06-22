@@ -2,9 +2,11 @@ mod server;
 
 use std::{
     collections::HashMap,
-    env,
+    env, fs,
     io::Error as IoError,
+    iter,
     net::SocketAddr,
+    str, string,
     sync::{Arc, Mutex},
 };
 
@@ -64,7 +66,7 @@ async fn main() -> Result<(), IoError> {
     ));
 
     let ai_client = Command::new("node")
-        .arg("build-server/static/js/main.50f775ac.js")
+        .arg(find_js_file())
         .arg(&port[..])
         .spawn()?;
 
@@ -84,4 +86,27 @@ async fn main() -> Result<(), IoError> {
     }
 
     Ok(())
+}
+
+fn find_js_file() -> String {
+    let mut path = String::from("./build-server/static/js/");
+
+    let mut file_name = fs::read_dir(&path).unwrap();
+
+    let res = match file_name.find(|a| match a {
+        Ok(a) => a.path().extension().unwrap().eq("js"),
+        Err(err) => panic!("{}", err),
+    }) {
+        Some(content) => match content {
+            Ok(dir_name) => match dir_name.file_name().into_string() {
+                Ok(val) => val,
+                Err(_) => panic!("The file name cannot be converted into string"),
+            },
+            Err(err) => panic!("{}", err),
+        },
+        None => panic!("No js file found"),
+    };
+
+    path.push_str(&String::from(&res));
+    path
 }
