@@ -1,9 +1,8 @@
 export function main() {
-  var ws = new WebSocket("ws://127.0.0.1:8080");
+  var ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
 
   ws.onerror = () => {
-    console.log("error trying to connect to socket on ws://127.0.0.1:8080");
-
+    console.log("error trying to connect to socket on wss://mmoactiongameserver.herokuapp.com/");
   };
 
 
