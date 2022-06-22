@@ -70,8 +70,6 @@ async fn main() -> Result<(), IoError> {
         .arg(&port[..])
         .spawn()?;
 
-    println!("hello!");
-
     // spawn the handling of each connection in a separate task.
     while let Ok((stream, addr)) = listener.accept().await {
         tokio::spawn(handle_connection::handle_connection(
