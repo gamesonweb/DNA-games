@@ -1,5 +1,5 @@
 export function main() {
-  var port = process.env.PORT || 8080
+  var port = process.argv[2]
   var adr = "ws://127.0.0.1:" + port
   var ws = new WebSocket(adr);
 

@@ -1,3 +1,0 @@
-const WebSocket = require('ws')
-!function(){"use strict";!function(){var o="ws://127.0.0.1:"+({NODE_ENV:"production",PUBLIC_URL:".",WDS_SOCKET_HOST:void 0,WDS_SOCKET_PATH:void 0,WDS_SOCKET_PORT:void 0,FAST_REFRESH:!0}.PORT||8080),n=new WebSocket(o);n.onerror=function(){console.log("error trying to connect to socket on "+o)},n.onopen=function(){setInterval((function(){n.send("keepalive")}),5e3)}}()}();
-//# sourceMappingURL=main.ac1726ee.js.map
