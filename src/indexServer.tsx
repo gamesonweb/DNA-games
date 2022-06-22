@@ -4,7 +4,7 @@ export function main() {
   var ws = new WebSocket(adr);
 
   ws.onerror = () => {
-    console.log("error trying to connect to socket on wss://mmoactiongameserver.herokuapp.com/");
+    console.log("error trying to connect to socket on " + adr);
   };
 
 
