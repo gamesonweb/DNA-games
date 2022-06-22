@@ -64,7 +64,7 @@ async fn main() -> Result<(), IoError> {
     ));
 
     let ai_client = Command::new("node")
-        .arg("build-server/static/js/main.c86c695e.js")
+        .arg("build-server/static/js/main.5f246245.js")
         .spawn()?;
 
     println!("hello!");

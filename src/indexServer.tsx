@@ -1,5 +1,7 @@
 export function main() {
-  var ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
+  var port = process.env.PORT || 8080
+  var adr = "ws://127.0.0.1:" + port
+  var ws = new WebSocket(adr);
 
   ws.onerror = () => {
     console.log("error trying to connect to socket on wss://mmoactiongameserver.herokuapp.com/");
