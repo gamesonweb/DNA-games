@@ -1,4 +1,4 @@
-import { Animation, AnimationGroup, Color3 } from "babylonjs";
+import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "./main";
 import { light } from "./scene";
 
@@ -12,12 +12,20 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     var animationSky = createSkyAnimation(ratio);
 
     //Light intensity
-    var animationLight = createLightAnimation(ratio);
+    var animationLightIntensity = createLightAnimation(ratio, true);
+
+    //Light tone
+    var animationLightTone = createLightAnimation(ratio, false);
+
+    //Light shit
+    var animationLightShift = createLightShift(ratio);
 
     // Create the animation group
     var animationGroup = new AnimationGroup("skyAnimGroup");
     animationGroup.addTargetedAnimation(animationSky, scene);
-    animationGroup.addTargetedAnimation(animationLight, light);
+    animationGroup.addTargetedAnimation(animationLightIntensity, light);
+    animationGroup.addTargetedAnimation(animationLightTone, light);
+    animationGroup.addTargetedAnimation(animationLightShift, light);
     animationGroup.normalize(0, 2400 * ratio);
 
     // Start the animation to the current time
@@ -36,7 +44,7 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     return animationGroup;
 }
 
-export function createSkyAnimation(ratio: number): Animation {
+function createSkyAnimation(ratio: number): Animation {
     //Sky Color
 
     //Create a scaling animation at 60 FPS
@@ -97,11 +105,11 @@ export function createSkyAnimation(ratio: number): Animation {
     return animationSky
 }
 
-export function createLightAnimation(ratio: number) {
+function createLightAnimation(ratio: number, isIntensity: boolean) {
     //Light intensity
 
     //Create a scaling animation at 60 FPS
-    var animationLight = new Animation("animationLight", "intensity", 60, Animation.ANIMATIONTYPE_FLOAT,
+    var animationLight = new Animation("animationLight" + isIntensity, isIntensity ? "intensity" : "specular", 60, isIntensity ? Animation.ANIMATIONTYPE_FLOAT : Animation.ANIMATIONTYPE_COLOR3,
         Animation.ANIMATIONLOOPMODE_CYCLE);
 
     // Animation keys
@@ -109,33 +117,93 @@ export function createLightAnimation(ratio: number) {
 
     keys.push({
         frame: 0,
-        value: 0.2
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
 
     keys.push({
         frame: 500 * ratio,
-        value: 0.2
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
+
+    if (!isIntensity) {
+        keys.push({
+            frame: 800 * ratio,
+            value: new Color3(228 / 255, 105 / 255, 46 / 255)
+        });
+    }
 
     keys.push({
         frame: 1100 * ratio,
-        value: 0.8
+        value: isIntensity ? 0.8 : new Color3(1, 1, 1)
     });
 
     keys.push({
         frame: 1700 * ratio,
-        value: 0.8
+        value: isIntensity ? 0.8 : new Color3(1, 1, 1)
     });
+
+    if (!isIntensity) {
+        keys.push({
+            frame: 2000 * ratio,
+            value: new Color3(227 / 255, 169 / 255, 136 / 255)
+        });
+    }
 
     keys.push({
         frame: 2300 * ratio,
-        value: 0.2
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     keys.push({
         frame: 2400 * ratio,
-        value: 0.2
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
+    });
+
+    //Adding keys to the animation object
+    animationLight.setKeys(keys);
+
+    return animationLight
+}
+
+function createLightShift(ratio: number) {
+    //Light position
+
+    //Create a scaling animation at 60 FPS
+    var animationLight = new Animation("animationLightPosition", "direction", 60, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    // Animation keys
+    var keys = [];
+
+    let start = new Vector3(5, -2, -1)
+    let end = new Vector3(-5, -2, -1)
+
+    //the sun start --> end
+    //the moon start <-- end (more quickly)
+    //so light go back to its starting point (without weird teleportation)
+
+    //1/6 = 2400 - 2300 + 500 - 0 = 600 => 100/600
+    //end + (start - end) * 1/6
+    let startinProgress = end.add(start.subtract(end).scale(1 / 6))
+
+    keys.push({
+        frame: 0,
+        value: startinProgress
+    });
+
+    keys.push({
+        frame: 500 * ratio,
+        value: new Vector3(5, -2, -1)
+    });
+
+    keys.push({
+        frame: 2300 * ratio,
+        value: new Vector3(-5, -2, -1)
+    });
+
+    keys.push({
+        frame: 2400 * ratio,
+        value: startinProgress
     });
 
     //Adding keys to the animation object
