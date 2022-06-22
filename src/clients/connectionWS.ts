@@ -41,10 +41,10 @@ export function connect_to_ws() {
     //first line is to connect on a local server for testing, second is to connect on the heroku server
 
     //RUNNING SERVER ON LOCAL FOR DEV
-    // ws = new WebSocket("ws://127.0.0.1:8080");
+    ws = new WebSocket("ws://127.0.0.1:8080");
 
     //RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
+    //ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
 
     ws.onerror = () => {
         ErrorNoServer()

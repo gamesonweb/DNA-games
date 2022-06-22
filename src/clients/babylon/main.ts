@@ -7,7 +7,7 @@ import { MyScene } from "./scene";
 
 export var canvas: HTMLCanvasElement;
 export var engine: Engine;
-export var scene: Scene;
+export var scene: MyScene;
 export var sphere1: Avatar | undefined;
 
 let doneOnce = false;
@@ -71,7 +71,7 @@ export function set_my_sphere() {
   }
 }
 
-export function setScene(e: Scene | undefined) {
+export function setScene(e: MyScene | undefined) {
   if (e === undefined) {
     throw new Error("Undefined Scene")
   } else {
@@ -83,7 +83,7 @@ declare global {
   interface Window {
     addAvatar: (() => Avatar),
     playerList: Map<string, Avatar>,
-    scene: Scene,
+    scene: MyScene,
     engine: Engine
     BABYLON: any;
   }

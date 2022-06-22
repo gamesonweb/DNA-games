@@ -1,11 +1,17 @@
 import { Animation } from "babylonjs";
 import { night_monster_list } from "../connectionWS";
 import { light } from "./scene";
+import { scene } from "./main";
 
-export var hour: number
+export var hour: number;
+export var skyDefined: boolean = false;
 
 export function updateHour(hourInput: number) {
-    // console.log("updating time to " + hourInput);
+    // console.log("updating time to " + hour);
+    if (scene && typeof scene !== 'undefined' && !skyDefined) {
+        scene.createSkyAnimation(hourInput);
+        skyDefined = true;
+    }
     hour = hourInput;
 
     //tue les monstres de nuit si il fait jour
