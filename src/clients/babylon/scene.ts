@@ -1,7 +1,8 @@
-import { FreeCamera, DirectionalLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4 } from "babylonjs";
+import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4 } from "babylonjs";
 import { canvas, engine, sphere1 } from "./main";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
+export var hemiLight: HemisphericLight;
 
 export class MyScene extends Scene {
     gravityIntensity: number;
@@ -52,6 +53,9 @@ export class MyScene extends Scene {
 
         // Default intensity is 1.
         light.intensity = 0.7;
+
+        hemiLight = new HemisphericLight("light2", new Vector3(0, 1, 0), this);
+        hemiLight.intensity = 0.35;
     }
 
     createGround() {
@@ -82,7 +86,7 @@ export class MyScene extends Scene {
     createShadows(): ShadowGenerator {
         let shadowGenerator = new ShadowGenerator(1024, light);
         shadowGenerator.filteringQuality = ShadowGenerator.QUALITY_LOW;
-        shadowGenerator.darkness = 0.3;
+        shadowGenerator.darkness = 0.2;
 
         //Makes the shadow blurred (but shadow disappear if above a mesh)
         // shadowGenerator.useBlurExponentialShadowMap = true;

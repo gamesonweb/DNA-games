@@ -1,6 +1,6 @@
 import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "./main";
-import { light } from "./scene";
+import { hemiLight, light } from "./scene";
 
 export function createDayNightCycle(origin: number): AnimationGroup {
     //s = Time Interval Server 24h => 24 * 4 * 0.5 sec = 48 sec
@@ -20,12 +20,16 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     //Light shit
     var animationLightShift = createLightShift(ratio);
 
+    //HemiLigh intensity
+    var animationHemiLight = createHemiLightAnimation(ratio);
+
     // Create the animation group
     var animationGroup = new AnimationGroup("skyAnimGroup");
     animationGroup.addTargetedAnimation(animationSky, scene);
     animationGroup.addTargetedAnimation(animationLightIntensity, light);
     animationGroup.addTargetedAnimation(animationLightTone, light);
     animationGroup.addTargetedAnimation(animationLightShift, light);
+    animationGroup.addTargetedAnimation(animationHemiLight, hemiLight);
     animationGroup.normalize(0, 2400 * ratio);
 
     // Start the animation to the current time
@@ -210,4 +214,49 @@ function createLightShift(ratio: number) {
     animationLight.setKeys(keys);
 
     return animationLight
+}
+
+function createHemiLightAnimation(ratio: number) {
+    //Light intensity
+
+    //Create a scaling animation at 60 FPS
+    var animationHemiLight = new Animation("animationHemiLight", "intensity", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    // Animation keys
+    var keys = [];
+
+    keys.push({
+        frame: 0,
+        value: 0
+    });
+
+    keys.push({
+        frame: 500 * ratio,
+        value: 0
+    });
+
+    keys.push({
+        frame: 1100 * ratio,
+        value: 0.35
+    });
+
+    keys.push({
+        frame: 1700 * ratio,
+        value: 0.35
+    });
+
+    keys.push({
+        frame: 2300 * ratio,
+        value: 0
+    });
+
+    keys.push({
+        frame: 2400 * ratio,
+        value: 0
+    });
+
+    //Adding keys to the animation object
+    animationHemiLight.setKeys(keys);
+
+    return animationHemiLight
 }
