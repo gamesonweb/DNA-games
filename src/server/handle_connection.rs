@@ -16,6 +16,14 @@ struct DamageData {
     damage: i16,
 }
 
+#[derive(Deserialize, Debug)]
+struct MoveMonsterData {
+    username: String,
+    pos_x: f32,
+    pos_y: f32,
+    pos_z: f32,
+}
+
 pub async fn handle_connection(
     peer_map: PeerMap,
     raw_stream: TcpStream,
@@ -143,6 +151,23 @@ pub async fn handle_connection(
                                 }
                                 None => {
                                     println!("ERROR: TRIED TO DAMAGE A ZOMBIE THAT DOES NOT EXIST");
+                                }
+                            }
+                        }
+                        "move_monster" => {
+                            let move_data: MoveMonsterData =
+                                serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
+                            println!("{:?}", move_data);
+                            let mut monster_list = monster_list.lock().unwrap();
+                            let new_data = monster_list.get_mut(&move_data.username);
+                            match new_data {
+                                Some(new_data) => {
+                                    new_data.pos_x = move_data.pos_x;
+                                    new_data.pos_y = move_data.pos_y;
+                                    new_data.pos_z = move_data.pos_z;
+                                }
+                                None => {
+                                    println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");
                                 }
                             }
                         }

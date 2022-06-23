@@ -23,6 +23,7 @@ export const serverMessages = {
     POSITION: "position",
     MONSTER_DATA: "monster_data",
     KILL_MONSTER: "kill_monster",
+    MOVE_MONSTER: "move_monster",
     DAMAGE_MONSTER: "damage_monster",
     FIRE_BULLET: "fireBullet",
     HOUR: "hour"
@@ -30,7 +31,7 @@ export const serverMessages = {
 
 type position = { pos_x: number, pos_y: number, pos_z: number, }
 
-type receiveContent = {
+export type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
     username: string, direction: Vector3, health?: number, maxHealth?: number
 }
@@ -220,7 +221,7 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>) {
+export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
     if (data.username === username && list === player_list) return
