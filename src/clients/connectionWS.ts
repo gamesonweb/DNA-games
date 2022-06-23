@@ -13,8 +13,6 @@ export var night_monster_list: Map<string, Avatar> = new Map();
 export var username: string;
 export var meshes: Mesh[] = [];
 
-window.playerList = player_list;
-
 export const serverMessages = {
     SET_USERNAME: "usernameSetter",
     LOGIN: "login",

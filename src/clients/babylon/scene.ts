@@ -1,4 +1,5 @@
-import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4 } from "babylonjs";
+import { DirectionalLight, FreeCamera, HemisphericLight, MeshBuilder, Scene, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector3 } from "babylonjs";
+import { windowExists } from "../reactComponents/tools";
 import { canvas, engine, sphere1 } from "./main";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
@@ -12,8 +13,6 @@ export class MyScene extends Scene {
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine!)
-
-        window.scene = this;
 
         this.createCamera()
         this.createLight()
@@ -42,7 +41,8 @@ export class MyScene extends Scene {
         camera.setTarget(Vector3.Zero());
 
         // This attaches the camera to the canvas
-        camera.attachControl(canvas, true);
+        if (windowExists())
+            camera.attachControl(canvas, true);
     }
 
     createLight() {

@@ -1,4 +1,4 @@
-import { Color3, DynamicTexture, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Color3, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { scene } from "./main";
 
 export type Health = {
@@ -80,8 +80,6 @@ class HealthBar {
     var healthBarMaterial = new StandardMaterial(parent.name + "hb1mat", scene);
     healthBarMaterial.backFaceCulling = false;
     healthBarMaterial.emissiveColor = HealthBar.colorHealthHigh;
-    var dynamicTexture = new DynamicTexture(parent.name + "dt1", 512, scene, true);
-    dynamicTexture.hasAlpha = true;
     healthBar.parent = healthBarContainer;
     healthBar.material = healthBarMaterial;
 

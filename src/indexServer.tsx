@@ -1,4 +1,4 @@
-import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, Ray } from "babylonjs";
+import { ArcRotateCamera, NullEngine, PointLight, Scene, Vector3 } from "babylonjs";
 import { Avatar } from "./clients/babylon/avatars/avatar";
 import { avatar_update_from_serveur, receiveContent, serverMessages } from "./clients/connectionWS";
 var night_monster_list: Map<string, Avatar> = new Map();
@@ -9,15 +9,14 @@ export function main() {
   // var LOADERS = require("../../dist/preview release/loaders/babylonjs.loaders");
   // global.XMLHttpRequest = require('xhr2').XMLHttpRequest;
 
-  var engine = new BABYLON.NullEngine();
-  var scene = new BABYLON.Scene(engine);
+  var engine = new NullEngine();
+  var scene = new Scene(engine);
 
-  var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+  var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
 
-  var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
+  var camera = new ArcRotateCamera("Camera", 0, 0.8, 100, Vector3.Zero(), scene);
 
-  var port = process.argv[2]
-  //var port = "8080"
+  var port = "8080"
   var adr = "ws://127.0.0.1:" + port
   var ws = new WebSocket(adr);
 
@@ -34,7 +33,7 @@ export function main() {
       let messageReceived = JSON.parse(event.data);
       switch (messageReceived.route) {
 
-        //monster_data: update the monster's data
+        // monster_data: update the monster's data
         case serverMessages.MONSTER_DATA: {
           let messageContent: receiveContent = JSON.parse(messageReceived.content);
           avatar_update_from_serveur(messageContent, night_monster_list);
@@ -67,9 +66,10 @@ export function main() {
       }
     })
 
+
     setInterval(() => {
-      for (const [key, value] of night_monster_list) {
-        // console.log(key, value);
+      for (const value of night_monster_list.values()) {
+        console.log(value);
         value.position.x += 0.5;
         ws.send(
           JSON.stringify({

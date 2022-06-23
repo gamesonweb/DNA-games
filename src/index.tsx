@@ -1,3 +1,3 @@
 
-    import { main } from "./indexServer";
-    main()
+import { main } from "./indexClient";
+main()

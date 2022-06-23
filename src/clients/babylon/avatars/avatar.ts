@@ -1,11 +1,11 @@
-import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, Ray } from "babylonjs";
+import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Ray, StandardMaterial, Vector3 } from "babylonjs";
 import { serverMessages, ws } from "../../connectionWS";
 import { Bullet } from "../bullet";
 import { inputStates } from "../inputListeners";
-import { Health, MeshWithHealth } from "../meshWithHealth";
-import { createLabel } from "../tools";
 import { sphere1 } from "../main";
+import { Health, MeshWithHealth } from "../meshWithHealth";
 import { MyScene } from "../scene";
+import { createLabel } from "../tools";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;

@@ -3,11 +3,11 @@ use tungstenite::Message;
 
 pub mod monster;
 
-use crate::{MonsterList, PeerMap, SharedMessages};
+use crate::{MonsterList, PeerMap};
 use monster::*;
 
 pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
-    let mut hour = 16.0;
+    let mut hour = 20.0;
     let mut zombie_counter = 0;
 
     loop {
