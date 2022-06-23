@@ -3,7 +3,7 @@ use tungstenite::Message;
 
 pub mod monster;
 
-use crate::{MonsterList, PeerMap};
+use crate::{MonsterList, PeerMap, SharedMessages};
 use monster::*;
 
 pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {

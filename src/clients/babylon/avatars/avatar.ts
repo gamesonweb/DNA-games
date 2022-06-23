@@ -69,7 +69,7 @@ export class Avatar extends MeshWithHealth {
     this.timeJumping = 250;
     this.bulletDelay = p?.bulletDelay || 500;
 
-    scene.shadowGenerator.addShadowCaster(this)
+    // scene.shadowGenerator.addShadowCaster(this)
 
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {

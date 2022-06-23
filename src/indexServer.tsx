@@ -4,7 +4,20 @@ import { avatar_update_from_serveur, receiveContent, serverMessages } from "./cl
 var night_monster_list: Map<string, Avatar> = new Map();
 
 export function main() {
+
+  // var BABYLON = require("../../dist/preview release/babylon.max");
+  // var LOADERS = require("../../dist/preview release/loaders/babylonjs.loaders");
+  // global.XMLHttpRequest = require('xhr2').XMLHttpRequest;
+
+  var engine = new BABYLON.NullEngine();
+  var scene = new BABYLON.Scene(engine);
+
+  var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+
+  var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
+
   var port = process.argv[2]
+  //var port = "8080"
   var adr = "ws://127.0.0.1:" + port
   var ws = new WebSocket(adr);
 
@@ -30,11 +43,25 @@ export function main() {
 
         //kill_monster: kill the monster with passed username
         case serverMessages.KILL_MONSTER: {
+          console.log("killing monster " + messageReceived.content);
           let monster_to_kill = night_monster_list.get(messageReceived.content);
           if (monster_to_kill !== undefined) monster_to_kill.dispose();
           night_monster_list.delete(messageReceived.content);
           break;
         }
+
+        //handle hour event
+        case serverMessages.HOUR: {
+          let hour = messageReceived.content;
+          //tue les monstres de nuit si il fait jour
+          if (hour > 7 && hour < 22) {
+            for (const value of night_monster_list.values()) {
+              value.dispose();
+            }
+            night_monster_list.clear();
+          }
+        }
+
         //default
         default: { }
       }
@@ -42,7 +69,7 @@ export function main() {
 
     setInterval(() => {
       for (const [key, value] of night_monster_list) {
-        console.log(key, value);
+        // console.log(key, value);
         value.position.x += 0.5;
         ws.send(
           JSON.stringify({
