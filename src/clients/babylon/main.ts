@@ -1,5 +1,6 @@
-import { Engine, FollowCamera, Scene, Vector3 } from "babylonjs";
+import { Engine, FollowCamera, Vector3 } from "babylonjs";
 import { player_list, username } from "../connectionWS";
+import { windowExists } from "../reactComponents/tools";
 import { Avatar } from "./avatars/avatar";
 
 import { inializeInputListeners } from "./inputListeners";
@@ -44,16 +45,13 @@ export let initFunction = async function () {
   engine = await asyncEngineCreation();
   // engine.displayLoadingUI();
 
-  // Resize
-  window.addEventListener("resize", function () {
-    engine.resize();
-  });
-  window.engine = engine;
   if (!engine) throw new Error('engine should not be null.');
   //startRenderLoop(engine, canvas);
 
   let scene = new MyScene();
   scene.assetManager.load();
+
+  setWindowParams()
   inializeInputListeners();
   return scene
 };
@@ -89,4 +87,16 @@ declare global {
   }
 }
 
-window.BABYLON = BABYLON;
+function setWindowParams() {
+  if (windowExists()) {
+    window.playerList = player_list;
+
+    // Resize
+    window.addEventListener("resize", function () {
+      engine.resize();
+    });
+    window.engine = engine;
+
+    window.scene = scene;
+  }
+}

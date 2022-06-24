@@ -8,12 +8,34 @@ use serde_json::{self};
 use tokio::net::TcpStream;
 use tungstenite::protocol::Message;
 
-use crate::{server::utils, MonsterList, PeerMap, PositionUpdates, SharedMessages};
+use crate::{
+    server::{game_events::monster::monster_spawner, utils},
+    Direction, MonsterList, PeerMap, PositionUpdates, SharedMessages,
+};
 
 #[derive(Deserialize, Debug)]
 struct DamageData {
     username: String,
     damage: i16,
+}
+
+#[derive(Deserialize, Debug)]
+struct MoveMonsterData {
+    username: String,
+    pos_x: f32,
+    pos_y: f32,
+    pos_z: f32,
+    direction: String,
+}
+
+#[derive(Deserialize, Debug)]
+struct SpawnMonsterData {
+    pos_x: f32,
+    pos_y: f32,
+    pos_z: f32,
+    username: String,
+    direction: String,
+    health: i16,
 }
 
 pub async fn handle_connection(
@@ -145,6 +167,46 @@ pub async fn handle_connection(
                                     println!("ERROR: TRIED TO DAMAGE A ZOMBIE THAT DOES NOT EXIST");
                                 }
                             }
+                        }
+                        "move_monster" => {
+                            let move_data: MoveMonsterData =
+                                serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
+                            println!("{:?}", move_data);
+                            let direction: Direction =
+                                serde_json::from_str(&move_data.direction).unwrap();
+                            let mut monster_list = monster_list.lock().unwrap();
+                            let new_data = monster_list.get_mut(&move_data.username);
+                            match new_data {
+                                Some(new_data) => {
+                                    new_data.pos_x = move_data.pos_x;
+                                    new_data.pos_y = move_data.pos_y;
+                                    new_data.pos_z = move_data.pos_z;
+                                    new_data.direction = format!(
+                                        r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+                                        direction._isDirty,
+                                        direction._x,
+                                        direction._y,
+                                        direction._z
+                                    );
+                                }
+                                None => {
+                                    println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");
+                                }
+                            }
+                        }
+                        "spawn_monster" => {
+                            println!("SPAWN MONSTER ROUTE RECEIVED");
+                            let spawn_data: SpawnMonsterData =
+                                serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
+                            monster_spawner(
+                                spawn_data.pos_x,
+                                spawn_data.pos_y,
+                                spawn_data.pos_z,
+                                spawn_data.username,
+                                spawn_data.direction,
+                                spawn_data.health,
+                                monster_list.clone(),
+                            )
                         }
                         //keep alive route, does nothing
                         "keepalive" => {}
