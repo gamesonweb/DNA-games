@@ -1,5 +1,6 @@
 import { Component, ReactNode, StrictMode } from "react";
 import { render } from "react-dom";
+import { windowExists } from "./tools";
 
 export class NoServer extends Component {
   render(): ReactNode {
@@ -12,10 +13,11 @@ export class NoServer extends Component {
 }
 
 export function ErrorNoServer() {
-  render(
-    <StrictMode>
-      <NoServer />
-    </StrictMode>,
-    document.getElementById("root")
-  );
+  if (windowExists())
+    render(
+      <StrictMode>
+        <NoServer />
+      </StrictMode>,
+      document.getElementById("root")
+    );
 }

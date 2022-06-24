@@ -3,6 +3,7 @@ import { render } from "react-dom"
 import { canvas, sphere1 } from "../babylon/main"
 import { getTime } from "../babylon/tools"
 import { sendMessage } from "../connectionWS"
+import { windowExists } from "./tools"
 
 export var input: HTMLInputElement
 
@@ -102,10 +103,11 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
 export let chatRef = createRef<Chat>();
 
 export function initChat() {
-    render(
-        <StrictMode>
-            <Chat ref={chatRef} />
-        </StrictMode>,
-        document.getElementById("chatAnchor")
-    );
+    if (windowExists())
+        render(
+            <StrictMode>
+                <Chat ref={chatRef} />
+            </StrictMode>,
+            document.getElementById("chatAnchor")
+        );
 }

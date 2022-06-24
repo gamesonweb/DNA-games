@@ -37,3 +37,4 @@ TODO
 /target/release/incremental/
 /target/.rustc_info.json
 target/.rustc_info.json
+.vscode/settings.json

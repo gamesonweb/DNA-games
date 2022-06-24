@@ -1,5 +1,6 @@
 import { Axis, Color3, Mesh, MeshBuilder, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
+import { windowExists } from "../reactComponents/tools";
 import { Avatar } from "./avatars/avatar";
 import { scene } from "./main";
 
@@ -43,27 +44,29 @@ export var createLabel = function (text: string, mesh: Avatar) {
     plane.billboardMode = Mesh.BILLBOARDMODE_Y;
     plane.position.y = 1.5;
 
-    var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
+    if (windowExists()) {
+        var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
 
-    var rect1 = new Rectangle();
-    rect1.width = 1;
-    rect1.height = 1;
-    rect1.cornerRadius = 20;
-    rect1.color = "White";
-    rect1.thickness = 0;
-    rect1.background = "transparent";
-    advancedTexture.addControl(rect1);
-    rect1.linkWithMesh(mesh);
-    rect1.linkOffsetY = -80;
+        var rect1 = new Rectangle();
+        rect1.width = 1;
+        rect1.height = 1;
+        rect1.cornerRadius = 20;
+        rect1.color = "White";
+        rect1.thickness = 0;
+        rect1.background = "transparent";
+        advancedTexture.addControl(rect1);
+        rect1.linkWithMesh(mesh);
+        rect1.linkOffsetY = -80;
 
-    const label = new TextBlock();
-    label.text = text;
-    label.color = "white"
-    rect1.addControl(label);
-    label.fontSize = 80;
+        const label = new TextBlock();
+        label.text = text;
+        label.color = "white"
+        rect1.addControl(label);
+        label.fontSize = 80;
 
-    label.outlineWidth = 10;
-    label.outlineColor = "black";
+        label.outlineWidth = 10;
+        label.outlineColor = "black";
+    }
     return plane
 }
 

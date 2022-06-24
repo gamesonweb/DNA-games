@@ -1,6 +1,7 @@
 import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager } from "babylonjs";
 import { startRenderLoop, canvas, engine, sphere1 } from "./main";
 import { ModelEnum } from "./models";
+import { windowExists } from "../reactComponents/tools";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -8,7 +9,7 @@ export var hemiLight: HemisphericLight;
 export class MyScene extends Scene {
     gravityIntensity: number;
     acceleration: number;
-    shadowGenerator: ShadowGenerator;
+    shadowGenerator: ShadowGenerator | null;
     assetManager: AssetsManager
 
     constructor() {
@@ -22,10 +23,12 @@ export class MyScene extends Scene {
         this.createCamera()
         this.createLight()
         this.createGround()
-        this.shadowGenerator = this.createShadows()
-        this.shadowGenerator.addShadowCaster(createWall())
 
-        this.createSprites()
+        if (windowExists()) {
+            this.shadowGenerator = this.createShadows()
+            this.shadowGenerator.addShadowCaster(createWall())
+            this.createSprites()
+        } else { this.shadowGenerator = null }
 
         ModelEnum.createAllModels(this);
 
@@ -61,7 +64,8 @@ export class MyScene extends Scene {
         camera.setTarget(Vector3.Zero());
 
         // This attaches the camera to the canvas
-        camera.attachControl(canvas, true);
+        if (windowExists())
+            camera.attachControl(canvas, true);
     }
 
     createLight() {

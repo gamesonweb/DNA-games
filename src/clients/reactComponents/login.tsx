@@ -1,6 +1,7 @@
 import { Component, KeyboardEvent, ReactNode, StrictMode } from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { establishConnection } from "../connectionWS";
+import { windowExists } from "./tools";
 
 export class ReactLogin extends Component<{}, {}> {
   inputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -27,10 +28,11 @@ export class ReactLogin extends Component<{}, {}> {
 }
 
 export function askUsername() {
-  render(
-    <StrictMode>
-      <ReactLogin />
-    </StrictMode>,
-    document.getElementById("root")
-  );
+  if (windowExists())
+    render(
+      <StrictMode>
+        <ReactLogin />
+      </StrictMode>,
+      document.getElementById("root")
+    );
 }
