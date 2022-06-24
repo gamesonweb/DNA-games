@@ -10,7 +10,7 @@ use tungstenite::protocol::Message;
 
 use crate::{
     server::{game_events::monster::monster_spawner, utils},
-    MonsterList, PeerMap, PositionUpdates, SharedMessages,
+    Direction, MonsterList, PeerMap, PositionUpdates, SharedMessages,
 };
 
 #[derive(Deserialize, Debug)]
@@ -25,6 +25,7 @@ struct MoveMonsterData {
     pos_x: f32,
     pos_y: f32,
     pos_z: f32,
+    direction: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -171,6 +172,8 @@ pub async fn handle_connection(
                             let move_data: MoveMonsterData =
                                 serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
                             println!("{:?}", move_data);
+                            let direction: Direction =
+                                serde_json::from_str(&move_data.direction).unwrap();
                             let mut monster_list = monster_list.lock().unwrap();
                             let new_data = monster_list.get_mut(&move_data.username);
                             match new_data {
@@ -178,6 +181,13 @@ pub async fn handle_connection(
                                     new_data.pos_x = move_data.pos_x;
                                     new_data.pos_y = move_data.pos_y;
                                     new_data.pos_z = move_data.pos_z;
+                                    new_data.direction = format!(
+                                        r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+                                        direction._isDirty,
+                                        direction._x,
+                                        direction._y,
+                                        direction._z
+                                    );
                                 }
                                 None => {
                                     println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");

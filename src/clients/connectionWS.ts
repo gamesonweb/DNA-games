@@ -245,7 +245,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         if (avatar_to_update.position.x !== data.pos_x || avatar_to_update.position.y !== data.pos_y || avatar_to_update.position.z !== data.pos_z) {
             Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, 3, avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
-        //avatar_to_move.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
+
         let target = avatar_to_update.position.add(data.direction);
         avatar_to_update.lookAt(target);
 

@@ -80,11 +80,22 @@ export function main() {
 
     setInterval(() => {
       for (const value of night_monster_list.values()) {
+        console.log("CURRENT DIRECTION: " + value.getDirection(Axis.Z));
+        console.log("CURRENT ROTATION: " + value.rotation);
         value.position.x += 0.5;
+        value.lookAt(new Vector3(5, 1, 5));
+        console.log("DIRECTION AFTER ROTATE: " + value.getDirection(Axis.Z));
+        console.log("ROTATION AFTER ROTATE: " + value.rotation);
         ws.send(
           JSON.stringify({
             route: serverMessages.MOVE_MONSTER,
-            content: JSON.stringify({ username: value.name, pos_x: value.position.x, pos_y: value.position.y, pos_z: value.position.z })
+            content: JSON.stringify({
+              username: value.name,
+              pos_x: value.position.x,
+              pos_y: value.position.y,
+              pos_z: value.position.z,
+              direction: JSON.stringify(value.getDirection(Axis.Z))
+            })
           }))
       }
     },
@@ -95,7 +106,7 @@ export function main() {
 function generate_zombie_wave() {
   var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
 
-  while (zombie_counter < 3) {
+  while (zombie_counter < counter_after_wave) {
     spawn_zombie(zombie_counter, 1, zombie_counter);
   }
 }
