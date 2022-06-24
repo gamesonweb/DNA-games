@@ -1,5 +1,6 @@
-import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4 } from "babylonjs";
-import { canvas, engine, sphere1 } from "./main";
+import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager } from "babylonjs";
+import { startRenderLoop, canvas, engine, sphere1 } from "./main";
+import { ModelEnum } from "./models";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -7,13 +8,16 @@ export var hemiLight: HemisphericLight;
 export class MyScene extends Scene {
     gravityIntensity: number;
     acceleration: number;
-    shadowGenerator: ShadowGenerator
+    shadowGenerator: ShadowGenerator;
+    assetManager: AssetsManager
 
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine!)
 
         window.scene = this;
+
+        this.assetManager = this.configureAssetManager();
 
         this.createCamera()
         this.createLight()
@@ -22,6 +26,8 @@ export class MyScene extends Scene {
         this.shadowGenerator.addShadowCaster(createWall())
 
         this.createSprites()
+
+        ModelEnum.createAllModels(this);
 
         // sphere1 = new Avatar(scene, "Well", "");
         this.gravityIntensity = -0.02;
@@ -32,6 +38,19 @@ export class MyScene extends Scene {
 
             sphere1?.isJumping ? this.applyJump() : this.applyGravity()
         }
+    }
+
+    configureAssetManager() {
+        let assetsManager = new AssetsManager(this);
+        assetsManager.onProgress = function (remainingCount, totalCount, lastFinishedTask) {
+            engine.loadingUIText = "Loading... (" + remainingCount + "/" + totalCount + ")"
+        }
+
+        assetsManager.onFinish = function (tasks) {
+            startRenderLoop(engine)
+        }
+
+        return assetsManager;
     }
 
     createCamera() {
@@ -62,11 +81,15 @@ export class MyScene extends Scene {
         // Our built- shape. Params: name, width, depth, subdivs, scene
         var ground = MeshBuilder.CreateGround("ground1", { width: 100, height: 100, subdivisions: 2 }, this);
         const groundMaterial = new StandardMaterial("groundMaterial", this);
-        groundMaterial.diffuseTexture = new Texture("./img/grass.png");
-        ground.material = groundMaterial;
+        //new Texture("./img/grass.png");
+        let groundTask = this.assetManager.addTextureTask(ground.name + "_task", "./img/grass.png");
+        groundTask.onSuccess = (task) => {
+            groundMaterial.diffuseTexture = task.texture
+            ground.material = groundMaterial;
+        }
+
         ground.checkCollisions = true;
         ground.receiveShadows = true;
-
     }
 
     createSprites() {

@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "babylonjs": "^5.10.0",
     "babylonjs-gui": "^5.10.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -42,6 +41,8 @@
     "@babylonjs/core": "^5.10.0",
     "@babylonjs/gui": "^5.10.0",
     "@types/downloadjs": "^1.4.3",
-    "@types/react-dom": "^18.0.5"
+    "@types/react-dom": "^18.0.5",
+    "babylonjs": "^5.12.1",
+    "babylonjs-loaders": "^5.12.1"
   }
 }

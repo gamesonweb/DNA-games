@@ -12,7 +12,7 @@ export var sphere1: Avatar | undefined;
 
 let doneOnce = false;
 
-var startRenderLoop = function (engine: Engine, canvas: HTMLCanvasElement) {
+export var startRenderLoop = function (engine: Engine) {
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
@@ -50,10 +50,10 @@ export let initFunction = async function () {
   });
   window.engine = engine;
   if (!engine) throw new Error('engine should not be null.');
-  startRenderLoop(engine, canvas);
+  //startRenderLoop(engine, canvas);
 
   let scene = new MyScene();
-
+  scene.assetManager.load();
   inializeInputListeners();
   return scene
 };
