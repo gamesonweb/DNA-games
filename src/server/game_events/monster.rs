@@ -3,33 +3,7 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use rand::Rng;
-
 use crate::{Direction, MonsterData, MonsterList};
-
-pub fn monster_nightstart_factory(
-    monster_list: Arc<Mutex<HashMap<String, MonsterData>>>,
-    zombie_counter: &mut i32,
-) {
-    let health = 100;
-
-    let mut rand_generator = rand::thread_rng();
-    let number_zombies = rand_generator.gen_range(3..5);
-
-    while *zombie_counter < number_zombies {
-        monster_spawner(
-            ((*zombie_counter) as f32 - rand_generator.gen_range(0.0..3.0)) * 2.0,
-            1.0,
-            ((*zombie_counter) as f32 - rand_generator.gen_range(0.0..3.0)) * 2.0,
-            String::from("zombie"),
-            String::from(
-                r#" {\"_isDirty\":true,\"_x\":0.23749832808971405,\"_y\":0,\"_z\":0.9713879227638245} "#,
-            ),
-            health,
-            monster_list.clone(),
-        );
-    }
-}
 
 pub fn monster_spawner(
     pos_x: f32,

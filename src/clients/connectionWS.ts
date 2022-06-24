@@ -239,6 +239,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
             }
         }));
         avatar_to_update = list.get(data.username);
+        if (avatar_to_update) avatar_to_update.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
 
     //avatar_to_move should now be affected and we can give it the new position
