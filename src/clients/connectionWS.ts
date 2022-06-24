@@ -24,7 +24,8 @@ export const serverMessages = {
     MOVE_MONSTER: "move_monster",
     DAMAGE_MONSTER: "damage_monster",
     FIRE_BULLET: "fireBullet",
-    HOUR: "hour"
+    HOUR: "hour",
+    SPAWN_MONSTER: "spawn_monster"
 }
 
 type position = { pos_x: number, pos_y: number, pos_z: number, }
@@ -189,7 +190,7 @@ function sendPosition(player: Avatar) {
         username: username,
         health: player.currentHealth,
         maxHealth: player.maxHealth,
-        direction: player.getDirection(Axis.Z)
+        direction: JSON.stringify(player.getDirection(Axis.Z))
     })
 
     //console.log("sending " + position_player);

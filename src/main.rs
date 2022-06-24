@@ -18,6 +18,14 @@ use tungstenite::protocol::Message;
 
 use crate::server::{broadcast, game_events, handle_connection, utils::find_js_file};
 
+#[derive(Deserialize, Debug)]
+struct Direction {
+    _isDirty: bool,
+    _x: f32,
+    _y: f32,
+    _z: f32,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct MonsterData {
     pos_x: f32,

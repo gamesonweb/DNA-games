@@ -1,4 +1,4 @@
-import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Ray, StandardMaterial, Vector3 } from "babylonjs";
+import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Ray, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { serverMessages, ws } from "../../connectionWS";
 import { Bullet } from "../bullet";
 import { inputStates } from "../inputListeners";
@@ -24,7 +24,7 @@ export class Avatar extends MeshWithHealth {
   jumpRay: Ray
 
 
-  constructor(scene: MyScene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
+  constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
     super(avatar_username + Avatar.counter, scene, p?.health);
     this.name = avatar_username
     this.counter = Avatar.counter;

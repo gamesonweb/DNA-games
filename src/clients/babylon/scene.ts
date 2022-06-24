@@ -8,7 +8,7 @@ export var hemiLight: HemisphericLight;
 export class MyScene extends Scene {
     gravityIntensity: number;
     acceleration: number;
-    shadowGenerator: ShadowGenerator
+    shadowGenerator: ShadowGenerator | null
 
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -17,10 +17,12 @@ export class MyScene extends Scene {
         this.createCamera()
         this.createLight()
         this.createGround()
-        this.shadowGenerator = this.createShadows()
-        this.shadowGenerator.addShadowCaster(createWall())
 
-        this.createSprites()
+        if (windowExists()) {
+            this.shadowGenerator = this.createShadows()
+            this.shadowGenerator.addShadowCaster(createWall())
+            this.createSprites()
+        } else { this.shadowGenerator = null }
 
         // sphere1 = new Avatar(scene, "Well", "");
         this.gravityIntensity = -0.02;

@@ -8,7 +8,10 @@ use serde_json::{self};
 use tokio::net::TcpStream;
 use tungstenite::protocol::Message;
 
-use crate::{server::utils, MonsterList, PeerMap, PositionUpdates, SharedMessages};
+use crate::{
+    server::{game_events::monster::monster_spawner, utils},
+    MonsterList, PeerMap, PositionUpdates, SharedMessages,
+};
 
 #[derive(Deserialize, Debug)]
 struct DamageData {
@@ -22,6 +25,16 @@ struct MoveMonsterData {
     pos_x: f32,
     pos_y: f32,
     pos_z: f32,
+}
+
+#[derive(Deserialize, Debug)]
+struct SpawnMonsterData {
+    pos_x: f32,
+    pos_y: f32,
+    pos_z: f32,
+    username: String,
+    direction: String,
+    health: i16,
 }
 
 pub async fn handle_connection(
@@ -170,6 +183,20 @@ pub async fn handle_connection(
                                     println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");
                                 }
                             }
+                        }
+                        "spawn_monster" => {
+                            println!("SPAWN MONSTER ROUTE RECEIVED");
+                            let spawn_data: SpawnMonsterData =
+                                serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
+                            monster_spawner(
+                                spawn_data.pos_x,
+                                spawn_data.pos_y,
+                                spawn_data.pos_z,
+                                spawn_data.username,
+                                spawn_data.direction,
+                                spawn_data.health,
+                                monster_list.clone(),
+                            )
                         }
                         //keep alive route, does nothing
                         "keepalive" => {}

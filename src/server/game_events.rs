@@ -21,9 +21,7 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
         println!("hour: {}", hour);
 
         //Spawn monsters at night start, remove them at day start
-        if hour == 22.0 {
-            monster_nightstart_factory(monster_list.clone(), &mut zombie_counter)
-        } else if hour == 7.0 {
+        if hour == 7.0 {
             clear_all_monsters(monster_list.clone(), &mut zombie_counter)
         }
 

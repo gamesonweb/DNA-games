@@ -5,7 +5,7 @@ use std::{
 
 use rand::Rng;
 
-use crate::{MonsterData, MonsterList};
+use crate::{Direction, MonsterData, MonsterList};
 
 pub fn monster_nightstart_factory(
     monster_list: Arc<Mutex<HashMap<String, MonsterData>>>,
@@ -27,7 +27,6 @@ pub fn monster_nightstart_factory(
             ),
             health,
             monster_list.clone(),
-            zombie_counter,
         );
     }
 }
@@ -40,15 +39,18 @@ pub fn monster_spawner(
     direction: String,
     health: i16,
     monster_list: MonsterList,
-    counter: &mut i32,
 ) {
+    let direction: Direction = serde_json::from_str(&direction).unwrap();
     //create monster's data
     let monster_data = MonsterData {
         pos_x,
         pos_y,
         pos_z,
-        username: format!("{}{}", username, counter), //String::from("zombie"),
-        direction, // String::from(r#" {\"_isDirty\":true,\"_x\":0.23749832808971405,\"_y\":0,\"_z\":0.9713879227638245} "#,),
+        username,
+        direction: format!(
+            r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+            direction._isDirty, direction._x, direction._y, direction._z
+        ),
         health,
         max_health: health.clone(),
     };
@@ -56,7 +58,6 @@ pub fn monster_spawner(
     //push it into the monster list
     let mut monster_list = monster_list.lock().unwrap();
     monster_list.insert(monster_data.username.clone(), monster_data);
-    *counter += 1;
 }
 
 pub fn clear_all_monsters(
