@@ -43,7 +43,7 @@ export class MyScene extends Scene {
     configureAssetManager() {
         let assetsManager = new AssetsManager(this);
         assetsManager.onProgress = function (remainingCount, totalCount, lastFinishedTask) {
-            engine.loadingUIText = "Loading... (" + remainingCount + "/" + totalCount + ")"
+            engine.loadingUIText = "Loading... " + lastFinishedTask.name + " (" + (totalCount - remainingCount) + "/" + totalCount + ")"
         }
 
         assetsManager.onFinish = function (tasks) {
@@ -82,7 +82,7 @@ export class MyScene extends Scene {
         var ground = MeshBuilder.CreateGround("ground1", { width: 100, height: 100, subdivisions: 2 }, this);
         const groundMaterial = new StandardMaterial("groundMaterial", this);
         //new Texture("./img/grass.png");
-        let groundTask = this.assetManager.addTextureTask(ground.name + "_task", "./img/grass.png");
+        let groundTask = this.assetManager.addTextureTask(ground.name + "_task", "./textures/grass.png");
         groundTask.onSuccess = (task) => {
             groundMaterial.diffuseTexture = task.texture
             ground.material = groundMaterial;
@@ -93,7 +93,7 @@ export class MyScene extends Scene {
     }
 
     createSprites() {
-        var spriteManagerTrees = new SpriteManager("grassesManager", "./img/herb.png", 2000, 800, this);
+        var spriteManagerTrees = new SpriteManager("grassesManager", "./textures/herb.png", 2000, 800, this);
 
         //Creation of 2000 trees at random positions
         for (var i = 0; i < 2000; i++) {
