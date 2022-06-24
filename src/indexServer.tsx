@@ -124,7 +124,7 @@ function generate_zombie_wave() {
   var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
 
   while (zombie_counter < counter_after_wave) {
-    spawn_zombie(zombie_counter, 1, zombie_counter);
+    spawn_zombie(zombie_counter + Math.random() * 5, 1, zombie_counter + Math.random() * 5);
   }
 }
 
