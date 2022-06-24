@@ -19,8 +19,7 @@ use tungstenite::protocol::Message;
 use crate::server::{broadcast, game_events, handle_connection, utils::find_js_file};
 
 #[derive(Deserialize, Debug)]
-struct Direction {
-    _isDirty: bool,
+struct Rotation {
     _x: f32,
     _y: f32,
     _z: f32,
@@ -32,7 +31,7 @@ pub struct MonsterData {
     pos_y: f32,
     pos_z: f32,
     username: String,
-    direction: String,
+    rotation: String,
     health: i16,
     max_health: i16,
 }
