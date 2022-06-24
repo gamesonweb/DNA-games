@@ -124,14 +124,14 @@ function setSocketMessageListener() {
             //position: add the player if they aren't in our list yet, move the avatar to the input position
             case serverMessages.POSITION: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                avatar_update_from_serveur(messageContent, player_list);
+                avatar_update_from_serveur(messageContent, player_list, 50);
                 break;
             }
 
             //monster_data: update the monster's data
             case serverMessages.MONSTER_DATA: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                avatar_update_from_serveur(messageContent, night_monster_list);
+                avatar_update_from_serveur(messageContent, night_monster_list, 500);
                 break;
             }
 
@@ -182,6 +182,7 @@ function setPositionUpdateSender() {
 }
 
 function sendPosition(player: Avatar) {
+    player.computeWorldMatrix(true);
     player.didSomething = false;
     var position_player = JSON.stringify({
         pos_x: player.position.x,
@@ -190,7 +191,7 @@ function sendPosition(player: Avatar) {
         username: username,
         health: player.currentHealth,
         maxHealth: player.maxHealth,
-        direction: JSON.stringify(player.getDirection(Axis.Z))
+        direction: player.getDirection(Axis.Z)
     })
 
     //console.log("sending " + position_player);
@@ -220,7 +221,7 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>) {
+export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>, time_ms: number) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
     if (data.username === username && list === player_list) return
@@ -243,11 +244,18 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_update) {
         if (avatar_to_update.position.x !== data.pos_x || avatar_to_update.position.y !== data.pos_y || avatar_to_update.position.z !== data.pos_z) {
-            Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, 3, avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
+            Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, Math.floor(0.06 * time_ms), avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
+
+        console.log("received direction: " + data.direction);
+
 
         let target = avatar_to_update.position.add(data.direction);
         avatar_to_update.lookAt(target);
+
+        avatar_to_update.computeWorldMatrix(true)
+        console.log("new direction: " + avatar_to_update.getDirection(Axis.Z));
+
 
         //update the avatar health to the data received
         let health = data.health

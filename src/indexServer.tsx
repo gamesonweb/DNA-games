@@ -1,9 +1,11 @@
 import { ArcRotateCamera, Axis, NullEngine, PointLight, Scene, Vector3 } from "babylonjs";
 import { Avatar } from "./clients/babylon/avatars/avatar";
 import { Monster } from "./clients/babylon/avatars/monster";
+import { distance } from "./clients/babylon/tools";
 import { avatar_update_from_serveur, receiveContent, serverMessages } from "./clients/connectionWS";
 
 var night_monster_list: Map<string, Avatar> = new Map();
+var player_list: Map<string, Avatar> = new Map();
 var zombie_counter: number;
 var scene: Scene;
 var ws: WebSocket
@@ -40,12 +42,28 @@ export function main() {
       let messageReceived = JSON.parse(event.data);
       switch (messageReceived.route) {
 
-        // monster_data: update the monster's data
-        // case serverMessages.MONSTER_DATA: {
-        //   let messageContent: receiveContent = JSON.parse(messageReceived.content);
-        //   avatar_update_from_serveur(messageContent, night_monster_list);
-        //   break;
-        // }
+        //logout route: dispose player's avatar, remove player's entry in the player_list map
+        case serverMessages.LOGOUT: {
+          let avatar_to_disconnect = player_list.get(messageReceived.content);
+          if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
+          player_list.delete(messageReceived.content);
+          console.log("LOGIN OUT: " + messageReceived.content);
+          break;
+        }
+
+        //position: add the player if they aren't in our list yet, move the avatar to the input position
+        case serverMessages.POSITION: {
+          let messageContent: receiveContent = JSON.parse(messageReceived.content);
+          let avatar_to_update = player_list.get(messageContent.username);
+          if (avatar_to_update === undefined) {
+            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, ""));
+            avatar_to_update = player_list.get(messageContent.username);
+          }
+          if (avatar_to_update) {
+            avatar_to_update.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z)
+          }
+          break;
+        }
 
         //kill_monster: kill the monster with passed username
         case serverMessages.KILL_MONSTER: {
@@ -77,29 +95,28 @@ export function main() {
       }
     })
 
-
     setInterval(() => {
-      for (const value of night_monster_list.values()) {
-        console.log("CURRENT DIRECTION: " + value.getDirection(Axis.Z));
-        console.log("CURRENT ROTATION: " + value.rotation);
-        value.position.x += 0.5;
-        value.lookAt(new Vector3(5, 1, 5));
-        console.log("DIRECTION AFTER ROTATE: " + value.getDirection(Axis.Z));
-        console.log("ROTATION AFTER ROTATE: " + value.rotation);
+      for (const monster of night_monster_list.values()) {
+        let player_to_target: Avatar | null = nearest_player(monster);
+        if (player_to_target) monster.lookAt(player_to_target.position);
+        monster.computeWorldMatrix(true);
+        console.log("new direction: " + monster.getDirection(Axis.Z));
+        monster.position.x += monster.getDirection(Axis.Z)._x
+        monster.position.z += monster.getDirection(Axis.Z)._z
         ws.send(
           JSON.stringify({
             route: serverMessages.MOVE_MONSTER,
             content: JSON.stringify({
-              username: value.name,
-              pos_x: value.position.x,
-              pos_y: value.position.y,
-              pos_z: value.position.z,
-              direction: JSON.stringify(value.getDirection(Axis.Z))
+              username: monster.name,
+              pos_x: monster.position.x,
+              pos_y: monster.position.y,
+              pos_z: monster.position.z,
+              direction: JSON.stringify(monster.getDirection(Axis.Z))
             })
           }))
       }
     },
-      1000)
+      500)
   }
 }
 
@@ -115,6 +132,7 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
   let generated_zombie = new Monster(scene, "zombie" + zombie_counter, "");
   generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
   night_monster_list.set(generated_zombie.name, generated_zombie);
+  generated_zombie.computeWorldMatrix(true);
   ws.send(JSON.stringify({
     route: serverMessages.SPAWN_MONSTER,
     content: JSON.stringify({
@@ -129,3 +147,15 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
   zombie_counter++
 }
 
+function nearest_player(monster: Avatar) {
+  var nearest_player: Avatar | null = null;
+  var dist = Infinity
+  for (var player of player_list.values()) {
+    let dist_to_player = distance(monster.position, player.position);
+    if (dist_to_player < dist) {
+      dist = dist_to_player
+      nearest_player = player
+    }
+  }
+  return nearest_player
+}
