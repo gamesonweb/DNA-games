@@ -32,7 +32,7 @@ type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 export type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, rotation: Vector3, health?: number, maxHealth?: number
+    username: string, direction: Vector3, health?: number, maxHealth?: number
 }
 
 export function connect_to_ws() {
@@ -190,7 +190,7 @@ function sendPosition(player: Avatar) {
         username: username,
         health: player.currentHealth,
         maxHealth: player.maxHealth,
-        rotation: JSON.stringify(player.rotation)
+        direction: JSON.stringify(player.getDirection(Axis.Z))
     })
 
     //console.log("sending " + position_player);
@@ -246,9 +246,8 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
             Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, 3, avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
 
-        // let target = avatar_to_update.position.add(data.rotation);
-        // avatar_to_update.lookAt(target);
-        avatar_to_update.rotation = new Vector3(data.rotation._x, data.rotation._y, data.rotation._z);
+        let target = avatar_to_update.position.add(data.direction);
+        avatar_to_update.lookAt(target);
 
         //update the avatar health to the data received
         let health = data.health

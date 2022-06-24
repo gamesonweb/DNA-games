@@ -10,7 +10,7 @@ use tungstenite::protocol::Message;
 
 use crate::{
     server::{game_events::monster::monster_spawner, utils},
-    MonsterList, PeerMap, PositionUpdates, Rotation, SharedMessages,
+    Direction, MonsterList, PeerMap, PositionUpdates, SharedMessages,
 };
 
 #[derive(Deserialize, Debug)]
@@ -25,7 +25,7 @@ struct MoveMonsterData {
     pos_x: f32,
     pos_y: f32,
     pos_z: f32,
-    rotation: String,
+    direction: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -34,7 +34,7 @@ struct SpawnMonsterData {
     pos_y: f32,
     pos_z: f32,
     username: String,
-    rotation: String,
+    direction: String,
     health: i16,
 }
 
@@ -172,8 +172,8 @@ pub async fn handle_connection(
                             let move_data: MoveMonsterData =
                                 serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
                             println!("{:?}", move_data);
-                            let rotation: Rotation =
-                                serde_json::from_str(&move_data.rotation).unwrap();
+                            let direction: Direction =
+                                serde_json::from_str(&move_data.direction).unwrap();
                             let mut monster_list = monster_list.lock().unwrap();
                             let new_data = monster_list.get_mut(&move_data.username);
                             match new_data {
@@ -181,9 +181,12 @@ pub async fn handle_connection(
                                     new_data.pos_x = move_data.pos_x;
                                     new_data.pos_y = move_data.pos_y;
                                     new_data.pos_z = move_data.pos_z;
-                                    new_data.rotation = format!(
-                                        r#" {{\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
-                                        rotation._x, rotation._y, rotation._z
+                                    new_data.direction = format!(
+                                        r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+                                        direction._isDirty,
+                                        direction._x,
+                                        direction._y,
+                                        direction._z
                                     );
                                 }
                                 None => {
@@ -200,7 +203,7 @@ pub async fn handle_connection(
                                 spawn_data.pos_y,
                                 spawn_data.pos_z,
                                 spawn_data.username,
-                                spawn_data.rotation,
+                                spawn_data.direction,
                                 spawn_data.health,
                                 monster_list.clone(),
                             )

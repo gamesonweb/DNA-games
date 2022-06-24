@@ -5,7 +5,7 @@ use std::{
 
 use rand::Rng;
 
-use crate::{MonsterData, MonsterList, Rotation};
+use crate::{Direction, MonsterData, MonsterList};
 
 pub fn monster_nightstart_factory(
     monster_list: Arc<Mutex<HashMap<String, MonsterData>>>,
@@ -36,20 +36,20 @@ pub fn monster_spawner(
     pos_y: f32,
     pos_z: f32,
     username: String,
-    rotation: String,
+    direction: String,
     health: i16,
     monster_list: MonsterList,
 ) {
-    let rotation: Rotation = serde_json::from_str(&rotation).unwrap();
+    let direction: Direction = serde_json::from_str(&direction).unwrap();
     //create monster's data
     let monster_data = MonsterData {
         pos_x,
         pos_y,
         pos_z,
         username,
-        rotation: format!(
-            r#" {{\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
-            rotation._x, rotation._y, rotation._z,
+        direction: format!(
+            r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+            direction._isDirty, direction._x, direction._y, direction._z
         ),
         health,
         max_health: health.clone(),
@@ -71,13 +71,13 @@ pub fn clear_all_monsters(
 
 pub fn monster_message_data(monster_data: &MonsterData) -> String {
     return format!(
-        r#" {{"route": "monster_data", "content": "{{\"pos_x\": {}, \"pos_y\": {}, \"pos_z\": {}, \"username\": \"{}\", \"health\": \"{}\", \"maxHealth\": \"{}\", \"rotation\": {}}}"}} "#,
+        r#" {{"route": "monster_data", "content": "{{\"pos_x\": {}, \"pos_y\": {}, \"pos_z\": {}, \"username\": \"{}\", \"health\": \"{}\", \"maxHealth\": \"{}\", \"direction\": {}}}"}} "#,
         monster_data.pos_x,
         monster_data.pos_y,
         monster_data.pos_z,
         monster_data.username,
         monster_data.health,
         monster_data.max_health,
-        monster_data.rotation
+        monster_data.direction
     );
 }

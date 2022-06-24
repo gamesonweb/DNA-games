@@ -78,12 +78,14 @@ export function main() {
     })
 
 
-    let point_to_look = 10
     setInterval(() => {
       for (const value of night_monster_list.values()) {
+        console.log("CURRENT DIRECTION: " + value.getDirection(Axis.Z));
+        console.log("CURRENT ROTATION: " + value.rotation);
         value.position.x += 0.5;
-        point_to_look = -point_to_look
-        value.lookAt(new Vector3(point_to_look, 1, point_to_look));
+        value.lookAt(new Vector3(5, 1, 5));
+        console.log("DIRECTION AFTER ROTATE: " + value.getDirection(Axis.Z));
+        console.log("ROTATION AFTER ROTATE: " + value.rotation);
         ws.send(
           JSON.stringify({
             route: serverMessages.MOVE_MONSTER,
@@ -92,7 +94,7 @@ export function main() {
               pos_x: value.position.x,
               pos_y: value.position.y,
               pos_z: value.position.z,
-              rotation: JSON.stringify(value.rotation)
+              direction: JSON.stringify(value.getDirection(Axis.Z))
             })
           }))
       }
@@ -120,7 +122,7 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
       pos_y: generated_zombie.position.y,
       pos_z: generated_zombie.position.z,
       username: generated_zombie.name,
-      rotation: JSON.stringify(generated_zombie.rotation),
+      direction: JSON.stringify(generated_zombie.getDirection(Axis.Z)),
       health: generated_zombie.currentHealth,
     })
   }))
