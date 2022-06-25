@@ -1,5 +1,7 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "./babylon/avatars/avatar";
+import { Monster } from "./babylon/avatars/monster";
+import { Player } from "./babylon/avatars/player";
 import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
 import { updateHour } from "./babylon/time";
 import { getTime, isVector3Equal, makeid } from "./babylon/tools";
@@ -8,8 +10,8 @@ import { askUsername } from "./reactComponents/login";
 import { ErrorNoServer } from "./reactComponents/noServer";
 
 export var ws: WebSocket;
-export var player_list: Map<string, Avatar> = new Map();
-export var night_monster_list: Map<string, Avatar> = new Map();
+export var player_list: Map<string, Player> = new Map();
+export var night_monster_list: Map<string, Monster> = new Map();
 export var username: string;
 export var meshes: Mesh[] = [];
 
@@ -25,7 +27,8 @@ export const serverMessages = {
     DAMAGE_MONSTER: "damage_monster",
     FIRE_BULLET: "fireBullet",
     HOUR: "hour",
-    SPAWN_MONSTER: "spawn_monster"
+    SPAWN_MONSTER: "spawn_monster",
+    MONSTER_HIT: "monster_hit"
 }
 
 type position = { pos_x: number, pos_y: number, pos_z: number, }
@@ -131,8 +134,18 @@ function setSocketMessageListener() {
             //monster_data: update the monster's data
             case serverMessages.MONSTER_DATA: {
                 let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                avatar_update_from_serveur(messageContent, night_monster_list, 500);
+                avatar_update_from_serveur(messageContent, night_monster_list, 500, true);
                 break;
+            }
+
+            //monster_hit: the monster try to hit players
+            case serverMessages.MONSTER_HIT: {
+                let messageContent = JSON.parse(messageReceived.content);
+                console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
+                let monster = night_monster_list.get(messageContent.username);
+                if (monster) monster.hit(messageContent.hitmode);
+                else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
+
             }
 
             //kill_monster: kill the monster with passed username
@@ -221,7 +234,7 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>, time_ms: number) {
+export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>, time_ms: number, isMonster: boolean = false) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
     if (data.username === username && list === player_list) return
@@ -232,12 +245,21 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
     //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
     if (avatar_to_update === undefined) {
         console.log("failed to find name " + data.username + " in list " + list + ", adding him.");
-        list.set(data.username, new Avatar(scene, data.username, username, {
-            health: {
-                maxHealth: data.maxHealth,
-                currentHealth: data.health
-            }
-        }));
+        list.set(
+            data.username,
+            isMonster ?
+                new Monster(scene, data.username, username, {
+                    health: {
+                        maxHealth: data.maxHealth,
+                        currentHealth: data.health
+                    }
+                })
+                : new Player(scene, data.username, username, {
+                    health: {
+                        maxHealth: data.maxHealth,
+                        currentHealth: data.health
+                    }
+                }));
         avatar_to_update = list.get(data.username);
         if (avatar_to_update) avatar_to_update.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
@@ -248,14 +270,11 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
             Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, Math.floor(0.06 * time_ms), avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
 
-        console.log("received direction: " + data.direction);
-
 
         let target = avatar_to_update.position.add(data.direction);
         avatar_to_update.lookAt(target);
 
         avatar_to_update.computeWorldMatrix(true)
-        console.log("new direction: " + avatar_to_update.getDirection(Axis.Z));
 
 
         //update the avatar health to the data received

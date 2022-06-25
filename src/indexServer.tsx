@@ -97,27 +97,44 @@ export function main() {
 
     setInterval(() => {
       for (const monster of night_monster_list.values()) {
-        let player_to_target: Avatar | null = nearest_player(monster);
-        if (player_to_target) monster.lookAt(player_to_target.position);
-        monster.computeWorldMatrix(true);
-        console.log("new direction: " + monster.getDirection(Axis.Z));
-        monster.position.x += monster.getDirection(Axis.Z)._x
-        monster.position.z += monster.getDirection(Axis.Z)._z
-        ws.send(
-          JSON.stringify({
-            route: serverMessages.MOVE_MONSTER,
-            content: JSON.stringify({
-              username: monster.name,
-              pos_x: monster.position.x,
-              pos_y: monster.position.y,
-              pos_z: monster.position.z,
-              direction: JSON.stringify(monster.getDirection(Axis.Z))
-            })
-          }))
+        zombie_apply_AI(monster);
       }
     },
       500)
   }
+}
+
+function zombie_apply_AI(monster: Avatar) {
+  let player_to_target: Avatar | null = nearest_player(monster);
+  if (player_to_target) {
+    monster.lookAt(player_to_target.position);
+    if (distance(monster.position, player_to_target.position) < 2) {
+      ws.send(
+        JSON.stringify({
+          route: serverMessages.MONSTER_HIT,
+          content: JSON.stringify({
+            username: monster.name,
+            hitmode: 0
+          })
+        })
+      )
+    }
+  }
+  monster.computeWorldMatrix(true);
+  console.log("new direction: " + monster.getDirection(Axis.Z));
+  monster.position.x += monster.getDirection(Axis.Z)._x
+  monster.position.z += monster.getDirection(Axis.Z)._z
+  ws.send(
+    JSON.stringify({
+      route: serverMessages.MOVE_MONSTER,
+      content: JSON.stringify({
+        username: monster.name,
+        pos_x: monster.position.x,
+        pos_y: monster.position.y,
+        pos_z: monster.position.z,
+        direction: JSON.stringify(monster.getDirection(Axis.Z))
+      })
+    }))
 }
 
 function generate_zombie_wave() {

@@ -72,16 +72,22 @@ export class Avatar extends MeshWithHealth {
 
     shadowGenerator?.addShadowCaster(this)
 
-    this.onCollide = e => {
-      if (e?.parent instanceof Avatar) {
-        let avatar = e.parent as Avatar;
-        if (avatar.name.includes("zombie") && this?.name === sphere1!.name) {
-          this.healthMinus(5)
-          let direction = this.position.subtract(avatar.position)
-          this.knockback(direction, 2)
-        }
-      }
-    }
+    // this.onCollide = e => {
+    //   if (e?.parent instanceof Avatar) {
+    //     let avatar = e.parent as Avatar;
+    //     if (avatar.name.includes("zombie") && this?.name === sphere1!.name) {
+    //       this.healthMinus(5)
+    //       let direction = this.position.subtract(avatar.position)
+    //       this.knockback(direction, 2)
+    //     }
+    //   }
+    // }
+  }
+
+  take_damage(source: Mesh, amount: number) {
+    this.healthMinus(amount);
+    let direction = this.position.subtract(source.position)
+    this.knockback(direction, 2)
   }
 
   move() {

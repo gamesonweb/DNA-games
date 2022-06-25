@@ -194,6 +194,10 @@ pub async fn handle_connection(
                                 }
                             }
                         }
+                        "monster_hit" => {
+                            println!("MONSTER HIT ROUTE RECEIVED");
+                            shared_messages.lock().unwrap().push(msg.clone());
+                        }
                         "spawn_monster" => {
                             println!("SPAWN MONSTER ROUTE RECEIVED");
                             let spawn_data: SpawnMonsterData =
