@@ -88,7 +88,7 @@ function setSocketMessageListener() {
 
             //login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
             case serverMessages.LOGIN: {
-                var sphere = new Avatar(scene, messageReceived.content, username);
+                var sphere = new Player(scene, messageReceived.content, username);
                 var sender_name = messageReceived.content;
                 player_list.set(sender_name, sphere);
                 if (sender_name === username) {

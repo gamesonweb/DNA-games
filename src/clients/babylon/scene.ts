@@ -33,7 +33,6 @@ export class MyScene extends Scene {
 
         ModelEnum.createAllModels(this);
 
-        // sphere1 = new Avatar(scene, "Well", "");
         this.gravityIntensity = -0.02;
         this.acceleration = this.gravityIntensity;
         this.collisionsEnabled = true;

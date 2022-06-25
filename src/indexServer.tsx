@@ -1,8 +1,7 @@
 import { ArcRotateCamera, Axis, NullEngine, PointLight, Scene, Vector3 } from "babylonjs";
 import { Avatar } from "./clients/babylon/avatars/avatar";
-import { Monster } from "./clients/babylon/avatars/monster";
 import { distance } from "./clients/babylon/tools";
-import { avatar_update_from_serveur, receiveContent, serverMessages } from "./clients/connectionWS";
+import { receiveContent, serverMessages } from "./clients/connectionWS";
 
 var night_monster_list: Map<string, Avatar> = new Map();
 var player_list: Map<string, Avatar> = new Map();
