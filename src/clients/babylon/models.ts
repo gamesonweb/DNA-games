@@ -32,36 +32,39 @@ export class ModelEnum {
     }
 
     callback(meshes: any[], particules: IParticleSystem[], skeletons: Skeleton[], animations: AnimationGroup[]) {
-        if (this.name == "grass") {
-            let myMeshes = [...meshes]
-            myMeshes.shift()
-            //Merging of all twig of grass in an unique mesh
-            let model = Mesh.MergeMeshes(myMeshes)
-            if (model) {
-                if (model.material && model.material.backFaceCulling) model.material.backFaceCulling = true;
-                var ratio = 1 / this.scaling;
-                model.position = new Vector3(0, 0, 0);
-                model.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+        setTimeout(() => {
+            if (this.name == "grass") {
+                let myMeshes = [...meshes]
+                myMeshes.shift()
+                //Merging of all twig of grass in an unique mesh
+                let model = Mesh.MergeMeshes(myMeshes)
+                if (model) {
+                    if (model.material && model.material.backFaceCulling) model.material.backFaceCulling = true;
+                    var ratio = 1 / this.scaling;
+                    model.position = new Vector3(0, 0, 0);
+                    model.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
 
-                //Creation of 300 herbs at random positions, scaling and orientation
-                for (var i = 0; i < 300; i++) {
-                    let x = Math.random() * 100 * ratio - 50 * ratio;
-                    let z = Math.random() * 100 * ratio - 50 * ratio;
+                    //Creation of 300 herbs at random positions, scaling and orientation
+                    for (var i = 0; i < 300; i++) {
+                        let x = Math.random() * 100 * ratio - 50 * ratio;
+                        let z = Math.random() * 100 * ratio - 50 * ratio;
 
-                    if (scene.ground?.getHeightAtCoordinates(x, z) != undefined && model) {
-                        //Parameters
-                        let scaleRatio = (Math.random() + 0.5) * 2
-                        let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
-                        let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
-                        let translationVector = new Vector3(x, (1 * ratio) + scene.ground?.getHeightAtCoordinates(x, z) * ratio, z);
-                        let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
+                        if (scene.ground?.getHeightAtCoordinates(x, z) != undefined && model) {
+                            //Parameters
+                            let scaleRatio = (Math.random() + 0.5) * 2
+                            let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
+                            let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
+                            let translationVector = new Vector3(x, (1 * ratio) + scene.ground?.getHeightAtCoordinates(x, z) * ratio, z);
+                            let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
 
-                        //Creation of thin instance
-                        model.thinInstanceAdd(scaleRotateTranslateMatrix);
+                            //Creation of thin instance
+                            model.thinInstanceAdd(scaleRotateTranslateMatrix);
+                        }
                     }
                 }
             }
-        }
+        }, 8000);
+
 
 
     }
