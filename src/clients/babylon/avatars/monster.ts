@@ -3,6 +3,7 @@ import { Health } from "../meshWithHealth";
 import { MyScene } from "../scene";
 import { Axis, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { sphere1 } from "../main";
+import { distance } from "../tools";
 
 export class Monster extends Avatar {
 
@@ -15,25 +16,27 @@ export class Monster extends Avatar {
 
             case 0:
                 console.log("entering monster hitmode 0");
-                var hitbox = MeshBuilder.CreateBox("hit", { size: 1 });
-                var direction_monster = this.getDirection(Axis.Z);
-                hitbox.lookAt(hitbox.position.add(direction_monster));
-                var position_monster = this.position;
-                hitbox.position = new Vector3(
-                    position_monster.x + (direction_monster.x * 1.5),
-                    position_monster.y + (direction_monster.y * 1.5),
-                    position_monster.z + (direction_monster.z * 1.5))
-                if (sphere1) {
-                    console.log("sphere1 position: " + sphere1.position);
-                    console.log("hitbox position: " + hitbox.position);
-                    if (hitbox.intersectsMesh(sphere1)) {
-                        console.log("player should take damage!");
-                        sphere1.take_damage(this, 10);
-                    }
-                }
-                //Here we set a timeout in testing to see the hitbox mesh, but
-                //in real utilisation the mesh would be instantly disposed.
-                setTimeout(() => hitbox.dispose(), 500);
+
+                /* TODO : Monster hit by spawning a hitbox ahead */
+
+                // var hitbox = MeshBuilder.CreateBox("hit", { size: 2 });
+                // var direction_monster = this.getDirection(Axis.Z);
+                // hitbox.lookAt(hitbox.position.add(direction_monster));
+                // var position_monster = this.position;
+                // hitbox.position = new Vector3(
+                //     position_monster.x + (direction_monster.x * 0.5),
+                //     position_monster.y + (direction_monster.y * 0.5),
+                //     position_monster.z + (direction_monster.z * 0.5))
+
+                // if (sphere1) {
+                //     if (hitbox.intersectsPoint(sphere1.position)) {
+                //         console.log("player should take damage!");
+                //         sphere1.take_damage(this, 10);
+                //     }
+                // }
+                // setTimeout(() => hitbox.dispose(), 500);
+
+                if (sphere1 && distance(sphere1.position, this.position) < 1.5) sphere1.take_damage(this, 10);
                 break;
 
             default:
