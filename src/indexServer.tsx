@@ -107,7 +107,7 @@ export function main() {
 function zombie_apply_AI(monster: Avatar) {
   let player_to_target: Avatar | null = nearest_player(monster);
   if (player_to_target) {
-    monster.lookAt(player_to_target.position);
+    monster.lookAt(new Vector3(player_to_target.position.x, monster.position.y, player_to_target.position.z));
     if (distance(monster.position, player_to_target.position) < 2) {
       ws.send(
         JSON.stringify({
@@ -146,7 +146,7 @@ function generate_zombie_wave() {
 }
 
 function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
-  let generated_zombie = new Monster(scene, "zombie" + zombie_counter, "");
+  let generated_zombie = new Avatar(scene, "zombie" + zombie_counter, "");
   generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
   night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.computeWorldMatrix(true);

@@ -86,7 +86,7 @@ export class Avatar extends MeshWithHealth {
 
   take_damage(source: Mesh, amount: number) {
     this.healthMinus(amount);
-    let direction = this.position.subtract(source.position)
+    let direction = new Vector3(this.position.x - source.position.x, this.position.y, this.position.z - source.position.z)
     this.knockback(direction, 2)
   }
 
