@@ -1,4 +1,4 @@
-import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager } from "babylonjs";
+import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager, GroundMesh } from "babylonjs";
 import { startRenderLoop, canvas, engine, sphere1 } from "./main";
 import { ModelEnum } from "./models";
 import { windowExists } from "../reactComponents/tools";
@@ -10,7 +10,8 @@ export class MyScene extends Scene {
     gravityIntensity: number;
     acceleration: number;
     shadowGenerator: ShadowGenerator | null;
-    assetManager: AssetsManager
+    assetManager: AssetsManager;
+    ground: GroundMesh | undefined
 
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -28,7 +29,7 @@ export class MyScene extends Scene {
             this.shadowGenerator = this.createShadows();
             this.shadowGenerator.addShadowCaster(createWall());
             shadowGenerator = this.shadowGenerator;
-            this.createSprites();
+            // this.createSprites();
         } else { this.shadowGenerator = null; }
 
         ModelEnum.createAllModels(this);
@@ -128,11 +129,13 @@ export class MyScene extends Scene {
             this
         );
 
-        function onGroundCreated() {
+        let onGroundCreated = () => {
             ground.material = groundMaterial;
             ground.checkCollisions = true;
             ground.receiveShadows = true;
             ground.position.y -= groundMaxheight;
+
+            this.ground = ground;
         }
     }
 
