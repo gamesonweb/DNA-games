@@ -6,6 +6,7 @@ import { sphere1 } from "../main";
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { MyScene } from "../scene";
 import { createLabel } from "../tools";
+import { shadowGenerator } from "../scene";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
@@ -57,7 +58,7 @@ export class Avatar extends MeshWithHealth {
     this.addChild(plane)
 
 
-    this.position = new Vector3(this.counter, 2, 0);
+    this.position = new Vector3(this.counter, 3, 0);
     this.oldPosition = this.position.clone();
 
 
@@ -69,7 +70,7 @@ export class Avatar extends MeshWithHealth {
     this.timeJumping = 250;
     this.bulletDelay = p?.bulletDelay || 500;
 
-    // scene.shadowGenerator.addShadowCaster(this)
+    shadowGenerator?.addShadowCaster(this)
 
     this.onCollide = e => {
       if (e?.parent instanceof Avatar) {

@@ -5,7 +5,7 @@ import { windowExists } from "../reactComponents/tools";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
-
+export var shadowGenerator: ShadowGenerator | null;
 export class MyScene extends Scene {
     gravityIntensity: number;
     acceleration: number;
@@ -20,15 +20,16 @@ export class MyScene extends Scene {
 
         this.assetManager = this.configureAssetManager();
 
-        this.createCamera()
-        this.createLight()
-        this.createGround()
+        this.createCamera();
+        this.createLight();
+        this.createGround();
 
         if (windowExists()) {
-            this.shadowGenerator = this.createShadows()
-            this.shadowGenerator.addShadowCaster(createWall())
-            this.createSprites()
-        } else { this.shadowGenerator = null }
+            this.shadowGenerator = this.createShadows();
+            this.shadowGenerator.addShadowCaster(createWall());
+            shadowGenerator = this.shadowGenerator;
+            this.createSprites();
+        } else { this.shadowGenerator = null; }
 
         ModelEnum.createAllModels(this);
 
@@ -39,7 +40,7 @@ export class MyScene extends Scene {
 
         this.beforeRender = () => {
 
-            sphere1?.isJumping ? this.applyJump() : this.applyGravity()
+            sphere1?.isJumping ? this.applyJump() : this.applyGravity();
         }
     }
 
@@ -82,18 +83,57 @@ export class MyScene extends Scene {
     }
 
     createGround() {
-        // Our built- shape. Params: name, width, depth, subdivs, scene
-        var ground = MeshBuilder.CreateGround("ground1", { width: 100, height: 100, subdivisions: 2 }, this);
-        const groundMaterial = new StandardMaterial("groundMaterial", this);
-        //new Texture("./img/grass.png");
-        let groundTask = this.assetManager.addTextureTask(ground.name + "_task", "./textures/grass.png");
+        const groundName = "ground1";
+        const diffuseTexture = "./textures/aerial_rocks_04_diff_8k.jpg";
+        const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
+
+        const groundWidth = 100;
+        const groundLenght = 100;
+
+        const groundMinheight = -1;
+        const groundMaxheight = 2;
+
+        var groundMaterial = new StandardMaterial(groundName + "_material", this);
+
+        var groundTask = this.assetManager.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
+
         groundTask.onSuccess = (task) => {
-            groundMaterial.diffuseTexture = task.texture
-            ground.material = groundMaterial;
+            let groundTexture = task.texture;
+            groundTexture.uScale = 5;
+            groundTexture.vScale = 5;
+
+            groundTexture.wrapU = 2
+            groundTexture.wrapV = 2
+
+            groundMaterial.diffuseTexture = groundTexture;
+            groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0)
         }
 
-        ground.checkCollisions = true;
-        ground.receiveShadows = true;
+        let groundOptions = () => {
+            return {
+                width: groundWidth,
+                height: groundLenght,
+                subdivisions: 32,
+                minHeight: groundMinheight,
+                maxHeight: groundMaxheight,
+
+                onReady: () => onGroundCreated(),
+            }
+        }
+
+        var ground = MeshBuilder.CreateGroundFromHeightMap(
+            groundName,
+            heightmapTexture,
+            groundOptions(),
+            this
+        );
+
+        function onGroundCreated() {
+            ground.material = groundMaterial;
+            ground.checkCollisions = true;
+            ground.receiveShadows = true;
+            ground.position.y -= groundMaxheight;
+        }
     }
 
     createSprites() {
