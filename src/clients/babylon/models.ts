@@ -5,13 +5,13 @@ import { MyScene } from "./scene";
 import 'babylonjs-loaders';
 
 export class ModelEnum {
-    // static Warrior = new ModelEnum("warrior");
+    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
     static Grass = new ModelEnum("grass", "gltf", 0.02)
 
     name: string;
     extension: string;
     scaling: number;
-    mesh: Mesh | undefined
+    rootMesh: Mesh | undefined
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
 
@@ -36,16 +36,25 @@ export class ModelEnum {
         switch (this.name) {
             case "grass":
                 let myMeshes = [...meshes];
+                myMeshes.forEach(m => {
+                    if (m.material) {
+                        m.material.backFaceCulling = true;
+                        m.flipFaces(true);
+                        //m.material.transparencyMode = 1;
+                    }
+                })
                 myMeshes.shift();
                 //Merging of all twig of grass in an unique mesh
                 let model = Mesh.MergeMeshes(myMeshes);
                 if (model) {
-                    this.mesh = model;
+                    this.rootMesh = model;
                     scene.setUpForGrass();
                 }
                 break;
 
             default:
+                meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+                this.rootMesh = meshes[0];
                 break;
         }
 
@@ -54,7 +63,7 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: MyScene) {
-        var allModels = [this.Grass]
+        var allModels = [this.PumpkinMonster, this.Grass]
         allModels.forEach(m => m.createModel(scene))
     }
 }

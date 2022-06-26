@@ -184,7 +184,7 @@ export class MyScene extends Scene {
         if (sphere1) {
             var hits = this.multiPickWithRay(sphere1.ray, (m) => { return m.isPickable });
 
-            var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
+            var filtered = (hits?.filter(e => (sphere1?.shape != undefined) && e.pickedMesh?.name !== sphere1?.shape.name))
 
             //if object detected but to high
             if (filtered !== undefined && filtered.length > 0) {
@@ -207,7 +207,7 @@ export class MyScene extends Scene {
         if (sphere1) {
             var hits = this.multiPickWithRay(sphere1.jumpRay, (m) => { return m.isPickable });
 
-            var filtered = (hits?.filter(e => e.pickedMesh?.name !== sphere1?.sphere.name))
+            var filtered = (hits?.filter(e => (sphere1?.shape != undefined) && e.pickedMesh?.name !== sphere1?.shape.name))
 
             if (filtered !== undefined && filtered.length > 0) {
                 var hit = filtered[0]
@@ -225,11 +225,10 @@ export class MyScene extends Scene {
     }
 
     private grassGeneration() {
-        var model = ModelEnum.Grass.mesh;
+        var model = ModelEnum.Grass.rootMesh;
         var scaling = ModelEnum.Grass.scaling;
 
         if (model != undefined) {
-            if (model.material && model.material.backFaceCulling) model.material.backFaceCulling = true;
             var ratio = 1 / scaling;
             model.position = new Vector3(0, 0, 0);
             model.scaling = new Vector3(scaling, scaling, scaling);

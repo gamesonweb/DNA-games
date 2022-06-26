@@ -7,11 +7,12 @@ import { Health, MeshWithHealth } from "../meshWithHealth";
 import { MyScene } from "../scene";
 import { createLabel } from "../tools";
 import { shadowGenerator } from "../scene";
+import { ModelEnum } from "../models";
 
 export class Avatar extends MeshWithHealth {
   static counter = 0;
   counter: number;
-  sphere: Mesh;
+  shape: Mesh | undefined;
   bulletList: Bullet[];
   speed_coeff: number;
   didSomething: Boolean;
@@ -30,24 +31,37 @@ export class Avatar extends MeshWithHealth {
     this.name = avatar_username
     this.counter = Avatar.counter;
     Avatar.counter += 3;
-    let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
-    let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+
+    let model;
+    if (false && this.name.includes("zombie")) {
+      model = ModelEnum.PumpkinMonster.rootMesh?.clone();
+    } else {
+      model = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
+      let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+
+      if (avatar_username !== username) {
+        model.checkCollisions = true;
+      }
+      var myMaterial = new StandardMaterial("myMaterial", scene);
+
+      myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
+      model.material = myMaterial;
+      model.parent = this;
+      this.addChild(model)
+      model.addChild(queue)
+      queue.position = new Vector3(0, 0, -0.3);
+    }
+
+
+
 
     this.ellipsoid = new Vector3(0.5, 1, 0.5);
     this.checkCollisions = true;
-    if (avatar_username !== username) {
-      sphere.checkCollisions = true;
-    }
-    var myMaterial = new StandardMaterial("myMaterial", scene);
 
-    myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
-    sphere.material = myMaterial;
 
-    sphere.parent = this;
-    this.addChild(sphere)
-    this.addChild(queue)
-    queue.position = new Vector3(0, 0, -0.3);
-    this.sphere = sphere;
+
+
+    this.shape = model;
     this.bulletList = [];
     this.speed_coeff = 0.20;
     this.didSomething = false;
