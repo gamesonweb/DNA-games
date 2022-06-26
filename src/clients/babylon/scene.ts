@@ -1,4 +1,4 @@
-import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager, GroundMesh } from "babylonjs";
+import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager, GroundMesh, Mesh, Quaternion, Axis, Matrix } from "babylonjs";
 import { startRenderLoop, canvas, engine, sphere1 } from "./main";
 import { ModelEnum } from "./models";
 import { windowExists } from "../reactComponents/tools";
@@ -11,7 +11,8 @@ export class MyScene extends Scene {
     acceleration: number;
     shadowGenerator: ShadowGenerator | null;
     assetManager: AssetsManager;
-    ground: GroundMesh | undefined
+    ground: GroundMesh | undefined;
+    grassTaskCounter: number;
 
     constructor() {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -38,6 +39,7 @@ export class MyScene extends Scene {
         this.gravityIntensity = -0.02;
         this.acceleration = this.gravityIntensity;
         this.collisionsEnabled = true;
+        this.grassTaskCounter = 0;
 
         this.beforeRender = () => {
 
@@ -136,6 +138,8 @@ export class MyScene extends Scene {
             ground.position.y -= groundMaxheight;
 
             this.ground = ground;
+
+            this.setUpForGrass()
         }
     }
 
@@ -216,4 +220,37 @@ export class MyScene extends Scene {
         }
     }
 
+    setUpForGrass() {
+        if (!(++this.grassTaskCounter < 2)) this.grassGeneration()
+    }
+
+    private grassGeneration() {
+        var model = ModelEnum.Grass.mesh;
+        var scaling = ModelEnum.Grass.scaling;
+
+        if (model != undefined) {
+            if (model.material && model.material.backFaceCulling) model.material.backFaceCulling = true;
+            var ratio = 1 / scaling;
+            model.position = new Vector3(0, 0, 0);
+            model.scaling = new Vector3(scaling, scaling, scaling);
+
+            //Creation of 300 herbs at random positions, scaling and orientation
+            for (var i = 0; i < 300; i++) {
+                let x = Math.random() * 100 * ratio - 50 * ratio;
+                let z = Math.random() * 100 * ratio - 50 * ratio;
+
+                if (this.ground?.getHeightAtCoordinates(x, z) != undefined && model) {
+                    //Parameters
+                    let scaleRatio = (Math.random() + 0.5) * 2
+                    let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
+                    let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
+                    let translationVector = new Vector3(x, (1 * ratio) + this.ground?.getHeightAtCoordinates(x, z) * ratio, z);
+                    let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
+
+                    //Creation of thin instance
+                    model.thinInstanceAdd(scaleRotateTranslateMatrix);
+                }
+            }
+        }
+    }
 };
