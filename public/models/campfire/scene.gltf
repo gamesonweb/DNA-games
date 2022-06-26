@@ -1,0 +1,554 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1830,
+      "max": [
+        4.833526134490967,
+        3.6911497116088867,
+        2.7277672290802
+      ],
+      "min": [
+        -3.5341217517852783,
+        -0.1439189910888672,
+        -6.050844192504883
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 21960,
+      "componentType": 5126,
+      "count": 1830,
+      "max": [
+        0.9952722191810608,
+        0.9948326349258423,
+        0.9955156445503235
+      ],
+      "min": [
+        -0.9979284405708313,
+        -0.9985257983207703,
+        -0.9986227750778198
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 1830,
+      "max": [
+        0.9999546408653259,
+        0.9974271655082703,
+        0.9979749917984009,
+        1.0
+      ],
+      "min": [
+        -0.9977517127990723,
+        -0.9996515512466431,
+        -0.9991874098777771,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1830,
+      "max": [
+        0.9952778816223145,
+        0.9931043386459351
+      ],
+      "min": [
+        -0.00276077538728714,
+        -0.0006737112998962402
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1830,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 43920,
+      "componentType": 5126,
+      "count": 1470,
+      "max": [
+        3.940741539001465,
+        2.396153450012207,
+        4.408881187438965
+      ],
+      "min": [
+        -4.078296184539795,
+        -0.14906930923461914,
+        -3.61665415763855
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 61560,
+      "componentType": 5126,
+      "count": 1470,
+      "max": [
+        0.9966921806335449,
+        0.9973070025444031,
+        0.9986520409584045
+      ],
+      "min": [
+        -0.9989857077598572,
+        -0.9984917640686035,
+        -0.9977355003356934
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 29280,
+      "componentType": 5126,
+      "count": 1470,
+      "max": [
+        0.9996598362922668,
+        0.9976028800010681,
+        0.9999790191650391,
+        1.0
+      ],
+      "min": [
+        -0.9979658126831055,
+        -0.9997743964195251,
+        -0.9969832897186279,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 14640,
+      "componentType": 5126,
+      "count": 1470,
+      "max": [
+        1.0092321634292603,
+        0.9930552244186401
+      ],
+      "min": [
+        0.006317839026451111,
+        -0.0025880932807922363
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 7320,
+      "componentType": 5125,
+      "count": 1470,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 79200,
+      "componentType": 5126,
+      "count": 838,
+      "max": [
+        2.9557993412017822,
+        4.714932441711426,
+        2.9668049812316895
+      ],
+      "min": [
+        -2.010793447494507,
+        -0.04477357864379883,
+        -2.7114508152008057
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 89256,
+      "componentType": 5126,
+      "count": 838,
+      "max": [
+        0.9999757409095764,
+        0.9466221332550049,
+        0.9995383024215698
+      ],
+      "min": [
+        -0.9996322989463806,
+        -0.9999967813491821,
+        -0.99978107213974
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 52800,
+      "componentType": 5126,
+      "count": 838,
+      "max": [
+        0.9671468138694763,
+        0.900314450263977,
+        0.9995377659797668,
+        1.0
+      ],
+      "min": [
+        -0.9230906963348389,
+        -0.8976083397865295,
+        -0.9999969601631165,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 26400,
+      "componentType": 5126,
+      "count": 838,
+      "max": [
+        0.99344402551651,
+        1.0018508434295654
+      ],
+      "min": [
+        0.0051863789558410645,
+        0.02924664318561554
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 13200,
+      "componentType": 5125,
+      "count": 1116,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Joshua Fox (https://sketchfab.com/Fox.joshua)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/campfire-48e7b8dd1cb748458a1c7a767025ff0c",
+      "title": "Campfire"
+    },
+    "generator": "Sketchfab-12.67.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 17664,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 33104,
+      "byteOffset": 17664,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 99312,
+      "byteOffset": 50768,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 66208,
+      "byteOffset": 150080,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 216288,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/campfire_model6_stone_baseColor.png"
+    },
+    {
+      "uri": "textures/campfire_model6_stone_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/campfire_model6_stone_normal.png"
+    },
+    {
+      "uri": "textures/campfire_model6_stone2_baseColor.png"
+    },
+    {
+      "uri": "textures/campfire_model6_stone2_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/campfire_model6_stone2_normal.png"
+    },
+    {
+      "uri": "textures/campfire_model6_wood_baseColor.png"
+    },
+    {
+      "uri": "textures/campfire_model6_wood_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/campfire_model6_wood_emissive.png"
+    },
+    {
+      "uri": "textures/campfire_model6_wood_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "campfire_model6_stone",
+      "normalTexture": {
+        "index": 2
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.232304788275688,
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "campfire_model6_stone2",
+      "normalTexture": {
+        "index": 5
+      },
+      "occlusionTexture": {
+        "index": 4
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0.22016606696859048,
+        "metallicRoughnessTexture": {
+          "index": 4
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "emissiveTexture": {
+        "index": 8
+      },
+      "name": "campfire_model6_wood",
+      "normalTexture": {
+        "index": 9
+      },
+      "occlusionTexture": {
+        "index": 7
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 6
+        },
+        "metallicFactor": 0.0,
+        "metallicRoughnessTexture": {
+          "index": 7
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "campfire_model:subtool14_campfire_model6_stone_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "campfire_model:subtool14_campfire_model6_stone2_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 9,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "campfire_model:subtool14_campfire_model6_wood_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10,
+            "TANGENT": 12,
+            "TEXCOORD_0": 13
+          },
+          "indices": 14,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "8e156acce6294511aac49a657a75e889.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5,
+        6
+      ],
+      "name": "campfire_model:subtool14"
+    },
+    {
+      "mesh": 0,
+      "name": "campfire_model:subtool14_campfire_model6_stone_0"
+    },
+    {
+      "mesh": 1,
+      "name": "campfire_model:subtool14_campfire_model6_stone2_0"
+    },
+    {
+      "mesh": 2,
+      "name": "campfire_model:subtool14_campfire_model6_wood_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    },
+    {
+      "sampler": 0,
+      "source": 6
+    },
+    {
+      "sampler": 0,
+      "source": 7
+    },
+    {
+      "sampler": 0,
+      "source": 8
+    },
+    {
+      "sampler": 0,
+      "source": 9
+    }
+  ]
+}
