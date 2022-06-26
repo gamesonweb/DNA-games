@@ -1,8 +1,7 @@
 import { ArcRotateCamera, Axis, NullEngine, PointLight, Scene, Vector3 } from "babylonjs";
-import { Avatar } from "./clients/babylon/avatars/avatar";
-import { Monster } from "./clients/babylon/avatars/monster";
-import { distance } from "./clients/babylon/tools";
-import { avatar_update_from_serveur, receiveContent, serverMessages } from "./clients/connectionWS";
+import { Avatar } from "./clients/fictif/fictive_avatar";
+import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
+import { distance } from "./clients/fictif/fictive_tools";
 
 var night_monster_list: Map<string, Avatar> = new Map();
 var player_list: Map<string, Avatar> = new Map();
@@ -56,7 +55,7 @@ export function main() {
           let messageContent: receiveContent = JSON.parse(messageReceived.content);
           let avatar_to_update = player_list.get(messageContent.username);
           if (avatar_to_update === undefined) {
-            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, ""));
+            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, messageContent.health));
             avatar_to_update = player_list.get(messageContent.username);
           }
           if (avatar_to_update) {
@@ -146,7 +145,7 @@ function generate_zombie_wave() {
 }
 
 function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
-  let generated_zombie = new Avatar(scene, "zombie" + zombie_counter, "");
+  let generated_zombie = new Avatar(scene, "zombie" + zombie_counter);
   generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
   night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.computeWorldMatrix(true);

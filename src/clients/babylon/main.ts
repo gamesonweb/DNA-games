@@ -1,7 +1,7 @@
 import { Engine, FollowCamera, Vector3 } from "babylonjs";
 import { player_list, username } from "../connectionWS";
 import { windowExists } from "../reactComponents/tools";
-import { Avatar } from "./avatars/avatar";
+import { Player } from "./avatars/player";
 
 import { inializeInputListeners } from "./inputListeners";
 import { MyScene } from "./scene";
@@ -9,7 +9,7 @@ import { MyScene } from "./scene";
 export var canvas: HTMLCanvasElement;
 export var engine: Engine;
 export var scene: MyScene;
-export var sphere1: Avatar | undefined;
+export var sphere1: Player | undefined;
 
 let doneOnce = false;
 
@@ -79,8 +79,7 @@ export function setScene(e: MyScene | undefined) {
 
 declare global {
   interface Window {
-    addAvatar: (() => Avatar),
-    playerList: Map<string, Avatar>,
+    playerList: Map<string, Player>,
     scene: MyScene,
     engine: Engine
     BABYLON: any;

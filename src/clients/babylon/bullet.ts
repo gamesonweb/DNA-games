@@ -1,11 +1,12 @@
 import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
 import { meshes, night_monster_list, serverMessages, ws } from "../connectionWS";
-import { Avatar } from "./avatars/avatar";
+import { Monster } from "./avatars/monster";
+import { Player } from "./avatars/player";
 import { scene, sphere1 } from "./main";
 import { distance, removeFromList } from "./tools";
 
 export class Bullet extends Mesh {
-  myShooter: Avatar;
+  myShooter: Player;
   name: string;
   static id = 0;
   angle: Vector3;
@@ -14,7 +15,7 @@ export class Bullet extends Mesh {
   originalPositionBullet: Vector3;
   damage: number;
 
-  constructor(myShooter: Avatar, displayOnly: Boolean, p?: { damage?: number }) {
+  constructor(myShooter: Player, displayOnly: Boolean, p?: { damage?: number }) {
     super("Bullet" + Bullet.id + myShooter.name);
     this.name = "Bullet" + Bullet.id + myShooter.name;
     this.displayOnly = displayOnly;
@@ -33,16 +34,15 @@ export class Bullet extends Mesh {
     Bullet.id++;
 
     this.onCollide = e => {
-      if (e?.parent instanceof Avatar) {
-        let avatar = e.parent as Avatar;
-        if (avatar.name.includes("zombie") && this.myShooter.name === sphere1!.name) {
-          console.log("HERE");
+      if (e?.parent instanceof Monster) {
+        let monster = e.parent as Monster;
+        if (this.myShooter.name === sphere1!.name) {
           console.log(night_monster_list);
 
           ws.send(
             JSON.stringify({
               route: serverMessages.DAMAGE_MONSTER,
-              content: JSON.stringify({ username: avatar.name, damage: this.damage })
+              content: JSON.stringify({ username: monster.name, damage: this.damage })
             }))
         }
       }
