@@ -5,8 +5,8 @@ import { shadowGenerator } from "../scene";
 import { ModelEnum } from "../models";
 
 export class Avatar extends MeshWithHealth {
-  sphere: Mesh;
   speed_coeff: number;
+  shape: Mesh | undefined;
   didSomething: Boolean;
   oldPosition: Vector3;
   isJumping: boolean;
@@ -18,19 +18,41 @@ export class Avatar extends MeshWithHealth {
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
     super(avatar_username, scene, p?.health);
+
+    let model;
+    if (false && this.name.includes("zombie")) {
+      model = ModelEnum.PumpkinMonster.rootMesh?.clone();
+    } else {
+      model = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
+      let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+
+      if (avatar_username !== username) {
+        model.checkCollisions = true;
+      }
+      var myMaterial = new StandardMaterial("myMaterial", scene);
+
+      myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
+      model.material = myMaterial;
+      model.parent = this;
+      this.addChild(model)
+      model.addChild(queue)
+      queue.position = new Vector3(0, 0, -0.3);
+    }
+
     this.name = avatar_username
-    let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
-    let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
+    // let sphere = MeshBuilder.CreateCylinder(this.name + "sp1", { diameter: 0.5, height: 2 }, scene);
+    // let queue = MeshBuilder.CreateSphere(this.name + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     this.ellipsoid = new Vector3(0.5, 1, 0.5);
     this.checkCollisions = true;
 
+    this.shape = model;
 
-    sphere.parent = this;
-    this.addChild(sphere)
-    this.addChild(queue)
-    queue.position = new Vector3(0, 0, -0.3);
-    this.sphere = sphere;
+    // sphere.parent = this;
+    // this.addChild(sphere)
+    // this.addChild(queue)
+    // queue.position = new Vector3(0, 0, -0.3);
+    // this.sphere = sphere;
 
     this.speed_coeff = 0.20;
     this.didSomething = false;
