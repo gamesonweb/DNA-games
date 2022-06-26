@@ -234,7 +234,7 @@ export class MyScene extends Scene {
             model.scaling = new Vector3(scaling, scaling, scaling);
 
             //Creation of 300 herbs at random positions, scaling and orientation
-            for (var i = 0; i < 300; i++) {
+            for (var i = 0; i < 400; i++) {
                 let x = Math.random() * 100 * ratio - 50 * ratio;
                 let z = Math.random() * 100 * ratio - 50 * ratio;
 

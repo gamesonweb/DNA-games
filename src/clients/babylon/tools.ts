@@ -73,7 +73,7 @@ export var createLabel = function (text: string, mesh: Avatar) {
 
 export function createWall() {
     let wall = MeshBuilder.CreateBox("wall", { height: 50, width: 2, depth: 0.2 }, scene);
-    wall.position = new Vector3(1, 1, -5)
+    wall.position = new Vector3(10, 1, -10)
     wall.rotate(Axis.X, Math.PI / 2.5)
     wall.checkCollisions = true;
 
