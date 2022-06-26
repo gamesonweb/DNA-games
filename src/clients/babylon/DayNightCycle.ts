@@ -132,13 +132,13 @@ function createLightAnimation(ratio: number, isIntensity: boolean) {
 
     if (!isIntensity) {
         keys.push({
-            frame: 800 * ratio,
+            frame: 650 * ratio,
             value: new Color3(228 / 255, 105 / 255, 46 / 255)
         });
     }
 
     keys.push({
-        frame: 1100 * ratio,
+        frame: (isIntensity ? 1100 : 800) * ratio,
         value: isIntensity ? 0.8 : new Color3(1, 1, 1)
     });
 
