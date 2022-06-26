@@ -72,13 +72,13 @@ function createSkyAnimation(ratio: number): Animation {
 
     //At the animation key 800 (08h00), the value of color is "rgb(228 / 255, 105 / 255, 46 / 255)" (Sunrise color)
     keys.push({
-        frame: 800 * ratio,
+        frame: 650 * ratio,
         value: new Color3(228 / 255, 105 / 255, 46 / 255)
     });
 
-    //At the animation key 1100 (11h00), the value of color is "rgb(0, 0, 0)" (blue sky)
+    //At the animation key 1100 (11h00), the value of color is "rgb(135 / 255, 206 / 255, 235 / 255)" (blue sky)
     keys.push({
-        frame: 1100 * ratio,
+        frame: 800 * ratio,
         value: new Color3(135 / 255, 206 / 255, 235 / 255)
     });
 
