@@ -48,7 +48,7 @@ export let initFunction = async function () {
   if (!engine) throw new Error('engine should not be null.');
   //startRenderLoop(engine, canvas);
 
-  let scene = new MyScene();
+  let scene = new MyScene(engine);
   scene.assetManager.load();
 
   setWindowParams()

@@ -1,7 +1,8 @@
-import { FreeCamera, DirectionalLight, HemisphericLight, MeshBuilder, Scene, Sprite, SpriteManager, StandardMaterial, Texture, Vector3, ShadowGenerator, Animation, AnimationGroup, Color3, Color4, AssetsManager, GroundMesh, Mesh, Quaternion, Axis, Matrix } from "babylonjs";
-import { startRenderLoop, canvas, engine, sphere1 } from "./main";
-import { ModelEnum } from "./models";
+import { AssetsManager, Axis, DirectionalLight, Engine, FreeCamera, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, Scene, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
+import { AvaterInterface as AvatarInterface } from "../../AvatarInterface";
 import { windowExists } from "../reactComponents/tools";
+import { canvas, engine, sphere1, startRenderLoop } from "./main";
+import { ModelEnum } from "./models";
 import { createWall } from "./tools";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -14,9 +15,9 @@ export class MyScene extends Scene {
     ground: GroundMesh | undefined;
     grassTaskCounter: number;
 
-    constructor() {
+    constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
-        super(engine!)
+        super(engine)
 
         window.scene = this;
 
@@ -42,7 +43,7 @@ export class MyScene extends Scene {
 
         this.beforeRender = () => {
 
-            sphere1?.isJumping ? this.applyJump() : this.applyGravity();
+            sphere1?.isJumping ? this.applyJump() : this.applyGravity(sphere1!);
         }
     }
 
@@ -178,25 +179,27 @@ export class MyScene extends Scene {
     }*/
 
 
-    applyGravity() {
+    applyGravity(mesh: AvatarInterface) {
         //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
-        if (sphere1) {
-            var hits = this.multiPickWithRay(sphere1.ray, (m) => { return m.isPickable });
+        if (mesh) {
+            var hits = this.multiPickWithRay(mesh.ray, (m) => { return m.isPickable });
 
-            var filtered = (hits?.filter(e => (sphere1?.shape != undefined) && e.pickedMesh?.name !== sphere1?.shape.name))
+            var filtered = (hits?.filter(e => (mesh?.shape != undefined) && e.pickedMesh?.name !== mesh?.shape.name))
 
             //if object detected but to high
             if (filtered !== undefined && filtered.length > 0) {
                 var hit = filtered[0]
-                if (hit !== null && hit.pickedPoint && sphere1.position.y > hit.pickedPoint.y + 1.2) {
-                    sphere1.position.y += this.acceleration;
+                if (hit !== null && hit.pickedPoint && mesh.position.y > hit.pickedPoint.y + 1.2) {
+                    mesh.position.y += this.acceleration;
                 } else {
                     this.acceleration = this.gravityIntensity;
-                    sphere1.canJump = true;
+                    mesh.canJump = true;
                 }
                 //else above the void
             } else {
-                sphere1.position.y += this.acceleration * 2;
+                console.log("Going down ?");
+
+                mesh.position.y += this.acceleration * 2;
                 this.acceleration += this.gravityIntensity * 0.2;
             }
         }

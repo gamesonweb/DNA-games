@@ -1,12 +1,14 @@
-import { ArcRotateCamera, Axis, NullEngine, PointLight, Scene, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Axis, NullEngine, PointLight, Vector3 } from "babylonjs";
+import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
+import { MyScene } from "./clients/babylon/scene";
 import { Avatar } from "./clients/fictif/fictive_avatar";
 import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
 import { distance } from "./clients/fictif/fictive_tools";
 
-var night_monster_list: Map<string, Avatar> = new Map();
-var player_list: Map<string, Avatar> = new Map();
+var night_monster_list: Map<string, AvatarInterface> = new Map();
+var player_list: Map<string, AvatarInterface> = new Map();
 var zombie_counter: number;
-var scene: Scene;
+var scene: MyScene;
 var ws: WebSocket
 
 export function main() {
@@ -16,7 +18,7 @@ export function main() {
   // global.XMLHttpRequest = require('xhr2').XMLHttpRequest;
 
   var engine = new NullEngine();
-  scene = new Scene(engine);
+  scene = new MyScene(engine)
 
   var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
 
@@ -77,7 +79,7 @@ export function main() {
         case serverMessages.HOUR: {
           let hour = messageReceived.content;
           //tue les monstres de nuit si il fait jour
-          if (hour == 7) {
+          if (hour == 21) {
             for (const value of night_monster_list.values()) {
               value.dispose();
             }
@@ -97,14 +99,15 @@ export function main() {
     setInterval(() => {
       for (const monster of night_monster_list.values()) {
         zombie_apply_AI(monster);
+        // scene.applyGravity(monster);
       }
     },
       500)
   }
 }
 
-function zombie_apply_AI(monster: Avatar) {
-  let player_to_target: Avatar | null = nearest_player(monster);
+function zombie_apply_AI(monster: AvatarInterface) {
+  let player_to_target: AvatarInterface | null = nearest_player(monster);
   if (player_to_target) {
     monster.lookAt(new Vector3(player_to_target.position.x, monster.position.y, player_to_target.position.z));
     if (distance(monster.position, player_to_target.position) < 2) {
@@ -163,8 +166,8 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
   zombie_counter++
 }
 
-function nearest_player(monster: Avatar) {
-  var nearest_player: Avatar | null = null;
+function nearest_player(monster: AvatarInterface) {
+  var nearest_player: AvatarInterface | null = null;
   var dist = Infinity
   for (var player of player_list.values()) {
     let dist_to_player = distance(monster.position, player.position);

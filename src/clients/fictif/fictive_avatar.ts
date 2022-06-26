@@ -1,10 +1,15 @@
-import { Mesh, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Mesh, MeshBuilder, Ray, Scene, Vector3 } from "babylonjs";
+import { AvaterInterface } from "../../AvatarInterface";
 
-export class Avatar extends Mesh {
+export class Avatar extends Mesh implements AvaterInterface {
     sphere: Mesh;
     speed_coeff: number;
     currentHealth: number;
     maxHealth: number;
+    canJump = false;
+    ray: Ray;
+    shape: Mesh | undefined;
+
 
     constructor(scene: Scene, avatar_username: string, health?: number) {
         super(avatar_username, scene);
@@ -26,8 +31,8 @@ export class Avatar extends Mesh {
         this.sphere = sphere;
         this.speed_coeff = 0.20;
         this.position = new Vector3(0, 1, 0);
+        this.ray = new Ray(this.position, new Vector3(0, -1, 0), 1.2);
     }
-
     dispose(): void {
         super.dispose()
     }

@@ -1,11 +1,12 @@
 import { Color3, Mesh, MeshBuilder, Ray, Scene, StandardMaterial, Vector3 } from "babylonjs";
-import { Health, MeshWithHealth } from "../meshWithHealth";
-import { createLabel } from "../tools";
-import { shadowGenerator } from "../scene";
-import { ModelEnum } from "../models";
+import { AvaterInterface } from "../../../AvatarInterface";
 import { windowExists } from "../../reactComponents/tools";
+import { Health, MeshWithHealth } from "../meshWithHealth";
+import { ModelEnum } from "../models";
+import { shadowGenerator } from "../scene";
+import { createLabel } from "../tools";
 
-export class Avatar extends MeshWithHealth {
+export class Avatar extends MeshWithHealth implements AvaterInterface {
   speed_coeff: number;
   shape: Mesh | undefined;
   didSomething: Boolean;
