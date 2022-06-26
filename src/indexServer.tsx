@@ -1,8 +1,8 @@
 import { ArcRotateCamera, Axis, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
-import { MyScene } from "./clients/babylon/scene";
 import { Avatar } from "./clients/fictif/fictive_avatar";
 import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
+import { MyScene } from "./clients/fictif/fictive_myScene";
 import { distance } from "./clients/fictif/fictive_tools";
 
 var night_monster_list: Map<string, AvatarInterface> = new Map();
@@ -19,9 +19,7 @@ export function main() {
 
   var engine = new NullEngine();
   scene = new MyScene(engine)
-
   var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
-
   var camera = new ArcRotateCamera("Camera", 0, 0.8, 100, Vector3.Zero(), scene);
 
   zombie_counter = 0;
@@ -98,8 +96,15 @@ export function main() {
 
     setInterval(() => {
       for (const monster of night_monster_list.values()) {
+        scene.applyGravity(monster);
+        monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 0.6));
+      }
+    },
+      100 / 6)
+
+    setInterval(() => {
+      for (const monster of night_monster_list.values()) {
         zombie_apply_AI(monster);
-        // scene.applyGravity(monster);
       }
     },
       500)
@@ -123,9 +128,8 @@ function zombie_apply_AI(monster: AvatarInterface) {
     }
   }
   monster.computeWorldMatrix(true);
-  console.log("new direction: " + monster.getDirection(Axis.Z));
-  monster.position.x += monster.getDirection(Axis.Z)._x
-  monster.position.z += monster.getDirection(Axis.Z)._z
+  // monster.position.x += monster.getDirection(Axis.Z)._x
+  // monster.position.z += monster.getDirection(Axis.Z)._z
   ws.send(
     JSON.stringify({
       route: serverMessages.MOVE_MONSTER,
