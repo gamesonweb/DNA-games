@@ -1,4 +1,4 @@
-import { Color4, Mesh, ParticleSystem, Texture, Vector3 } from "babylonjs";
+import { Animation, Color4, Mesh, ParticleSystem, Texture, Vector3 } from "babylonjs";
 import { scene } from "./main";
 
 export function createFire(emitter: Mesh) {
@@ -92,4 +92,68 @@ export function createFire(emitter: Mesh) {
 
     // Start the particle system
     fireSystem.start();
+}
+
+export function createFireAnimation(): Animation {
+    //Light intensity
+
+    //Create a scaling animation at 60 FPS
+    var animationFireLight = new Animation("animFireLight", "intensity", 15, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    // Animation keys
+    var keys = [];
+
+    keys.push({
+        frame: 0,
+        value: 1
+    });
+
+    keys.push({
+        frame: 10,
+        value: 0.8
+    });
+    keys.push({
+        frame: 20,
+        value: 0.3
+    });
+    keys.push({
+        frame: 30,
+        value: 0.8
+    });
+    keys.push({
+        frame: 40,
+        value: 0.6
+    });
+
+    keys.push({
+        frame: 50,
+        value: 1.5
+    });
+    keys.push({
+        frame: 60,
+        value: 0.6
+    });
+    keys.push({
+        frame: 70,
+        value: 1.2
+    });
+    keys.push({
+        frame: 80,
+        value: 0.7
+    });
+    keys.push({
+        frame: 90,
+        value: 0.5
+    });
+
+    keys.push({
+        frame: 100,
+        value: 0.8
+    });
+
+
+    //Adding keys to the animation object
+    animationFireLight.setKeys(keys);
+
+    return animationFireLight
 }

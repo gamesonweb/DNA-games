@@ -2,7 +2,7 @@ import { Color3, Mesh, MeshBuilder, Ray, Scene, StandardMaterial, Vector3 } from
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { createLabel } from "../tools";
 import { shadowGenerator } from "../scene";
-import { ModelEnum } from "../models";
+import { ModelEnum, shadowGeneratorCampfire } from "../models";
 import { windowExists } from "../../reactComponents/tools";
 
 export class Avatar extends MeshWithHealth {

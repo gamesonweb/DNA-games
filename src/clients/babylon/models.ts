@@ -1,10 +1,11 @@
-import { AbstractMesh, AnimationGroup, Axis, Color3, Color4, GlowLayer, HighlightLayer, IParticleSystem, Matrix, Mesh, MeshBuilder, ParticleHelper, ParticleSystem, PointLight, Quaternion, SceneLoader, Skeleton, StandardMaterial, Texture, Vector3 } from "babylonjs";
-import { scene } from "./main";
+import { Animation, AbstractMesh, AnimationGroup, Axis, Color3, Color4, GlowLayer, HighlightLayer, IParticleSystem, Matrix, Mesh, MeshBuilder, ParticleHelper, ParticleSystem, PointLight, Quaternion, SceneLoader, Skeleton, StandardMaterial, Texture, Vector3, ShadowGenerator } from "babylonjs";
+import { scene, sphere1 } from "./main";
 import { MyScene } from "./scene";
 
 import 'babylonjs-loaders';
 import { createFire } from "./particules";
-
+import { createFireAnimation } from "./particules";
+export var shadowGeneratorCampfire: ShadowGenerator;
 export class ModelEnum {
     static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
     static Grass = new ModelEnum("grass", "gltf", 0.02);
@@ -56,6 +57,7 @@ export class ModelEnum {
             case "pumpkin_monster":
 
                 meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+                //meshes[0].position = new Vector3(15, 0, 20);
 
                 meshes[0].position.y -= 1.5;
                 this.rootMesh = meshes[0];
@@ -81,12 +83,21 @@ export class ModelEnum {
                 break;
 
             case "campfire":
-                meshes[0].position = new Vector3(10, -0.2, 3);
-                let campfireLight = new PointLight(this.name + "_light", meshes[0].position, scene);
+                meshes[0].position = new Vector3(10, -0.5, 10);
+                let campfireLight = new PointLight(this.name + "_light", meshes[0].position.add(new Vector3(0, 0.5, 0.8)), scene);
+                shadowGeneratorCampfire = new ShadowGenerator(128, campfireLight);
+                shadowGeneratorCampfire.filteringQuality = ShadowGenerator.QUALITY_LOW;
+                shadowGeneratorCampfire.darkness = 0;
+
+                shadowGeneratorCampfire.addShadowCaster(sphere1!);
 
                 campfireLight.diffuse = new Color3(1, 0.5, 0);
                 campfireLight.specular = new Color3(1, 0.5, 0);
-                campfireLight.range = 8;
+                campfireLight.range = 15;
+                let animFireLight = createFireAnimation();
+                campfireLight.animations.push(animFireLight);
+                scene.beginAnimation(campfireLight, 0, 100, true);
+
                 campfireLight.intensity = 1;
                 createFire(meshes[0]);
             // campfireLight.parent = meshes[0];
