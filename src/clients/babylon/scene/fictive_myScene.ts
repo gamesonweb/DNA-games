@@ -10,8 +10,6 @@ export class MyScene extends Scene {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine)
 
-        this.createGround();
-
         this.gravityIntensity = -0.02;
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
@@ -19,7 +17,7 @@ export class MyScene extends Scene {
 
     createGround() {
         const groundName = "ground1";
-        const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpg";
+        const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
 
         const groundWidth = 100;
         const groundLenght = 100;
@@ -90,7 +88,7 @@ export class MyScene extends Scene {
                 console.log("Going down ?");
 
                 mesh.position.y += mesh.gravity_acceleration * 2;
-                // mesh.gravity_acceleration += this.gravityIntensity * 0.2;
+                mesh.gravity_acceleration += this.gravityIntensity * 0.2;
             }
         }
     }

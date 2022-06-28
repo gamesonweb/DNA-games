@@ -295,23 +295,23 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
 }
 
 export function establishConnection(name: string) {
-    var username_entry = name;
-    var formatted_username_entry = username_entry?.replace(/["']/g, "");
-    username = formatted_username_entry ? formatted_username_entry : "";
-
-    if (username.length > 12) {
-        username = username.slice(0, 12);
-    }
-
-    if (username === "") {
-        username = makeid(10);
-    }
-    console.log("connection successfully established!");
-    setUsername();
-    setSocketMessageListener();
-    initChat()
     initFunction().then(e => {
         setScene(e)
         scene.collisionsEnabled = true
+        var username_entry = name;
+        var formatted_username_entry = username_entry?.replace(/["']/g, "");
+        username = formatted_username_entry ? formatted_username_entry : "";
+
+        if (username.length > 12) {
+            username = username.slice(0, 12);
+        }
+
+        if (username === "") {
+            username = makeid(10);
+        }
+        console.log("connection successfully established!");
+        setUsername();
+        setSocketMessageListener();
+        initChat()
     });
 }

@@ -121,13 +121,13 @@ function createLightAnimation(ratio: number, isIntensity: boolean) {
 
     keys.push({
         frame: 0,
-        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
 
     keys.push({
         frame: 500 * ratio,
-        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     if (!isIntensity) {
@@ -141,6 +141,14 @@ function createLightAnimation(ratio: number, isIntensity: boolean) {
         frame: (isIntensity ? 1100 : 800) * ratio,
         value: isIntensity ? 0.8 : new Color3(1, 1, 1)
     });
+
+    //Zenith
+    if (isIntensity) {
+        keys.push({
+            frame: 1400 * ratio,
+            value: 0.9
+        });
+    }
 
     keys.push({
         frame: 1700 * ratio,
@@ -156,12 +164,12 @@ function createLightAnimation(ratio: number, isIntensity: boolean) {
 
     keys.push({
         frame: 2300 * ratio,
-        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     keys.push({
         frame: 2400 * ratio,
-        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     //Adding keys to the animation object

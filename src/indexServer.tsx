@@ -25,6 +25,7 @@ export function main() {
   canvas.style.height = "100%"
   var engine = new Engine(canvas);
   scene = new MyScene(engine)
+  scene.createGround()
   var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
   var camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
   camera.attachControl(true);
