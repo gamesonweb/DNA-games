@@ -3,7 +3,7 @@ import { AvaterInterface } from "../../../AvatarInterface";
 import { windowExists } from "../../reactComponents/tools";
 import { Health, MeshWithHealth } from "../meshWithHealth";
 import { ModelEnum } from "../models";
-import { shadowGenerator } from "../scene";
+import { shadowGenerator } from "../scene/scene";
 import { createLabel } from "../tools";
 
 export class Avatar extends MeshWithHealth implements AvaterInterface {
@@ -16,11 +16,13 @@ export class Avatar extends MeshWithHealth implements AvaterInterface {
   timeJumping: number;
   lastShoot?: number;
   ray: Ray;
-  jumpRay: Ray
+  jumpRay: Ray;
+  gravity_acceleration: number;
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
     super(avatar_username, scene, p?.health);
 
+    this.gravity_acceleration = 0;
     let model;
     if (windowExists() && this.name.includes("zombie") && ModelEnum.PumpkinMonster.rootMesh != undefined) {
       model = ModelEnum.PumpkinMonster.rootMesh?.clone();
@@ -79,6 +81,9 @@ export class Avatar extends MeshWithHealth implements AvaterInterface {
     this.timeJumping = 250;
 
     shadowGenerator?.addShadowCaster(this)
+  }
+  setRayPosition() {
+    throw new Error("Method not implemented.");
   }
 
   dispose(): void {

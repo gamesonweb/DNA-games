@@ -1,8 +1,8 @@
-import { ArcRotateCamera, Axis, NullEngine, PointLight, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Axis, Engine, PointLight, Vector3 } from "babylonjs";
 import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
+import { MyScene } from "./clients/babylon/scene/fictive_myScene";
 import { Avatar } from "./clients/fictif/fictive_avatar";
 import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
-import { MyScene } from "./clients/fictif/fictive_myScene";
 import { distance } from "./clients/fictif/fictive_tools";
 
 var night_monster_list: Map<string, AvatarInterface> = new Map();
@@ -20,10 +20,18 @@ export function main() {
   // var XMLHttpRequest = require('xhr2');
   // var xhr = new XMLHttpRequest();
 
-  var engine = new NullEngine();
+  var canvas = document.getElementById("canvas") as HTMLCanvasElement
+  canvas.style.width = "100%"
+  canvas.style.height = "100%"
+  var engine = new Engine(canvas);
   scene = new MyScene(engine)
   var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
-  var camera = new ArcRotateCamera("Camera", 0, 0.8, 100, Vector3.Zero(), scene);
+  var camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
+  camera.attachControl(true);
+
+
+  engine.runRenderLoop(() => scene.render());
+
 
   zombie_counter = 0;
 
@@ -107,13 +115,13 @@ export function main() {
     //   }
     // });
 
-    // setInterval(() => {
-    //   for (const monster of night_monster_list.values()) {
-    //     //scene.applyGravity(monster);
-    //     monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
-    //   }
-    // },
-    //   17)
+    setInterval(() => {
+      for (const monster of night_monster_list.values()) {
+        // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+        scene.applyGravity(monster);
+        monster.setRayPosition();
+      }
+    }, 1000 / 60)
 
     setInterval(() => {
       for (const monster of night_monster_list.values()) {

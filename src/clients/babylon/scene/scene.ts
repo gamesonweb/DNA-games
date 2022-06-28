@@ -1,15 +1,14 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, FreeCamera, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, Scene, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
-import { AvaterInterface as AvatarInterface } from "../../AvatarInterface";
-import { windowExists } from "../reactComponents/tools";
-import { canvas, engine, sphere1, startRenderLoop } from "./main";
-import { ModelEnum } from "./models";
-import { createWall } from "./tools";
+import { AssetsManager, Axis, DirectionalLight, Engine, FreeCamera, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
+import { windowExists } from "../../reactComponents/tools";
+import { canvas, engine, sphere1, startRenderLoop } from "../main";
+import { ModelEnum } from "../models";
+import { createWall } from "../tools";
+import { MyScene } from "./fictive_myScene";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var shadowGenerator: ShadowGenerator | null;
-export class MyScene extends Scene {
-    gravityIntensity: number;
-    acceleration: number;
+
+export class MySceneClient extends MyScene {
     shadowGenerator: ShadowGenerator | null;
     assetManager: AssetsManager;
     ground: GroundMesh | undefined;
@@ -37,7 +36,6 @@ export class MyScene extends Scene {
         ModelEnum.createAllModels(this);
 
         this.gravityIntensity = -0.02;
-        this.acceleration = this.gravityIntensity;
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
 
@@ -177,33 +175,6 @@ export class MyScene extends Scene {
     /*createSky() {
         this.clearColor = new Color4(135 / 255, 206 / 255, 235 / 255, 1);
     }*/
-
-
-    applyGravity(mesh: AvatarInterface) {
-        //sphere1?.moveWithCollisions(new Vector3(0, -0.5, 0))
-        if (mesh) {
-            var hits = this.multiPickWithRay(mesh.ray, (m) => { return m.isPickable });
-
-            var filtered = (hits?.filter(e => (mesh?.shape != undefined) && e.pickedMesh?.name !== mesh?.shape.name))
-
-            //if object detected but to high
-            if (filtered !== undefined && filtered.length > 0) {
-                var hit = filtered[0]
-                if (hit !== null && hit.pickedPoint && mesh.position.y > hit.pickedPoint.y + 1.2) {
-                    mesh.position.y += this.acceleration;
-                } else {
-                    this.acceleration = this.gravityIntensity;
-                    mesh.canJump = true;
-                }
-                //else above the void
-            } else {
-                console.log("Going down ?");
-
-                mesh.position.y += this.acceleration * 2;
-                this.acceleration += this.gravityIntensity * 0.2;
-            }
-        }
-    }
 
     applyJump() {
         if (sphere1) {
