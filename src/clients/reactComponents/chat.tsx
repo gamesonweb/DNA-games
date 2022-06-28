@@ -1,7 +1,7 @@
 import { Component, createRef, ReactNode, RefObject, StrictMode } from "react"
 import { render } from "react-dom"
 import { canvas, sphere1 } from "../babylon/main"
-import { getTime } from "../babylon/tools"
+import { getTimeToString } from "../babylon/others/tools"
 import { sendMessage } from "../connectionWS"
 import { windowExists } from "./tools"
 
@@ -59,7 +59,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     sendMessageFromPlayer(msg: string) {
-        var time = getTime()
+        var time = getTimeToString()
         if (sphere1) {
             this.writeMessageInChat(time, sphere1.name, msg, true)
             sendMessage(time, msg)

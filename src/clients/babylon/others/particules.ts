@@ -1,5 +1,5 @@
 import { Animation, Color4, Mesh, ParticleSystem, Texture, Vector3 } from "babylonjs";
-import { scene } from "./main";
+import { scene } from "../main";
 
 export function createFire(emitter: Mesh) {
     //Smoke

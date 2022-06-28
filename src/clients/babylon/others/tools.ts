@@ -1,8 +1,7 @@
-import { Axis, Color3, Mesh, MeshBuilder, StandardMaterial, Vector3 } from "babylonjs";
+import { Axis, Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
-import { windowExists } from "../reactComponents/tools";
-import { Avatar } from "./avatars/avatar";
-import { scene } from "./main";
+import { windowExists } from "../../reactComponents/tools";
+import { Avatar } from "../avatars/avatarHeavy";
 
 export function makeid(length: number) {
     var result = '';
@@ -26,7 +25,7 @@ export function removeFromList<T>(elt: T, l: T[]) {
 }
 
 
-export function getTime() {
+export function getTimeToString() {
     var today = new Date();
     var hours = today.getHours().toString()
     var minutes = today.getMinutes().toString()
@@ -39,7 +38,7 @@ export function isVector3Equal(v1: Vector3, v2: Vector3) {
 }
 
 
-export var createLabel = function (text: string, mesh: Avatar) {
+export var createLabel = function (text: string, mesh: Avatar, scene: Scene) {
     var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);
     plane.billboardMode = Mesh.BILLBOARDMODE_Y;
     plane.position.y = 1.5;
@@ -71,7 +70,7 @@ export var createLabel = function (text: string, mesh: Avatar) {
 }
 
 
-export function createWall() {
+export function createWall(scene: Scene) {
     let wall = MeshBuilder.CreateBox("wall", { height: 50, width: 2, depth: 0.2 }, scene);
     wall.position = new Vector3(10, 1, -10)
     wall.rotate(Axis.X, Math.PI / 2.5)

@@ -1,5 +1,4 @@
-import { Color3, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
-import { scene } from "./main";
+import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
 
 export type Health = {
   maxHealth?: number;
@@ -14,11 +13,11 @@ export class MeshWithHealth extends Mesh implements Health {
   healthBar: HealthBar;
 
 
-  constructor(name: string, scene?: Nullable<Scene> | undefined, healthParam?: Health) {
+  constructor(name: string, scene: Scene, healthParam?: Health) {
     super(name, scene);
     this.maxHealth = (healthParam?.maxHealth || healthParam?.currentHealth) || 100
     this.minHealth = healthParam?.minHealth || 0
-    this.healthBar = new HealthBar(this);
+    this.healthBar = new HealthBar(this, scene);
     this.currentHealth = this.healthSet(healthParam?.currentHealth || this.maxHealth)
   }
 
@@ -59,7 +58,7 @@ class HealthBar {
   height: number;
   width: number;
 
-  constructor(parent: Mesh, p?: { height: number, width: number }) {
+  constructor(parent: Mesh, scene: Scene, p?: { height: number, width: number }) {
     this.height = p?.height || 0.15;
     this.width = p?.width || 1;
     let [width, height] = [this.width, this.height]

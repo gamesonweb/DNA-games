@@ -1,9 +1,9 @@
 import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
-import { meshes, night_monster_list, serverMessages, ws } from "../connectionWS";
-import { Monster } from "./avatars/monster";
-import { Player } from "./avatars/player";
-import { scene, sphere1 } from "./main";
-import { distance, removeFromList } from "./tools";
+import { meshes, night_monster_list, serverMessages, ws } from "../../../connectionWS";
+import { scene, sphere1 } from "../../main";
+import { distance, removeFromList } from "../../others/tools";
+import { Player } from "../heroes/player";
+import { Monster } from "../monsters/monster";
 
 export class Bullet extends Mesh {
   myShooter: Player;

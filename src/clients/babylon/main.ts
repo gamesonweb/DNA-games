@@ -1,10 +1,10 @@
 import { Engine, FollowCamera, Vector3 } from "babylonjs";
 import { player_list, username } from "../connectionWS";
 import { windowExists } from "../reactComponents/tools";
-import { Player } from "./avatars/player";
+import { Player } from "./avatars/heroes/player";
 
-import { inializeInputListeners } from "./inputListeners";
-import { MySceneClient } from "./scene/scene";
+import { inializeInputListeners } from "./avatars/inputListeners";
+import { MySceneClient } from "./scene/sceneClient";
 
 export var canvas: HTMLCanvasElement;
 export var engine: Engine;
@@ -49,7 +49,7 @@ export let initFunction = async function () {
   //startRenderLoop(engine, canvas);
 
   let scene = new MySceneClient(engine);
-  scene.assetManager.load();
+  scene.assetManager?.load();
 
   setWindowParams()
   inializeInputListeners();

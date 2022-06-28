@@ -1,15 +1,15 @@
 import { ArcRotateCamera, Axis, Camera, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
-import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
-import { MyScene } from "./clients/babylon/scene/fictive_myScene";
-import { Avatar } from "./clients/fictif/fictive_avatar";
+import { Avatar } from "./clients/babylon/avatars/avatarFictif";
+import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
+import { distance } from "./clients/babylon/others/tools";
+import { sceneFictive } from "./clients/babylon/scene/sceneFictive";
 import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
-import { distance } from "./clients/fictif/fictive_tools";
 import { windowExists } from "./clients/reactComponents/tools";
 
-var night_monster_list: Map<string, AvatarInterface> = new Map();
-var player_list: Map<string, AvatarInterface> = new Map();
+var night_monster_list: Map<string, AvatarSoft> = new Map();
+var player_list: Map<string, AvatarSoft> = new Map();
 var zombie_counter: number;
-var scene: MyScene;
+var scene: sceneFictive;
 var ws: WebSocket
 
 export var canvas: HTMLCanvasElement;
@@ -29,14 +29,14 @@ export function main() {
     canvas.style.width = "100%"
     canvas.style.height = "100%"
     engine = new Engine(canvas);
-    scene = new MyScene(engine)
+    scene = new sceneFictive(engine)
     scene.createGround()
     var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
     camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
     camera.attachControl(true);
   } else {
     engine = new NullEngine();
-    scene = new MyScene(engine)
+    scene = new sceneFictive(engine)
     scene.createGround()
     camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
   }
@@ -78,7 +78,7 @@ export function main() {
           let messageContent: receiveContent = JSON.parse(messageReceived.content);
           let avatar_to_update = player_list.get(messageContent.username);
           if (avatar_to_update === undefined) {
-            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, messageContent.health));
+            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, { currentHealth: messageContent.health }));
             avatar_to_update = player_list.get(messageContent.username);
           }
           if (avatar_to_update) {
@@ -131,7 +131,6 @@ export function main() {
       for (const monster of night_monster_list.values()) {
         // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
         scene.applyGravity(monster);
-        monster.setRayPosition();
       }
     }, 1000 / 60)
 
@@ -144,8 +143,8 @@ export function main() {
   }
 }
 
-function zombie_apply_AI(monster: AvatarInterface) {
-  let player_to_target: AvatarInterface | null = nearest_player(monster);
+function zombie_apply_AI(monster: AvatarSoft) {
+  let player_to_target: AvatarSoft | null = nearest_player(monster);
   if (player_to_target) {
     monster.lookAt(new Vector3(player_to_target.position.x, monster.position.y, player_to_target.position.z));
     if (distance(monster.position, player_to_target.position) < 2) {
@@ -207,8 +206,8 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
   zombie_counter++
 }
 
-function nearest_player(monster: AvatarInterface) {
-  var nearest_player: AvatarInterface | null = null;
+function nearest_player(monster: AvatarSoft) {
+  var nearest_player: AvatarSoft | null = null;
   var dist = Infinity
   for (var player of player_list.values()) {
     let dist_to_player = distance(monster.position, player.position);

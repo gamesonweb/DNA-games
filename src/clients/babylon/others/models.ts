@@ -1,6 +1,6 @@
 import { AnimationGroup, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
-import { scene, sphere1 } from "./main";
-import { MySceneClient } from "./scene/scene";
+import { scene, sphere1 } from "../main";
+import { MySceneClient } from "../scene/sceneClient";
 
 import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
@@ -26,10 +26,16 @@ export class ModelEnum {
     }
 
     createModel(scene: MySceneClient) {
+        console.log(scene.assetManager);
+
         //A priori, all gltf extension file will be (automatically) named "scene", else the same name of the respective folder
-        let meshTask = scene.assetManager.addMeshTask(this.name + "_task", "", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension);
-        meshTask.onSuccess = (task) => {
-            this.callback(task.loadedMeshes, task.loadedParticleSystems, task.loadedSkeletons, task.loadedAnimationGroups)
+        if (scene.assetManager) {
+            let meshTask = scene.assetManager.addMeshTask(this.name + "_task", "", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension);
+            meshTask.onSuccess = (task) => {
+                this.callback(task.loadedMeshes, task.loadedParticleSystems, task.loadedSkeletons, task.loadedAnimationGroups)
+            }
+        } else {
+            throw new Error("No asset menager in scene !")
         }
 
     }
@@ -100,15 +106,11 @@ export class ModelEnum {
                 campfireLight.intensity = 1;
                 createFire(meshes[0]);
             // campfireLight.parent = meshes[0];
-
             default:
                 meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
                 this.rootMesh = meshes[0];
                 break;
         }
-
-
-
     }
 
     static createAllModels(scene: MySceneClient) {

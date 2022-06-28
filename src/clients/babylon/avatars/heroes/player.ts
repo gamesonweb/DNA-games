@@ -1,9 +1,9 @@
 import { Animation, Axis, Mesh, Quaternion, Scene, Vector3 } from "babylonjs";
-import { serverMessages, ws } from "../../connectionWS";
-import { Bullet } from "../bullet";
+import { serverMessages, ws } from "../../../connectionWS";
+import { Avatar } from "../avatarHeavy";
 import { inputStates } from "../inputListeners";
 import { Health } from "../meshWithHealth";
-import { Avatar } from "./avatar";
+import { Bullet } from "../weapons/bullet";
 
 export class Player extends Avatar {
 

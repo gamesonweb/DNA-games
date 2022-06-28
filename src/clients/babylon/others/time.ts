@@ -1,8 +1,8 @@
 import { Animation } from "babylonjs";
-import { night_monster_list } from "../connectionWS";
-import { createDayNightCycle } from "./dayNightCycle";
-import { scene } from "./main";
-import { light } from "./scene/scene";
+import { night_monster_list } from "../../connectionWS";
+import { scene } from "../main";
+import { createDayNightCycle } from "../scene/dayNightCycle";
+import { light } from "../scene/sceneClient";
 
 export var hour: number;
 export var skyDefined: boolean = false;

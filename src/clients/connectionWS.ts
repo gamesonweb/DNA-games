@@ -1,10 +1,10 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
-import { Avatar } from "./babylon/avatars/avatar";
-import { Monster } from "./babylon/avatars/monster";
-import { Player } from "./babylon/avatars/player";
+import { Avatar } from "./babylon/avatars/avatarHeavy";
+import { Player } from "./babylon/avatars/heroes/player";
+import { Monster } from "./babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
-import { updateHour } from "./babylon/time";
-import { getTime, isVector3Equal, makeid } from "./babylon/tools";
+import { updateHour } from "./babylon/others/time";
+import { getTimeToString, isVector3Equal, makeid } from "./babylon/others/tools";
 import { chatRef, initChat } from "./reactComponents/chat";
 import { askUsername } from "./reactComponents/login";
 import { ErrorNoServer } from "./reactComponents/noServer";
@@ -96,7 +96,7 @@ function setSocketMessageListener() {
                     setPositionUpdateSender()
                 }
                 console.log("LOGIN IN: " + messageReceived.content);
-                chatRef.current!.displayStatusInChat(getTime(), messageReceived.content, true);
+                chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, true);
                 break;
             }
 
@@ -112,7 +112,7 @@ function setSocketMessageListener() {
                 if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
                 player_list.delete(messageReceived.content);
                 console.log("LOGIN OUT: " + messageReceived.content);
-                chatRef.current!.displayStatusInChat(getTime(), messageReceived.content, false);
+                chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, false);
                 break;
             }
 

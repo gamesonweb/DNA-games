@@ -1,47 +1,36 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, FreeCamera, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
-import { windowExists } from "../../reactComponents/tools";
-import { canvas, engine, sphere1, startRenderLoop } from "../main";
-import { ModelEnum } from "../models";
-import { createWall } from "../tools";
-import { MyScene } from "./fictive_myScene";
+import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
+import { engine, sphere1, startRenderLoop } from "../main";
+import { ModelEnum } from "../others/models";
+import { createWall } from "../others/tools";
+import { groundParameters, SceneSoft } from "./sceneSoft";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var shadowGenerator: ShadowGenerator | null;
 
-export class MySceneClient extends MyScene {
+export class MySceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
-    assetManager: AssetsManager;
     ground: GroundMesh | undefined;
     grassTaskCounter: number;
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine)
-
-        window.scene = this;
-
-        this.assetManager = this.configureAssetManager();
-
-        this.createCamera();
         this.createLight();
-        this.createGround();
 
-        if (windowExists()) {
-            this.shadowGenerator = this.createShadows();
-            this.shadowGenerator.addShadowCaster(createWall());
-            shadowGenerator = this.shadowGenerator;
-            // this.createSprites();
-        } else { this.shadowGenerator = null; }
+        this.shadowGenerator = this.createShadows();
+        this.shadowGenerator.addShadowCaster(createWall(this));
+        shadowGenerator = this.shadowGenerator;
+        // this.createSprites();
 
         ModelEnum.createAllModels(this);
 
-        this.gravityIntensity = -0.02;
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
 
         this.beforeRender = () => {
-
-            sphere1?.isJumping ? this.applyJump() : this.applyGravity(sphere1!);
+            if (sphere1) {
+                sphere1.isJumping ? sphere1.applyJump() : sphere1.applyGravity();
+            }
         }
     }
 
@@ -56,18 +45,6 @@ export class MySceneClient extends MyScene {
         }
 
         return assetsManager;
-    }
-
-    createCamera() {
-        // This creates and positions a free camera (non-mesh)
-        var camera = new FreeCamera("camera1", new Vector3(0, 5, -10), this);
-
-        // This targets the camera to scene origin
-        camera.setTarget(Vector3.Zero());
-
-        // This attaches the camera to the canvas
-        if (windowExists())
-            camera.attachControl(canvas, true);
     }
 
     createLight() {
@@ -88,15 +65,9 @@ export class MySceneClient extends MyScene {
         const diffuseTexture = "./textures/aerial_rocks_04_diff_8k.jpg";
         const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
 
-        const groundWidth = 100;
-        const groundLenght = 100;
-
-        const groundMinheight = -1;
-        const groundMaxheight = 2;
-
         var groundMaterial = new StandardMaterial(groundName + "_material", this);
 
-        var groundTask = this.assetManager.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
+        var groundTask = this.assetManager!.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
 
         groundTask.onSuccess = (task) => {
             let groundTexture = task.texture;
@@ -111,21 +82,16 @@ export class MySceneClient extends MyScene {
         }
 
         let groundOptions = () => {
-            return {
-                width: groundWidth,
-                height: groundLenght,
-                subdivisions: 32,
-                minHeight: groundMinheight,
-                maxHeight: groundMaxheight,
-
-                onReady: () => onGroundCreated(),
-            }
+            return Object.assign({}, groundParameters, { onReady: () => onGroundCreated() })
         }
 
         var ground = MeshBuilder.CreateGroundFromHeightMap(
             groundName,
             heightmapTexture,
-            groundOptions(),
+            {
+                ...groundParameters,
+                onReady: () => onGroundCreated(),
+            },
             this
         );
 
@@ -133,10 +99,8 @@ export class MySceneClient extends MyScene {
             ground.material = groundMaterial;
             ground.checkCollisions = true;
             ground.receiveShadows = true;
-            ground.position.y -= groundMaxheight;
-
+            ground.position.y -= groundParameters.maxHeight;
             this.ground = ground;
-
             this.setUpForGrass()
         }
     }
@@ -176,22 +140,6 @@ export class MySceneClient extends MyScene {
         this.clearColor = new Color4(135 / 255, 206 / 255, 235 / 255, 1);
     }*/
 
-    applyJump() {
-        if (sphere1) {
-            var hits = this.multiPickWithRay(sphere1.jumpRay, (m) => { return m.isPickable });
-
-            var filtered = (hits?.filter(e => (sphere1?.shape != undefined) && e.pickedMesh?.name !== sphere1?.shape.name))
-
-            if (filtered !== undefined && filtered.length > 0) {
-                var hit = filtered[0]
-                if (hit !== null && hit.pickedPoint && sphere1.position.y < hit.pickedPoint.y - 1.2) {
-                    sphere1.position.y -= this.gravityIntensity
-                }
-            } else {
-                sphere1.position.y -= this.gravityIntensity * 10
-            }
-        }
-    }
 
     setUpForGrass() {
         if (!(++this.grassTaskCounter < 2)) this.grassGeneration()

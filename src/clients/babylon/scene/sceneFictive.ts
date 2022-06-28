@@ -1,7 +1,8 @@
-import { Engine, GroundMesh, MeshBuilder, Scene } from "babylonjs";
-import { AvaterInterface as AvatarInterface } from "../../../AvatarInterface";
+import { Engine, GroundMesh, MeshBuilder } from "babylonjs";
+import { AvatarSoft } from "../avatars/avatarSoft";
+import { SceneSoft } from "./sceneSoft";
 
-export class MyScene extends Scene {
+export class sceneFictive extends SceneSoft {
     gravityIntensity: number;
     ground: GroundMesh | undefined;
     grassTaskCounter: number;
@@ -60,7 +61,7 @@ export class MyScene extends Scene {
         }
     }
 
-    applyGravity(mesh: AvatarInterface) {
+    applyGravity(mesh: AvatarSoft) {
         // mesh.moveWithCollisions(new Vector3(0, -0.5, 0))
         if (mesh) {
             var hits = this.multiPickWithRay(mesh.ray, (m) => { return m.isPickable });
