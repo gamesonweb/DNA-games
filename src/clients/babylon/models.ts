@@ -112,7 +112,7 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: MySceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass]
-        allModels.forEach(m => m.createModel(scene))
+        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire];
+        allModels.forEach(m => m.createModel(scene));
     }
 }
