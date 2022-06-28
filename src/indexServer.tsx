@@ -1,9 +1,10 @@
-import { ArcRotateCamera, Axis, Engine, PointLight, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
 import { MyScene } from "./clients/babylon/scene/fictive_myScene";
 import { Avatar } from "./clients/fictif/fictive_avatar";
 import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
 import { distance } from "./clients/fictif/fictive_tools";
+import { windowExists } from "./clients/reactComponents/tools";
 
 var night_monster_list: Map<string, AvatarInterface> = new Map();
 var player_list: Map<string, AvatarInterface> = new Map();
@@ -20,15 +21,23 @@ export function main() {
   // var XMLHttpRequest = require('xhr2');
   // var xhr = new XMLHttpRequest();
 
-  var canvas = document.getElementById("canvas") as HTMLCanvasElement
-  canvas.style.width = "100%"
-  canvas.style.height = "100%"
-  var engine = new Engine(canvas);
-  scene = new MyScene(engine)
-  scene.createGround()
-  var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
-  var camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
-  camera.attachControl(true);
+  var engine: Engine
+
+  if (windowExists()) {
+    var canvas = document.getElementById("canvas") as HTMLCanvasElement
+    canvas.style.width = "100%"
+    canvas.style.height = "100%"
+    engine = new Engine(canvas);
+    scene = new MyScene(engine)
+    scene.createGround()
+    var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
+    var camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
+    camera.attachControl(true);
+  } else {
+    engine = new NullEngine();
+    scene = new MyScene(engine)
+    scene.createGround()
+  }
 
 
   engine.runRenderLoop(() => scene.render());
