@@ -17,7 +17,7 @@ export class MyScene extends Scene {
 
     createGround() {
         const groundName = "ground1";
-        const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
+        const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpg";
 
         const groundWidth = 100;
         const groundLenght = 100;
@@ -64,17 +64,17 @@ export class MyScene extends Scene {
         // mesh.moveWithCollisions(new Vector3(0, -0.5, 0))
         if (mesh) {
             var hits = this.multiPickWithRay(mesh.ray, (m) => { return m.isPickable });
-            console.log({ hits });
+            // console.log({ hits });
 
 
             var filtered = (hits?.filter(e => (mesh?.shape === undefined) || (mesh?.shape != undefined && e.pickedMesh?.name !== mesh?.shape.name)))
 
-            console.log({ filtered });
+            // console.log({ filtered });
 
 
             //if object detected but to high
             if (filtered !== undefined && filtered.length > 0) {
-                console.log("If first branch", filtered);
+                // console.log("If first branch", filtered);
 
                 var hit = filtered[0]
                 if (hit !== null && hit.pickedPoint && mesh.position.y > hit.pickedPoint.y + 1.2) {
@@ -85,7 +85,7 @@ export class MyScene extends Scene {
                 }
                 //else above the void
             } else {
-                console.log("Going down ?");
+                // console.log("Going down ?");
 
                 mesh.position.y += mesh.gravity_acceleration * 2;
                 mesh.gravity_acceleration += this.gravityIntensity * 0.2;

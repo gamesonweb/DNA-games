@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Axis, Camera, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvaterInterface as AvatarInterface } from "./AvatarInterface";
 import { MyScene } from "./clients/babylon/scene/fictive_myScene";
 import { Avatar } from "./clients/fictif/fictive_avatar";
@@ -22,6 +22,7 @@ export function main() {
   // var xhr = new XMLHttpRequest();
 
   var engine: Engine
+  var camera: Camera
 
   if (windowExists()) {
     var canvas = document.getElementById("canvas") as HTMLCanvasElement
@@ -31,12 +32,13 @@ export function main() {
     scene = new MyScene(engine)
     scene.createGround()
     var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
-    var camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
+    camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
     camera.attachControl(true);
   } else {
     engine = new NullEngine();
     scene = new MyScene(engine)
     scene.createGround()
+    camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
   }
 
 
