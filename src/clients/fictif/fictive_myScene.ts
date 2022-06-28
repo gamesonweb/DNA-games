@@ -21,7 +21,7 @@ export class MyScene extends Scene {
 
     createGround() {
         const groundName = "ground1";
-        const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpg";
+        const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpggg";
 
         const groundWidth = 100;
         const groundLenght = 100;
@@ -29,33 +29,38 @@ export class MyScene extends Scene {
         const groundMinheight = -1;
         const groundMaxheight = 2;
 
-        let groundOptions = () => {
-            return {
-                width: groundWidth,
-                height: groundLenght,
-                subdivisions: 32,
-                minHeight: groundMinheight,
-                maxHeight: groundMaxheight,
+        // let groundOptions = () => {
+        //     return {
+        //         width: groundWidth,
+        //         height: groundLenght,
+        //         subdivisions: 32,
+        //         minHeight: groundMinheight,
+        //         maxHeight: groundMaxheight,
 
-                onReady: () => onGroundCreated(),
-            }
-        }
+        //         onReady: () => onGroundCreated(),
+        //     }
+        // }
 
-        var ground = MeshBuilder.CreateGroundFromHeightMap(
-            groundName,
-            heightmapTexture,
-            groundOptions(),
-            this
-        );
+        // var ground = MeshBuilder.CreateGround(
+        //     groundName,
+        //     groundOptions(),
+        // )
 
-        console.log("ground: " + ground);
+        // var ground = MeshBuilder.CreateGroundFromHeightMap(
+        //     groundName,
+        //     heightmapTexture,
+        //     groundOptions(),
+        //     this
+        // );
 
 
-        let onGroundCreated = () => {
-            ground.checkCollisions = true;
-            ground.position.y -= groundMaxheight;
-            this.ground = ground;
-        }
+        // let onGroundCreated = () => {
+        //     ground.position.y -= 10;
+        //     ground.checkCollisions = true;
+        //     this.ground = ground;
+        //     console.log("ground: " + ground);
+        //     console.log("ground y: " + ground.position.y);
+        // }
     }
 
     applyGravity(mesh: AvatarInterface) {

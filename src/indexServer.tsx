@@ -11,11 +11,14 @@ var zombie_counter: number;
 var scene: MyScene;
 var ws: WebSocket
 
+export var canvas: HTMLCanvasElement;
+
 export function main() {
 
   // var BABYLON = require("../../dist/preview release/babylon.max");
   // var LOADERS = require("../../dist/preview release/loaders/babylonjs.loaders");
-  // global.XMLHttpRequest = require('xhr2').XMLHttpRequest;
+  // var XMLHttpRequest = require('xhr2');
+  // var xhr = new XMLHttpRequest();
 
   var engine = new NullEngine();
   scene = new MyScene(engine)
@@ -77,7 +80,7 @@ export function main() {
         case serverMessages.HOUR: {
           let hour = messageReceived.content;
           //tue les monstres de nuit si il fait jour
-          if (hour == 21) {
+          if (hour == 7) {
             for (const value of night_monster_list.values()) {
               value.dispose();
             }
@@ -94,20 +97,30 @@ export function main() {
       }
     })
 
-    setInterval(() => {
-      for (const monster of night_monster_list.values()) {
-        scene.applyGravity(monster);
-        monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 0.6));
-      }
-    },
-      100 / 6)
+    // engine.runRenderLoop(function () {
+    //   if (scene && scene.activeCamera) {
+    //     for (const monster of night_monster_list.values()) {
+    //       //scene.applyGravity(monster);
+    //       monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+    //       console.log("monster " + monster.name + " pos: " + monster.position);
+    //     }
+    //   }
+    // });
+
+    // setInterval(() => {
+    //   for (const monster of night_monster_list.values()) {
+    //     //scene.applyGravity(monster);
+    //     monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+    //   }
+    // },
+    //   17)
 
     setInterval(() => {
       for (const monster of night_monster_list.values()) {
         zombie_apply_AI(monster);
       }
     },
-      500)
+      100)
   }
 }
 
@@ -130,6 +143,7 @@ function zombie_apply_AI(monster: AvatarInterface) {
   monster.computeWorldMatrix(true);
   // monster.position.x += monster.getDirection(Axis.Z)._x
   // monster.position.z += monster.getDirection(Axis.Z)._z
+  monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 6))
   ws.send(
     JSON.stringify({
       route: serverMessages.MOVE_MONSTER,
@@ -141,6 +155,9 @@ function zombie_apply_AI(monster: AvatarInterface) {
         direction: JSON.stringify(monster.getDirection(Axis.Z))
       })
     }))
+  if (monster.name === "zombie0")
+    console.log("" + monster.name + " : " + monster.position);
+
 }
 
 function generate_zombie_wave() {
