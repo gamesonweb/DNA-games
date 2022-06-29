@@ -111,6 +111,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
 
 export function generate_zombie_wave() {
   var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
+  console.log("Generating wave");
 
   while (zombie_counter < counter_after_wave) {
     spawn_zombie({

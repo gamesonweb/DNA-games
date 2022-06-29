@@ -103,7 +103,7 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 }
 
                 case serverMessages.HOUR: {
-                    this.hour(messageReceived.content)
+                    this.hour(messageReceived)
                     break;
                 }
 

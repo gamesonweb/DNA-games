@@ -24,13 +24,13 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
     throw new Error("Method not implemented.");
   }
   login(messageReceived: any): void {
-    throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
   message(messageReceived: any): void {
     throw new Error("Method not implemented.");
   }
   monster_data(messageReceived: any): void {
-    throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
   move_monster(messageReceived: any): void {
     throw new Error("Method not implemented.");
