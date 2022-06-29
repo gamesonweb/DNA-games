@@ -53,8 +53,8 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
             if (event.currentTarget.value !== "") {
                 this.sendMessageFromPlayer(event.currentTarget.value)
                 event.currentTarget.value = ""
-            } else
                 this.exitChat()
+            }
         }
     }
 
