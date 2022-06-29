@@ -1,5 +1,5 @@
 import { Engine, FollowCamera, Vector3 } from "babylonjs";
-import { player_list, username } from "../connectionWS";
+import { player_list, username } from "../connection/connectionClient";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/heroes/player";
 

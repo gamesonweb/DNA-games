@@ -1,5 +1,6 @@
 import { Animation, Axis, Mesh, Quaternion, Scene, Vector3 } from "babylonjs";
-import { serverMessages, ws } from "../../../connectionWS";
+import { ws } from "../../../connection/connectionClient";
+import { serverMessages } from "../../../connection/connectionSoft";
 import { Avatar } from "../avatarHeavy";
 import { inputStates } from "../inputListeners";
 import { Health } from "../meshWithHealth";

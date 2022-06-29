@@ -1,4 +1,4 @@
-import { connect_to_ws } from './clients/connectionWS';
+import { connect_to_ws } from './clients/connection/connectionClient';
 import './clients/css/index.css';
 
 export function main() {

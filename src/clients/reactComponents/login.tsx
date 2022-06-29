@@ -1,6 +1,6 @@
 import { Component, KeyboardEvent, ReactNode, StrictMode } from "react";
 import { render, unmountComponentAtNode } from "react-dom";
-import { establishConnection } from "../connectionWS";
+import { establishConnection } from "../connection/connectionClient";
 import { windowExists } from "./tools";
 
 export class ReactLogin extends Component<{}, {}> {

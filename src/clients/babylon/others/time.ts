@@ -1,5 +1,5 @@
 import { Animation } from "babylonjs";
-import { night_monster_list } from "../../connectionWS";
+import { night_monster_list } from "../../connection/connectionClient";
 import { scene } from "../main";
 import { createDayNightCycle } from "../scene/dayNightCycle";
 import { light } from "../scene/sceneClient";

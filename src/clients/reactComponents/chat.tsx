@@ -2,7 +2,7 @@ import { Component, createRef, ReactNode, RefObject, StrictMode } from "react"
 import { render } from "react-dom"
 import { canvas, sphere1 } from "../babylon/main"
 import { getTimeToString } from "../babylon/others/tools"
-import { sendMessage } from "../connectionWS"
+import { sendMessage } from "../connection/connectionClient"
 import { windowExists } from "./tools"
 
 export var input: HTMLInputElement

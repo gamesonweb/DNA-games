@@ -1,5 +1,6 @@
 import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
-import { meshes, night_monster_list, serverMessages, ws } from "../../../connectionWS";
+import { meshes, night_monster_list, ws } from "../../../connection/connectionClient";
+import { serverMessages } from "../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../main";
 import { distance, removeFromList } from "../../others/tools";
 import { Player } from "../heroes/player";

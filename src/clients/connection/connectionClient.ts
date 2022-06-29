@@ -1,13 +1,14 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
-import { Avatar } from "./babylon/avatars/avatarHeavy";
-import { Player } from "./babylon/avatars/heroes/player";
-import { Monster } from "./babylon/avatars/monsters/monster";
-import { initFunction, scene, setScene, set_my_sphere } from "./babylon/main";
-import { updateHour } from "./babylon/others/time";
-import { getTimeToString, isVector3Equal, makeid } from "./babylon/others/tools";
-import { chatRef, initChat } from "./reactComponents/chat";
-import { askUsername } from "./reactComponents/login";
-import { ErrorNoServer } from "./reactComponents/noServer";
+import { Avatar } from "../babylon/avatars/avatarHeavy";
+import { Player } from "../babylon/avatars/heroes/player";
+import { Monster } from "../babylon/avatars/monsters/monster";
+import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
+import { updateHour } from "../babylon/others/time";
+import { getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
+import { chatRef, initChat } from "../reactComponents/chat";
+import { askUsername } from "../reactComponents/login";
+import { ErrorNoServer } from "../reactComponents/noServer";
+import { receiveContent, serverMessages } from "./connectionSoft";
 
 export var ws: WebSocket;
 export var player_list: Map<string, Player> = new Map();
@@ -15,28 +16,8 @@ export var night_monster_list: Map<string, Monster> = new Map();
 export var username: string;
 export var meshes: Mesh[] = [];
 
-export const serverMessages = {
-    SET_USERNAME: "usernameSetter",
-    LOGIN: "login",
-    LOGOUT: "logout",
-    MESSAGE: "message",
-    POSITION: "position",
-    MONSTER_DATA: "monster_data",
-    KILL_MONSTER: "kill_monster",
-    MOVE_MONSTER: "move_monster",
-    DAMAGE_MONSTER: "damage_monster",
-    FIRE_BULLET: "fireBullet",
-    HOUR: "hour",
-    SPAWN_MONSTER: "spawn_monster",
-    MONSTER_HIT: "monster_hit"
-}
-
 type position = { pos_x: number, pos_y: number, pos_z: number, }
 
-export type receiveContent = {
-    pos_x: number, pos_y: number, pos_z: number,
-    username: string, direction: Vector3, health?: number, maxHealth?: number
-}
 
 export function connect_to_ws() {
 
@@ -153,8 +134,6 @@ function setSocketMessageListener() {
             //kill_monster: kill the monster with passed username
             case serverMessages.KILL_MONSTER: {
                 let monster_to_kill = night_monster_list.get(messageReceived.content);
-                console.log(monster_to_kill, messageReceived.content, night_monster_list);
-
                 if (monster_to_kill !== undefined) monster_to_kill.dispose();
                 night_monster_list.delete(messageReceived.content);
                 break;

@@ -2,7 +2,7 @@ import { Mesh, MeshBuilder, Ray, Scene, Vector3 } from "babylonjs";
 import { AvatarSoft } from "./avatarSoft";
 import { Health } from "./meshWithHealth";
 
-export class Avatar extends AvatarSoft {
+export class AvatarFictive extends AvatarSoft {
     shape: Mesh;
 
     constructor(scene: Scene, avatar_username: string, health?: Health) {

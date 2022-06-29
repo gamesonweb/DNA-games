@@ -1,20 +1,24 @@
 import { ArcRotateCamera, Axis, Camera, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
-import { Avatar } from "./clients/babylon/avatars/avatarFictif";
+import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
 import { distance } from "./clients/babylon/others/tools";
 import { sceneFictive } from "./clients/babylon/scene/sceneFictive";
-import { receiveContent, serverMessages } from "./clients/fictif/fictive_connectionWS";
+import { connect_to_ws_fictive, setCounter, ws, zombie_counter } from "./clients/connection/connectionFictive";
+import { serverMessages } from "./clients/connection/connectionSoft";
 import { windowExists } from "./clients/reactComponents/tools";
 
 var night_monster_list: Map<string, AvatarSoft> = new Map();
 var player_list: Map<string, AvatarSoft> = new Map();
-var zombie_counter: number;
 var scene: sceneFictive;
-var ws: WebSocket
+var doOne = true
 
 export var canvas: HTMLCanvasElement;
 
 export function main() {
+  console.log(123);
+
+  if (doOne) doOne = false
+  else return
 
   // var BABYLON = require("../../dist/preview release/babylon.max");
   // var LOADERS = require("../../dist/preview release/loaders/babylonjs.loaders");
@@ -30,10 +34,9 @@ export function main() {
     canvas.style.height = "100%"
     engine = new Engine(canvas);
     scene = new sceneFictive(engine)
+    scene.activeCamera?.attachControl(true)
     scene.createGround()
     var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
-    camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
-    camera.attachControl(true);
   } else {
     engine = new NullEngine();
     scene = new sceneFictive(engine)
@@ -44,105 +47,34 @@ export function main() {
 
   engine.runRenderLoop(() => scene.render());
 
+  connect_to_ws_fictive(scene, player_list, night_monster_list)
 
-  zombie_counter = 0;
+  // engine.runRenderLoop(function () {
+  //   if (scene && scene.activeCamera) {
+  //     for (const monster of night_monster_list.values()) {
+  //       //scene.applyGravity(monster);
+  //       monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+  //       console.log("monster " + monster.name + " pos: " + monster.position);
+  //     }
+  //   }
+  // });
 
-  var port = "8080"
-  var adr = "ws://127.0.0.1:" + port
-  ws = new WebSocket(adr);
+  setInterval(() => {
+    for (const monster of night_monster_list.values()) {
+      // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+      monster.applyGravity();
+      monster.setRayPosition()
+    }
+  }, 1000 / 60)
 
-  ws.onerror = () => {
-    console.log("error trying to connect to socket on " + adr);
-  };
-
-
-  //we start our request process when the connection is established
-  ws.onopen = () => {
-
-    //ecoute les infos zombie du serveur
-    ws.addEventListener('message', function (event) {
-      let messageReceived = JSON.parse(event.data);
-      switch (messageReceived.route) {
-
-        //logout route: dispose player's avatar, remove player's entry in the player_list map
-        case serverMessages.LOGOUT: {
-          let avatar_to_disconnect = player_list.get(messageReceived.content);
-          if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
-          player_list.delete(messageReceived.content);
-          console.log("LOGIN OUT: " + messageReceived.content);
-          break;
-        }
-
-        //position: add the player if they aren't in our list yet, move the avatar to the input position
-        case serverMessages.POSITION: {
-          let messageContent: receiveContent = JSON.parse(messageReceived.content);
-          let avatar_to_update = player_list.get(messageContent.username);
-          if (avatar_to_update === undefined) {
-            player_list.set(messageContent.username, new Avatar(scene, messageContent.username, { currentHealth: messageContent.health }));
-            avatar_to_update = player_list.get(messageContent.username);
-          }
-          if (avatar_to_update) {
-            avatar_to_update.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z)
-          }
-          break;
-        }
-
-        //kill_monster: kill the monster with passed username
-        case serverMessages.KILL_MONSTER: {
-          console.log("killing monster " + messageReceived.content);
-          let monster_to_kill = night_monster_list.get(messageReceived.content);
-          if (monster_to_kill !== undefined) monster_to_kill.dispose();
-          night_monster_list.delete(messageReceived.content);
-          break;
-        }
-
-        //handle hour event
-        case serverMessages.HOUR: {
-          let hour = messageReceived.content;
-          //tue les monstres de nuit si il fait jour
-          if (hour == 7) {
-            for (const value of night_monster_list.values()) {
-              value.dispose();
-            }
-            night_monster_list.clear();
-            zombie_counter = 0;
-          }
-          if (hour == 22) {
-            generate_zombie_wave()
-          }
-        }
-
-        //default
-        default: { }
-      }
-    })
-
-    // engine.runRenderLoop(function () {
-    //   if (scene && scene.activeCamera) {
-    //     for (const monster of night_monster_list.values()) {
-    //       //scene.applyGravity(monster);
-    //       monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
-    //       console.log("monster " + monster.name + " pos: " + monster.position);
-    //     }
-    //   }
-    // });
-
-    setInterval(() => {
-      for (const monster of night_monster_list.values()) {
-        // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
-        monster.applyGravity();
-        monster.setRayPosition()
-      }
-    }, 1000 / 60)
-
-    setInterval(() => {
-      for (const monster of night_monster_list.values()) {
-        zombie_apply_AI(monster);
-      }
-    },
-      100)
-  }
+  setInterval(() => {
+    for (const monster of night_monster_list.values()) {
+      zombie_apply_AI(monster);
+    }
+  },
+    100)
 }
+
 
 function zombie_apply_AI(monster: AvatarSoft) {
   let player_to_target: AvatarSoft | null = nearest_player(monster);
@@ -180,7 +112,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
 
 }
 
-function generate_zombie_wave() {
+export function generate_zombie_wave() {
   var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
 
   while (zombie_counter < counter_after_wave) {
@@ -189,7 +121,7 @@ function generate_zombie_wave() {
 }
 
 function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
-  let generated_zombie = new Avatar(scene, "zombie" + zombie_counter);
+  let generated_zombie = new AvatarFictive(scene, "zombie" + zombie_counter);
   generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
   night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.computeWorldMatrix(true);
@@ -204,7 +136,7 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
       health: generated_zombie.currentHealth,
     })
   }))
-  zombie_counter++
+  setCounter(zombie_counter + 1)
 }
 
 function nearest_player(monster: AvatarSoft) {
