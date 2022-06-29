@@ -86,4 +86,8 @@ export class AvatarSoft extends MeshWithHealth {
       this.position.y -= SceneSoft.gravityIntensity * 10
     }
   }
+
+  setRayPosition() {
+    this.ray.origin = this.position
+  }
 }

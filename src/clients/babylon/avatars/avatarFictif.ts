@@ -30,8 +30,4 @@ export class Avatar extends AvatarSoft {
     dispose(): void {
         super.dispose()
     }
-
-    setRayPosition() {
-        this.ray.origin = this.position
-    }
 }

@@ -130,7 +130,8 @@ export function main() {
     setInterval(() => {
       for (const monster of night_monster_list.values()) {
         // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
-        scene.applyGravity(monster);
+        monster.applyGravity();
+        monster.setRayPosition()
       }
     }, 1000 / 60)
 
