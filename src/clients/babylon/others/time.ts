@@ -1,5 +1,5 @@
 import { Animation } from "babylonjs";
-import { night_monster_list } from "../../connection/connectionClient";
+import { wsClient } from "../../connection/connectionClient";
 import { scene } from "../main";
 import { createDayNightCycle } from "../scene/dayNightCycle";
 import { light } from "../scene/sceneClient";
@@ -17,10 +17,10 @@ export function updateHour(hourInput: number) {
 
     //tue les monstres de nuit si il fait jour
     if (hour > 7 && hour < 22) {
-        for (const value of night_monster_list.values()) {
+        for (const value of wsClient.night_monster_list.values()) {
             value.dispose();
         }
-        night_monster_list.clear();
+        wsClient.night_monster_list.clear();
     }
     /*Replaced by dedicated animation in DayNightCycle.js
 

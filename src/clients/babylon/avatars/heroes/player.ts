@@ -1,5 +1,5 @@
 import { Animation, Axis, Mesh, Quaternion, Scene, Vector3 } from "babylonjs";
-import { ws } from "../../../connection/connectionClient";
+import { wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { Avatar } from "../avatarHeavy";
 import { inputStates } from "../inputListeners";
@@ -7,7 +7,6 @@ import { Health } from "../meshWithHealth";
 import { Bullet } from "../weapons/bullet";
 
 export class Player extends Avatar {
-
     bulletList: Bullet[];
     bulletDelay: number;
 
@@ -59,7 +58,7 @@ export class Player extends Avatar {
         //player's main attack
         if (inputStates.attack) {
             this.addBullet()
-            ws.send(
+            wsClient.send(
                 JSON.stringify({
                     route: serverMessages.FIRE_BULLET,
                     content: this.name
@@ -89,10 +88,6 @@ export class Player extends Avatar {
         }
     }
 
-    updateBulletPosition() {
-        this.bulletList.forEach(e => e.update())
-    }
-
     knockback(direction: Vector3, power: number) {
         let targetPosition = this.position.add(direction.scale(power))
         Animation.CreateAndStartAnimation("animKnockback", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
@@ -100,5 +95,10 @@ export class Player extends Avatar {
                 this.ray.origin = this.position
                 this.jumpRay.origin = this.position
             })
+    }
+
+
+    updateBulletPosition() {
+        this.bulletList.forEach(e => e.update())
     }
 }

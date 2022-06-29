@@ -5,6 +5,9 @@ import { Avatar } from "../avatarHeavy";
 import { Health } from "../meshWithHealth";
 
 export class Monster extends Avatar {
+    addBullet(displayOnly: boolean): void {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
         super(scene, avatar_username, username, p)

@@ -1,6 +1,6 @@
 import { AnimationGroup, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { scene, sphere1 } from "../main";
-import { MySceneClient } from "../scene/sceneClient";
+import { SceneClient } from "../scene/sceneClient";
 
 import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
@@ -25,7 +25,7 @@ export class ModelEnum {
         this.scaling = scaling;
     }
 
-    createModel(scene: MySceneClient) {
+    createModel(scene: SceneClient) {
         console.log(scene.assetManager);
 
         //A priori, all gltf extension file will be (automatically) named "scene", else the same name of the respective folder
@@ -113,7 +113,7 @@ export class ModelEnum {
         }
     }
 
-    static createAllModels(scene: MySceneClient) {
+    static createAllModels(scene: SceneClient) {
         var allModels = [this.PumpkinMonster, this.Grass, this.Campfire];
         allModels.forEach(m => m.createModel(scene));
     }

@@ -2,7 +2,7 @@ import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
 import { SceneSoft } from "../scene/sceneSoft";
 import { Health, MeshWithHealth } from "./meshWithHealth";
 
-export class AvatarSoft extends MeshWithHealth {
+export abstract class AvatarSoft extends MeshWithHealth {
   speed_coeff: number;
   didSomething: Boolean;
   oldPosition: Vector3;

@@ -7,7 +7,7 @@ export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var shadowGenerator: ShadowGenerator | null;
 
-export class MySceneClient extends SceneSoft {
+export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
     ground: GroundMesh | undefined;
     grassTaskCounter: number;

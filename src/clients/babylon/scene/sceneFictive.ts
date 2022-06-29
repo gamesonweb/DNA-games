@@ -1,7 +1,7 @@
 import { Engine, GroundMesh, MeshBuilder } from "babylonjs";
 import { SceneSoft } from "./sceneSoft";
 
-export class sceneFictive extends SceneSoft {
+export class SceneFictive extends SceneSoft {
     gravityIntensity: number;
     ground: GroundMesh | undefined;
     grassTaskCounter: number;

@@ -1,15 +1,13 @@
-import { ArcRotateCamera, Axis, Camera, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
 import { distance } from "./clients/babylon/others/tools";
-import { sceneFictive } from "./clients/babylon/scene/sceneFictive";
-import { connect_to_ws_fictive, setCounter, ws, zombie_counter } from "./clients/connection/connectionFictive";
-import { serverMessages } from "./clients/connection/connectionSoft";
+import { SceneFictive } from "./clients/babylon/scene/sceneFictive";
+import { ConnectionServer, setCounter, ws, zombie_counter } from "./clients/connection/connectionFictive";
+import { position, serverMessages } from "./clients/connection/connectionSoft";
 import { windowExists } from "./clients/reactComponents/tools";
 
-var night_monster_list: Map<string, AvatarSoft> = new Map();
-var player_list: Map<string, AvatarSoft> = new Map();
-var scene: sceneFictive;
+var scene: SceneFictive;
 var doOne = true
 
 export var canvas: HTMLCanvasElement;
@@ -26,28 +24,27 @@ export function main() {
   // var xhr = new XMLHttpRequest();
 
   var engine: Engine
-  var camera: Camera
 
   if (windowExists()) {
     var canvas = document.getElementById("canvas") as HTMLCanvasElement
     canvas.style.width = "100%"
     canvas.style.height = "100%"
     engine = new Engine(canvas);
-    scene = new sceneFictive(engine)
+    scene = new SceneFictive(engine)
     scene.activeCamera?.attachControl(true)
     scene.createGround()
     var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
   } else {
     engine = new NullEngine();
-    scene = new sceneFictive(engine)
+    scene = new SceneFictive(engine)
     scene.createGround()
-    camera = new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
+    new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
   }
 
 
   engine.runRenderLoop(() => scene.render());
 
-  connect_to_ws_fictive(scene, player_list, night_monster_list)
+  ConnectionServer.setGlobalWebSocket(scene)
 
   // engine.runRenderLoop(function () {
   //   if (scene && scene.activeCamera) {
@@ -60,7 +57,7 @@ export function main() {
   // });
 
   setInterval(() => {
-    for (const monster of night_monster_list.values()) {
+    for (const monster of ws.night_monster_list.values()) {
       // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
       monster.applyGravity();
       monster.setRayPosition()
@@ -68,7 +65,7 @@ export function main() {
   }, 1000 / 60)
 
   setInterval(() => {
-    for (const monster of night_monster_list.values()) {
+    for (const monster of ws.night_monster_list.values()) {
       zombie_apply_AI(monster);
     }
   },
@@ -116,14 +113,18 @@ export function generate_zombie_wave() {
   var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
 
   while (zombie_counter < counter_after_wave) {
-    spawn_zombie(zombie_counter + Math.random() * 5, 1, zombie_counter + Math.random() * 5);
+    spawn_zombie({
+      pos_x: zombie_counter + Math.random() * 5,
+      pos_y: 1,
+      pos_z: zombie_counter + Math.random() * 5
+    });
   }
 }
 
-function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
+function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let generated_zombie = new AvatarFictive(scene, "zombie" + zombie_counter);
   generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
-  night_monster_list.set(generated_zombie.name, generated_zombie);
+  ws.night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.computeWorldMatrix(true);
   ws.send(JSON.stringify({
     route: serverMessages.SPAWN_MONSTER,
@@ -142,7 +143,7 @@ function spawn_zombie(pos_x: number, pos_y: number, pos_z: number) {
 function nearest_player(monster: AvatarSoft) {
   var nearest_player: AvatarSoft | null = null;
   var dist = Infinity
-  for (var player of player_list.values()) {
+  for (var player of ws.player_list.values()) {
     let dist_to_player = distance(monster.position, player.position);
     if (dist_to_player < dist) {
       dist = dist_to_player

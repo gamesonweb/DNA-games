@@ -1,8 +1,8 @@
-import { connect_to_ws } from './clients/connection/connectionClient';
+import { ConnectionClient } from './clients/connection/connectionClient';
 import './clients/css/index.css';
 
 export function main() {
-  connect_to_ws();
+  ConnectionClient.setGlobalWebSocket()
 }
 
 

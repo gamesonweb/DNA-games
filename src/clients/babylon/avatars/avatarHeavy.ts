@@ -6,7 +6,7 @@ import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
 import { Health } from "./meshWithHealth";
 
-export class Avatar extends AvatarSoft {
+export abstract class Avatar extends AvatarSoft {
 
   constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
     super(scene, avatar_username, p);

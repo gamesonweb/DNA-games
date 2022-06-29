@@ -1,5 +1,5 @@
 import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
-import { meshes, night_monster_list, ws } from "../../../connection/connectionClient";
+import { meshes, wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../main";
 import { distance, removeFromList } from "../../others/tools";
@@ -38,9 +38,9 @@ export class Bullet extends Mesh {
       if (e?.parent instanceof Monster) {
         let monster = e.parent as Monster;
         if (this.myShooter.name === sphere1!.name) {
-          console.log(night_monster_list);
+          console.log(wsClient.night_monster_list);
 
-          ws.send(
+          wsClient.send(
             JSON.stringify({
               route: serverMessages.DAMAGE_MONSTER,
               content: JSON.stringify({ username: monster.name, damage: this.damage })

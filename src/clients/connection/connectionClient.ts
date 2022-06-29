@@ -5,53 +5,112 @@ import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
+import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef, initChat } from "../reactComponents/chat";
 import { askUsername } from "../reactComponents/login";
 import { ErrorNoServer } from "../reactComponents/noServer";
-import { receiveContent, serverMessages } from "./connectionSoft";
+import { ConnectionSoft, position, receiveContent, serverMessages } from "./connectionSoft";
 
-export var ws: WebSocket;
-export var player_list: Map<string, Player> = new Map();
-export var night_monster_list: Map<string, Monster> = new Map();
 export var username: string;
 export var meshes: Mesh[] = [];
 
-type position = { pos_x: number, pos_y: number, pos_z: number, }
+export let wsClient: ConnectionClient;
 
+export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClient> {
+    constructor() {
+        //RUNNING SERVER ON LOCAL FOR DEV
+        super("ws://127.0.0.1:8080");
+        // RUNNING SERVER ON HEROKU FOR DEPLOYMENT
+        // super("wss://mmoactiongameserver.herokuapp.com/");
+    }
 
-export function connect_to_ws() {
-
-    // !!!!!! CHANGE COMMENTED LINE TO CONNECT TO HEROKU BEFORE PUSHING A BUILD !!!!! \\
-    //first line is to connect on a local server for testing, second is to connect on the heroku server
-
-    //RUNNING SERVER ON LOCAL FOR DEV
-    ws = new WebSocket("ws://127.0.0.1:8080");
-
-    // RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-    // ws = new WebSocket("wss://mmoactiongameserver.herokuapp.com/");
-
-    ws.onerror = () => {
-        ErrorNoServer()
-    };
-
-
-    //we start our request process when the connection is established
-    ws.onopen = (e) => {
-        //Ask username to user and removes " and ' characters. If user fails to give a username, give them a random id
+    onOpen(evt?: Event | undefined) {
+        console.log("Opening");
         askUsername()
-    };
+    }
 
-    // setTimeout(() => {
-    //     setUsername();
-    //     setSocketMessageListener();
-    // },
-    //     100);
+    onError() {
+        ErrorNoServer()
+    }
 
+    set_username(messageReceived: any): void {
+        console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
+        this.username = messageReceived.content;
+    }
+
+    login(messageReceived: any): void {
+        var sphere = new Player(scene, messageReceived.content, username);
+        var sender_name = messageReceived.content;
+        this.player_list.set(sender_name, sphere);
+        if (sender_name === username) {
+            set_my_sphere();
+            setPositionUpdateSender()
+        }
+        console.log("LOGIN IN: " + messageReceived.content);
+        chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, true);
+    }
+
+    message(messageReceived: any): void {
+        let messageContent = JSON.parse(messageReceived.content);
+        if (messageContent.username !== this.username)
+            chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
+    }
+
+    monster_data(messageReceived: any): void {
+        let messageContent: receiveContent = JSON.parse(messageReceived.content);
+        avatar_update_from_serveur(messageContent, this.night_monster_list, 500, true);
+        let d = new Date();
+        if (messageContent.username == "zombie0") console.log("received z0 update: " + d.getMilliseconds());
+    }
+
+    move_monster(messageReceived: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    damage_monster(messageReceived: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    fire_bullet(messageReceived: any): void {
+        if (messageReceived.content !== username) {
+            let firing_player = this.player_list.get(messageReceived.content)
+            if (firing_player) {
+                firing_player.addBullet(true);
+            }
+        }
+    }
+
+    position(messageReceived: any): void {
+        let messageContent: receiveContent = JSON.parse(messageReceived.content);
+        avatar_update_from_serveur(messageContent, this.player_list, 50);
+    }
+
+    hour(messageReceived: any): void {
+        updateHour(messageReceived.content)
+    }
+
+    spawn_monster(messageReceived: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    monster_hit(messageReceived: any): void {
+        let messageContent = JSON.parse(messageReceived.content);
+        console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
+        let monster = this.night_monster_list.get(messageContent.username);
+        if (monster) monster.hit(messageContent.hitmode);
+        else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
+    }
+
+    static setGlobalWebSocket(): void {
+        wsClient = new ConnectionClient();
+    }
 }
+
+
 
 //login to the server with the given username
 function setUsername() {
-    ws.send(
+    wsClient.send(
         JSON.stringify(
             {
                 route: serverMessages.LOGIN,
@@ -59,115 +118,14 @@ function setUsername() {
             }));
 }
 
-//our websocket listen to incoming messages
-function setSocketMessageListener() {
-    //procedure on messages received from server
-    ws.addEventListener('message', function (event) {
-        //console.log(event.data);
-        let messageReceived = JSON.parse(event.data);
-        switch (messageReceived.route) {
-
-            //login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
-            case serverMessages.LOGIN: {
-                var sphere = new Player(scene, messageReceived.content, username);
-                var sender_name = messageReceived.content;
-                player_list.set(sender_name, sphere);
-                if (sender_name === username) {
-                    set_my_sphere();
-                    setPositionUpdateSender()
-                }
-                console.log("LOGIN IN: " + messageReceived.content);
-                chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, true);
-                break;
-            }
-
-            case serverMessages.SET_USERNAME: {
-                console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
-                username = messageReceived.content;
-                break;
-            }
-
-            //logout route: dispose player's avatar, remove player's entry in the player_list map
-            case serverMessages.LOGOUT: {
-                let avatar_to_disconnect = player_list.get(messageReceived.content);
-                if (avatar_to_disconnect !== undefined) avatar_to_disconnect.dispose();
-                player_list.delete(messageReceived.content);
-                console.log("LOGIN OUT: " + messageReceived.content);
-                chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, false);
-                break;
-            }
-
-            //message route: write the message content in the chat if the sender isn't us
-            case serverMessages.MESSAGE: {
-                let messageContent = JSON.parse(messageReceived.content);
-                if (messageContent.username === username) break;
-                chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
-                break;
-            }
-
-            //position: add the player if they aren't in our list yet, move the avatar to the input position
-            case serverMessages.POSITION: {
-                let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                avatar_update_from_serveur(messageContent, player_list, 50);
-                break;
-            }
-
-            //monster_data: update the monster's data
-            case serverMessages.MONSTER_DATA: {
-                let messageContent: receiveContent = JSON.parse(messageReceived.content);
-                avatar_update_from_serveur(messageContent, night_monster_list, 500, true);
-                let d = new Date();
-                if (messageContent.username == "zombie0") console.log("received z0 update: " + d.getMilliseconds());
-                break;
-            }
-
-            //monster_hit: the monster try to hit players
-            case serverMessages.MONSTER_HIT: {
-                let messageContent = JSON.parse(messageReceived.content);
-                console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
-                let monster = night_monster_list.get(messageContent.username);
-                if (monster) monster.hit(messageContent.hitmode);
-                else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
-
-            }
-
-            //kill_monster: kill the monster with passed username
-            case serverMessages.KILL_MONSTER: {
-                let monster_to_kill = night_monster_list.get(messageReceived.content);
-                if (monster_to_kill !== undefined) monster_to_kill.dispose();
-                night_monster_list.delete(messageReceived.content);
-                break;
-            }
-
-            //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
-            case serverMessages.FIRE_BULLET: {
-                if (messageReceived.content !== username) {
-                    let firing_player = player_list.get(messageReceived.content)
-                    if (firing_player) {
-                        firing_player.addBullet(true);
-                    }
-                }
-                break;
-            }
-
-            case serverMessages.HOUR: {
-                updateHour(messageReceived.content)
-                break;
-            }
-
-            //default: the route received does not exist. Should not happen, look for debugging!
-            default: console.log("received a message from server with an invalid route: " + messageReceived.route);
-        }
-    })
-}
 
 //the client regularly send its player's position
 function setPositionUpdateSender() {
     let player: Avatar | undefined;
-    if (username && (player = player_list.get(username))) sendPosition(player);
+    if (username && (player = wsClient.player_list.get(username))) sendPosition(player);
     setInterval(() => {
         let player: Avatar | undefined;
-        if (username && (player = player_list.get(username)) && (player.didSomething || !isVector3Equal(player.oldPosition, player.position))) {
+        if (username && (player = wsClient.player_list.get(username)) && (player.didSomething || !isVector3Equal(player.oldPosition, player.position))) {
             sendPosition(player);
             player.oldPosition = player.position.clone()
         }
@@ -190,7 +148,7 @@ function sendPosition(player: Avatar) {
 
     //console.log("sending " + position_player);
 
-    ws.send(
+    wsClient.send(
         JSON.stringify({
             route: serverMessages.POSITION,
             content: position_player
@@ -204,7 +162,7 @@ export function sendMessage(time: string, msg: string) {
         message: msg
     })
 
-    ws.send(
+    wsClient.send(
         JSON.stringify({
             route: serverMessages.MESSAGE,
             content: message_player
@@ -218,7 +176,7 @@ export function objToPosition({ position }: Mesh): position {
 export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>, time_ms: number, isMonster: boolean = false) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
-    if (data.username === username && list === player_list) return
+    if (data.username === username && list === wsClient.player_list) return
 
     //We find the avatar linked to the username in our list parameter map
     let avatar_to_update = list.get(data.username);
@@ -290,7 +248,7 @@ export function establishConnection(name: string) {
         }
         console.log("connection successfully established!");
         setUsername();
-        setSocketMessageListener();
+        wsClient.setEventListener()
         initChat()
     });
 }
