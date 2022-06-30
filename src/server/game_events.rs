@@ -3,7 +3,7 @@ use tungstenite::Message;
 
 pub mod monster;
 
-use crate::{MonsterList, PeerMap};
+use crate::{server::utils::round, MonsterList, PeerMap};
 use monster::*;
 
 pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
@@ -11,10 +11,10 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
     let mut zombie_counter = 0;
 
     loop {
-        sleep(Duration::from_millis(500)).await;
+        sleep(Duration::from_millis(100)).await;
 
         //update server hour
-        hour += 0.25;
+        hour = round(hour + 0.1, 1);
         if hour >= 24.0 {
             hour = 0.0;
         }
@@ -37,7 +37,7 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
                 .unwrap();
 
             //send updated monster data to all clients
-            if hour > 22.0 || hour < 21.0 {
+            if hour > 22.0 || hour < 7.0 {
                 for monster in monster_list.values() {
                     recp.unbounded_send(Message::from(monster_message_data(monster)))
                         .unwrap();

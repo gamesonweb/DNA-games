@@ -18,11 +18,6 @@ export function main() {
   if (doOne) doOne = false
   else return
 
-  // var BABYLON = require("../../dist/preview release/babylon.max");
-  // var LOADERS = require("../../dist/preview release/loaders/babylonjs.loaders");
-  // var XMLHttpRequest = require('xhr2');
-  // var xhr = new XMLHttpRequest();
-
   var engine: Engine
 
   if (windowExists()) {
@@ -46,16 +41,6 @@ export function main() {
 
   ConnectionServer.setGlobalWebSocket(scene)
 
-  // engine.runRenderLoop(function () {
-  //   if (scene && scene.activeCamera) {
-  //     for (const monster of night_monster_list.values()) {
-  //       //scene.applyGravity(monster);
-  //       monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
-  //       console.log("monster " + monster.name + " pos: " + monster.position);
-  //     }
-  //   }
-  // });
-
   setInterval(() => {
     for (const monster of ws.night_monster_list.values()) {
       var direction = monster.getDirection(Axis.Z);
@@ -63,10 +48,7 @@ export function main() {
         console.log("----------");
         console.log("direction: ", direction);
       }
-      // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
-      monster.moveWithCollisions(direction);
-      // monster.position.x += direction.x
-      // monster.position.z += direction.z
+      monster.moveWithCollisions(direction.scale(monster.speed_coeff * 0.5));
       monster.applyGravity();
       monster.setRayPosition()
     }

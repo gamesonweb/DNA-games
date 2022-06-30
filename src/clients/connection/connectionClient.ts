@@ -58,7 +58,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_data(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
-        avatar_update_from_serveur(messageContent, this.night_monster_list, 500, true);
+        avatar_update_from_serveur(messageContent, this.night_monster_list, 100, true);
         let d = new Date();
         if (messageContent.username == "zombie0") console.log("received z0 update: " + d.getMilliseconds());
     }
