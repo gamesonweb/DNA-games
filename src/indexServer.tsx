@@ -58,7 +58,15 @@ export function main() {
 
   setInterval(() => {
     for (const monster of ws.night_monster_list.values()) {
-      // monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff));
+      var direction = monster.getDirection(Axis.Z);
+      if (monster.name == "zombie0") {
+        console.log("----------");
+        console.log("direction: ", direction);
+      }
+      // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
+      monster.moveWithCollisions(direction);
+      // monster.position.x += direction.x
+      // monster.position.z += direction.z
       monster.applyGravity();
       monster.setRayPosition()
     }
@@ -92,7 +100,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
   monster.computeWorldMatrix(true);
   // monster.position.x += monster.getDirection(Axis.Z)._x
   // monster.position.z += monster.getDirection(Axis.Z)._z
-  monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 6))
+  //monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 6))
   ws.send(
     JSON.stringify({
       route: serverMessages.MOVE_MONSTER,

@@ -2,11 +2,10 @@ mod server;
 
 use std::{
     collections::HashMap,
-    env, fs,
+    env,
     io::Error as IoError,
-    iter,
     net::SocketAddr,
-    str, string,
+    str,
     sync::{Arc, Mutex},
 };
 
@@ -73,10 +72,22 @@ async fn main() -> Result<(), IoError> {
         monster_list.clone(),
     ));
 
-    // let ai_client = Command::new("node")
-    //     .arg(find_js_file())
-    //     .arg(&port[..])
-    //     .spawn()?;
+    //determine si un argument false a été passé au cargo run
+    let args: Vec<String> = env::args().collect();
+    let launch_ai: bool = if args.len() < 2 {
+        true
+    } else {
+        &args[1] != "false"
+    };
+
+    //lance l'IA sauf si l'argument false est passé
+    if launch_ai {
+        println!("LAUNCH AI");
+        let _ai_client = Command::new("node")
+            .arg(find_js_file())
+            .arg(&port[..])
+            .spawn()?;
+    }
 
     // spawn the handling of each connection in a separate task.
     while let Ok((stream, addr)) = listener.accept().await {
