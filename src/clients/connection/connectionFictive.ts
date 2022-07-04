@@ -2,7 +2,7 @@ import { Vector3 } from "babylonjs";
 import { generate_zombie_wave } from "../../indexServer";
 import { AvatarFictive } from "../babylon/avatars/avatarFictif";
 import { SceneFictive } from "../babylon/scene/sceneFictive";
-import { ConnectionSoft, receiveContent } from "./connectionSoft";
+import { ConnectionSoft, receiveContent, serverMessages } from "./connectionSoft";
 
 export let zombie_counter = 0;
 export let ws: ConnectionServer;
@@ -55,13 +55,18 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
 
   hour(messageReceived: any): void {
     let hour = messageReceived.content;
-    //tue les monstres de nuit si il fait jour
-    if (hour == 7) {
+    //tue les monstres de nuit quand le jour se lève
+    if (hour == 8) {
       for (const value of this.night_monster_list.values()) {
         value.dispose();
       }
       this.night_monster_list.clear();
       zombie_counter = 0;
+      ws.send(JSON.stringify({
+        route: serverMessages.KILL_ALL_NIGHT_MONSTER,
+        content: ""
+      }
+      ))
     }
     if (hour == 22) {
       generate_zombie_wave()

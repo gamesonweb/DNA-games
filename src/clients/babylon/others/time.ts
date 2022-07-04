@@ -16,12 +16,12 @@ export function updateHour(hourInput: number) {
     hour = hourInput;
 
     //tue les monstres de nuit si il fait jour
-    if (hour > 7 && hour < 22) {
-        for (const value of wsClient.night_monster_list.values()) {
-            value.dispose();
-        }
-        wsClient.night_monster_list.clear();
-    }
+    // if (hour > 7 && hour < 22) {
+    //     for (const value of wsClient.night_monster_list.values()) {
+    //         value.dispose();
+    //     }
+    //     wsClient.night_monster_list.clear();
+    // }
     /*Replaced by dedicated animation in DayNightCycle.js
 
     //pleine nuit

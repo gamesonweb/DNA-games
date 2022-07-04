@@ -9,7 +9,10 @@ use tokio::net::TcpStream;
 use tungstenite::protocol::Message;
 
 use crate::{
-    server::{game_events::monster::monster_spawner, utils},
+    server::{
+        game_events::monster::{clear_all_monsters, monster_spawner},
+        utils,
+    },
     Direction, MonsterList, PeerMap, PositionUpdates, SharedMessages,
 };
 
@@ -139,6 +142,10 @@ pub async fn handle_connection(
                                 .lock()
                                 .unwrap()
                                 .insert(username.clone(), msg.clone().to_string());
+                        }
+                        "kill_all_night_monster" => {
+                            clear_all_monsters(monster_list.clone());
+                            shared_messages.lock().unwrap().push(msg.clone());
                         }
                         "damage_monster" => {
                             let damage_data: DamageData =

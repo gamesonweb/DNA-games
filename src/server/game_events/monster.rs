@@ -34,13 +34,9 @@ pub fn monster_spawner(
     monster_list.insert(monster_data.username.clone(), monster_data);
 }
 
-pub fn clear_all_monsters(
-    monster_list: Arc<Mutex<HashMap<String, MonsterData>>>,
-    zombie_counter: &mut i32,
-) {
+pub fn clear_all_monsters(monster_list: Arc<Mutex<HashMap<String, MonsterData>>>) {
     let mut monster_list = monster_list.lock().unwrap();
     monster_list.clear();
-    *zombie_counter = 0;
 }
 
 pub fn monster_message_data(monster_data: &MonsterData) -> String {

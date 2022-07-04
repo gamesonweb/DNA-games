@@ -8,7 +8,6 @@ use monster::*;
 
 pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
     let mut hour = 20.0;
-    let mut zombie_counter = 0;
 
     loop {
         sleep(Duration::from_millis(100)).await;
@@ -21,9 +20,9 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
         println!("hour: {}", hour);
 
         //Spawn monsters at night start, remove them at day start
-        if hour == 7.0 {
-            clear_all_monsters(monster_list.clone(), &mut zombie_counter)
-        }
+        // if hour == 7.0 {
+        //     clear_all_monsters(monster_list.clone(), &mut zombie_counter)
+        // }
 
         let peers = peer_map.lock().unwrap();
         let broadcast_recipients = peers.iter().map(|(_, ws_sink)| ws_sink);

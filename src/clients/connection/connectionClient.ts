@@ -63,6 +63,13 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
         if (messageContent.username == "zombie0") console.log("received z0 update: " + d.getMilliseconds());
     }
 
+    kill_all_night_monster(messageReceived: any) {
+        for (const value of wsClient.night_monster_list.values()) {
+            value.dispose();
+        }
+        wsClient.night_monster_list.clear();
+    }
+
     move_monster(messageReceived: any): void {
         throw new Error("Method not implemented.");
     }

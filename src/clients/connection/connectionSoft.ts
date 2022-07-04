@@ -9,6 +9,7 @@ export const serverMessages = {
     POSITION: "position",
     MONSTER_DATA: "monster_data",
     KILL_MONSTER: "kill_monster",
+    KILL_ALL_NIGHT_MONSTER: "kill_all_night_monster",
     MOVE_MONSTER: "move_monster",
     DAMAGE_MONSTER: "damage_monster",
     FIRE_BULLET: "fireBullet",
@@ -96,6 +97,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                     break;
                 }
 
+                //kill_monster: kill the monster with passed username
+                case serverMessages.KILL_ALL_NIGHT_MONSTER: {
+                    this.kill_all_night_monster(messageReceived)
+                    break;
+                }
+
                 //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
                 case serverMessages.FIRE_BULLET: {
                     this.fire_bullet(messageReceived)
@@ -133,6 +140,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
         if (monster_to_kill !== undefined) monster_to_kill.dispose();
         this.night_monster_list.delete(messageReceived.content);
     }
+
+    /**
+     * kill_all_night_monster: kill all current night monster
+     * @param messageReceived 
+     */
+    kill_all_night_monster(messageReceived: any) { }
 
     abstract set_username(messageReceived: any): void;
 
