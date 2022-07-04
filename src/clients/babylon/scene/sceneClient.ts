@@ -1,8 +1,10 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, MeshBuilder, Quaternion, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Vector3 } from "babylonjs";
+import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3, VertexData } from "babylonjs";
+import { ws } from "../../connection/connectionFictive";
+import { AvatarFictive } from "../avatars/avatarFictif";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
-import { groundParameters, SceneSoft } from "./sceneSoft";
+import { SceneSoft } from "./sceneSoft";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var shadowGenerator: ShadowGenerator | null;
@@ -61,48 +63,68 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        const groundName = "ground1";
-        const diffuseTexture = "./textures/aerial_rocks_04_diff_8k.jpg";
-        const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
+        // const groundName = "ground1";
+        // const diffuseTexture = "./textures/aerial_rocks_04_diff_8k.jpg";
+        // const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
 
-        var groundMaterial = new StandardMaterial(groundName + "_material", this);
+        // var groundMaterial = new StandardMaterial(groundName + "_material", this);
 
-        var groundTask = this.assetManager!.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
+        // var groundTask = this.assetManager!.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
 
-        groundTask.onSuccess = (task) => {
-            let groundTexture = task.texture;
-            groundTexture.uScale = 5;
-            groundTexture.vScale = 5;
+        // groundTask.onSuccess = (task) => {
+        //     let groundTexture = task.texture;
+        //     groundTexture.uScale = 5;
+        //     groundTexture.vScale = 5;
 
-            groundTexture.wrapU = 2
-            groundTexture.wrapV = 2
+        //     groundTexture.wrapU = 2
+        //     groundTexture.wrapV = 2
 
-            groundMaterial.diffuseTexture = groundTexture;
-            groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0)
-        }
+        //     groundMaterial.diffuseTexture = groundTexture;
+        //     groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0)
+        // }
 
-        let groundOptions = () => {
-            return Object.assign({}, groundParameters, { onReady: () => onGroundCreated() })
-        }
+        // let groundOptions = () => {
+        //     return Object.assign({}, groundParameters, { onReady: () => onGroundCreated() })
+        // }
 
-        var ground = MeshBuilder.CreateGroundFromHeightMap(
-            groundName,
-            heightmapTexture,
-            {
-                ...groundParameters,
-                onReady: () => onGroundCreated(),
-            },
-            this
-        );
+        // var ground = MeshBuilder.CreateGroundFromHeightMap(
+        //     groundName,
+        //     heightmapTexture,
+        //     {
+        //         ...groundParameters,
+        //         onReady: () => onGroundCreated(),
+        //     },
+        //     this
+        // );
 
-        let onGroundCreated = () => {
-            ground.material = groundMaterial;
-            ground.checkCollisions = true;
-            ground.receiveShadows = true;
-            ground.position.y -= groundParameters.maxHeight;
-            this.ground = ground;
-            this.setUpForGrass()
-        }
+        // let onGroundCreated = () => {
+        //     ground.material = groundMaterial;
+        //     ground.checkCollisions = true;
+        //     ground.receiveShadows = true;
+        //     ground.position.y -= groundParameters.maxHeight;
+        //     this.ground = ground;
+        //     this.setUpForGrass()
+        // }
+        let scene = this;
+        SceneLoader.Append("models/", "testmap.glb", scene, function (scene) {
+            let mesh = scene.getMeshByName("Plane") as Mesh;
+            mesh.isPickable = true;
+            mesh.scaling = new Vector3(20, 20, 20)
+
+            mesh.bakeCurrentTransformIntoVertices();
+
+
+            var myGround = MeshBuilder.CreateGround("myGround", { width: 1000, height: 1000, subdivisions: 8 }, scene);
+            myGround.position.x -= 5
+
+            let data = VertexData.ExtractFromMesh(mesh);
+
+            data.applyToMesh(myGround);
+            myGround.flipFaces();
+
+            mesh.setEnabled(false);
+            ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
+        });
     }
 
     createSprites() {

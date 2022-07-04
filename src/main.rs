@@ -7,7 +7,7 @@ use std::{
     net::SocketAddr,
     str,
     sync::{Arc, Mutex},
-};
+}; 
 
 use futures_channel::mpsc::UnboundedSender;
 use serde::{Deserialize, Serialize};
