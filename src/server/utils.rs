@@ -24,7 +24,7 @@ pub fn merge(v: &serde_json::Value, fields: &HashMap<String, String>) -> serde_j
 }
 
 pub fn find_js_file() -> String {
-    let mut path = String::from("./build-server/static/js/");
+    let mut path = String::from("./static/js/");
 
     let mut file_name = fs::read_dir(&path).unwrap();
 

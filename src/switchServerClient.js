@@ -25,12 +25,12 @@ var serverFolderFilesDir = process.cwd()
 console.log(serverFolderFilesDir);
 //process.chdir('..');
 console.log(process.cwd());
-//const liveServer = require("live-server");
+const liveServer = require("live-server");
 
-//liveServer.start({
-//  open: false,
-//  port: 3000
-//});`
+liveServer.start({
+  open: false,
+  port: 3000
+});`
     let ct = firstLine + fs.readFileSync(fic).toString()
     fs.writeFileSync(fic, ct)
   }

@@ -5,9 +5,10 @@ use std::{
     env,
     io::Error as IoError,
     net::SocketAddr,
+    path::Path,
     str,
     sync::{Arc, Mutex},
-}; 
+};
 
 use futures_channel::mpsc::UnboundedSender;
 use serde::{Deserialize, Serialize};
@@ -82,6 +83,13 @@ async fn main() -> Result<(), IoError> {
 
     //lance l'IA sauf si l'argument false est passé
     if launch_ai {
+        let root = Path::new("./build-server");
+        assert!(env::set_current_dir(&root).is_ok());
+        println!(
+            "Successfully changed working directory to {}!",
+            root.display()
+        );
+
         println!("LAUNCH AI");
         let _ai_client = Command::new("node")
             .arg(find_js_file())
