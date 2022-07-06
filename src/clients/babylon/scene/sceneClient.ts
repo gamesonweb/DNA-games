@@ -106,15 +106,15 @@ export class SceneClient extends SceneSoft {
         //     this.setUpForGrass()
         // }
         let scene = this;
-        SceneLoader.Append("models/", "testmap.glb", scene, function (scene) {
+        SceneLoader.Append("models/terrain/", "scene.gltf", scene, function (scene) {
             let mesh = scene.getMeshByName("Plane") as Mesh;
             mesh.isPickable = true;
-            mesh.scaling = new Vector3(20, 20, 20)
+            mesh.scaling = new Vector3(1000, 1000, 1000)
 
             mesh.bakeCurrentTransformIntoVertices();
 
 
-            var myGround = MeshBuilder.CreateGround("myGround", { width: 1000, height: 1000, subdivisions: 8 }, scene);
+            var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
             myGround.position.x -= 5
 
             let data = VertexData.ExtractFromMesh(mesh);
@@ -122,7 +122,9 @@ export class SceneClient extends SceneSoft {
             data.applyToMesh(myGround);
             myGround.flipFaces();
 
-            mesh.setEnabled(false);
+            myGround.scaling = new Vector3(10, 10, 10)
+
+            // mesh.setEnabled(false);
             ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
         });
     }

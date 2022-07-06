@@ -9,6 +9,7 @@ export class ModelEnum {
     static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
     static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Campfire = new ModelEnum("campfire", "gltf", 0.25);
+    // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
     extension: string;
@@ -105,7 +106,16 @@ export class ModelEnum {
 
                 campfireLight.intensity = 1;
                 createFire(meshes[0]);
+            // break;
             // campfireLight.parent = meshes[0];
+            // case "terrain":
+            //     meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+            //     this.rootMesh = meshes[0];
+            //     meshes[0].position = new Vector3(0, -5, 0);
+            //     meshes[0].checkCollisions = true;
+            //     // for (const mesh of meshes) mesh.checkCollisions = true;
+            //     break;
+
             default:
                 meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
                 this.rootMesh = meshes[0];

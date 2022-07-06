@@ -51,7 +51,8 @@ export class SceneFictive extends SceneSoft {
         );
 
         // in future replace with : http://127.0.0.1:3000/models/
-        SceneLoader.Append("https://raw.githubusercontent.com/proace137/assets/master/", "testmap.glb", scene, function (scene) {
+        // SceneLoader.Append("https://raw.githubusercontent.com/proace137/assets/master/", "testmap.glb", scene, function (scene) {
+        SceneLoader.Append("http://127.0.0.1:3000/models/terrain/", "scene.gltf", scene, function (scene) {
             let mesh = scene.getMeshByName("Plane") as Mesh;
             mesh.isPickable = true;
             mesh.scaling = new Vector3(20, 20, 20)
