@@ -7,6 +7,7 @@ export const serverMessages = {
     LOGOUT: "logout",
     MESSAGE: "message",
     POSITION: "position",
+    POSITION_LIST: "position_player_list",
     MONSTER_DATA: "monster_data",
     KILL_MONSTER: "kill_monster",
     KILL_ALL_NIGHT_MONSTER: "kill_all_night_monster",
@@ -76,6 +77,11 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 //position: add the player if they aren't in our list yet, move the avatar to the input position
                 case serverMessages.POSITION: {
                     this.position(messageReceived)
+                    break;
+                }
+
+                case serverMessages.POSITION_LIST: {
+                    this.position_list(messageReceived);
                     break;
                 }
 
@@ -179,6 +185,14 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
      * @param messageReceived 
      */
     abstract position(messageReceived: any): void;
+
+    position_list(messageReceived: any): void {
+        //chaque élément de la liste est un message, qu'on envoie à la fonction "position" traitant les actualisation individuelles de position
+        messageReceived.content.forEach((position_update: any) => {
+            this.position(JSON.parse(position_update))
+        });
+    }
+
     abstract hour(messageReceived: any): void;
     abstract spawn_monster(messageReceived: any): void;
 
