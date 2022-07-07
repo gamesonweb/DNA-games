@@ -1,3 +1,4 @@
+use futures_channel::mpsc::UnboundedSender;
 use serde_json::json;
 use tokio::time::{sleep, Duration};
 use tungstenite::protocol::Message;
@@ -29,8 +30,15 @@ pub async fn broadcast(
         );
 
         //lock to create the iterator on messages
-        let mut messages = shared_messages.lock().unwrap();
-        let message_list = messages.iter();
+        let mut message_list = vec![];
+        {
+            let mut messages = shared_messages.lock().unwrap();
+            for message in &*messages {
+                message_list.push(message.clone())
+            }
+            messages.clear();
+        }
+
         //lock the needed list of players (real of AI) to broadcast to
         let peers = peer_map.lock().unwrap();
         let broadcast_recipients = peers.iter().map(|(_, ws_sink)| ws_sink);
@@ -46,8 +54,5 @@ pub async fn broadcast(
             recp.unbounded_send(Message::from(position_update_list.clone()))
                 .unwrap();
         }
-
-        //empty the message stack
-        messages.clear();
     }
 }
