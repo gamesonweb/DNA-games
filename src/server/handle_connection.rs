@@ -179,26 +179,16 @@ pub async fn handle_connection(
                             let move_data: MoveMonsterData =
                                 serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
                             println!("{:?}", move_data);
-                            let direction: Direction =
-                                serde_json::from_str(&move_data.direction).unwrap();
-                            let mut monster_list = monster_list.lock().unwrap();
-                            let new_data = monster_list.get_mut(&move_data.username);
-                            match new_data {
-                                Some(new_data) => {
-                                    new_data.pos_x = move_data.pos_x;
-                                    new_data.pos_y = move_data.pos_y;
-                                    new_data.pos_z = move_data.pos_z;
-                                    new_data.direction = format!(
-                                        r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
-                                        direction._isDirty,
-                                        direction._x,
-                                        direction._y,
-                                        direction._z
-                                    );
-                                }
-                                None => {
-                                    println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");
-                                }
+                            update_position(move_data, monster_list.clone());
+                        }
+                        "monster_pos_list" => {
+                            let content: Vec<String> =
+                                serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
+                            for position in content {
+                                let move_data: MoveMonsterData =
+                                    serde_json::from_str(&position).unwrap();
+                                println!("{:?}", move_data);
+                                update_position(move_data, monster_list.clone());
                             }
                         }
                         "monster_hit" => {
@@ -252,4 +242,24 @@ pub async fn handle_connection(
 
     //remove the user from the position Hashmap
     position_list.lock().unwrap().remove(&username);
+}
+
+fn update_position(move_data: MoveMonsterData, monster_list: MonsterList) {
+    let direction: Direction = serde_json::from_str(&move_data.direction).unwrap();
+    let mut monster_list = monster_list.lock().unwrap();
+    let new_data = monster_list.get_mut(&move_data.username);
+    match new_data {
+        Some(new_data) => {
+            new_data.pos_x = move_data.pos_x;
+            new_data.pos_y = move_data.pos_y;
+            new_data.pos_z = move_data.pos_z;
+            new_data.direction = format!(
+                r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
+                direction._isDirty, direction._x, direction._y, direction._z
+            );
+        }
+        None => {
+            println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");
+        }
+    }
 }

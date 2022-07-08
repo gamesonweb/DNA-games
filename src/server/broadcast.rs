@@ -1,4 +1,3 @@
-use futures_channel::mpsc::UnboundedSender;
 use serde_json::json;
 use tokio::time::{sleep, Duration};
 use tungstenite::protocol::Message;

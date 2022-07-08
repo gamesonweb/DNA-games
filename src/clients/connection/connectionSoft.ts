@@ -16,7 +16,8 @@ export const serverMessages = {
     FIRE_BULLET: "fireBullet",
     HOUR: "hour",
     SPAWN_MONSTER: "spawn_monster",
-    MONSTER_HIT: "monster_hit"
+    MONSTER_HIT: "monster_hit",
+    MONSTER_POSITION_LIST: "monster_pos_list"
 }
 
 export type receiveContent = {

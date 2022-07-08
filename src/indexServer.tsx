@@ -55,11 +55,33 @@ export function main() {
   }, 1000 / 60)
 
   setInterval(() => {
-    for (const monster of ws.night_monster_list.values()) {
-      zombie_apply_AI(monster);
+    if (ws.night_monster_list.size > 0) {
+      for (const monster of ws.night_monster_list.values()) {
+        zombie_apply_AI(monster);
+      }
+      ws.send(make_pos_list_msg());
     }
   },
     100)
+}
+
+function make_pos_list_msg() {
+  let message = []
+  for (const monster of ws.night_monster_list.values()) {
+    message.push(
+      JSON.stringify({
+        username: monster.name,
+        pos_x: monster.position.x,
+        pos_y: monster.position.y,
+        pos_z: monster.position.z,
+        direction: JSON.stringify(monster.getDirection(Axis.Z))
+      })
+    )
+  }
+  return JSON.stringify({
+    route: serverMessages.MONSTER_POSITION_LIST,
+    content: JSON.stringify(message)
+  })
 }
 
 
@@ -80,23 +102,6 @@ function zombie_apply_AI(monster: AvatarSoft) {
     }
   }
   monster.computeWorldMatrix(true);
-  // monster.position.x += monster.getDirection(Axis.Z)._x
-  // monster.position.z += monster.getDirection(Axis.Z)._z
-  //monster.moveWithCollisions(monster.getDirection(Axis.Z).scale(monster.speed_coeff * 6))
-  ws.send(
-    JSON.stringify({
-      route: serverMessages.MOVE_MONSTER,
-      content: JSON.stringify({
-        username: monster.name,
-        pos_x: monster.position.x,
-        pos_y: monster.position.y,
-        pos_z: monster.position.z,
-        direction: JSON.stringify(monster.getDirection(Axis.Z))
-      })
-    }))
-  if (monster.name === "zombie0")
-    console.log("" + monster.name + " : " + monster.position);
-
 }
 
 export function generate_zombie_wave() {
