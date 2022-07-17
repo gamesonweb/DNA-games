@@ -17,7 +17,7 @@ export const serverMessages = {
     HOUR: "hour",
     SPAWN_MONSTER: "spawn_monster",
     MONSTER_HIT: "monster_hit",
-    MONSTER_POSITION_LIST: "monster_pos_list"
+    MONSTER_POSITION_LIST: "position_monster_list"
 }
 
 export type receiveContent = {
@@ -89,6 +89,11 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 //monster_data: update the monster's data
                 case serverMessages.MONSTER_DATA: {
                     this.monster_data(messageReceived)
+                    break;
+                }
+
+                case serverMessages.MONSTER_POSITION_LIST: {
+                    this.monster_position_list(messageReceived);
                     break;
                 }
 
@@ -172,6 +177,14 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
      * @param messageReceived 
      */
     abstract monster_data(messageReceived: any): void;
+
+    monster_position_list(messageReceived: any): void {
+        //chaque élément de la liste est un message, qu'on envoie à la fonction "monster_data" traitant les actualisation individuelles
+        messageReceived.content.forEach((position_update: any) => {
+            this.monster_data(JSON.parse(position_update))
+        });
+    }
+
     abstract move_monster(messageReceived: any): void;
     abstract damage_monster(messageReceived: any): void;
 

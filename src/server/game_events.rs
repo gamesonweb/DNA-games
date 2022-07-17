@@ -1,3 +1,4 @@
+use serde_json::json;
 use tokio::time::{sleep, Duration};
 use tungstenite::Message;
 
@@ -19,14 +20,22 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
         }
         println!("hour: {}", hour);
 
-        //Spawn monsters at night start, remove them at day start
-        // if hour == 7.0 {
-        //     clear_all_monsters(monster_list.clone(), &mut zombie_counter)
-        // }
+        //build the vector of all positions messages in the monsters' position map
+        let mut list_pos_monster = vec![];
+        {
+            let monster_map = monster_list.lock().unwrap();
+            for (_, value) in &*monster_map {
+                list_pos_monster.push(monster_message_data(value.clone()));
+            }
+        }
+        //create the message of the list of positions to update
+        let monster_position_update_message = format!(
+            r#" {{"route": "position_monster_list", "content": {}}} "#,
+            json!(list_pos_monster)
+        );
 
         let peers = peer_map.lock().unwrap();
         let broadcast_recipients = peers.iter().map(|(_, ws_sink)| ws_sink);
-        let monster_list = monster_list.lock().unwrap();
 
         //BROADCAST TO ALL CLIENTS
         for recp in broadcast_recipients {
@@ -36,11 +45,9 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
                 .unwrap();
 
             //send updated monster data to all clients
-            if hour > 22.0 || hour < 7.0 {
-                for monster in monster_list.values() {
-                    recp.unbounded_send(Message::from(monster_message_data(monster)))
-                        .unwrap();
-                }
+            if (hour > 22.0 || hour < 7.0) {
+                recp.unbounded_send(Message::from(monster_position_update_message.clone()))
+                    .unwrap();
             }
         }
     }

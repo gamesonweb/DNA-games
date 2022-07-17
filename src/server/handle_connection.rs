@@ -181,7 +181,7 @@ pub async fn handle_connection(
                             println!("{:?}", move_data);
                             update_position(move_data, monster_list.clone());
                         }
-                        "monster_pos_list" => {
+                        "position_monster_list" => {
                             let content: Vec<String> =
                                 serde_json::from_str(json["content"].as_str().unwrap()).unwrap();
                             for position in content {
