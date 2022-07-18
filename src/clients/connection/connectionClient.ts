@@ -17,11 +17,13 @@ export var meshes: Mesh[] = [];
 export let wsClient: ConnectionClient;
 
 export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClient> {
+    timeSendPing: number;
     constructor() {
         //RUNNING SERVER ON LOCAL FOR DEV
         super("ws://127.0.0.1:8080");
         // RUNNING SERVER ON HEROKU FOR DEPLOYMENT
         // super("wss://mmoactiongameserver.herokuapp.com/");
+        this.timeSendPing = 0;
     }
 
     onOpen(evt?: Event | undefined) {
@@ -36,6 +38,11 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     set_username(messageReceived: any): void {
         console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
         this.username = messageReceived.content;
+    }
+
+    ping(): void {
+        let pingMs = Date.now() - this.timeSendPing;
+        console.log("PING: " + pingMs + "ms");
     }
 
     login(messageReceived: any): void {
@@ -121,6 +128,16 @@ function setUsername() {
                 route: serverMessages.LOGIN,
                 content: username
             }));
+}
+
+function pingServer() {
+    wsClient.timeSendPing = Date.now()
+    wsClient.send(
+        JSON.stringify({
+            route: serverMessages.PING,
+            content: username
+        })
+    )
 }
 
 
@@ -253,6 +270,10 @@ export function establishConnection(name: string) {
         console.log("connection successfully established!");
         setUsername();
         wsClient.setEventListener()
+
+        //GET THE PING BETWEEN CLIENT AND SERVER (CURRENTLY 1 PING RIGHT AFTER CONENCTION IS INITIALIZED, DISPLAY PING IN CONSOLE)
+        pingServer();
+
         initChat()
     });
 }

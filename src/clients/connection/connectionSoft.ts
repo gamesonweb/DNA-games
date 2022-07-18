@@ -3,6 +3,7 @@ import { AvatarSoft } from "../babylon/avatars/avatarSoft"
 
 export const serverMessages = {
     SET_USERNAME: "usernameSetter",
+    PING: "ping",
     LOGIN: "login",
     LOGOUT: "logout",
     MESSAGE: "message",
@@ -52,7 +53,13 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
 
         this.addEventListener('message', event => {
             let messageReceived = JSON.parse(event.data);
+
             switch (messageReceived.route) {
+                case serverMessages.PING: {
+                    this.ping()
+                    break;
+                }
+
                 case serverMessages.LOGIN: {
                     this.login(messageReceived)
                     break;
@@ -130,6 +137,10 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 default: throw new Error("Error : this functionality is to be implemented")
             }
         })
+    }
+
+    ping() {
+        throw new Error("Method not implemented.")
     }
 
     /**

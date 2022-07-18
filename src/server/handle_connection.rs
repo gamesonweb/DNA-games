@@ -97,6 +97,10 @@ pub async fn handle_connection(
                         "fireBullet" => {
                             shared_messages.lock().unwrap().push(msg.clone());
                         }
+                        "ping" => {
+                            //send back the user's ping, for connection testing
+                            tx.unbounded_send(msg.clone()).unwrap();
+                        }
                         "login" => {
                             //set the username value
                             match json["content"].as_str() {
