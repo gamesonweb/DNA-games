@@ -1,4 +1,4 @@
-import { AnimationGroup, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3, VertexData } from "babylonjs";
 import { scene, sphere1 } from "../main";
 import { SceneClient } from "../scene/sceneClient";
 
@@ -44,6 +44,9 @@ export class ModelEnum {
     callback(meshes: any[], particules: IParticleSystem[], skeletons: Skeleton[], animations: AnimationGroup[]) {
         switch (this.name) {
             case "grass":
+                meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+                this.rootMesh = meshes[0];
+                if (this.rootMesh) this.rootMesh.name = "grass"
                 let myMeshes = [...meshes];
                 myMeshes.forEach(m => {
                     if (m.material) {
@@ -67,6 +70,7 @@ export class ModelEnum {
 
                 meshes[0].position.y -= 1.5;
                 this.rootMesh = meshes[0];
+                if (this.rootMesh) this.rootMesh.name = "pumpkin"
 
                 let eye = MeshBuilder.CreateSphere(this.name + "_eye", { segments: 8, diameter: 0.06 }, scene);
                 eye.position = new Vector3(0.122, 1.108, 0.125)
@@ -106,15 +110,36 @@ export class ModelEnum {
 
                 campfireLight.intensity = 1;
                 createFire(meshes[0]);
+                meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+                this.rootMesh = meshes[0];
+                if (this.rootMesh) this.rootMesh.name = "fireCamp"
+                break;
             // break;
             // campfireLight.parent = meshes[0];
-            // case "terrain":
-            //     meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);
-            //     this.rootMesh = meshes[0];
-            //     meshes[0].position = new Vector3(0, -5, 0);
-            //     meshes[0].checkCollisions = true;
-            //     // for (const mesh of meshes) mesh.checkCollisions = true;
-            //     break;
+            case "terrain":
+                this.rootMesh = meshes[0] as Mesh;
+                meshes[0].position = new Vector3(0, -5, 0);
+                meshes[0].checkCollisions = true;
+                meshes[0].collisionsEnabled = true;
+                this.rootMesh.showBoundingBox = true;
+
+                this.rootMesh.bakeCurrentTransformIntoVertices();
+
+
+                var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
+                // myGround.rotate(Axis.Z, Math.PI / 3)
+
+
+                let data = VertexData.ExtractFromMesh(this.rootMesh);
+                console.log(data);
+
+
+                data.applyToMesh(myGround);
+                myGround.flipFaces();
+
+                myGround.scaling = new Vector3(10, 10, 10)
+                myGround.checkCollisions = true
+                break;
 
             default:
                 meshes[0].scaling = new Vector3(this.scaling, this.scaling, this.scaling);

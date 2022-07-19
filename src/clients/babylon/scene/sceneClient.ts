@@ -106,27 +106,73 @@ export class SceneClient extends SceneSoft {
         //     this.setUpForGrass()
         // }
         let scene = this;
-        SceneLoader.Append("models/terrain/", "scene.gltf", scene, function (scene) {
-            let mesh = scene.getMeshByName("Plane") as Mesh;
-            mesh.isPickable = true;
-            mesh.scaling = new Vector3(1000, 1000, 1000)
+        SceneLoader.Append("models/", "scene.glb", scene, function (newMeshes) {
+            // scene.getActiveMeshes().forEach(mesh => {
+            //     console.log(mesh.name);
+            // })
+            let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+            mesh.scaling = new Vector3(10, 10, 10)
+            mesh.checkCollisions = true;
+            mesh.position.z -= 8
+            // mesh.rotate(Axis.X, -Math.PI / 2)
 
-            mesh.bakeCurrentTransformIntoVertices();
+            // var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 8 }, scene);
 
+            // let data = VertexData.ExtractFromMesh(mesh);
 
-            var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
-            myGround.position.x -= 5
-
-            let data = VertexData.ExtractFromMesh(mesh);
-
-            data.applyToMesh(myGround);
-            myGround.flipFaces();
-
-            myGround.scaling = new Vector3(10, 10, 10)
+            // data.applyToMesh(myGround);
+            // myGround.flipFaces();
 
             // mesh.setEnabled(false);
-            ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
+            // myGround.checkCollisions = true;
+
+            // myGround.scaling = new Vector3(10, 10, 10)
+            // myGround.showBoundingBox = true;
+            // myGround.rotate(Axis.X, -Math.PI / 2)
+
         });
+        // SceneLoader.Append("models/terrain/", "scene.gltf", scene, function (scene) {
+        //     let mesh = scene.getMeshByName("__root__") as Mesh;
+
+        //     var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 32 }, scene);
+        //     mesh.checkCollisions = true
+
+        //     let data = VertexData.ExtractFromMesh(mesh);
+
+        //     // data.applyToMesh(myGround);
+        //     // myGround.flipFaces();
+
+        //     mesh.setEnabled(false);
+        //     console.log(myGround.getHeightAtCoordinates(1, 1));
+        //     myGround.checkCollisions = true;
+        //     myGround.showBoundingBox = true;
+        //     scene.getActiveMeshes().forEach(e => console.log(e.name));
+
+        //     let mesh = scene.getMeshByName("__root__") as Mesh;
+        //     console.log("HELLOOOO " + mesh);
+
+        //     mesh.isPickable = true;
+        //     mesh.scaling = new Vector3(10, 10, 10)
+
+        //     mesh.bakeCurrentTransformIntoVertices();
+
+
+        //     var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
+
+
+        //     let data = VertexData.ExtractFromMesh(mesh);
+
+        //     data.applyToMesh(myGround);
+
+        //     myGround.flipFaces();
+
+
+        //     myGround.scaling = new Vector3(10, 10, 10)
+
+        //     // mesh.setEnabled(false);
+        //     myGround.checkCollisions = true;
+        //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
+        // });
     }
 
     createSprites() {

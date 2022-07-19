@@ -14,6 +14,10 @@ export class Player extends Avatar {
         super(scene, avatar_username, username, p)
         this.bulletList = [];
         this.bulletDelay = p?.bulletDelay || 500;
+        this.onCollide = c => {
+            console.log("players collisioned with ", c);
+        }
+        this.shape!.showBoundingBox = true
     }
 
     take_damage(source: Mesh, amount: number) {
@@ -58,6 +62,7 @@ export class Player extends Avatar {
         //player's main attack
         if (inputStates.attack) {
             this.addBullet()
+            this.position.y += 10
             wsClient.send(
                 JSON.stringify({
                     route: serverMessages.FIRE_BULLET,
