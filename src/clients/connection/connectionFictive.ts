@@ -71,6 +71,8 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
     if (hour == 22) {
       generate_zombie_wave()
     }
+    console.log(hour);
+
   }
 
   spawn_monster(messageReceived: any): void {

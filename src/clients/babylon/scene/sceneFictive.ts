@@ -1,5 +1,8 @@
-import { Engine, GroundMesh, MeshBuilder } from "babylonjs";
-import { SceneSoft } from "./sceneSoft";
+import { Engine, GroundMesh, Mesh, MeshBuilder, SceneLoader, Vector3, VertexData } from "babylonjs";
+import 'babylonjs-loaders';
+import { ws } from "../../connection/connectionFictive";
+import { AvatarFictive } from "../avatars/avatarFictif";
+import { groundParameters, SceneSoft } from "./sceneSoft";
 
 export class SceneFictive extends SceneSoft {
     gravityIntensity: number;
@@ -16,47 +19,66 @@ export class SceneFictive extends SceneSoft {
     }
 
     createGround() {
-        const groundName = "ground1";
-        const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpg";
+        // const groundName = "ground1";
+        // const heightmapTexture = "http://localhost:3000/textures/aerial_rocks_04_rough_8k.jpg";
 
-        const groundWidth = 100;
-        const groundLenght = 100;
+        // let ground: GroundMesh;
 
-        const groundMinheight = -1;
-        const groundMaxheight = 2;
-
-        let groundOptions = () => {
-            return {
-                width: groundWidth,
-                height: groundLenght,
-                subdivisions: 32,
-                minHeight: groundMinheight,
-                maxHeight: groundMaxheight,
-
-                onReady: () => onGroundCreated(),
-            }
-        }
-
-        // var ground = MeshBuilder.CreateGround(
+        // ground = MeshBuilder.CreateGround(
         //     groundName,
-        //     groundOptions(),
+        //     {
+        //         ...groundParameters
+        //     },
         // )
+        // ground.checkCollisions = true;
+        let scene = this;
 
-        var ground = MeshBuilder.CreateGroundFromHeightMap(
-            groundName,
-            heightmapTexture,
-            groundOptions(),
-            this
-        );
+        // ground = MeshBuilder.CreateGroundFromHeightMap(
+        //     groundName,
+        //     heightmapTexture,
+        //     {
+        //         ...groundParameters,
+        //         onReady: function (ground: GroundMesh) {
+        //             ground.position.y -= groundParameters.maxHeight;
+        //             ground.checkCollisions = true;
+        //             scene.ground = ground;
+        //             console.log("Ground is READY");
+        //             ground.isPickable = true
+        //         },
+
+        //     },
+        //     this
+        // );
+
+        // in future replace with : http://127.0.0.1:3000/models/
+        // SceneLoader.Append("https://raw.githubusercontent.com/proace137/assets/master/", "testmap.glb", scene, function (scene) {
+        // SceneLoader.Append("http://127.0.0.1:3000/models/terrain/", "scene.gltf", scene, function (scene) {
+        //     let mesh = scene.getMeshByName("Plane") as Mesh;
+        //     mesh.isPickable = true;
+        //     mesh.scaling = new Vector3(20, 20, 20)
+
+        //     mesh.bakeCurrentTransformIntoVertices();
 
 
-        let onGroundCreated = () => {
-            ground.position.y -= groundMaxheight;
-            ground.checkCollisions = true;
-            this.ground = ground;
-            console.log("ground: " + ground);
-            console.log("ground y: " + ground.position.y);
-            ground.isPickable = true
+        //     var myGround = MeshBuilder.CreateGround("myGround", { width: 1000, height: 1000, subdivisions: 8 }, scene);
+        //     myGround.position.x -= 5
+
+        //     let data = VertexData.ExtractFromMesh(mesh);
+
+        //     data.applyToMesh(myGround);
+        //     myGround.flipFaces();
+
+        //     mesh.setEnabled(false);
+        //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
+        // });
+
+        SceneLoader.Append("http://127.0.0.1:3000/models/", "scene.glb", scene, function (newMeshes) {
+            let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+            mesh.scaling = new Vector3(10, 10, 10)
+            mesh.checkCollisions = true;
+            mesh.position.z -= 8
+
         }
+        );
     }
 };

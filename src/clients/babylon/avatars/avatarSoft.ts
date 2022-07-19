@@ -55,6 +55,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     var hits = this.getScene().multiPickWithRay(this.ray, (m) => { return m.isPickable });
 
     var filtered = hits?.filter(e => e.pickedMesh?.name !== this.shape?.name)
+    // console.log("filtered: ", filtered);
 
     //if object detected but to high
     if (filtered !== undefined && filtered.length > 0) {
@@ -67,7 +68,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
       }
       //else above the void
     } else {
-      this.position.y += this.gravity_acceleration * 2;
+      this.moveWithCollisions(new Vector3(0, this.gravity_acceleration * 2, 0));
+      // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2;
     }
   }

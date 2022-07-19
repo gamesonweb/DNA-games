@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
+import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
 import { distance } from "./clients/babylon/others/tools";
@@ -27,17 +27,27 @@ export function main() {
     engine = new Engine(canvas);
     scene = new SceneFictive(engine)
     scene.activeCamera?.attachControl(true)
-    scene.createGround()
-    var light = new PointLight("Omni", new Vector3(20, 20, 100), scene);
+    new PointLight("Omni", new Vector3(20, 20, 100), scene);
   } else {
     engine = new NullEngine();
     scene = new SceneFictive(engine)
-    scene.createGround()
-    new ArcRotateCamera("Camera", 0, 0.8, 15, Vector3.Zero(), scene);
   }
 
 
-  engine.runRenderLoop(() => scene.render());
+  engine.runRenderLoop(() => {
+    ws.night_monster_list.forEach(monster => {
+      console.log(monster.position.y);
+      monster.applyGravity()
+      var direction = monster.getDirection(Axis.Z);
+      // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
+      monster.moveWithCollisions(direction);
+      // monster.position.x += direction.x
+      // monster.position.z += direction.z
+      // monster.applyGravity();
+      monster.setRayPosition()
+    })
+    scene.render()
+  });
 
   ConnectionServer.setGlobalWebSocket(scene)
 
