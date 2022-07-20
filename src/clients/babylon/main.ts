@@ -19,6 +19,7 @@ export var startRenderLoop = function (engine: Engine) {
       scene.render();
       wsClient.player_list.forEach(e => e.updateBulletPosition())
       sphere1?.move();
+      console.log(engine.getFps().toFixed() + " fps");
     }
   });
   engine.resize()

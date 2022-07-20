@@ -14,9 +14,6 @@ export class Player extends Avatar {
         super(scene, avatar_username, username, p)
         this.bulletList = [];
         this.bulletDelay = p?.bulletDelay || 500;
-        this.onCollide = c => {
-            console.log("players collisioned with ", c);
-        }
         this.shape!.showBoundingBox = true
     }
 

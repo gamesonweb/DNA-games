@@ -63,116 +63,21 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        // const groundName = "ground1";
-        // const diffuseTexture = "./textures/aerial_rocks_04_diff_8k.jpg";
-        // const heightmapTexture = "./textures/aerial_rocks_04_rough_8k.jpg";
-
-        // var groundMaterial = new StandardMaterial(groundName + "_material", this);
-
-        // var groundTask = this.assetManager!.addTextureTask(groundName + "_diffuse_task", diffuseTexture);
-
-        // groundTask.onSuccess = (task) => {
-        //     let groundTexture = task.texture;
-        //     groundTexture.uScale = 5;
-        //     groundTexture.vScale = 5;
-
-        //     groundTexture.wrapU = 2
-        //     groundTexture.wrapV = 2
-
-        //     groundMaterial.diffuseTexture = groundTexture;
-        //     groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0)
-        // }
-
-        // let groundOptions = () => {
-        //     return Object.assign({}, groundParameters, { onReady: () => onGroundCreated() })
-        // }
-
-        // var ground = MeshBuilder.CreateGroundFromHeightMap(
-        //     groundName,
-        //     heightmapTexture,
-        //     {
-        //         ...groundParameters,
-        //         onReady: () => onGroundCreated(),
-        //     },
-        //     this
-        // );
-
-        // let onGroundCreated = () => {
-        //     ground.material = groundMaterial;
-        //     ground.checkCollisions = true;
-        //     ground.receiveShadows = true;
-        //     ground.position.y -= groundParameters.maxHeight;
-        //     this.ground = ground;
-        //     this.setUpForGrass()
-        // }
         let scene = this;
-        SceneLoader.Append("models/", "scene.glb", scene, function (newMeshes) {
-            // scene.getActiveMeshes().forEach(mesh => {
-            //     console.log(mesh.name);
-            // })
+        // SceneLoader.Append("models/", "scene.glb", scene, function (newMeshes) {
+        //     let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+        //     mesh.scaling = new Vector3(10, 10, 10)
+        //     mesh.checkCollisions = true;
+        //     mesh.position.z -= 8
+        //     mesh.freezeWorldMatrix();
+        // });
+        SceneLoader.Append("models/", "terrainOpt.glb", scene, function (newMeshes) {
             let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
             mesh.scaling = new Vector3(10, 10, 10)
             mesh.checkCollisions = true;
             mesh.position.z -= 8
-            // mesh.rotate(Axis.X, -Math.PI / 2)
-
-            // var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 8 }, scene);
-
-            // let data = VertexData.ExtractFromMesh(mesh);
-
-            // data.applyToMesh(myGround);
-            // myGround.flipFaces();
-
-            // mesh.setEnabled(false);
-            // myGround.checkCollisions = true;
-
-            // myGround.scaling = new Vector3(10, 10, 10)
-            // myGround.showBoundingBox = true;
-            // myGround.rotate(Axis.X, -Math.PI / 2)
-
+            mesh.freezeWorldMatrix();
         });
-        // SceneLoader.Append("models/terrain/", "scene.gltf", scene, function (scene) {
-        //     let mesh = scene.getMeshByName("__root__") as Mesh;
-
-        //     var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 32 }, scene);
-        //     mesh.checkCollisions = true
-
-        //     let data = VertexData.ExtractFromMesh(mesh);
-
-        //     // data.applyToMesh(myGround);
-        //     // myGround.flipFaces();
-
-        //     mesh.setEnabled(false);
-        //     console.log(myGround.getHeightAtCoordinates(1, 1));
-        //     myGround.checkCollisions = true;
-        //     myGround.showBoundingBox = true;
-        //     scene.getActiveMeshes().forEach(e => console.log(e.name));
-
-        //     let mesh = scene.getMeshByName("__root__") as Mesh;
-        //     console.log("HELLOOOO " + mesh);
-
-        //     mesh.isPickable = true;
-        //     mesh.scaling = new Vector3(10, 10, 10)
-
-        //     mesh.bakeCurrentTransformIntoVertices();
-
-
-        //     var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
-
-
-        //     let data = VertexData.ExtractFromMesh(mesh);
-
-        //     data.applyToMesh(myGround);
-
-        //     myGround.flipFaces();
-
-
-        //     myGround.scaling = new Vector3(10, 10, 10)
-
-        //     // mesh.setEnabled(false);
-        //     myGround.checkCollisions = true;
-        //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
-        // });
     }
 
     createSprites() {
