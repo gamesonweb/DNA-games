@@ -64,13 +64,6 @@ export class SceneClient extends SceneSoft {
 
     createGround() {
         let scene = this;
-        // SceneLoader.Append("models/", "scene.glb", scene, function (newMeshes) {
-        //     let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
-        //     mesh.scaling = new Vector3(10, 10, 10)
-        //     mesh.checkCollisions = true;
-        //     mesh.position.z -= 8
-        //     mesh.freezeWorldMatrix();
-        // });
         SceneLoader.Append("models/", "terrainOpt.glb", scene, function (newMeshes) {
             let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
             mesh.scaling = new Vector3(10, 10, 10)
@@ -129,7 +122,7 @@ export class SceneClient extends SceneSoft {
             model.position = new Vector3(0, 0, 0);
             model.scaling = new Vector3(scaling, scaling, scaling);
 
-            //Creation of 300 herbs at random positions, scaling and orientation
+            //Creation of 400 herbs at random positions, scaling and orientation
             for (var i = 0; i < 400; i++) {
                 let x = Math.random() * 100 * ratio - 50 * ratio;
                 let z = Math.random() * 100 * ratio - 50 * ratio;
