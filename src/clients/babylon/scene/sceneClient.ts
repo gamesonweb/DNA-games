@@ -1,4 +1,4 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3, VertexData } from "babylonjs";
+import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3, VertexData } from "babylonjs";
 import { ws } from "../../connection/connectionFictive";
 import { AvatarFictive } from "../avatars/avatarFictif";
 import { engine, sphere1, startRenderLoop } from "../main";
@@ -11,8 +11,9 @@ export var shadowGenerator: ShadowGenerator | null;
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
-    ground: GroundMesh | undefined;
+    ground: Mesh | undefined;
     grassTaskCounter: number;
+    heightRay: Ray;
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -28,6 +29,8 @@ export class SceneClient extends SceneSoft {
 
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
+
+        this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 30);
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -50,8 +53,6 @@ export class SceneClient extends SceneSoft {
     }
 
     createLight() {
-        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-        //light = new HemisphericLight("light1", new Vector3(0, 1, 0), this);
         light = new DirectionalLight("light1", new Vector3(-1, -2, -1), this);
         light.position = new Vector3(0, 40, 0);
 
@@ -63,13 +64,16 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        let scene = this;
-        SceneLoader.Append("models/", "terrainOpt.glb", scene, function (newMeshes) {
-            let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
-            mesh.scaling = new Vector3(10, 10, 10)
-            mesh.checkCollisions = true;
-            mesh.position.z -= 8
-            mesh.freezeWorldMatrix();
+        SceneLoader.Append("models/", "terrainOpt.glb", this, (scene) => {
+            let ground = scene.getMeshByName("Object_2") as Mesh;
+            ground.scaling = new Vector3(10, 10, 10)
+            ground.checkCollisions = true;
+            ground.position.z -= 8
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            this.ground = ground;
+
+            this.setUpForGrass();
         });
     }
 
@@ -115,24 +119,23 @@ export class SceneClient extends SceneSoft {
 
     private grassGeneration() {
         var model = ModelEnum.Grass.rootMesh;
-        var scaling = ModelEnum.Grass.scaling;
 
         if (model != undefined) {
-            var ratio = 1 / scaling;
-            model.position = new Vector3(0, 0, 0);
-            model.scaling = new Vector3(scaling, scaling, scaling);
+            model.scaling = new Vector3(1, 1, 1);
 
             //Creation of 400 herbs at random positions, scaling and orientation
             for (var i = 0; i < 400; i++) {
-                let x = Math.random() * 100 * ratio - 50 * ratio;
-                let z = Math.random() * 100 * ratio - 50 * ratio;
 
-                if (this.ground?.getHeightAtCoordinates(x, z) != undefined && model) {
+                let x = Math.random() * 100 - 50;
+                let z = Math.random() * 100 - 50;
+                let height = this.getHeightAtPoint(x, z)
+
+                if (height != undefined) {
                     //Parameters
-                    let scaleRatio = (Math.random() + 0.5) * 2
+                    let scaleRatio = 3 - Math.random() * 2.5
                     let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
                     let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
-                    let translationVector = new Vector3(x, (1 * ratio) + this.ground?.getHeightAtCoordinates(x, z) * ratio, z);
+                    let translationVector = new Vector3(x, height - 0.2, z);
                     let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
 
                     //Creation of thin instance
@@ -140,5 +143,21 @@ export class SceneClient extends SceneSoft {
                 }
             }
         }
+    }
+
+    getHeightAtPoint(x: number, z: number): number | undefined {
+        this.heightRay.origin = new Vector3(x, 20, z)
+
+        var hits = this.multiPickWithRay(this.heightRay, (m) => { return m.isPickable });
+        var filtered = hits?.filter(e => e.pickedMesh?.name === this.ground!.name)
+
+
+        if (filtered !== undefined && filtered.length > 0) {
+            var hit = filtered[0]
+            if (hit !== null && hit.pickedPoint) {
+                return hit.pickedPoint.y
+            }
+        }
+        return undefined;
     }
 };

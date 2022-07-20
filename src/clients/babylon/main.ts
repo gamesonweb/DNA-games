@@ -19,7 +19,7 @@ export var startRenderLoop = function (engine: Engine) {
       scene.render();
       wsClient.player_list.forEach(e => e.updateBulletPosition())
       sphere1?.move();
-      console.log(engine.getFps().toFixed() + " fps");
+      // console.log(engine.getFps().toFixed() + " fps");
     }
   });
   engine.resize()
@@ -69,7 +69,6 @@ export function set_my_sphere() {
     let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.position.multiply(new Vector3(1, -1, 1)), scene, sphere1);
     cameraBuilder.rotationOffset = 180;
     scene.activeCamera = cameraBuilder;
-    console.log("JERE");
 
   }
 }

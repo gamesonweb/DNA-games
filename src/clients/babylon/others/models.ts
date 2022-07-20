@@ -90,7 +90,7 @@ export class ModelEnum {
                 this.rootMesh.position = new Vector3(5, -0.5, 5);
 
                 //campfire light
-                let campfireLight = new PointLight(this.name + "_light", meshes[0].position.add(new Vector3(0, 0.5, 0.8)), scene);
+                let campfireLight = new PointLight(this.name + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
                 campfireLight.diffuse = new Color3(1, 0.5, 0);
                 campfireLight.specular = new Color3(1, 0.5, 0);
                 campfireLight.range = 15;
