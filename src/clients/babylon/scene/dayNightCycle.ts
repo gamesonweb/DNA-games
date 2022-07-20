@@ -1,6 +1,7 @@
 import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "../main";
 import { hemiLight, light } from "./sceneClient";
+import { hour } from "../others/time";
 
 export function createDayNightCycle(origin: number): AnimationGroup {
     //s = Time Interval Server 24h => 24 * 4 * 0.5 sec = 48 sec
@@ -44,6 +45,21 @@ export function createDayNightCycle(origin: number): AnimationGroup {
 
     //Launch animations on scene, from key 0 to key 2400 with loop activated
     //this.beginAnimation(this, beginning, 2400, true);
+
+    //Keep sync if alt-tab
+    function checkTabFocused() {
+        if (document.visibilityState === 'visible') {
+            // console.log("go to :", hour * 100, "| =", hour * 100 * ratio)
+            // console.log("At = ", new Date().toLocaleString());
+
+            animationGroup.reset();
+            animationGroup.goToFrame(hour * 100 * ratio);
+
+            animationGroup.play(true)
+
+        }
+    }
+    document.addEventListener('visibilitychange', checkTabFocused);
 
     return animationGroup;
 }
