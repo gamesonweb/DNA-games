@@ -269,6 +269,7 @@ export function establishConnection(name: string) {
         }
         console.log("connection successfully established!");
         setUsername();
+        wsClient.username = username
         wsClient.setEventListener()
 
         //GET THE PING BETWEEN CLIENT AND SERVER (CURRENTLY 1 PING RIGHT AFTER CONENCTION IS INITIALIZED, DISPLAY PING IN CONSOLE)
