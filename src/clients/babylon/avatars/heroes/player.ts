@@ -94,7 +94,7 @@ export class Player extends Avatar {
 
     knockback(direction: Vector3, power: number) {
         let targetPosition = this.shape.position.add(direction.scale(power))
-        Animation.CreateAndStartAnimation("animKnockback", this, "position", 60, 12, this.shape.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
+        Animation.CreateAndStartAnimation("animKnockback", this.shape, "position", 60, 12, this.shape.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
             () => {
                 this.ray.origin = this.shape.position
                 this.jumpRay.origin = this.shape.position

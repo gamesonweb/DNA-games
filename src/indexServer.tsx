@@ -13,7 +13,7 @@ var doOne = true
 export var canvas: HTMLCanvasElement;
 
 export function main() {
-  console.log(123);
+  // console.log(123);
 
   if (doOne) doOne = false
   else return
@@ -36,7 +36,7 @@ export function main() {
 
   engine.runRenderLoop(() => {
     ws.night_monster_list.forEach(monster => {
-      console.log(monster.shape.position.y);
+      // console.log(monster.shape.position.y);
       monster.applyGravity()
       var direction = monster.shape.getDirection(Axis.Z);
       // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
@@ -54,10 +54,10 @@ export function main() {
   setInterval(() => {
     for (const monster of ws.night_monster_list.values()) {
       var direction = monster.shape.getDirection(Axis.Z);
-      if (monster.name == "zombie0") {
-        console.log("----------");
-        console.log("direction: ", direction);
-      }
+      // if (monster.name == "zombie0") {
+      //   // console.log("----------");
+      //   // console.log("direction: ", direction);
+      // }
       monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 0.5));
       monster.applyGravity();
       monster.setRayPosition()
@@ -99,7 +99,9 @@ function zombie_apply_AI(monster: AvatarSoft) {
   let player_to_target: AvatarSoft | null = nearest_player(monster);
   if (player_to_target) {
     monster.shape.lookAt(new Vector3(player_to_target.shape.position.x, monster.shape.position.y, player_to_target.shape.position.z));
-    if (distance(monster.shape.position, player_to_target.shape.position) < 2) {
+    if (monster.canHit && distance(monster.shape.position, player_to_target.shape.position) < 1.5) {
+      console.log("monster can hit: ", monster.canHit);
+
       ws.send(
         JSON.stringify({
           route: serverMessages.MONSTER_HIT,
@@ -109,14 +111,19 @@ function zombie_apply_AI(monster: AvatarSoft) {
           })
         })
       )
+      monster.canHit = false;
+      setTimeout(() => {
+        if (monster) monster.canHit = true
+      }, 2000)
     }
   }
   monster.shape.computeWorldMatrix(true);
 }
 
 export function generate_zombie_wave() {
-  var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
-  console.log("Generating wave");
+  // var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
+  var counter_after_wave = 1 + zombie_counter
+  // console.log("Generating wave");
 
   while (zombie_counter < counter_after_wave) {
     spawn_zombie({

@@ -13,6 +13,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   ray: Ray;
   jumpRay: Ray;
   gravity_acceleration: number;
+  canHit: boolean;
 
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
@@ -40,6 +41,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.isJumping = false;
     this.canJump = true;
     this.timeJumping = 250;
+
+    this.canHit = true;
   }
 
   dispose(): void {

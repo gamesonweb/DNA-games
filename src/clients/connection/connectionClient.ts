@@ -109,8 +109,10 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
         let messageContent = JSON.parse(messageReceived.content);
         console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
         let monster = this.night_monster_list.get(messageContent.username);
-        if (monster) monster.hit(messageContent.hitmode);
-        else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
+        setTimeout(() => {
+            if (monster) monster.hit(messageContent.hitmode);
+            else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
+        }, 100)
     }
 
     static setGlobalWebSocket(): void {
