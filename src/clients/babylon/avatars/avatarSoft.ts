@@ -91,4 +91,14 @@ export abstract class AvatarSoft extends MeshWithHealth {
   setRayPosition() {
     this.ray.origin = this.shape.position
   }
+
+  knockback(direction: Vector3, power: number) {
+    let scaledDirection = direction.scale(power)
+    // console.log("knockback direction: ", scaledDirection);
+
+    let intervalKnockBack = setInterval(() => {
+      if (this.shape) this.shape.moveWithCollisions(scaledDirection)
+    }, 100 / 6)
+    setTimeout(() => { clearInterval(intervalKnockBack) }, 200)
+  }
 }

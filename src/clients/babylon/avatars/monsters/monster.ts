@@ -31,7 +31,9 @@ export class Monster extends Avatar {
                         position_monster.y + (direction_monster.y * 0.5),
                         position_monster.z + (direction_monster.z * 0.5))
 
-                    hitbox.showBoundingBox = true
+                    hitbox.visibility = 0.00001;
+                    hitbox.checkCollisions = false;
+                    hitbox.showBoundingBox = true;
 
                     // if (sphere1) {
                     //     console.log("position hitbox: ", hitbox.position);

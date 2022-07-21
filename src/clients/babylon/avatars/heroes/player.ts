@@ -21,8 +21,10 @@ export class Player extends Avatar {
 
     take_damage(source: Mesh, amount: number) {
         this.healthMinus(amount);
-        let direction = new Vector3(this.shape.position.x - source.position.x, this.shape.position.y, this.shape.position.z - source.position.z)
-        this.knockback(direction, 2)
+        let direction = new Vector3(this.shape.position.x - source.position.x, this.shape.position.y - source.position.y, this.shape.position.z - source.position.z)
+        direction.normalize();
+        direction.y += 0.5
+        this.knockback(direction, 1)
     }
 
     move() {
@@ -90,15 +92,6 @@ export class Player extends Avatar {
             this.lastShoot = Date.now()
             this.bulletList.push(new Bullet(this, displayOnly))
         }
-    }
-
-    knockback(direction: Vector3, power: number) {
-        let targetPosition = this.shape.position.add(direction.scale(power))
-        Animation.CreateAndStartAnimation("animKnockback", this.shape, "position", 60, 12, this.shape.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
-            () => {
-                this.ray.origin = this.shape.position
-                this.jumpRay.origin = this.shape.position
-            })
     }
 
 
