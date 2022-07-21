@@ -22,8 +22,8 @@ export class Bullet extends Mesh {
     this.displayOnly = displayOnly;
     this.myShooter = myShooter;
     this.addChild(this.createSphere())
-    this.angle = myShooter.getDirection(Axis.Z)
-    this.position = this.myShooter.position.clone();
+    this.angle = myShooter.shape.getDirection(Axis.Z)
+    this.position = this.myShooter.shape.position.clone();
     this.originalPositionBullet = this.position.clone()
     this.speedCoeff = 0.05;
     this.rotation = this.angle

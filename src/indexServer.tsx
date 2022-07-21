@@ -36,11 +36,11 @@ export function main() {
 
   engine.runRenderLoop(() => {
     ws.night_monster_list.forEach(monster => {
-      console.log(monster.position.y);
+      console.log(monster.shape.position.y);
       monster.applyGravity()
-      var direction = monster.getDirection(Axis.Z);
+      var direction = monster.shape.getDirection(Axis.Z);
       // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
-      monster.moveWithCollisions(direction);
+      monster.shape.moveWithCollisions(direction);
       // monster.position.x += direction.x
       // monster.position.z += direction.z
       // monster.applyGravity();
@@ -53,12 +53,12 @@ export function main() {
 
   setInterval(() => {
     for (const monster of ws.night_monster_list.values()) {
-      var direction = monster.getDirection(Axis.Z);
+      var direction = monster.shape.getDirection(Axis.Z);
       if (monster.name == "zombie0") {
         console.log("----------");
         console.log("direction: ", direction);
       }
-      monster.moveWithCollisions(direction.scale(monster.speed_coeff * 0.5));
+      monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 0.5));
       monster.applyGravity();
       monster.setRayPosition()
     }
@@ -81,10 +81,10 @@ function make_pos_list_msg() {
     message.push(
       JSON.stringify({
         username: monster.name,
-        pos_x: monster.position.x,
-        pos_y: monster.position.y,
-        pos_z: monster.position.z,
-        direction: JSON.stringify(monster.getDirection(Axis.Z))
+        pos_x: monster.shape.position.x,
+        pos_y: monster.shape.position.y,
+        pos_z: monster.shape.position.z,
+        direction: JSON.stringify(monster.shape.getDirection(Axis.Z))
       })
     )
   }
@@ -98,8 +98,8 @@ function make_pos_list_msg() {
 function zombie_apply_AI(monster: AvatarSoft) {
   let player_to_target: AvatarSoft | null = nearest_player(monster);
   if (player_to_target) {
-    monster.lookAt(new Vector3(player_to_target.position.x, monster.position.y, player_to_target.position.z));
-    if (distance(monster.position, player_to_target.position) < 2) {
+    monster.shape.lookAt(new Vector3(player_to_target.shape.position.x, monster.shape.position.y, player_to_target.shape.position.z));
+    if (distance(monster.shape.position, player_to_target.shape.position) < 2) {
       ws.send(
         JSON.stringify({
           route: serverMessages.MONSTER_HIT,
@@ -111,7 +111,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
       )
     }
   }
-  monster.computeWorldMatrix(true);
+  monster.shape.computeWorldMatrix(true);
 }
 
 export function generate_zombie_wave() {
@@ -129,17 +129,17 @@ export function generate_zombie_wave() {
 
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let generated_zombie = new AvatarFictive(scene, "zombie" + zombie_counter);
-  generated_zombie.position = new Vector3(pos_x, pos_y, pos_z);
+  generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.night_monster_list.set(generated_zombie.name, generated_zombie);
-  generated_zombie.computeWorldMatrix(true);
+  generated_zombie.shape.computeWorldMatrix(true);
   ws.send(JSON.stringify({
     route: serverMessages.SPAWN_MONSTER,
     content: JSON.stringify({
-      pos_x: generated_zombie.position.x,
-      pos_y: generated_zombie.position.y,
-      pos_z: generated_zombie.position.z,
+      pos_x: generated_zombie.shape.position.x,
+      pos_y: generated_zombie.shape.position.y,
+      pos_z: generated_zombie.shape.position.z,
       username: generated_zombie.name,
-      direction: JSON.stringify(generated_zombie.getDirection(Axis.Z)),
+      direction: JSON.stringify(generated_zombie.shape.getDirection(Axis.Z)),
       health: generated_zombie.currentHealth,
     })
   }))
@@ -150,7 +150,7 @@ function nearest_player(monster: AvatarSoft) {
   var nearest_player: AvatarSoft | null = null;
   var dist = Infinity
   for (var player of ws.player_list.values()) {
-    let dist_to_player = distance(monster.position, player.position);
+    let dist_to_player = distance(monster.shape.position, player.shape.position);
     if (dist_to_player < dist) {
       dist = dist_to_player
       nearest_player = player

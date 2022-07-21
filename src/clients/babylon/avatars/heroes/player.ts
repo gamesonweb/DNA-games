@@ -1,6 +1,7 @@
-import { Animation, Axis, Mesh, Quaternion, Scene, Vector3 } from "babylonjs";
+import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
+import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 import { inputStates } from "../inputListeners";
 import { Health } from "../meshWithHealth";
@@ -11,14 +12,16 @@ export class Player extends Avatar {
     bulletDelay: number;
 
     constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
-        super(scene, avatar_username, username, p)
+
+        let shape = createShape(avatar_username, username, scene);
+        super(scene, avatar_username, username, shape, p)
         this.bulletList = [];
         this.bulletDelay = p?.bulletDelay || 500;
     }
 
     take_damage(source: Mesh, amount: number) {
         this.healthMinus(amount);
-        let direction = new Vector3(this.position.x - source.position.x, this.position.y, this.position.z - source.position.z)
+        let direction = new Vector3(this.shape.position.x - source.position.x, this.shape.position.y, this.shape.position.z - source.position.z)
         this.knockback(direction, 2)
     }
 
@@ -27,38 +30,38 @@ export class Player extends Avatar {
         if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack)
             this.didSomething = true;
 
-        let direction = this.getDirection(Axis.Z)
+        let direction = this.shape.getDirection(Axis.Z)
 
         let coeff_diagonal = 1
         if ((inputStates.goForeward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
 
         //forward/backward movement
         if (inputStates.goForeward) {
-            this.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal));
+            this.shape.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal));
         } else if (inputStates.goBackward) {
-            this.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 2));
+            this.shape.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 2));
         }
 
         //left/right movement
         if (inputStates.goLeft) {
             direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-            this.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 1.5));
+            this.shape.moveWithCollisions(direction.scale(-this.speed_coeff * coeff_diagonal / 1.5));
         } else if (inputStates.goRight) {
             direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-            this.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal / 1.5));
+            this.shape.moveWithCollisions(direction.scale(this.speed_coeff * coeff_diagonal / 1.5));
         }
 
         //player rotation
         if (inputStates.rotateRight) {
-            this.rotate(Axis.Y, +0.05)
+            this.shape.rotate(Axis.Y, +0.05)
         } else if (inputStates.rotateLeft) {
-            this.rotate(Axis.Y, -0.05)
+            this.shape.rotate(Axis.Y, -0.05)
         }
 
         //player's main attack
         if (inputStates.attack) {
             this.addBullet()
-            this.position.y += 10
+            this.shape.position.y += 10
             wsClient.send(
                 JSON.stringify({
                     route: serverMessages.FIRE_BULLET,
@@ -90,11 +93,11 @@ export class Player extends Avatar {
     }
 
     knockback(direction: Vector3, power: number) {
-        let targetPosition = this.position.add(direction.scale(power))
-        Animation.CreateAndStartAnimation("animKnockback", this, "position", 60, 12, this.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
+        let targetPosition = this.shape.position.add(direction.scale(power))
+        Animation.CreateAndStartAnimation("animKnockback", this, "position", 60, 12, this.shape.position, targetPosition, Animation.ANIMATIONLOOPMODE_CONSTANT, undefined,
             () => {
-                this.ray.origin = this.position
-                this.jumpRay.origin = this.position
+                this.ray.origin = this.shape.position
+                this.jumpRay.origin = this.shape.position
             })
     }
 
@@ -102,4 +105,8 @@ export class Player extends Avatar {
     updateBulletPosition() {
         this.bulletList.forEach(e => e.update())
     }
+}
+
+function createShape(avatar_username: String, username: String, scene: Scene) {
+    return createBasicShape(avatar_username, username, scene);
 }

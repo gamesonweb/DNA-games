@@ -49,7 +49,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
       avatar_to_update = this.player_list.get(messageContent.username);
     }
     if (avatar_to_update) {
-      avatar_to_update.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z)
+      avatar_to_update.shape.position = new Vector3(messageContent.pos_x, messageContent.pos_y, messageContent.pos_z)
     }
   }
 

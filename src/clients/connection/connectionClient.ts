@@ -147,25 +147,25 @@ function setPositionUpdateSender() {
     if (username && (player = wsClient.player_list.get(username))) sendPosition(player);
     setInterval(() => {
         let player: Avatar | undefined;
-        if (username && (player = wsClient.player_list.get(username)) && (player.didSomething || !isVector3Equal(player.oldPosition, player.position))) {
+        if (username && (player = wsClient.player_list.get(username)) && (player.didSomething || !isVector3Equal(player.oldPosition, player.shape.position))) {
             sendPosition(player);
-            player.oldPosition = player.position.clone()
+            player.oldPosition = player.shape.position.clone()
         }
     },
         50);
 }
 
 function sendPosition(player: Avatar) {
-    player.computeWorldMatrix(true);
+    player.shape.computeWorldMatrix(true);
     player.didSomething = false;
     var position_player = JSON.stringify({
-        pos_x: player.position.x,
-        pos_y: player.position.y,
-        pos_z: player.position.z,
+        pos_x: player.shape.position.x,
+        pos_y: player.shape.position.y,
+        pos_z: player.shape.position.z,
         username: username,
         health: player.currentHealth,
         maxHealth: player.maxHealth,
-        direction: player.getDirection(Axis.Z)
+        direction: player.shape.getDirection(Axis.Z)
     })
 
     //console.log("sending " + position_player);
@@ -222,25 +222,26 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
                     }
                 }));
         avatar_to_update = list.get(data.username);
-        if (avatar_to_update) avatar_to_update.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
+        if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
 
     if (avatar_to_update?.name == "zombie0") {
-        console.log("current position: " + avatar_to_update.position);
+        console.log("current position: " + avatar_to_update.shape.position);
         console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
     }
 
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_update) {
-        if (avatar_to_update.position.x !== data.pos_x || avatar_to_update.position.y !== data.pos_y || avatar_to_update.position.z !== data.pos_z) {
-            Animation.CreateAndStartAnimation("animMove", avatar_to_update, "position", 60, Math.floor(0.7 * time_ms), avatar_to_update.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
+        if (avatar_to_update.shape.position.x !== data.pos_x || avatar_to_update.shape.position.y !== data.pos_y || avatar_to_update.shape.position.z !== data.pos_z) {
+            console.log("avatar " + avatar_to_update.name + " should move");
+            Animation.CreateAndStartAnimation("animMove", avatar_to_update.shape, "position", 60, Math.floor(0.7 * time_ms), avatar_to_update.shape.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
 
 
-        let target = avatar_to_update.position.add(data.direction);
-        avatar_to_update.lookAt(target);
+        let target = avatar_to_update.shape.position.add(data.direction);
+        avatar_to_update.shape.lookAt(target);
 
-        avatar_to_update.computeWorldMatrix(true)
+        avatar_to_update.shape.computeWorldMatrix(true)
 
 
         //update the avatar health to the data received

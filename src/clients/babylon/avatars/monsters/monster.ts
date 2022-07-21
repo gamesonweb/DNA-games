@@ -1,6 +1,8 @@
 import { Scene } from "babylonjs";
+import { windowExists } from "../../../reactComponents/tools";
 import { sphere1 } from "../../main";
-import { distance } from "../../others/tools";
+import { ModelEnum } from "../../others/models";
+import { createBasicShape, distance } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 import { Health } from "../meshWithHealth";
 
@@ -10,7 +12,8 @@ export class Monster extends Avatar {
     }
 
     constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
-        super(scene, avatar_username, username, p)
+        let shape = createShape(avatar_username, username, scene)
+        super(scene, avatar_username, username, shape, p)
     }
 
     hit(hitmode: number) {
@@ -38,7 +41,7 @@ export class Monster extends Avatar {
                 // }
                 // setTimeout(() => hitbox.dispose(), 500);
 
-                if (sphere1 && distance(sphere1.position, this.position) < 1.5) sphere1.take_damage(this, 10);
+                if (sphere1 && distance(sphere1.shape.position, this.shape.position) < 1.5) sphere1.take_damage(this.shape, 10);
                 break;
 
             default:
@@ -47,4 +50,15 @@ export class Monster extends Avatar {
 
         }
     }
+}
+
+function createShape(avatar_username: String, username: String, scene: Scene) {
+    let shape = createBasicShape(avatar_username, username, scene)
+    if (windowExists() && ModelEnum.PumpkinMonster.rootMesh != undefined) {
+        shape.isVisible = false
+        let model = ModelEnum.PumpkinMonster.rootMesh?.clone();
+        model.isPickable = false;
+        shape.addChild(model)
+    }
+    return shape
 }

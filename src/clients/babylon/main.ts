@@ -66,7 +66,7 @@ export function set_my_sphere() {
     //scene.setActiveCameraByName(player_sphere.cameraAvatar.name)
     sphere1 = player_sphere;
 
-    let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.position.multiply(new Vector3(1, -1, 1)), scene, sphere1);
+    let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.shape.position.multiply(new Vector3(1, -1, 1)), scene, sphere1.shape);
     cameraBuilder.rotationOffset = 180;
     scene.activeCamera = cameraBuilder;
 

@@ -54,7 +54,7 @@ export var createLabel = function (text: string, mesh: Avatar, scene: Scene) {
         rect1.thickness = 0;
         rect1.background = "transparent";
         advancedTexture.addControl(rect1);
-        rect1.linkWithMesh(mesh);
+        rect1.linkWithMesh(mesh.shape);
         rect1.linkOffsetY = -80;
 
         const label = new TextBlock();
@@ -83,4 +83,20 @@ export function createWall(scene: Scene) {
 
     wall.receiveShadows = true;
     return wall
+}
+
+export function createBasicShape(avatar_username: String, username: String, scene: Scene) {
+    let model = MeshBuilder.CreateCylinder(avatar_username + "sp1", { diameter: 1, height: 2 }, scene);
+    let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
+
+    if (avatar_username !== username) {
+        model.checkCollisions = true;
+    }
+    var myMaterial = new StandardMaterial("myMaterial", scene);
+
+    myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
+    model.material = myMaterial;
+    model.addChild(queue)
+    queue.position = new Vector3(0, 0, -0.3);
+    return model
 }

@@ -6,19 +6,30 @@ export type Health = {
   currentHealth?: number;
 }
 
-export class MeshWithHealth extends Mesh implements Health {
+export abstract class MeshWithHealth implements Health {
   maxHealth: number;
   minHealth: number;
   currentHealth: number;
   healthBar: HealthBar;
+  name: string;
+  shape: Mesh;
 
 
-  constructor(name: string, scene: Scene, healthParam?: Health) {
-    super(name, scene);
+  constructor(name: string, scene: Scene, shape: Mesh, healthParam?: Health) {
+    this.name = name;
+    this.shape = shape;
+    // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
+    this.shape.checkCollisions = true;
     this.maxHealth = (healthParam?.maxHealth || healthParam?.currentHealth) || 100
     this.minHealth = healthParam?.minHealth || 0
-    this.healthBar = new HealthBar(this, scene);
+    this.healthBar = new HealthBar(this.shape, scene);
     this.currentHealth = this.healthSet(healthParam?.currentHealth || this.maxHealth)
+  }
+
+  dispose() {
+    console.log("zombie " + this.name + "disappears");
+
+    this.shape.dispose();
   }
 
   healthSetToMax() {

@@ -72,7 +72,7 @@ export class SceneFictive extends SceneSoft {
         //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
         // });
 
-        SceneLoader.Append("http://127.0.0.1:3000/models/", "scene.glb", scene, function (newMeshes) {
+        SceneLoader.Append("http://127.0.0.1:3000/models/", "terrainOpt.glb", scene, function (newMeshes) {
             let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
             mesh.scaling = new Vector3(10, 10, 10)
             mesh.checkCollisions = true;

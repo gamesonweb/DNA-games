@@ -101,7 +101,7 @@ export class ModelEnum {
                 shadowGeneratorCampfire = new ShadowGenerator(128, campfireLight);
                 shadowGeneratorCampfire.filteringQuality = ShadowGenerator.QUALITY_LOW;
                 shadowGeneratorCampfire.darkness = 0;
-                shadowGeneratorCampfire.addShadowCaster(sphere1!);
+                shadowGeneratorCampfire.addShadowCaster(sphere1!.shape);
 
                 //campfire light animation
                 let animFireLight = createFireAnimation();
