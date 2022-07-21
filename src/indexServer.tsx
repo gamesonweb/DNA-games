@@ -1,7 +1,7 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
-import { distance } from "./clients/babylon/others/tools";
+import { createBasicShape, distance } from "./clients/babylon/others/tools";
 import { SceneFictive } from "./clients/babylon/scene/sceneFictive";
 import { ConnectionServer, setCounter, ws, zombie_counter } from "./clients/connection/connectionFictive";
 import { position, serverMessages } from "./clients/connection/connectionSoft";
@@ -121,8 +121,8 @@ function zombie_apply_AI(monster: AvatarSoft) {
 }
 
 export function generate_zombie_wave() {
-  // var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
-  var counter_after_wave = 1 + zombie_counter
+  var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
+  // var counter_after_wave = 1 + zombie_counter
   // console.log("Generating wave");
 
   while (zombie_counter < counter_after_wave) {
@@ -135,7 +135,8 @@ export function generate_zombie_wave() {
 }
 
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
-  let generated_zombie = new AvatarFictive(scene, "zombie" + zombie_counter);
+  let name = "zombie" + zombie_counter
+  let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene));
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);

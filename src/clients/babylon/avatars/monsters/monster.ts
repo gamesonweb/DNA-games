@@ -8,9 +8,9 @@ import { Health } from "../meshWithHealth";
 
 export class Monster extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, username: string, p?: { bulletDelay?: number, health?: Health }) {
-        let shape = createShape(avatar_username, username, scene)
-        super(scene, avatar_username, username, shape, p)
+    constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
+        let shape = createShape(avatar_username, scene)
+        super(scene, avatar_username, shape, p)
     }
 
     hit(hitmode: number) {
@@ -68,8 +68,8 @@ export class Monster extends Avatar {
     }
 }
 
-function createShape(avatar_username: String, username: String, scene: Scene) {
-    let shape = createBasicShape(avatar_username, username, scene)
+function createShape(avatar_username: String, scene: Scene) {
+    let shape = createBasicShape(avatar_username, scene)
     if (windowExists() && ModelEnum.PumpkinMonster.rootMesh != undefined) {
         shape.isVisible = false
         let model = ModelEnum.PumpkinMonster.rootMesh?.clone();

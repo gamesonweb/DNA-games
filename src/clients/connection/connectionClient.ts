@@ -46,7 +46,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     login(messageReceived: any): void {
-        var sphere = new Player(scene, messageReceived.content, username);
+        var sphere = new Player(scene, messageReceived.content);
         var sender_name = messageReceived.content;
         this.player_list.set(sender_name, sphere);
         if (sender_name === username) {
@@ -211,13 +211,13 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         list.set(
             data.username,
             isMonster ?
-                new Monster(scene, data.username, username, {
+                new Monster(scene, data.username, {
                     health: {
                         maxHealth: data.maxHealth,
                         currentHealth: data.health
                     }
                 })
-                : new Player(scene, data.username, username, {
+                : new Player(scene, data.username, {
                     health: {
                         maxHealth: data.maxHealth,
                         currentHealth: data.health

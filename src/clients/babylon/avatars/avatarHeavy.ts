@@ -8,7 +8,7 @@ import { Health } from "./meshWithHealth";
 
 export abstract class Avatar extends AvatarSoft {
 
-  constructor(scene: Scene, avatar_username: string, username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
     // let model;
     // if (windowExists() && this.name.includes("zombie") && ModelEnum.PumpkinMonster.rootMesh != undefined) {
     //   model = ModelEnum.PumpkinMonster.rootMesh?.clone();

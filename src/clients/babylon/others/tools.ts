@@ -85,13 +85,10 @@ export function createWall(scene: Scene) {
     return wall
 }
 
-export function createBasicShape(avatar_username: String, username: String, scene: Scene) {
+export function createBasicShape(avatar_username: String, scene: Scene) {
     let model = MeshBuilder.CreateCylinder(avatar_username + "sp1", { diameter: 1, height: 2 }, scene);
     let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
-    if (avatar_username !== username) {
-        model.checkCollisions = true;
-    }
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
     myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
