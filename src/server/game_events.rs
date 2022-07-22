@@ -4,10 +4,14 @@ use tungstenite::Message;
 
 pub mod monster;
 
-use crate::{server::utils::round, MonsterList, PeerMap};
+use crate::{server::utils::round, MonsterList, PeerMap, SharedMessages};
 use monster::*;
 
-pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
+pub async fn game_events(
+    peer_map: PeerMap,
+    monster_list: MonsterList,
+    monster_action: SharedMessages,
+) {
     let mut hour = 20.0;
 
     loop {
@@ -37,6 +41,16 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
         let peers = peer_map.lock().unwrap();
         let broadcast_recipients = peers.iter().map(|(_, ws_sink)| ws_sink);
 
+        //lock to create the iterator on messages
+        let mut action_list = vec![];
+        {
+            let mut actions = monster_action.lock().unwrap();
+            for action in &*actions {
+                action_list.push(action.clone())
+            }
+            actions.clear();
+        }
+
         //BROADCAST TO ALL CLIENTS
         for recp in broadcast_recipients {
             //send hour to all clients
@@ -48,6 +62,10 @@ pub async fn game_events(peer_map: PeerMap, monster_list: MonsterList) {
             if (hour > 22.0 || hour < 7.0) {
                 recp.unbounded_send(Message::from(monster_position_update_message.clone()))
                     .unwrap();
+            }
+
+            for action in action_list.clone() {
+                recp.unbounded_send(action.clone()).unwrap();
             }
         }
     }

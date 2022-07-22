@@ -54,6 +54,7 @@ async fn main() -> Result<(), IoError> {
     let message_stack = SharedMessages::new(Mutex::new(Vec::new()));
     let positions = PositionUpdates::new(Mutex::new(HashMap::new()));
     let monster_list: MonsterList = MonsterList::new(Mutex::new(HashMap::new()));
+    let monster_action = SharedMessages::new(Mutex::new(Vec::new()));
 
     // Create the event loop and TCP listener we'll accept connections on.
     let try_socket = TcpListener::bind(&addr).await;
@@ -64,13 +65,13 @@ async fn main() -> Result<(), IoError> {
     tokio::spawn(broadcast::broadcast(
         state.clone(),
         message_stack.clone(),
-        // users.clone(),
         positions.clone(),
     ));
 
     tokio::spawn(game_events::game_events(
         state.clone(),
         monster_list.clone(),
+        monster_action.clone(),
     ));
 
     //determine si un argument false a été passé au cargo run
@@ -107,6 +108,7 @@ async fn main() -> Result<(), IoError> {
             // users.clone(),
             positions.clone(),
             monster_list.clone(),
+            monster_action.clone(),
         ));
     }
 

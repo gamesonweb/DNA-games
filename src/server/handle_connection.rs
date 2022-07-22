@@ -48,6 +48,7 @@ pub async fn handle_connection(
     shared_messages: SharedMessages,
     position_list: PositionUpdates,
     monster_list: MonsterList,
+    monster_action: SharedMessages,
 ) {
     println!("Incoming TCP connection from: {}", addr);
 
@@ -197,7 +198,7 @@ pub async fn handle_connection(
                         }
                         "monster_hit" => {
                             println!("MONSTER HIT ROUTE RECEIVED");
-                            shared_messages.lock().unwrap().push(msg.clone());
+                            monster_action.lock().unwrap().push(msg.clone());
                         }
                         "spawn_monster" => {
                             println!("SPAWN MONSTER ROUTE RECEIVED");
