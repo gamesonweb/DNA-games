@@ -49,7 +49,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     super.dispose()
   }
 
-  applyGravity() {
+  applyGravity(scale = 1) {
     // mesh.moveWithCollisions(new Vector3(0, -0.5, 0))
     var hits = this.shape.getScene().multiPickWithRay(this.ray, (m) => { return m.isPickable });
 
@@ -60,16 +60,16 @@ export abstract class AvatarSoft extends MeshWithHealth {
     if (filtered !== undefined && filtered.length > 0) {
       var hit = filtered[0]
       if (hit !== null && hit.pickedPoint && this.shape.position.y > hit.pickedPoint.y + 1.2) {
-        this.shape.position.y += this.gravity_acceleration;
+        this.shape.position.y += this.gravity_acceleration + SceneSoft.gravityIntensity * (scale - 1);
       } else {
         this.gravity_acceleration = SceneSoft.gravityIntensity;
         this.canJump = true;
       }
       //else above the void
     } else {
-      this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * 2, 0));
+      this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale, 0));
       // this.position.y += this.gravity_acceleration * 2;
-      this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2;
+      this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2 * scale;
     }
   }
 

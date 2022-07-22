@@ -35,38 +35,23 @@ export function main() {
 
 
   engine.runRenderLoop(() => {
-    ws.night_monster_list.forEach(monster => {
-      // console.log(monster.shape.position.y);
-      monster.applyGravity()
-      var direction = monster.shape.getDirection(Axis.Z);
-      // monster.moveWithCollisions(direction.scale(monster.speed_coeff));
-      monster.shape.moveWithCollisions(direction);
-      // monster.position.x += direction.x
-      // monster.position.z += direction.z
-      // monster.applyGravity();
-      monster.setRayPosition()
-    })
     scene.render()
   });
 
   ConnectionServer.setGlobalWebSocket(scene)
 
   setInterval(() => {
-    for (const monster of ws.night_monster_list.values()) {
-      var direction = monster.shape.getDirection(Axis.Z);
-      // if (monster.name == "zombie0") {
-      //   // console.log("----------");
-      //   // console.log("direction: ", direction);
-      // }
-      monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 0.5));
-      monster.applyGravity();
-      monster.setRayPosition()
-    }
-  }, 1000 / 60)
-
-  setInterval(() => {
     if (ws.night_monster_list.size > 0) {
+      let fps = engine.getFps()
+      console.log(fps.toFixed() + " fps");
+      let fpsRatio = 60 / engine.getFps()
       for (const monster of ws.night_monster_list.values()) {
+        // monster.applyGravity(10 * fpsRatio)
+        monster.applyGravity(30)
+        var direction = monster.shape.getDirection(Axis.Z);
+        // monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 4 * fpsRatio));
+        monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
+        monster.setRayPosition()
         zombie_apply_AI(monster);
       }
       ws.send(make_pos_list_msg());

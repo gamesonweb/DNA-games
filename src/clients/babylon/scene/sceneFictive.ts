@@ -77,7 +77,7 @@ export class SceneFictive extends SceneSoft {
             mesh.scaling = new Vector3(10, 10, 10)
             mesh.checkCollisions = true;
             mesh.position.z -= 8
-
+            mesh.freezeWorldMatrix()
         }
         );
     }
