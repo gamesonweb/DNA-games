@@ -81,5 +81,17 @@ export class SceneFictive extends SceneSoft {
             mesh.freezeWorldMatrix()
         }
         );
+
+        SceneLoader.Append("http://127.0.0.1:3000/models/", "colorRampBaked.babylon", scene, function (newMeshes) {
+            // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+            let mesh = scene.getMeshByName("Landscape") as Mesh;
+            mesh.scaling = new Vector3(100, 100, 100)
+            mesh.checkCollisions = true;
+            mesh.isPickable = true;
+            mesh.position.z += 200
+            mesh.position.y -= 20
+            mesh.freezeWorldMatrix()
+        }
+        );
     }
 };

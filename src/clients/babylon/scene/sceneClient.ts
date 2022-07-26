@@ -64,7 +64,7 @@ export class SceneClient extends SceneSoft {
     createGround() {
         SceneLoader.Append("models/", "antTextureBaked.babylon", this, (scene) => {
             // let ground = scene.getMeshByName("Object_2") as Mesh;
-            let ground = scene.getMeshByName("Landscape") as Mesh;
+            let ground = scene.getMeshByName("Canyon") as Mesh;
             // let ground = scene.getMeshByName("Landscape.001") as Mesh;
             ground.scaling = new Vector3(100, 100, 100)
             ground.checkCollisions = true;
@@ -76,6 +76,20 @@ export class SceneClient extends SceneSoft {
             this.ground = ground;
 
             this.setUpForGrass();
+        });
+
+        SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
+            // let ground = scene.getMeshByName("Object_2") as Mesh;
+            let ground = scene.getMeshByName("Landscape") as Mesh;
+            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
+            ground.checkCollisions = true;
+            ground.position.z += 200
+            ground.position.y -= 20
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            ground.isPickable = true;
+            this.ground = ground;
         });
     }
 
