@@ -1,8 +1,6 @@
-import { Engine, GroundMesh, Mesh, MeshBuilder, SceneLoader, Vector3, VertexData } from "babylonjs";
+import { Engine, GroundMesh, Mesh, SceneLoader, Vector3 } from "babylonjs";
 import 'babylonjs-loaders';
-import { ws } from "../../connection/connectionFictive";
-import { AvatarFictive } from "../avatars/avatarFictif";
-import { groundParameters, SceneSoft } from "./sceneSoft";
+import { SceneSoft } from "./sceneSoft";
 
 export class SceneFictive extends SceneSoft {
     gravityIntensity: number;
@@ -72,11 +70,13 @@ export class SceneFictive extends SceneSoft {
         //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
         // });
 
-        SceneLoader.Append("http://127.0.0.1:3000/models/", "terrainOpt.glb", scene, function (newMeshes) {
-            let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
-            mesh.scaling = new Vector3(10, 10, 10)
+        SceneLoader.Append("http://127.0.0.1:3000/models/", "antTexture.glb", scene, function (newMeshes) {
+            // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+            let mesh = scene.getMeshByName("Landscape") as Mesh;
+            mesh.scaling = new Vector3(100, 100, 100)
             mesh.checkCollisions = true;
             mesh.position.z -= 8
+            mesh.position.y -= 20
             mesh.freezeWorldMatrix()
         }
         );

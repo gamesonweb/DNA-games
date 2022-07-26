@@ -54,7 +54,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     var hits = this.shape.getScene().multiPickWithRay(this.ray, (m) => { return m.isPickable });
 
     var filtered = hits?.filter(e => e.pickedMesh?.name !== this.shape?.name)
-    // console.log("filtered: ", filtered);
+    console.log("filtered: ", filtered);
 
     //if object detected but to high
     if (filtered !== undefined && filtered.length > 0) {

@@ -1,4 +1,4 @@
-import { Animation, Axis, Color3, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Axis, Mesh, Quaternion, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { createBasicShape } from "../../others/tools";
@@ -63,7 +63,7 @@ export class Player extends Avatar {
         //player's main attack
         if (inputStates.attack) {
             this.addBullet()
-            this.shape.position.y += 10
+            // this.shape.position.y += 10
             wsClient.send(
                 JSON.stringify({
                     route: serverMessages.FIRE_BULLET,

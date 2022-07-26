@@ -1,6 +1,4 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, GroundMesh, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3, VertexData } from "babylonjs";
-import { ws } from "../../connection/connectionFictive";
-import { AvatarFictive } from "../avatars/avatarFictif";
+import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3 } from "babylonjs";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
@@ -64,13 +62,17 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        SceneLoader.Append("models/", "terrainOpt.glb", this, (scene) => {
-            let ground = scene.getMeshByName("Object_2") as Mesh;
-            ground.scaling = new Vector3(10, 10, 10)
+        SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
+            // let ground = scene.getMeshByName("Object_2") as Mesh;
+            let ground = scene.getMeshByName("Landscape") as Mesh;
+            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
             ground.checkCollisions = true;
             ground.position.z -= 8
+            ground.position.y -= 20
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
+            ground.isPickable = true;
             this.ground = ground;
 
             this.setUpForGrass();

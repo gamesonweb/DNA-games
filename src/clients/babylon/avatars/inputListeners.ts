@@ -84,6 +84,11 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
         inputStates.goRight = isPressed;
     }
 
+    //giga jump (development only)
+    else if (evt.code === "KeyK") {
+        if (sphere1) sphere1.shape.position.y += 10
+    }
+
     //rotation
     else if (evt.code === "ArrowRight") {
         inputStates.rotateRight = isPressed;

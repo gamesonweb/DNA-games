@@ -28,6 +28,7 @@ export function main() {
     scene = new SceneFictive(engine)
     scene.activeCamera?.attachControl(true)
     new PointLight("Omni", new Vector3(20, 20, 100), scene);
+    var light = new PointLight("pointLight", new Vector3(1, 10, 1), scene);
   } else {
     engine = new NullEngine();
     scene = new SceneFictive(engine)
