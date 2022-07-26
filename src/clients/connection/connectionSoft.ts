@@ -140,7 +140,6 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
     }
 
     ping() {
-        throw new Error("Method not implemented.")
     }
 
     /**

@@ -76,11 +76,9 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     move_monster(messageReceived: any): void {
-        throw new Error("Method not implemented.");
     }
 
     damage_monster(messageReceived: any): void {
-        throw new Error("Method not implemented.");
     }
 
     fire_bullet(messageReceived: any): void {
@@ -102,7 +100,6 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     spawn_monster(messageReceived: any): void {
-        throw new Error("Method not implemented.");
     }
 
     monster_hit(messageReceived: any): void {

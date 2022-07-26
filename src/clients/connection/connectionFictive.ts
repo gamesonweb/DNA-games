@@ -22,25 +22,20 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
     throw new Error("IA-Server can't connect to server !");
   }
   set_username(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
   login(messageReceived: any): void {
     // throw new Error("Method not implemented.");
   }
   message(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
   monster_data(messageReceived: any): void {
     // throw new Error("Method not implemented.");
   }
   move_monster(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
   damage_monster(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
   fire_bullet(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
   position(messageReceived: any): void {
     let messageContent: receiveContent = JSON.parse(messageReceived.content);
@@ -77,11 +72,9 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
   }
 
   spawn_monster(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
 
   monster_hit(messageReceived: any): void {
-    throw new Error("Method not implemented.");
   }
 
   static setGlobalWebSocket(scene: SceneFictive): void {

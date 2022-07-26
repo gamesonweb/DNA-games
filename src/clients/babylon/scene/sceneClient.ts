@@ -62,7 +62,7 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
+        SceneLoader.Append("models/", "antTextureBaked.babylon", this, (scene) => {
             // let ground = scene.getMeshByName("Object_2") as Mesh;
             let ground = scene.getMeshByName("Landscape") as Mesh;
             // let ground = scene.getMeshByName("Landscape.001") as Mesh;
