@@ -16,7 +16,7 @@ export class ReactLogin extends Component<{}, {}> {
       <span> Hi curious explorer ! </span>
       <span>You are entering a fantastic world </span>
       <span>  But before enter your name</span>
-      <input placeholder="Who are you ?" onChange={e => this.inputOnChange(e)} onKeyDown={e => this.inputKeyDown(e)}></input>
+      <input placeholder="Who are you ?" autoFocus onChange={e => this.inputOnChange(e)} onKeyDown={e => this.inputKeyDown(e)}></input>
     </div>
   }
   inputKeyDown(e: KeyboardEvent<HTMLInputElement>): void {
