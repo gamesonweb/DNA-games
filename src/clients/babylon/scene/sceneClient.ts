@@ -1,4 +1,5 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Vector3 } from "babylonjs";
+import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { WaterMaterial } from "babylonjs-materials";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
@@ -10,6 +11,8 @@ export var shadowGenerator: ShadowGenerator | null;
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
     ground: Mesh | undefined;
+    water: Mesh;
+    waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
     heightRay: Ray;
 
@@ -17,6 +20,7 @@ export class SceneClient extends SceneSoft {
         // This creates a basic Babylon Scene object (non-mesh)
         super(engine)
         this.createLight();
+        this.water = this.createSea();
 
         this.shadowGenerator = this.createShadows();
         this.shadowGenerator.addShadowCaster(createWall(this));
@@ -76,6 +80,10 @@ export class SceneClient extends SceneSoft {
             this.ground = ground;
 
             this.setUpForGrass();
+            // this.createSea(ground)
+            this.waterMaterial!.addToRenderList(ground);
+            //TODO Correctly
+            setTimeout(() => { this.waterMaterial!.addToRenderList(sphere1!.shape) }, 2000)
         });
 
         SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
@@ -90,6 +98,7 @@ export class SceneClient extends SceneSoft {
             ground.receiveShadows = true;
             ground.isPickable = true;
             this.ground = ground;
+            this.waterMaterial!.addToRenderList(ground);
         });
     }
 
@@ -122,6 +131,25 @@ export class SceneClient extends SceneSoft {
         // shadowGenerator.transparencyShadow = true;
         // shadowGenerator.enableSoftTransparentShadow = true;
         return shadowGenerator
+    }
+
+    createSea(): Mesh {
+        //water ground
+        this.water = MeshBuilder.CreateGround("waterMesh", { height: 512, width: 512, subdivisions: 32 }, this);
+        this.water.position.y = -18;
+        this.water.isPickable = false;
+
+        this.waterMaterial = new WaterMaterial("waterMaterial", this, new Vector2(256, 256));
+        this.waterMaterial.backFaceCulling = true;
+        this.waterMaterial.bumpTexture = new Texture("./textures/waterbump.png", this);
+        this.waterMaterial.windForce = -5;
+        this.waterMaterial.waveHeight = 0.1;
+        this.waterMaterial.bumpHeight = 0.1;
+        this.waterMaterial.waveLength = 0.1;
+        this.waterMaterial.colorBlendFactor = 0;
+        this.water.material = this.waterMaterial;
+
+        return this.water;
     }
 
     /*createSky() {

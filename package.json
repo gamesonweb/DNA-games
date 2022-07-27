@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "babylonjs-gui": "^5.10.0",
+    "babylonjs-materials": "^5.16.0",
     "express": "^4.18.1",
     "live-server": "^1.2.2",
     "react": "^16.13.1",
@@ -45,7 +46,7 @@
     "@babylonjs/gui": "^5.10.0",
     "@types/downloadjs": "^1.4.3",
     "@types/react-dom": "^18.0.5",
-    "babylonjs": "^5.12.1",
+    "babylonjs": "^5.16.0",
     "babylonjs-loaders": "^5.12.1"
   }
 }
