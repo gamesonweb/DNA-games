@@ -21,7 +21,7 @@ export var startRenderLoop = function (engine: Engine) {
       wsClient.player_list.forEach(e => e.updateBulletPosition())
       sphere1?.move();
       if (sphere1) adjustCameraPosition(scene, sphere1)
-      console.log(engine.getFps().toFixed() + " fps");
+      // console.log(engine.getFps().toFixed() + " fps");
     }
   });
   engine.resize()

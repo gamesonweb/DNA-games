@@ -15,7 +15,7 @@ export function updateHour(hourInput: number) {
     }
     hour = hourInput;
 
-    if (skyDefined) {
+    if (false && skyDefined) {
         if (hour == 0 || hour == 12) syncAnimGroup(hour)
     }
 

@@ -113,7 +113,7 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
         // var rayHelper = new RayHelper(ray);
         // rayHelper.show(scene); 
         hit = scene.pickWithRay(ray);
-        console.log("picked mesh with Camera's ray: ", hit);
+        // console.log("picked mesh with Camera's ray: ", hit);
         if (hit.pickedMesh) {
             if (hit.pickedMesh !== sphere1.shape) {
                 if (followCam.radius >= 0.2) followCam.radius -= 0.2

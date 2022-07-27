@@ -39,7 +39,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     enterChat() {
         this.setState({ visible: true, displayChat: true })
         this.inputRef.current?.focus()
-        console.log("Show");
+        // console.log("Show");
     }
 
     toggleChat() {

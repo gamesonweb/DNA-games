@@ -38,7 +38,7 @@ export class Bullet extends Mesh {
       if (e?.parent instanceof Monster) {
         let monster = e.parent as Monster;
         if (this.myShooter.name === sphere1!.name) {
-          console.log(wsClient.night_monster_list);
+          // console.log(wsClient.night_monster_list);
 
           wsClient.send(
             JSON.stringify({

@@ -17,7 +17,7 @@ export class Monster extends Avatar {
         switch (hitmode) {
 
             case 0:
-                console.log("entering monster hitmode 0");
+                // console.log("entering monster hitmode 0");
 
                 if (sphere1 && distance(sphere1.shape.position, this.shape.position) < 2) {
                     /* TODO : Monster hit by spawning a hitbox ahead */
@@ -46,11 +46,11 @@ export class Monster extends Avatar {
                     // }
                     setTimeout(() => {
                         if (sphere1) {
-                            console.log("position hitbox: ", hitbox.position);
-                            console.log("sphere1 position: ", sphere1.shape.position);
+                            // console.log("position hitbox: ", hitbox.position);
+                            // console.log("sphere1 position: ", sphere1.shape.position);
 
                             if (hitbox.intersectsMesh(sphere1.shape.getChildMeshes()[0])) {
-                                console.log("player should take damage!");
+                                // console.log("player should take damage!");
                                 sphere1.take_damage(this.shape, 10);
                             }
                         }
@@ -61,7 +61,7 @@ export class Monster extends Avatar {
                 break;
 
             default:
-                console.log("tried hitting with mode " + hitmode + ", but " + this + " does not have such mode");
+                // console.log("tried hitting with mode " + hitmode + ", but " + this + " does not have such mode");
                 break;
 
         }

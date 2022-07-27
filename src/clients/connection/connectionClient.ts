@@ -42,7 +42,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     ping(): void {
         let pingMs = Date.now() - this.timeSendPing;
-        console.log("PING: " + pingMs + "ms");
+        // console.log("PING: " + pingMs + "ms");
     }
 
     login(messageReceived: any): void {
@@ -104,11 +104,11 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
-        console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
+        // console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
         let monster = this.night_monster_list.get(messageContent.username);
         setTimeout(() => {
             if (monster) monster.hit(messageContent.hitmode);
-            else console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
+            else { }//console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
         }, 100)
     }
 
@@ -204,7 +204,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
 
     //if we found nothing, we add the username in the list parameter map, and associate it with a new avatar
     if (avatar_to_update === undefined) {
-        console.log("failed to find name " + data.username + " in list " + list + ", adding him.");
+        // console.log("failed to find name " + data.username + " in list " + list + ", adding him.");
         list.set(
             data.username,
             isMonster ?
@@ -225,14 +225,14 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
     }
 
     if (avatar_to_update?.name == "zombie0") {
-        console.log("current position: " + avatar_to_update.shape.position);
-        console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
+        // console.log("current position: " + avatar_to_update.shape.position);
+        // console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
     }
 
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_update) {
         if (avatar_to_update.shape.position.x !== data.pos_x || avatar_to_update.shape.position.y !== data.pos_y || avatar_to_update.shape.position.z !== data.pos_z) {
-            console.log("avatar " + avatar_to_update.name + " should move");
+            // console.log("avatar " + avatar_to_update.name + " should move");
             Animation.CreateAndStartAnimation("animMove", avatar_to_update.shape, "position", 60, Math.floor(0.7 * time_ms), avatar_to_update.shape.position, new Vector3(data.pos_x, data.pos_y, data.pos_z), Animation.ANIMATIONLOOPMODE_CONSTANT);
         }
 

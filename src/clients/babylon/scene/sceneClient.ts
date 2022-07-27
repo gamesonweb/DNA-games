@@ -11,7 +11,6 @@ export var shadowGenerator: ShadowGenerator | null;
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
-    ground: Mesh | undefined;
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
@@ -33,7 +32,7 @@ export class SceneClient extends SceneSoft {
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
 
-        this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 30);
+        this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 60);
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -78,7 +77,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
 
             this.setUpForGrass();
             // this.createSea(ground)
@@ -98,8 +97,9 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
             this.waterMaterial!.addToRenderList(ground);
+            this.setUpForGrass();
         });
     }
 
@@ -161,7 +161,7 @@ export class SceneClient extends SceneSoft {
 
 
     setUpForGrass() {
-        if (!(++this.grassTaskCounter < 2)) this.grassGeneration()
+        if (!(++this.grassTaskCounter < 3)) this.grassGeneration()
     }
 
     private grassGeneration() {
@@ -171,13 +171,13 @@ export class SceneClient extends SceneSoft {
             model.scaling = new Vector3(1, 1, 1);
 
             //Creation of 400 herbs at random positions, scaling and orientation
-            for (var i = 0; i < 400; i++) {
+            for (var i = 0; i < 2000; i++) {
 
-                let x = Math.random() * 100 - 50;
-                let z = Math.random() * 100 - 50;
+                let x = Math.random() * 200 - 100;
+                let z = Math.random() * 200 - 100;
                 let height = this.getHeightAtPoint(x, z)
 
-                if (height != undefined) {
+                if (height != undefined && height <= -15) {
                     //Parameters
                     let scaleRatio = 3 - Math.random() * 2.5
                     let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
@@ -196,11 +196,10 @@ export class SceneClient extends SceneSoft {
         this.heightRay.origin = new Vector3(x, 20, z)
 
         var hits = this.multiPickWithRay(this.heightRay, (m) => { return m.isPickable });
-        var filtered = hits?.filter(e => e.pickedMesh?.name === this.ground!.name)
-
+        var filtered = hits?.filter(e => e.pickedMesh && this.grounds!.includes(e.pickedMesh.name))
 
         if (filtered !== undefined && filtered.length > 0) {
-            var hit = filtered[0]
+            var hit = filtered[filtered.length - 1]
             if (hit !== null && hit.pickedPoint) {
                 return hit.pickedPoint.y
             }

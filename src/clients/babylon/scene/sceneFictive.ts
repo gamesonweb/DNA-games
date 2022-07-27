@@ -4,7 +4,6 @@ import { SceneSoft } from "./sceneSoft";
 
 export class SceneFictive extends SceneSoft {
     gravityIntensity: number;
-    ground: GroundMesh | undefined;
     grassTaskCounter: number;
 
     constructor(engine: Engine) {

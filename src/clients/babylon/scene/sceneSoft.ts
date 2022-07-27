@@ -10,15 +10,16 @@ export const groundParameters = {
 
 export abstract class SceneSoft extends Scene {
   static gravityIntensity = -0.02;
-  ground: Mesh | undefined;
+  grounds: string[];
   assetManager: AssetsManager | undefined;
 
   constructor(engine: Engine) {
     // This creates a basic Babylon Scene object (non-mesh)
     super(engine)
-    console.log("Creating scene soft")
+    // console.log("Creating scene soft")
     this.collisionsEnabled = true;
     this.createCamera()
+    this.grounds = []
 
     this.assetManager = this.configureAssetManager();
     this.createGround()

@@ -44,7 +44,7 @@ export function main() {
   setInterval(() => {
     if (ws.night_monster_list.size > 0) {
       let fps = engine.getFps()
-      console.log(fps.toFixed() + " fps");
+      // console.log(fps.toFixed() + " fps");
       let fpsRatio = 60 / engine.getFps()
       for (const monster of ws.night_monster_list.values()) {
         // monster.applyGravity(10 * fpsRatio)
@@ -86,7 +86,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
   if (player_to_target) {
     monster.shape.lookAt(new Vector3(player_to_target.shape.position.x, monster.shape.position.y, player_to_target.shape.position.z));
     if (monster.canHit && distance(monster.shape.position, player_to_target.shape.position) < 1.5) {
-      console.log("monster can hit: ", monster.canHit);
+      // console.log("monster can hit: ", monster.canHit);
 
       ws.send(
         JSON.stringify({

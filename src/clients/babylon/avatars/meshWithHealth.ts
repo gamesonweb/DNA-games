@@ -28,7 +28,7 @@ export abstract class MeshWithHealth implements Health {
   }
 
   dispose() {
-    console.log("zombie " + this.name + "disappears");
+    // console.log("zombie " + this.name + "disappears");
 
     this.shape.dispose();
   }

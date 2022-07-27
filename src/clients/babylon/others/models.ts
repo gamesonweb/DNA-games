@@ -27,7 +27,7 @@ export class ModelEnum {
     }
 
     createModel(scene: SceneClient) {
-        console.log(scene.assetManager);
+        // console.log(scene.assetManager);
 
         //A priori, all gltf extension file will be (automatically) named "scene", else the same name of the respective folder
         if (scene.assetManager) {
