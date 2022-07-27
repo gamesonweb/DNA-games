@@ -1,7 +1,7 @@
 import { Animation } from "babylonjs";
 import { wsClient } from "../../connection/connectionClient";
 import { scene } from "../main";
-import { createDayNightCycle } from "../scene/dayNightCycle";
+import { animations, createDayNightCycle, syncAnimGroup } from "../scene/dayNightCycle";
 import { light } from "../scene/sceneClient";
 
 export var hour: number;
@@ -14,6 +14,10 @@ export function updateHour(hourInput: number) {
         skyDefined = true;
     }
     hour = hourInput;
+
+    if (skyDefined) {
+        if (hour == 0 || hour == 12) syncAnimGroup(hour)
+    }
 
     //tue les monstres de nuit si il fait jour
     // if (hour > 7 && hour < 22) {

@@ -1,28 +1,32 @@
 import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "../main";
-import { hemiLight, light } from "./sceneClient";
+import { hemiLight, light, water } from "./sceneClient";
 import { hour } from "../others/time";
-
+export const ratio = 1.2;
+export var animations: AnimationGroup;
 export function createDayNightCycle(origin: number): AnimationGroup {
     //s = Time Interval Server 24h => 24 * 4 * 0.5 sec = 48 sec
     //c = Time Interval Client 24h => 2400/60 sec = 40 sec
     //Ratio = s/c = 1.2
-    var ratio = 1.2;
+    // var ratio = 1.2;
 
     //Sky color
-    var animationSky = createSkyAnimation(ratio);
+    var animationSky = createSkyAnimation();
 
     //Light intensity
-    var animationLightIntensity = createLightAnimation(ratio, true);
+    var animationLightIntensity = createLightAnimation(true);
 
     //Light tone
-    var animationLightTone = createLightAnimation(ratio, false);
+    var animationLightTone = createLightAnimation(false);
 
     //Light shit
-    var animationLightShift = createLightShift(ratio);
+    var animationLightShift = createLightShift();
 
     //HemiLigh intensity
-    var animationHemiLight = createHemiLightAnimation(ratio);
+    var animationHemiLight = createHemiLightAnimation();
+
+    //Tide
+    var animationTide = createTideAnimation();
 
     // Create the animation group
     var animationGroup = new AnimationGroup("skyAnimGroup");
@@ -31,6 +35,7 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     animationGroup.addTargetedAnimation(animationLightTone, light);
     animationGroup.addTargetedAnimation(animationLightShift, light);
     animationGroup.addTargetedAnimation(animationHemiLight, hemiLight);
+    animationGroup.addTargetedAnimation(animationTide, water);
     animationGroup.normalize(0, 2400 * ratio);
 
     // Start the animation to the current time
@@ -39,6 +44,7 @@ export function createDayNightCycle(origin: number): AnimationGroup {
 
     //Launch the looping animation
     animationGroup.play(true);
+    animations = animationGroup;
 
     //Then add the animation object to scene
     //this.animations.push(animationSky);
@@ -64,7 +70,14 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     return animationGroup;
 }
 
-function createSkyAnimation(ratio: number): Animation {
+export function syncAnimGroup(time: number) {
+    animations.reset();
+    animations.goToFrame(hour * 100 * ratio);
+
+    animations.play(true)
+}
+
+function createSkyAnimation(): Animation {
     //Sky Color
 
     //Create a scaling animation at 60 FPS
@@ -125,7 +138,7 @@ function createSkyAnimation(ratio: number): Animation {
     return animationSky
 }
 
-function createLightAnimation(ratio: number, isIntensity: boolean) {
+function createLightAnimation(isIntensity: boolean) {
     //Light intensity
 
     //Create a scaling animation at 60 FPS
@@ -194,7 +207,7 @@ function createLightAnimation(ratio: number, isIntensity: boolean) {
     return animationLight
 }
 
-function createLightShift(ratio: number) {
+function createLightShift() {
     //Light position
 
     //Create a scaling animation at 60 FPS
@@ -240,7 +253,7 @@ function createLightShift(ratio: number) {
     return animationLight
 }
 
-function createHemiLightAnimation(ratio: number) {
+function createHemiLightAnimation() {
     //Light intensity
 
     //Create a scaling animation at 60 FPS
@@ -283,4 +296,48 @@ function createHemiLightAnimation(ratio: number) {
     animationHemiLight.setKeys(keys);
 
     return animationHemiLight
+}
+
+function createTideAnimation() {
+    //Light intensity
+
+    //Create a scaling animation at 60 FPS
+    var animationTide = new Animation("animationTide", "position.y", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE);
+    // Animation keys
+    var keys = [];
+
+    keys.push({
+        frame: 0,
+        value: -15
+    });
+
+    keys.push({
+        frame: 500 * ratio,
+        value: -16
+    });
+
+    keys.push({
+        frame: 1100 * ratio,
+        value: -20
+    });
+
+    keys.push({
+        frame: 1700 * ratio,
+        value: -20
+    });
+
+    keys.push({
+        frame: 2300 * ratio,
+        value: -17
+    });
+
+    keys.push({
+        frame: 2400 * ratio,
+        value: -15
+    });
+
+    //Adding keys to the animation object
+    animationTide.setKeys(keys);
+
+    return animationTide
 }

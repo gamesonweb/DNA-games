@@ -6,6 +6,7 @@ import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
+export var water: Mesh;
 export var shadowGenerator: ShadowGenerator | null;
 
 export class SceneClient extends SceneSoft {
@@ -136,7 +137,7 @@ export class SceneClient extends SceneSoft {
     createSea(): Mesh {
         //water ground
         this.water = MeshBuilder.CreateGround("waterMesh", { height: 512, width: 512, subdivisions: 32 }, this);
-        this.water.position.y = -18;
+        this.water.position.y = -20;
         this.water.isPickable = false;
 
         this.waterMaterial = new WaterMaterial("waterMaterial", this, new Vector2(256, 256));
@@ -148,6 +149,8 @@ export class SceneClient extends SceneSoft {
         this.waterMaterial.waveLength = 0.1;
         this.waterMaterial.colorBlendFactor = 0;
         this.water.material = this.waterMaterial;
+
+        water = this.water
 
         return this.water;
     }
