@@ -4,6 +4,7 @@ import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/heroes/player";
 
 import { inializeInputListeners } from "./avatars/inputListeners";
+import { adjustCameraPosition } from "./others/tools";
 import { SceneClient } from "./scene/sceneClient";
 
 export var canvas: HTMLCanvasElement;
@@ -19,6 +20,7 @@ export var startRenderLoop = function (engine: Engine) {
       scene.render();
       wsClient.player_list.forEach(e => e.updateBulletPosition())
       sphere1?.move();
+      if (sphere1) adjustCameraPosition(scene, sphere1)
       console.log(engine.getFps().toFixed() + " fps");
     }
   });
@@ -70,6 +72,7 @@ export function set_my_sphere() {
     cameraBuilder.rotationOffset = 180;
     // cameraBuilder.minZ = 5;
     scene.activeCamera = cameraBuilder;
+
 
   }
 }

@@ -1,7 +1,9 @@
-import { Axis, Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, RayHelper, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
 import { windowExists } from "../../reactComponents/tools";
 import { Avatar } from "../avatars/avatarHeavy";
+import { AvatarSoft } from "../avatars/avatarSoft";
+import { sphere1 } from "../main";
 
 export function makeid(length: number) {
     var result = '';
@@ -96,4 +98,46 @@ export function createBasicShape(avatar_username: String, scene: Scene) {
     model.addChild(queue)
     queue.position = new Vector3(0, 0, -0.3);
     return model
+}
+
+export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
+    let followCam = scene.activeCamera as FollowCamera
+
+    //VERSION WITH DO WHILE
+
+    var hit: any
+    var iter = 0
+    do {
+        iter++
+        var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(2)).subtract(new Vector3(0, 1, 0)), followCam.getDirection(Axis.Z), 15);
+        // var rayHelper = new RayHelper(ray);
+        // rayHelper.show(scene); 
+        hit = scene.pickWithRay(ray);
+        console.log("picked mesh with Camera's ray: ", hit);
+        if (hit.pickedMesh) {
+            if (hit.pickedMesh !== sphere1.shape) {
+                if (followCam.radius >= 0.2) followCam.radius -= 0.2
+            } else {
+                if (followCam.radius < 10) {
+                    var backRay = new Ray(followCam.position.subtract(new Vector3(0, 1, 0)), followCam.getDirection(Axis.Z).negate(), 1);
+                    var backHit = scene.pickWithRay(backRay)
+                    if (!backHit?.pickedMesh || backHit.pickedMesh == sphere1.shape) followCam.radius += 0.2
+                }
+            }
+        } else { followCam.radius -= 0.2 }
+    } while (hit.pickedMesh !== sphere1.shape && iter < 30)
+
+    //VERSION WITH PICKEDPOINT
+
+    // var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(10)).subtract(new Vector3(0, 1, 0)), followCam.getDirection(Axis.Z), 20);
+    // var hit = scene.pickWithRay(ray);
+    // console.log("picked mesh with Camera's ray: ", hit);
+    // if (hit) {
+    //     if (hit.pickedMesh !== sphere1.shape) {
+    //         // if (followCam.radius >= 0.2) followCam.radius -= 0.2
+    //         if (hit.pickedPoint) followCam.radius = Math.max(0, distance(sphere1.shape.position, hit.pickedPoint) - 4)
+    //         else { followCam.radius -= 0.5 }
+    //     } else { followCam.radius += 0.2 }
+    // }
+    // if (followCam.radius > 10) followCam.radius = 10
 }
