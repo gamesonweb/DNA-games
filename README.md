@@ -1,30 +1,21 @@
-# Getting Started with Create React App
+Structure
+-npm, lancement de l'IA depuis le serveur
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) to word with PDF files. You are allowed to load PDF from your computer and then you can:
-- merge them
-- save them
-- duplicate them
-- iterval with blank pages
+Serveur
+-comment le serveur marche, quel est son role
+-version originel d'un terrain plat, des joueurs qui bougent et un mini-chat
 
-## Available Scripts
+Collisions
+-Difficultés avec les déplacement des zombies
+-Changement des collisions sur les models vers des collisions par hitbox
 
-In the project directory, you can run:
+Terrain
+-problematique serveur (pas de heightmap)
+-Blender (shader, ANT landscape...)
+-problématiques d'export
 
-### `npm start`
+Camera
+-caméra s'enfonce dans les textures, utilisation d'un système de laser
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
