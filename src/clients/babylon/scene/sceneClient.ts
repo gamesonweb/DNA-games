@@ -8,6 +8,12 @@ export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var water: Mesh;
 export var shadowGenerator: ShadowGenerator | null;
+export var pos_forest: Vector3
+export var pos_canyon: Vector3
+export var pos_snow: Vector3
+export var pos_lowPo: Vector3
+export var pos_volcan: Vector3
+export var pos_mossy: Vector3
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
@@ -66,14 +72,14 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
+        var offset = -20
+        //load canyon
+        pos_canyon = new Vector3(0, offset, 0)
         SceneLoader.Append("models/", "antTextureBaked.babylon", this, (scene) => {
-            // let ground = scene.getMeshByName("Object_2") as Mesh;
             let ground = scene.getMeshByName("Canyon") as Mesh;
-            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
             ground.scaling = new Vector3(100, 100, 100)
             ground.checkCollisions = true;
-            ground.position.z -= 8
-            ground.position.y -= 20
+            ground.position = pos_canyon;
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
@@ -86,14 +92,65 @@ export class SceneClient extends SceneSoft {
             setTimeout(() => { this.waterMaterial!.addToRenderList(sphere1!.shape) }, 2000)
         });
 
+        //load forest
+        pos_forest = new Vector3(0, offset, 200)
         SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
-            // let ground = scene.getMeshByName("Object_2") as Mesh;
             let ground = scene.getMeshByName("Landscape") as Mesh;
-            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
             ground.scaling = new Vector3(100, 100, 100)
             ground.checkCollisions = true;
-            ground.position.z += 200
-            ground.position.y -= 20
+            ground.position = pos_forest;
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            ground.isPickable = true;
+            this.ground = ground;
+        });
+
+        //load mossy
+        pos_mossy = new Vector3(200, offset, 200)
+        SceneLoader.Append("models/", "mossy.babylon", this, (scene) => {
+            let ground = scene.getMeshByName("Mossy") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
+            ground.checkCollisions = true;
+            ground.position = pos_mossy;
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            ground.isPickable = true;
+            this.ground = ground;
+        });
+
+        //load snow mountain
+        pos_snow = new Vector3(200, offset, 0)
+        SceneLoader.Append("models/", "snowMountain.babylon", this, (scene) => {
+            let ground = scene.getMeshByName("SnowMountain") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
+            ground.checkCollisions = true;
+            ground.position = pos_snow;
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            ground.isPickable = true;
+            this.ground = ground;
+        });
+
+        //load low Poly terrain
+        pos_lowPo = new Vector3(-200, offset, 0)
+        SceneLoader.Append("models/", "lowPoBasic.babylon", this, (scene) => {
+            let ground = scene.getMeshByName("LowPoBasic") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
+            ground.checkCollisions = true;
+            ground.position = pos_lowPo;
+            ground.freezeWorldMatrix();
+            ground.receiveShadows = true;
+            ground.isPickable = true;
+            this.ground = ground;
+        });
+
+        //load volcan
+        pos_volcan = new Vector3(400, offset, 0)
+        SceneLoader.Append("models/", "volcan.babylon", this, (scene) => {
+            let ground = scene.getMeshByName("Volcan") as Mesh;
+            ground.scaling = new Vector3(100, 100, 100)
+            ground.checkCollisions = true;
+            ground.position = pos_volcan
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;

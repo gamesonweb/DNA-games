@@ -1,6 +1,7 @@
 import { Axis } from "babylonjs";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, sphere1 } from "../main";
+import { pos_forest, pos_canyon, pos_lowPo, pos_snow, pos_volcan, pos_mossy } from "../scene/sceneClient";
 
 export type InputStates = {
     jump: boolean,
@@ -87,6 +88,49 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
     //giga jump (development only)
     else if (evt.code === "KeyK") {
         if (sphere1) sphere1.shape.position.y += 10
+    }
+
+    //tp forest
+    else if (evt.code === "Numpad1") {
+        if (pos_forest && sphere1) {
+            sphere1.shape.position = pos_forest
+            sphere1.shape.position.y += 20
+        }
+    }
+    //tp pos_canyon
+    else if (evt.code === "Numpad2") {
+        if (pos_canyon && sphere1) {
+            sphere1.shape.position = pos_canyon
+            sphere1.shape.position.y += 20
+        }
+    }
+    //tp pos_lowPo
+    else if (evt.code === "Numpad3") {
+        if (pos_lowPo && sphere1) {
+            sphere1.shape.position = pos_lowPo
+            sphere1.shape.position.y += 20
+        }
+    }
+    //tp pos_snow
+    else if (evt.code === "Numpad4") {
+        if (pos_snow && sphere1) {
+            sphere1.shape.position = pos_snow
+            sphere1.shape.position.y += 20
+        }
+    }
+    //tp pos_volcan
+    else if (evt.code === "Numpad5") {
+        if (pos_volcan && sphere1) {
+            sphere1.shape.position = pos_volcan
+            sphere1.shape.position.y += 20
+        }
+    }
+    //tp pos_volcan
+    else if (evt.code === "Numpad6") {
+        if (pos_mossy && sphere1) {
+            sphere1.shape.position = pos_mossy
+            sphere1.shape.position.y += 20
+        }
     }
 
     //rotation
