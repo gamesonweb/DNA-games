@@ -8,10 +8,10 @@ export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var water: Mesh;
 export var shadowGenerator: ShadowGenerator | null;
-export var pos_forest: Vector3
+// export var pos_forest: Vector3
 export var pos_canyon: Vector3
 export var pos_snow: Vector3
-export var pos_lowPo: Vector3
+// export var pos_lowPo: Vector3
 export var pos_volcan: Vector3
 export var pos_mossy: Vector3
 
@@ -93,17 +93,17 @@ export class SceneClient extends SceneSoft {
         });
 
         //load forest
-        pos_forest = new Vector3(0, offset, 200)
-        SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("Landscape") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position = pos_forest;
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-        });
+        // pos_forest = new Vector3(0, offset, 200)
+        // SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
+        //     let ground = scene.getMeshByName("Landscape") as Mesh;
+        //     ground.scaling = new Vector3(100, 100, 100)
+        //     ground.checkCollisions = true;
+        //     ground.position = pos_forest;
+        //     ground.freezeWorldMatrix();
+        //     ground.receiveShadows = true;
+        //     ground.isPickable = true;
+        //     this.grounds!.push(ground.name);
+        // });
 
         //load mossy
         pos_mossy = new Vector3(200, offset, 200)
@@ -121,7 +121,7 @@ export class SceneClient extends SceneSoft {
         //load snow mountain
         pos_snow = new Vector3(200, offset, 0)
         SceneLoader.Append("models/", "snowMountain.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("SnowMountain") as Mesh;
+            let ground = scene.getMeshByName("Snow") as Mesh;
             ground.scaling = new Vector3(100, 100, 100)
             ground.checkCollisions = true;
             ground.position = pos_snow;
@@ -132,17 +132,17 @@ export class SceneClient extends SceneSoft {
         });
 
         //load low Poly terrain
-        pos_lowPo = new Vector3(-200, offset, 0)
-        SceneLoader.Append("models/", "lowPoBasic.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("LowPoBasic") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position = pos_lowPo;
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-        });
+        // pos_lowPo = new Vector3(-200, offset, 0)
+        // SceneLoader.Append("models/", "lowPoBasic.babylon", this, (scene) => {
+        //     let ground = scene.getMeshByName("LowPoBasic") as Mesh;
+        //     ground.scaling = new Vector3(100, 100, 100)
+        //     ground.checkCollisions = true;
+        //     ground.position = pos_lowPo;
+        //     ground.freezeWorldMatrix();
+        //     ground.receiveShadows = true;
+        //     ground.isPickable = true;
+        //     this.grounds!.push(ground.name);
+        // });
 
         //load volcan
         pos_volcan = new Vector3(400, offset, 0)
