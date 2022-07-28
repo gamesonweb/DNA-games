@@ -12,23 +12,23 @@ Exporter version: 2.93.5, Blender version: 3.1.2
 		Texture directory   :  E:\Cour\GamesOnWeb2023\public\models\
 	Python World class constructor completed
 	WARNING: No active camera has been assigned, or is not in a currently enabled collection
-	processing begun of mesh:  SnowMountain
-		processing begun of material:  Material.001
-			processing texture BakedSnowTexture
+	processing begun of mesh:  Snow
+		processing begun of material:  Landscape_pbr
+			processing texture Landscape_normal2
 				texture type:  bumpTexture, mapped using: "UVMap"
-			processing texture BakedSnowTexture
+			processing texture Landscape_basecolor
 				texture type:  diffuseTexture, mapped using: "UVMap"
-			processing texture BakedSnowroughness
+			processing texture Landscape_roughness
 				texture type:  value not meaningful 2, mapped using: "UVMap"
-		num positions      :  3281
-		num normals        :  3281
+		num positions      :  3294
+		num normals        :  3294
 		num tangents       :  0
-		num uvs            :  6562
+		num uvs            :  6588
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  6553
+		num triangles      :  6552
 ========= Writing of JSON file started =========
-	writing mesh:  SnowMountain
+	writing mesh:  Snow
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.3285 secs
+elapsed time:  0 min, 1.6483 secs
