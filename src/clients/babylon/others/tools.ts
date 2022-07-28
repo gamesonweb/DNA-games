@@ -131,13 +131,16 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
     //VERSION WITH PICKEDPOINT
 
     var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(2)), followCam.getDirection(Axis.Z), 15);
-    var hit = scene.pickWithRay(ray);
+    var hit = scene.pickWithRay(ray, cameraCollision);
+    console.log("RAY HIT: ", hit?.pickedMesh?.name);
+
     if (hit) {
         if (hit.pickedMesh !== sphere1.shape) {
-            if (hit.pickedPoint) followCam.radius = Math.max(1, distance(sphere1.shape.position, hit.pickedPoint) - 4)
+            if (hit.pickedPoint) followCam.radius = Math.max(2, distance(sphere1.shape.position, hit.pickedPoint) - 4)
         } else {
-            var backRay = new Ray(sphere1.shape.position, followCam.getDirection(Axis.Z).negate().add(new Vector3(0, followCam.getDirection(Axis.Z).y, 0)), Math.min(10, followCam.radius + 1));
-            var backHit = scene.pickWithRay(backRay, cameraCollision)
+            var backRay = new Ray(sphere1.shape.position, followCam.getDirection(Axis.Z).negate().add(new Vector3(0, -0.5, 0)), Math.min(10, followCam.radius + 1));
+            var backHit = scene.pickWithRay(backRay, cameraBackCollision)
+            console.log("BACKRAY HIT: ", backHit?.pickedMesh?.name);
 
             if (followCam.radius < 10) {
                 if (!backHit?.pickedPoint) followCam.radius += 0.5
@@ -145,9 +148,14 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
         }
     }
     if (followCam.radius > 10) followCam.radius = 10
+    sphere1.shape.visibility = Math.min(followCam.radius / 4, 1)
 }
 
 function cameraCollision(mesh: AbstractMesh) {
+    return (scene.grounds.includes(mesh.name) || mesh.name == sphere1?.shape.name)
+}
+
+export function cameraBackCollision(mesh: AbstractMesh) {
     return (scene.grounds.includes(mesh.name))
 }
 

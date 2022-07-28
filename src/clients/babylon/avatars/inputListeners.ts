@@ -1,7 +1,7 @@
-import { Axis, Mesh, Vector3 } from "babylonjs";
+import { Axis, FollowCamera, Mesh, Ray, Vector3 } from "babylonjs";
 import { chatRef, input } from "../../reactComponents/chat";
-import { canvas, sphere1 } from "../main";
-import { teleport } from "../others/tools";
+import { canvas, scene, sphere1 } from "../main";
+import { cameraBackCollision, teleport } from "../others/tools";
 import { pos_canyon, pos_snow, pos_volcan, pos_mossy } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
 
@@ -165,6 +165,23 @@ export function pointerLockAndMouseMove() {
             if (evt.movementX < 0) {
                 sphere1.shape.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
                 sphere1.didSomething = true;
+            }
+        }
+        if (scene.activeCamera) {
+            if (evt.movementY < 0) {
+                var camera = scene.activeCamera as FollowCamera;
+                // var bottomRay = new Ray(camera.position, new Vector3(0, -1, 0), 2 + Math.sqrt(-evt.movementY))
+                // var bottomHit = scene.pickWithRay(bottomRay, cameraBackCollision)
+                // if (!bottomHit?.pickedMesh) {
+                camera.heightOffset -= Math.sqrt(-evt.movementY) / 20
+                camera.heightOffset = Math.max(-1, camera.heightOffset)
+                // }
+            }
+            if (evt.movementY > 0) {
+                var camera = scene.activeCamera as FollowCamera;
+                camera.heightOffset += Math.sqrt(evt.movementY) / 20
+                camera.heightOffset = Math.min(8, camera.heightOffset)
+
             }
         }
     });
