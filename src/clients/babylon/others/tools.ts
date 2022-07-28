@@ -150,3 +150,11 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
 function cameraCollision(mesh: AbstractMesh) {
     return (scene.grounds.includes(mesh.name))
 }
+
+export function teleport(mesh: AvatarSoft, position: Vector3, offsetY = 5) {
+    var heightGround = scene.getHeightAtPoint(position.x, position.z)
+    if (heightGround) {
+        mesh.shape.position = new Vector3(position.x, heightGround + offsetY, position.z)
+        mesh.setRayPosition()
+    } else { console.log("t'as pas de sol là bas"); }
+}
