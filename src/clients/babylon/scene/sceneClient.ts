@@ -102,7 +102,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
         });
 
         //load mossy
@@ -115,7 +115,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
         });
 
         //load snow mountain
@@ -128,7 +128,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
         });
 
         //load low Poly terrain
@@ -141,7 +141,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
-            this.ground = ground;
+            this.grounds!.push(ground.name);
         });
 
         //load volcan

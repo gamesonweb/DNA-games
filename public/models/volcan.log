@@ -13,24 +13,24 @@ Exporter version: 2.93.5, Blender version: 3.1.2
 	Python World class constructor completed
 	WARNING: No active camera has been assigned, or is not in a currently enabled collection
 	processing begun of mesh:  Volcan
-		processing begun of material:  Material.001
-			processing texture volcannormal2
+		processing begun of material:  Volcan_pbr
+			processing texture Volcan_normal2
 				texture type:  bumpTexture, mapped using: "UVMap"
-			processing texture volcanDiffuse
+			processing texture Volcan_basecolor
 				texture type:  diffuseTexture, mapped using: "UVMap"
-			processing texture VolcanRoughness
+			processing texture Volcan_roughness
 				texture type:  value not meaningful 2, mapped using: "UVMap"
-			processing texture VOLCAN_emmission
+			processing texture Volcan_emmission
 				texture type:  emissiveTexture, mapped using: "UVMap"
-		num positions      :  2787
-		num normals        :  2787
+		num positions      :  3294
+		num normals        :  3294
 		num tangents       :  0
-		num uvs            :  5574
+		num uvs            :  6588
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  5563
+		num triangles      :  6553
 ========= Writing of JSON file started =========
 	writing mesh:  Volcan
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.3054 secs
+elapsed time:  0 min, 0.4361 secs

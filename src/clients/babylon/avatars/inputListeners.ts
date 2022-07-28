@@ -125,7 +125,7 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
             sphere1.shape.position.y += 20
         }
     }
-    //tp pos_volcan
+    //tp pos_volcanc
     else if (evt.code === "Numpad6") {
         if (pos_mossy && sphere1) {
             sphere1.shape.position = pos_mossy
