@@ -54,16 +54,7 @@ export function createDayNightCycle(origin: number): AnimationGroup {
 
     //Keep sync if alt-tab
     function checkTabFocused() {
-        if (document.visibilityState === 'visible') {
-            // console.log("go to :", hour * 100, "| =", hour * 100 * ratio)
-            // console.log("At = ", new Date().toLocaleString());
-
-            animationGroup.reset();
-            animationGroup.goToFrame(hour * 100 * ratio);
-
-            animationGroup.play(true)
-
-        }
+        if (document.visibilityState === 'visible') syncAnimGroup(hour)
     }
     document.addEventListener('visibilitychange', checkTabFocused);
 
