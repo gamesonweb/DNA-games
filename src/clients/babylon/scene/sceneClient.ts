@@ -20,7 +20,6 @@ export class SceneClient extends SceneSoft {
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
-    heightRay: Ray;
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -37,8 +36,6 @@ export class SceneClient extends SceneSoft {
 
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
-
-        this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 60);
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -247,20 +244,5 @@ export class SceneClient extends SceneSoft {
                 }
             }
         }
-    }
-
-    getHeightAtPoint(x: number, z: number): number | undefined {
-        this.heightRay.origin = new Vector3(x, 20, z)
-
-        var hits = this.multiPickWithRay(this.heightRay, (m) => { return m.isPickable });
-        var filtered = hits?.filter(e => e.pickedMesh && this.grounds!.includes(e.pickedMesh.name))
-
-        if (filtered !== undefined && filtered.length > 0) {
-            var hit = filtered[filtered.length - 1]
-            if (hit !== null && hit.pickedPoint) {
-                return hit.pickedPoint.y
-            }
-        }
-        return undefined;
     }
 };

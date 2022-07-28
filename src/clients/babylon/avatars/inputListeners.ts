@@ -1,7 +1,9 @@
-import { Axis } from "babylonjs";
+import { Axis, Mesh, Vector3 } from "babylonjs";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, sphere1 } from "../main";
+import { teleport } from "../others/tools";
 import { pos_canyon, pos_snow, pos_volcan, pos_mossy } from "../scene/sceneClient";
+import { AvatarSoft } from "./avatarSoft";
 
 export type InputStates = {
     jump: boolean,
@@ -90,48 +92,44 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
         if (sphere1) sphere1.shape.position.y += 10
     }
 
+    //tp pos_canyon
+    else if (evt.code === "Digit1") {
+        if (pos_canyon && sphere1) {
+            teleport(sphere1, pos_canyon)
+        }
+    }
+    //tp pos_snow
+    else if (evt.code === "Digit2") {
+        if (pos_snow && sphere1) {
+            teleport(sphere1, pos_snow)
+        }
+    }
+    //tp pos_volcan
+    else if (evt.code === "Digit3") {
+        if (pos_volcan && sphere1) {
+            teleport(sphere1, pos_volcan)
+        }
+    }
+    //tp pos_volcanc
+    else if (evt.code === "Digit4") {
+        if (pos_mossy && sphere1) {
+            teleport(sphere1, pos_mossy)
+        }
+    }
     //tp forest
-    // else if (evt.code === "Numpad1") {
+    // else if (evt.code === "Numpad5") {
     //     if (pos_forest && sphere1) {
     //         sphere1.shape.position = pos_forest
     //         sphere1.shape.position.y += 20
     //     }
     // }
-    //tp pos_canyon
-    else if (evt.code === "Numpad2") {
-        if (pos_canyon && sphere1) {
-            sphere1.shape.position = pos_canyon
-            sphere1.shape.position.y += 20
-        }
-    }
     //tp pos_lowPo
-    // else if (evt.code === "Numpad3") {
+    // else if (evt.code === "Numpad6") {
     //     if (pos_lowPo && sphere1) {
     //         sphere1.shape.position = pos_lowPo
     //         sphere1.shape.position.y += 20
     //     }
     // }
-    //tp pos_snow
-    else if (evt.code === "Numpad4") {
-        if (pos_snow && sphere1) {
-            sphere1.shape.position = pos_snow
-            sphere1.shape.position.y += 20
-        }
-    }
-    //tp pos_volcan
-    else if (evt.code === "Numpad5") {
-        if (pos_volcan && sphere1) {
-            sphere1.shape.position = pos_volcan
-            sphere1.shape.position.y += 20
-        }
-    }
-    //tp pos_volcanc
-    else if (evt.code === "Numpad6") {
-        if (pos_mossy && sphere1) {
-            sphere1.shape.position = pos_mossy
-            sphere1.shape.position.y += 20
-        }
-    }
 
     //rotation
     else if (evt.code === "ArrowRight") {
