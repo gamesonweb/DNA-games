@@ -47,7 +47,7 @@ export class ModelEnum {
         //     throw new Error("No asset menager in scene !")
         // }
 
-        SceneLoader.ImportMesh("", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+        SceneLoader.ImportMesh("", "models/" + this.name + "/", (this.extension === "gltf" ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
             this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
         })
 
@@ -193,7 +193,7 @@ export class ModelEnum {
         let stat = Math.round(doneLoad / ModelEnum.totalLoad * 100 * 100) / 100 + "%";
         loadingRef.current!.setContent("Loading... " + stat)
 
-        if (ModelEnum.remainingLoad == 0) {
+        if (ModelEnum.remainingLoad === 0) {
             unmountComponentAtNode(document.getElementById('root')!);
             startRenderLoop(engine);
 

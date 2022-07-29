@@ -224,7 +224,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
 
-    if (avatar_to_update?.name == "zombie0") {
+    if (avatar_to_update?.name === "zombie0") {
         // console.log("current position: " + avatar_to_update.shape.position);
         // console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
     }
