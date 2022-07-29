@@ -1,14 +1,18 @@
-import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
-import { scene, sphere1 } from "../main";
-import { SceneClient } from "../scene/sceneClient";
+import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { engine, scene, sphere1, startRenderLoop } from "../main";
+import { SceneClient, shadowGenerator } from "../scene/sceneClient";
 
 import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
+import { unmountComponentAtNode } from "react-dom";
+import { loadingRef } from "../../reactComponents/loadingScreen";
 export var shadowGeneratorCampfire: ShadowGenerator;
+
 export class ModelEnum {
     static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
     static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Campfire = new ModelEnum("campfire", "gltf", 0.25);
+    static Mage = new ModelEnum("mage", "gltf", 1.2);
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -17,6 +21,10 @@ export class ModelEnum {
     rootMesh: Mesh | undefined
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
+
+    //Grounds + Water texture + All models + Grass generation
+    static totalLoad: number = 0;
+    static remainingLoad: number = ModelEnum.totalLoad;
 
 
 
@@ -30,14 +38,18 @@ export class ModelEnum {
         // console.log(scene.assetManager);
 
         //A priori, all gltf extension file will be (automatically) named "scene", else the same name of the respective folder
-        if (scene.assetManager) {
-            let meshTask = scene.assetManager.addMeshTask(this.name + "_task", "", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension);
-            meshTask.onSuccess = (task) => {
-                this.callback(task.loadedMeshes, task.loadedParticleSystems, task.loadedSkeletons, task.loadedAnimationGroups)
-            }
-        } else {
-            throw new Error("No asset menager in scene !")
-        }
+        // if (scene.assetManager) {
+        //     let meshTask = scene.assetManager.addMeshTask(this.name + "_task", "", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension);
+        //     meshTask.onSuccess = (task) => {
+        //         this.callback(task.loadedMeshes, task.loadedParticleSystems, task.loadedSkeletons, task.loadedAnimationGroups)
+        //     }
+        // } else {
+        //     throw new Error("No asset menager in scene !")
+        // }
+
+        SceneLoader.ImportMesh("", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+            this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
+        })
 
     }
 
@@ -45,6 +57,8 @@ export class ModelEnum {
         this.rootMesh = meshes[0] as Mesh;
         this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
         this.rootMesh.name = this.name;
+
+        ModelEnum.loadingDone();
 
         switch (this.name) {
             case "grass":
@@ -69,6 +83,11 @@ export class ModelEnum {
             case "pumpkin_monster":
                 this.rootMesh.position.y -= 0.5;
                 this.rootMesh.rotate(Axis.Y, Math.PI)
+
+                //TODO (monster will have cylinder as hitbox like Player currently)
+                // meshes.forEach(m => {
+                //     m.isPickable = false
+                // });
 
                 //left eye
                 let left_eye = MeshBuilder.CreateSphere(this.name + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
@@ -112,6 +131,20 @@ export class ModelEnum {
                 createFire(this.rootMesh);
                 break;
 
+            case "mage":
+                this.rootMesh.rotate(Axis.Y, Math.PI);
+                meshes.forEach(m => {
+                    m.isPickable = false
+                });
+                let modelSphere1 = this.rootMesh.clone();
+                sphere1?.shape.addChild(modelSphere1)
+                shadowGenerator?.addShadowCaster(modelSphere1)
+
+                if (sphere1) {
+                    sphere1.shape.isVisible = false;
+                }
+                break;
+
             // case "terrain":
             //     this.rootMesh = meshes[0] as Mesh;
             //     meshes[0].position = new Vector3(0, -5, 0);
@@ -143,7 +176,27 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: SceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire];
+        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage];
+        ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
     }
+
+    static addLoadingTask(quantity: number) {
+        ModelEnum.totalLoad += quantity;
+        ModelEnum.remainingLoad += quantity;
+    }
+
+    static loadingDone() {
+        ModelEnum.remainingLoad--;
+        let doneLoad = ModelEnum.totalLoad - ModelEnum.remainingLoad;
+        let stat = Math.round(doneLoad / ModelEnum.totalLoad * 100 * 100) / 100 + "%";
+        loadingRef.current!.setContent("Loading... " + stat)
+
+        if (ModelEnum.remainingLoad == 0) {
+            unmountComponentAtNode(document.getElementById('root')!);
+            startRenderLoop(engine);
+
+        }
+    }
+
 }

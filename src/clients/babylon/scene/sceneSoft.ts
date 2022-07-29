@@ -11,7 +11,7 @@ export const groundParameters = {
 export abstract class SceneSoft extends Scene {
   static gravityIntensity = -0.02;
   grounds: string[];
-  assetManager: AssetsManager | undefined;
+  //assetManager: AssetsManager | undefined;
   heightRay: Ray;
   groundsData: { modelID: string; meshName: string; position: Vector3; }[];
 
@@ -48,13 +48,13 @@ export abstract class SceneSoft extends Scene {
 
     this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 100);
 
-    this.assetManager = this.configureAssetManager();
+    //this.assetManager = this.configureAssetManager();
     this.createGround()
   }
 
-  configureAssetManager(): undefined | AssetsManager {
-    return
-  }
+  // configureAssetManager(): undefined | AssetsManager {
+  //   return
+  // }
 
   createCamera() {
     // This creates and positions a free camera (non-mesh)

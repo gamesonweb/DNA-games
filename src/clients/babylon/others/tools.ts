@@ -89,15 +89,15 @@ export function createWall(scene: Scene) {
 
 export function createBasicShape(avatar_username: String, scene: Scene) {
     let model = MeshBuilder.CreateCylinder(avatar_username + "sp1", { diameter: 1, height: 2 }, scene);
-    let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
+    // let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
     myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
     model.material = myMaterial;
-    model.addChild(queue)
-    queue.position = new Vector3(0, 0, -0.3);
-    queue.isPickable = false;
+    // model.addChild(queue)
+    // queue.position = new Vector3(0, 0, -0.3);
+    // queue.isPickable = false;
     return model
 }
 

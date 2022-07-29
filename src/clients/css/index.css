@@ -61,6 +61,7 @@ body {
   position: absolute;
 }
 
+.loadingReact,
 .loginReact,
 .no-server {
   background-color: black;

@@ -53,7 +53,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
     // mesh.moveWithCollisions(new Vector3(0, -0.5, 0))
     var hits = this.shape.getScene().multiPickWithRay(this.ray, (m) => { return m.isPickable });
 
-    var filtered = hits?.filter(e => e.pickedMesh?.name !== this.shape?.name)
+    var filtered = hits?.filter(e => (e.pickedMesh?.name !== this.shape?.name) && (e.pickedMesh?.name !== this.shape.getChildMeshes()[0].name))
+
     // console.log("filtered: ", filtered);
     // console.log("filtered: ");
 

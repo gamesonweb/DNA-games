@@ -44,7 +44,7 @@ export class SceneClient extends SceneSoft {
         }
     }
 
-    configureAssetManager() {
+    /*configureAssetManager() {
         let assetsManager = new AssetsManager(this);
         assetsManager.onProgress = function (remainingCount, totalCount, lastFinishedTask) {
             engine.loadingUIText = "Loading... " + lastFinishedTask.name + " (" + (totalCount - remainingCount) + "/" + totalCount + ")"
@@ -55,7 +55,7 @@ export class SceneClient extends SceneSoft {
         }
 
         return assetsManager;
-    }
+    }*/
 
     createLight() {
         light = new DirectionalLight("light1", new Vector3(-1, -2, -1), this);
@@ -69,6 +69,7 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
+        ModelEnum.addLoadingTask(this.groundsData.length)
         for (const ground of this.groundsData) {
             this.loadGround("models/", ground.modelID, ground.meshName, ground.position)
         }
@@ -87,8 +88,7 @@ export class SceneClient extends SceneSoft {
 
             this.setUpForGrass();
             this.waterMaterial!.addToRenderList(ground);
-            //TODO Correctly
-            setTimeout(() => { this.waterMaterial!.addToRenderList(sphere1!.shape) }, 2000)
+            ModelEnum.loadingDone();
         });
     }
 
@@ -125,13 +125,16 @@ export class SceneClient extends SceneSoft {
 
     createSea(): Mesh {
         //water ground
+        ModelEnum.addLoadingTask(1);
         this.water = MeshBuilder.CreateGround("waterMesh", { height: 2000, width: 2000, subdivisions: 32 }, this);
         this.water.position.y = -24;
         this.water.isPickable = false;
 
         this.waterMaterial = new WaterMaterial("waterMaterial", this, new Vector2(256, 256));
         this.waterMaterial.backFaceCulling = true;
-        this.waterMaterial.bumpTexture = new Texture("./textures/waterbump.png", this);
+        this.waterMaterial.bumpTexture = new Texture("./textures/waterbump.png", this, undefined, undefined, undefined, () => {
+            ModelEnum.loadingDone();
+        });
         this.waterMaterial.windForce = -5;
         this.waterMaterial.waveHeight = 0.1;
         this.waterMaterial.bumpHeight = 0.1;
@@ -150,10 +153,12 @@ export class SceneClient extends SceneSoft {
 
 
     setUpForGrass() {
-        if (!(++this.grassTaskCounter < 3)) this.grassGeneration()
+        //Grounds + Grass
+        if (!(++this.grassTaskCounter < this.groundsData.length + 1)) this.grassGeneration()
     }
 
     private grassGeneration() {
+        ModelEnum.addLoadingTask(1);
         var model = ModelEnum.Grass.rootMesh;
 
         if (model != undefined) {
@@ -178,6 +183,8 @@ export class SceneClient extends SceneSoft {
                     model.thinInstanceAdd(scaleRotateTranslateMatrix);
                 }
             }
+
+            ModelEnum.loadingDone()
         }
     }
 };
