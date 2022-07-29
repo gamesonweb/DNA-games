@@ -1,4 +1,4 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
@@ -69,14 +69,17 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        var offset = -20
-        //load canyon
-        pos_canyon = new Vector3(0, offset, 0)
-        SceneLoader.Append("models/", "Desert.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("Desert") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
+        for (const ground of this.groundsData) {
+            this.loadGround("models/", ground.modelID, ground.meshName, ground.position)
+        }
+    }
+
+    loadGround(path: string, modelID: string, meshName: string, position: Vector3, scaling = 100) {
+        SceneLoader.Append(path, modelID, this, (scene) => {
+            let ground = scene.getMeshByName(meshName) as Mesh;
+            ground.scaling = new Vector3(scaling, scaling, scaling)
             ground.checkCollisions = true;
-            ground.position = pos_canyon;
+            ground.position = position;
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
@@ -87,75 +90,6 @@ export class SceneClient extends SceneSoft {
             //TODO Correctly
             setTimeout(() => { this.waterMaterial!.addToRenderList(sphere1!.shape) }, 2000)
         });
-
-        //load mossy
-        pos_mossy = new Vector3(400, offset, 100)
-        SceneLoader.Append("models/", "mossy.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("Mossy") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position = pos_mossy;
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-            this.waterMaterial!.addToRenderList(ground);
-        });
-
-        //load snow mountain
-        pos_snow = new Vector3(400, offset, 280)
-        SceneLoader.Append("models/", "snowMountain.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("Snow") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position = pos_snow;
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-            this.waterMaterial!.addToRenderList(ground);
-        });
-
-        //load volcan
-        pos_volcan = new Vector3(-100, offset, 500)
-        SceneLoader.Append("models/", "volcan.babylon", this, (scene) => {
-            let ground = scene.getMeshByName("Volcan") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position = pos_volcan
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-            this.waterMaterial!.addToRenderList(ground);
-            this.setUpForGrass();
-        });
-
-        //load forest
-        // pos_forest = new Vector3(0, offset, 200)
-        // SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
-        //     let ground = scene.getMeshByName("Landscape") as Mesh;
-        //     ground.scaling = new Vector3(100, 100, 100)
-        //     ground.checkCollisions = true;
-        //     ground.position = pos_forest;
-        //     ground.freezeWorldMatrix();
-        //     ground.receiveShadows = true;
-        //     ground.isPickable = true;
-        //     this.grounds!.push(ground.name);
-        // });
-
-        //load low Poly terrain
-        // pos_lowPo = new Vector3(-200, offset, 0)
-        // SceneLoader.Append("models/", "lowPoBasic.babylon", this, (scene) => {
-        //     let ground = scene.getMeshByName("LowPoBasic") as Mesh;
-        //     ground.scaling = new Vector3(100, 100, 100)
-        //     ground.checkCollisions = true;
-        //     ground.position = pos_lowPo;
-        //     ground.freezeWorldMatrix();
-        //     ground.receiveShadows = true;
-        //     ground.isPickable = true;
-        //     this.grounds!.push(ground.name);
-        // });
     }
 
     createSprites() {

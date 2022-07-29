@@ -94,26 +94,26 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
     //tp pos_canyon
     else if (evt.code === "Digit1") {
-        if (pos_canyon && sphere1) {
-            teleport(sphere1, pos_canyon)
+        if (scene.groundsData[0] && sphere1) {
+            teleport(sphere1, scene.groundsData[0].position)
         }
     }
     //tp pos_snow
     else if (evt.code === "Digit2") {
-        if (pos_snow && sphere1) {
-            teleport(sphere1, pos_snow)
+        if (scene.groundsData[1] && sphere1) {
+            teleport(sphere1, scene.groundsData[1].position)
         }
     }
     //tp pos_volcan
     else if (evt.code === "Digit3") {
-        if (pos_volcan && sphere1) {
-            teleport(sphere1, pos_volcan)
+        if (scene.groundsData[2] && sphere1) {
+            teleport(sphere1, scene.groundsData[2].position)
         }
     }
     //tp pos_volcanc
     else if (evt.code === "Digit4") {
-        if (pos_mossy && sphere1) {
-            teleport(sphere1, pos_mossy)
+        if (scene.groundsData[3] && sphere1) {
+            teleport(sphere1, scene.groundsData[3].position)
         }
     }
     //tp forest

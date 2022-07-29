@@ -132,7 +132,7 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
 
     var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(2)), followCam.getDirection(Axis.Z), 15);
     var hit = scene.pickWithRay(ray, cameraCollision);
-    console.log("RAY HIT: ", hit?.pickedMesh?.name);
+    // console.log("RAY HIT: ", hit?.pickedMesh?.name);
 
     if (hit) {
         if (hit.pickedMesh !== sphere1.shape) {
@@ -140,7 +140,7 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
         } else {
             var backRay = new Ray(sphere1.shape.position, followCam.getDirection(Axis.Z).negate().add(new Vector3(0, -0.5, 0)), Math.min(10, followCam.radius + 1));
             var backHit = scene.pickWithRay(backRay, cameraBackCollision)
-            console.log("BACKRAY HIT: ", backHit?.pickedMesh?.name);
+            // console.log("BACKRAY HIT: ", backHit?.pickedMesh?.name);
 
             if (followCam.radius < 10) {
                 if (!backHit?.pickedPoint) followCam.radius += 0.5

@@ -1,4 +1,4 @@
-import { Mesh, AssetsManager, Engine, FreeCamera, GroundMesh, Scene, Vector3, Ray } from "babylonjs";
+import { AssetsManager, Engine, FreeCamera, Scene, Vector3, Ray } from "babylonjs";
 
 export const groundParameters = {
   width: 100,
@@ -13,6 +13,7 @@ export abstract class SceneSoft extends Scene {
   grounds: string[];
   assetManager: AssetsManager | undefined;
   heightRay: Ray;
+  groundsData: { modelID: string; meshName: string; position: Vector3; }[];
 
   constructor(engine: Engine) {
     // This creates a basic Babylon Scene object (non-mesh)
@@ -21,6 +22,30 @@ export abstract class SceneSoft extends Scene {
     this.collisionsEnabled = true;
     this.createCamera()
     this.grounds = []
+    var offset = -20
+    this.groundsData = [
+      {
+        modelID: "Desert.babylon",
+        meshName: "Desert",
+        position: new Vector3(0, offset, 0)
+      },
+      {
+        modelID: "mossy.babylon",
+        meshName: "Mossy",
+        position: new Vector3(400, offset, 100)
+      },
+      {
+        modelID: "snowMountain.babylon",
+        meshName: "Snow",
+        position: new Vector3(400, offset, 280)
+      },
+      {
+        modelID: "volcan.babylon",
+        meshName: "Volcan",
+        position: new Vector3(-100, offset, 500)
+      },
+    ]
+
     this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 100);
 
     this.assetManager = this.configureAssetManager();
@@ -53,6 +78,8 @@ export abstract class SceneSoft extends Scene {
     }
     return undefined;
   }
+
+  abstract loadGround(path: String, modelID: String, meshName: String, position: Vector3, scaling: number): void;
 
   abstract createGround(): void;
 };

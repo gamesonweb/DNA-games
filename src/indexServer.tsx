@@ -39,7 +39,8 @@ export function main() {
     scene.render()
   });
 
-  ConnectionServer.setGlobalWebSocket(scene)
+  var port = process.argv[2]
+  ConnectionServer.setGlobalWebSocket(scene, port)
 
   setInterval(() => {
     if (ws.night_monster_list.size > 0) {
