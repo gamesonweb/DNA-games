@@ -134,11 +134,12 @@ export class ModelEnum {
             case "mage":
                 this.rootMesh.rotate(Axis.Y, Math.PI);
                 meshes.forEach(m => {
-                    m.isPickable = false
+                    m.isPickable = false;
+                    m.checkCollisions = false;
                 });
                 let modelSphere1 = this.rootMesh.clone();
-                sphere1?.shape.addChild(modelSphere1)
-                shadowGenerator?.addShadowCaster(modelSphere1)
+                sphere1?.shape.addChild(modelSphere1);
+                shadowGenerator?.addShadowCaster(modelSphere1);
 
                 if (sphere1) {
                     sphere1.shape.isVisible = false;
