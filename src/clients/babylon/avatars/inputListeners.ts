@@ -1,9 +1,7 @@
-import { Axis, FollowCamera, Mesh, Ray, Vector3 } from "babylonjs";
+import { Axis, FollowCamera } from "babylonjs";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
-import { cameraBackCollision, teleport } from "../others/tools";
-import { pos_canyon, pos_snow, pos_volcan, pos_mossy } from "../scene/sceneClient";
-import { AvatarSoft } from "./avatarSoft";
+import { teleport } from "../others/tools";
 
 export type InputStates = {
     jump: boolean,

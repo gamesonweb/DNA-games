@@ -1,5 +1,5 @@
 import { Engine, Mesh, SceneLoader, Vector3 } from "babylonjs";
-import 'babylonjs-loaders';
+// import 'babylonjs-loaders';
 import { SceneSoft } from "./sceneSoft";
 
 export class SceneFictive extends SceneSoft {

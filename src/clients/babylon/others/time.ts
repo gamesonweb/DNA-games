@@ -1,7 +1,6 @@
 import { Animation } from "babylonjs";
-import { wsClient } from "../../connection/connectionClient";
 import { scene } from "../main";
-import { animations, createDayNightCycle, syncAnimGroup } from "../scene/dayNightCycle";
+import { createDayNightCycle, syncAnimGroup } from "../scene/dayNightCycle";
 import { light } from "../scene/sceneClient";
 
 export var hour: number;
