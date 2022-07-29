@@ -39,14 +39,15 @@ export function main() {
     scene.render()
   });
 
+  // var port = "8080"
   var port = process.argv[2]
   ConnectionServer.setGlobalWebSocket(scene, port)
 
   setInterval(() => {
     if (ws.night_monster_list.size > 0) {
-      let fps = engine.getFps()
+      // let fps = engine.getFps()
       // console.log(fps.toFixed() + " fps");
-      let fpsRatio = 60 / engine.getFps()
+      // let fpsRatio = 60 / engine.getFps()
       for (const monster of ws.night_monster_list.values()) {
         // monster.applyGravity(10 * fpsRatio)
         monster.applyGravity(30)
@@ -108,16 +109,20 @@ function zombie_apply_AI(monster: AvatarSoft) {
 }
 
 export function generate_zombie_wave() {
-  var counter_after_wave = Math.round(Math.random() * 3) + 3 + zombie_counter
-  // var counter_after_wave = 1 + zombie_counter
-  // console.log("Generating wave");
-
-  while (zombie_counter < counter_after_wave) {
-    spawn_zombie({
-      pos_x: zombie_counter + Math.random() * 5,
-      pos_y: 1,
-      pos_z: zombie_counter + Math.random() * 5
-    });
+  for (var player of ws.player_list.values()) {
+    for (var i = 0; i < 3 + Math.random() * 3; i++) {
+      var zombie_x = Math.random() > 0.5 ? player.shape.position.x + 5 + Math.random() * 10 : player.shape.position.x - 5 - Math.random() * 10
+      var zombie_z = Math.random() > 0.5 ? player.shape.position.z + 5 + Math.random() * 10 : player.shape.position.z - 5 - Math.random() * 10
+      var zombie_y = 0
+      var height = scene.getHeightAtPoint(zombie_x, zombie_z)
+      if (!height) break;
+      if (height) zombie_y = height + 3
+      spawn_zombie({
+        pos_x: zombie_x,
+        pos_y: zombie_y,
+        pos_z: zombie_z
+      });
+    }
   }
 }
 
@@ -153,3 +158,4 @@ function nearest_player(monster: AvatarSoft) {
   }
   return nearest_player
 }
+
