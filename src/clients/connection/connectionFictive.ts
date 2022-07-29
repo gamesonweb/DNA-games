@@ -8,10 +8,8 @@ import { ConnectionSoft, receiveContent, serverMessages } from "./connectionSoft
 export let zombie_counter = 0;
 export let ws: ConnectionServer;
 
-const port = "8080"
-
 export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictive, SceneFictive>{
-  constructor(scene: SceneFictive) {
+  constructor(scene: SceneFictive, port: string) {
     super("ws://127.0.0.1:" + port, scene)
   }
 
@@ -77,8 +75,8 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
   monster_hit(messageReceived: any): void {
   }
 
-  static setGlobalWebSocket(scene: SceneFictive): void {
-    ws = new ConnectionServer(scene);
+  static setGlobalWebSocket(scene: SceneFictive, port: string): void {
+    ws = new ConnectionServer(scene, port);
   }
 }
 

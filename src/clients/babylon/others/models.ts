@@ -1,4 +1,4 @@
-import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3, VertexData } from "babylonjs";
+import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { scene, sphere1 } from "../main";
 import { SceneClient } from "../scene/sceneClient";
 

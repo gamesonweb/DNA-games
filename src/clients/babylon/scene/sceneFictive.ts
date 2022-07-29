@@ -1,5 +1,5 @@
-import { Engine, GroundMesh, Mesh, SceneLoader, Vector3 } from "babylonjs";
-import 'babylonjs-loaders';
+import { Engine, Mesh, SceneLoader, Vector3 } from "babylonjs";
+// import 'babylonjs-loaders';
 import { SceneSoft } from "./sceneSoft";
 
 export class SceneFictive extends SceneSoft {
@@ -28,7 +28,7 @@ export class SceneFictive extends SceneSoft {
         //     },
         // )
         // ground.checkCollisions = true;
-        let scene = this;
+        // let scene = this;
 
         // ground = MeshBuilder.CreateGroundFromHeightMap(
         //     groundName,
@@ -69,28 +69,44 @@ export class SceneFictive extends SceneSoft {
         //     ws.night_monster_list.set("Tester", new AvatarFictive(scene, "Tester"));
         // });
 
-        SceneLoader.Append("http://127.0.0.1:3000/models/", "antTextureBaked.babylon", scene, function (newMeshes) {
-            // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
-            let mesh = scene.getMeshByName("Landscape") as Mesh;
-            mesh.scaling = new Vector3(100, 100, 100)
-            mesh.checkCollisions = true;
-            mesh.isPickable = true;
-            mesh.position.z -= 8
-            mesh.position.y -= 20
-            mesh.freezeWorldMatrix()
-        }
-        );
+        // SceneLoader.Append("http://127.0.0.1:3000/models/", "antTextureBaked.babylon", scene, function (newMeshes) {
+        //     // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+        //     let mesh = scene.getMeshByName("Landscape") as Mesh;
+        //     mesh.scaling = new Vector3(100, 100, 100)
+        //     mesh.checkCollisions = true;
+        //     mesh.isPickable = true;
+        //     mesh.position.z -= 8
+        //     mesh.position.y -= 20
+        //     mesh.freezeWorldMatrix()
+        // }
+        // );
 
-        SceneLoader.Append("http://127.0.0.1:3000/models/", "colorRampBaked.babylon", scene, function (newMeshes) {
-            // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
-            let mesh = scene.getMeshByName("Landscape") as Mesh;
-            mesh.scaling = new Vector3(100, 100, 100)
-            mesh.checkCollisions = true;
-            mesh.isPickable = true;
-            mesh.position.z += 200
-            mesh.position.y -= 20
-            mesh.freezeWorldMatrix()
+        // SceneLoader.Append("http://127.0.0.1:3000/models/", "colorRampBaked.babylon", scene, function (newMeshes) {
+        //     // let mesh = newMeshes.getMeshByName("Object_2") as Mesh;
+        //     let mesh = scene.getMeshByName("Landscape") as Mesh;
+        //     mesh.scaling = new Vector3(100, 100, 100)
+        //     mesh.checkCollisions = true;
+        //     mesh.isPickable = true;
+        //     mesh.position.z += 200
+        //     mesh.position.y -= 20
+        //     mesh.freezeWorldMatrix()
+        // }
+        // );
+
+        for (const ground of this.groundsData) {
+            this.loadGround("http://127.0.0.1:3000/models/", ground.modelID, ground.meshName, ground.position)
         }
-        );
+    }
+
+    loadGround(path: string, modelID: string, meshName: string, position: Vector3, scaling = 100) {
+        SceneLoader.Append(path, modelID, this, (scene) => {
+            let ground = scene.getMeshByName(meshName) as Mesh;
+            ground.scaling = new Vector3(scaling, scaling, scaling)
+            ground.checkCollisions = true;
+            ground.position = position;
+            ground.freezeWorldMatrix();
+            ground.isPickable = true;
+            this.grounds!.push(ground.name);
+        });
     }
 };

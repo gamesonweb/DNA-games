@@ -1,4 +1,4 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, Ray, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
@@ -8,13 +8,18 @@ export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var water: Mesh;
 export var shadowGenerator: ShadowGenerator | null;
+// export var pos_forest: Vector3
+export var pos_canyon: Vector3
+export var pos_snow: Vector3
+// export var pos_lowPo: Vector3
+export var pos_volcan: Vector3
+export var pos_mossy: Vector3
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
-    heightRay: Ray;
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -31,8 +36,6 @@ export class SceneClient extends SceneSoft {
 
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
-
-        this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 60);
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -66,40 +69,26 @@ export class SceneClient extends SceneSoft {
     }
 
     createGround() {
-        SceneLoader.Append("models/", "antTextureBaked.babylon", this, (scene) => {
-            // let ground = scene.getMeshByName("Object_2") as Mesh;
-            let ground = scene.getMeshByName("Canyon") as Mesh;
-            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
+        for (const ground of this.groundsData) {
+            this.loadGround("models/", ground.modelID, ground.meshName, ground.position)
+        }
+    }
+
+    loadGround(path: string, modelID: string, meshName: string, position: Vector3, scaling = 100) {
+        SceneLoader.Append(path, modelID, this, (scene) => {
+            let ground = scene.getMeshByName(meshName) as Mesh;
+            ground.scaling = new Vector3(scaling, scaling, scaling)
             ground.checkCollisions = true;
-            ground.position.z -= 8
-            ground.position.y -= 20
+            ground.position = position;
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
             this.grounds!.push(ground.name);
 
             this.setUpForGrass();
-            // this.createSea(ground)
             this.waterMaterial!.addToRenderList(ground);
             //TODO Correctly
             setTimeout(() => { this.waterMaterial!.addToRenderList(sphere1!.shape) }, 2000)
-        });
-
-        SceneLoader.Append("models/", "colorRampBaked.babylon", this, (scene) => {
-            // let ground = scene.getMeshByName("Object_2") as Mesh;
-            let ground = scene.getMeshByName("Landscape") as Mesh;
-            // let ground = scene.getMeshByName("Landscape.001") as Mesh;
-            ground.scaling = new Vector3(100, 100, 100)
-            ground.checkCollisions = true;
-            ground.position.z += 200
-            ground.position.y -= 20
-            ground.freezeWorldMatrix();
-            ground.receiveShadows = true;
-            ground.isPickable = true;
-            this.grounds!.push(ground.name);
-            this.waterMaterial!.addToRenderList(ground);
-            this.setUpForGrass();
         });
     }
 
@@ -136,8 +125,8 @@ export class SceneClient extends SceneSoft {
 
     createSea(): Mesh {
         //water ground
-        this.water = MeshBuilder.CreateGround("waterMesh", { height: 512, width: 512, subdivisions: 32 }, this);
-        this.water.position.y = -20;
+        this.water = MeshBuilder.CreateGround("waterMesh", { height: 2000, width: 2000, subdivisions: 32 }, this);
+        this.water.position.y = -24;
         this.water.isPickable = false;
 
         this.waterMaterial = new WaterMaterial("waterMaterial", this, new Vector2(256, 256));
@@ -190,20 +179,5 @@ export class SceneClient extends SceneSoft {
                 }
             }
         }
-    }
-
-    getHeightAtPoint(x: number, z: number): number | undefined {
-        this.heightRay.origin = new Vector3(x, 20, z)
-
-        var hits = this.multiPickWithRay(this.heightRay, (m) => { return m.isPickable });
-        var filtered = hits?.filter(e => e.pickedMesh && this.grounds!.includes(e.pickedMesh.name))
-
-        if (filtered !== undefined && filtered.length > 0) {
-            var hit = filtered[filtered.length - 1]
-            if (hit !== null && hit.pickedPoint) {
-                return hit.pickedPoint.y
-            }
-        }
-        return undefined;
     }
 };

@@ -11,6 +11,7 @@ export abstract class Avatar extends AvatarSoft {
     super(scene, avatar_username, shape, p);
 
     let plane = createLabel(this.name, this, scene);
+    plane.isPickable = false;
     this.shape.addChild(plane)
 
     shadowGenerator?.addShadowCaster(this.shape)

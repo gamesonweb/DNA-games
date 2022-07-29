@@ -55,7 +55,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     var filtered = hits?.filter(e => e.pickedMesh?.name !== this.shape?.name)
     // console.log("filtered: ", filtered);
-    console.log("filtered: ");
+    // console.log("filtered: ");
 
     //if object detected but to high
     if (filtered !== undefined && filtered.length > 0) {

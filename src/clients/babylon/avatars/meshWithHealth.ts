@@ -84,6 +84,7 @@ class HealthBar {
     healthBarContainer.parent = parent;
     healthBarContainer.material = healthBarContainerMaterial;
     healthBarContainer.billboardMode = Mesh.BILLBOARDMODE_Y
+    healthBarContainer.isPickable = false
 
     // The healthBar
     var healthBar = MeshBuilder.CreatePlane(parent.name + "hb1", { width, height }, scene);
@@ -93,6 +94,7 @@ class HealthBar {
     healthBarMaterial.emissiveColor = HealthBar.colorHealthHigh;
     healthBar.parent = healthBarContainer;
     healthBar.material = healthBarMaterial;
+    healthBar.isPickable = false;
 
     this.healthBar = healthBar;
     this.healthBarMaterial = healthBarMaterial

@@ -46,7 +46,7 @@
     "@babylonjs/gui": "^5.10.0",
     "@types/downloadjs": "^1.4.3",
     "@types/react-dom": "^18.0.5",
-    "babylonjs": "^5.16.0",
+    "babylonjs": "^5.17.1",
     "babylonjs-loaders": "^5.12.1"
   }
 }

@@ -1,6 +1,7 @@
-import { Axis } from "babylonjs";
+import { Axis, FollowCamera } from "babylonjs";
 import { chatRef, input } from "../../reactComponents/chat";
-import { canvas, sphere1 } from "../main";
+import { canvas, scene, sphere1 } from "../main";
+import { teleport } from "../others/tools";
 
 export type InputStates = {
     jump: boolean,
@@ -89,6 +90,45 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
         if (sphere1) sphere1.shape.position.y += 10
     }
 
+    //tp pos_canyon
+    else if (evt.code === "Digit1") {
+        if (scene.groundsData[0] && sphere1) {
+            teleport(sphere1, scene.groundsData[0].position)
+        }
+    }
+    //tp pos_snow
+    else if (evt.code === "Digit2") {
+        if (scene.groundsData[1] && sphere1) {
+            teleport(sphere1, scene.groundsData[1].position)
+        }
+    }
+    //tp pos_volcan
+    else if (evt.code === "Digit3") {
+        if (scene.groundsData[2] && sphere1) {
+            teleport(sphere1, scene.groundsData[2].position)
+        }
+    }
+    //tp pos_volcanc
+    else if (evt.code === "Digit4") {
+        if (scene.groundsData[3] && sphere1) {
+            teleport(sphere1, scene.groundsData[3].position)
+        }
+    }
+    //tp forest
+    // else if (evt.code === "Numpad5") {
+    //     if (pos_forest && sphere1) {
+    //         sphere1.shape.position = pos_forest
+    //         sphere1.shape.position.y += 20
+    //     }
+    // }
+    //tp pos_lowPo
+    // else if (evt.code === "Numpad6") {
+    //     if (pos_lowPo && sphere1) {
+    //         sphere1.shape.position = pos_lowPo
+    //         sphere1.shape.position.y += 20
+    //     }
+    // }
+
     //rotation
     else if (evt.code === "ArrowRight") {
         inputStates.rotateRight = isPressed;
@@ -123,6 +163,23 @@ export function pointerLockAndMouseMove() {
             if (evt.movementX < 0) {
                 sphere1.shape.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
                 sphere1.didSomething = true;
+            }
+        }
+        if (scene.activeCamera) {
+            if (evt.movementY < 0) {
+                var camera = scene.activeCamera as FollowCamera;
+                // var bottomRay = new Ray(camera.position, new Vector3(0, -1, 0), 2 + Math.sqrt(-evt.movementY))
+                // var bottomHit = scene.pickWithRay(bottomRay, cameraBackCollision)
+                // if (!bottomHit?.pickedMesh) {
+                camera.heightOffset -= Math.sqrt(-evt.movementY) / 20
+                camera.heightOffset = Math.max(-1, camera.heightOffset)
+                // }
+            }
+            if (evt.movementY > 0) {
+                var camera = scene.activeCamera as FollowCamera;
+                camera.heightOffset += Math.sqrt(evt.movementY) / 20
+                camera.heightOffset = Math.min(8, camera.heightOffset)
+
             }
         }
     });
