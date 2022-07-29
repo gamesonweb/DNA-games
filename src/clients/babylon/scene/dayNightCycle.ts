@@ -299,32 +299,32 @@ function createTideAnimation() {
 
     keys.push({
         frame: 0,
-        value: -15
+        value: -20
     });
 
     keys.push({
         frame: 500 * ratio,
-        value: -16
+        value: -21
     });
 
     keys.push({
         frame: 1100 * ratio,
-        value: -20
+        value: -24
     });
 
     keys.push({
         frame: 1700 * ratio,
-        value: -20
+        value: -24
     });
 
     keys.push({
         frame: 2300 * ratio,
-        value: -17
+        value: -22
     });
 
     keys.push({
         frame: 2400 * ratio,
-        value: -15
+        value: -20
     });
 
     //Adding keys to the animation object
