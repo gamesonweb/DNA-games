@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "heroku-postbuild": "node src/switchServerClient.js t s src/index.tsx && npm run build && node src/switchServerClient.js f s",
+    "heroku-postbuild": "",
     "eject": "react-scripts eject",
     "server": ".\\target\\debug\\tokyo_server.exe",
     "buildc": "node src/switchServerClient.js t c src/index.tsx && npm run build && node src/switchServerClient.js f c",
