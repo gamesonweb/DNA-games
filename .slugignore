@@ -1,3 +1,5 @@
 /build-client/*
 /public/*
 /src/*
+Cargo.toml
+Cargo.lock
