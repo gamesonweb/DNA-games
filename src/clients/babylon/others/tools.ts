@@ -43,7 +43,7 @@ export function isVector3Equal(v1: Vector3, v2: Vector3) {
 export var createLabel = function (text: string, mesh: Avatar, scene: Scene) {
     var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);
     plane.billboardMode = Mesh.BILLBOARDMODE_Y;
-    plane.position.y = 1.5;
+    plane.position.y = 2.5;
 
     if (windowExists()) {
         var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);
@@ -136,19 +136,24 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
 
     if (hit) {
         if (hit.pickedMesh !== sphere1.shape) {
-            if (hit.pickedPoint) followCam.radius = Math.max(2, distance(sphere1.shape.position, hit.pickedPoint) - 4)
+            if (hit.pickedPoint) followCam.radius = Math.max(2, distance(sphere1.shape.position, hit.pickedPoint) - 4);
         } else {
             var backRay = new Ray(sphere1.shape.position, followCam.getDirection(Axis.Z).negate().add(new Vector3(0, -0.5, 0)), Math.min(10, followCam.radius + 1));
             var backHit = scene.pickWithRay(backRay, cameraBackCollision)
             // console.log("BACKRAY HIT: ", backHit?.pickedMesh?.name);
 
             if (followCam.radius < 10) {
-                if (!backHit?.pickedPoint) followCam.radius += 0.5
+                if (!backHit?.pickedPoint) followCam.radius += 0.5;
             }
         }
     }
-    if (followCam.radius > 10) followCam.radius = 10
-    sphere1.shape.visibility = Math.min(followCam.radius / 4, 1)
+    if (followCam.radius > 10) followCam.radius = 10;
+    // sphere1.shape.visibility = Math.min(followCam.radius / 4, 1);
+
+
+    sphere1.model!.getChildMeshes().forEach(m => {
+        m.visibility = Math.min(followCam.radius / 4, 1);
+    })
 }
 
 function cameraCollision(mesh: AbstractMesh) {

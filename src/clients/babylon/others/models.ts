@@ -143,6 +143,7 @@ export class ModelEnum {
 
                 if (sphere1) {
                     sphere1.shape.isVisible = false;
+                    sphere1.model = modelSphere1;
                 }
                 break;
 

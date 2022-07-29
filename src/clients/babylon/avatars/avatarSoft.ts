@@ -15,6 +15,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
   gravity_acceleration: number;
   canHit: boolean;
 
+  model: Mesh | undefined;
+
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
     super(avatar_username, scene, shape, p?.health);
