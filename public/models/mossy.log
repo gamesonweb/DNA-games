@@ -18,15 +18,15 @@ Exporter version: 2.93.5, Blender version: 3.1.2
 				texture type:  bumpTexture, mapped using: "UVMap"
 			processing texture mossyTextures
 				texture type:  diffuseTexture, mapped using: "UVMap"
-		num positions      :  3364
-		num normals        :  3364
+		num positions      :  3352
+		num normals        :  3352
 		num tangents       :  0
-		num uvs            :  6728
+		num uvs            :  6704
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  6714
+		num triangles      :  6690
 ========= Writing of JSON file started =========
 	writing mesh:  Mossy
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.537 secs
+elapsed time:  0 min, 0.6806 secs
