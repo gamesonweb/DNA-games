@@ -5,4 +5,4 @@ COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install --production
 
 COPY . .
-CMD ["./target/release/tokyo_server"]
+CMD target\release\tokyo_server.exe
