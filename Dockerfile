@@ -1,4 +1,4 @@
-FROM risingstack/alpine:3.3-v4.2.6-1.1.3
+FROM sitespeedio/node:ubuntu-20.04-nodejs-12.14.1
 ENV NODE_ENV=production
 
 COPY ["package.json", "package-lock.json*", "./"]
