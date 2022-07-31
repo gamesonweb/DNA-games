@@ -17,5 +17,7 @@ Terrain
 Camera
 -caméra s'enfonce dans les textures, utilisation d'un système de laser
 
+Déploiement
+-github pages + Heroku, problématique Heroku
 
 
