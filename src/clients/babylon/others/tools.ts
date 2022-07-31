@@ -1,5 +1,7 @@
 import { AbstractMesh, Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, RayHelper, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
+import { wsClient } from "../../connection/connectionClient";
+import { ws } from "../../connection/connectionFictive";
 import { windowExists } from "../../reactComponents/tools";
 import { Avatar } from "../avatars/avatarHeavy";
 import { AvatarSoft } from "../avatars/avatarSoft";
@@ -88,7 +90,7 @@ export function createWall(scene: Scene) {
 }
 
 export function createBasicShape(avatar_username: String, scene: Scene) {
-    let model = MeshBuilder.CreateCylinder(avatar_username + "sp1", { diameter: 1, height: 2 }, scene);
+    let model = MeshBuilder.CreateCylinder(avatar_username.toString(), { diameter: 1, height: 2 }, scene);
     // let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     var myMaterial = new StandardMaterial("myMaterial", scene);
@@ -103,32 +105,6 @@ export function createBasicShape(avatar_username: String, scene: Scene) {
 
 export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
     let followCam = scene.activeCamera as FollowCamera
-
-    //VERSION WITH DO WHILE
-
-    // var hit: any
-    // var iter = 0
-    // do {
-    //     iter++
-    //     var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(2)).subtract(new Vector3(0, 1, 0)), followCam.getDirection(Axis.Z), 15);
-    //     // var rayHelper = new RayHelper(ray);
-    //     // rayHelper.show(scene); 
-    //     hit = scene.pickWithRay(ray);
-    //     // console.log("picked mesh with Camera's ray: ", hit);
-    //     if (hit.pickedMesh) {
-    //         if (hit.pickedMesh !== sphere1.shape) {
-    //             if (followCam.radius >= 0.2) followCam.radius -= 0.2
-    //         } else {
-    //             if (followCam.radius < 10) {
-    //                 var backRay = new Ray(followCam.position.subtract(new Vector3(0, 1, 0)), followCam.getDirection(Axis.Z).negate(), 1);
-    //                 var backHit = scene.pickWithRay(backRay)
-    //                 if (!backHit?.pickedMesh || backHit.pickedMesh == sphere1.shape) followCam.radius += 0.2
-    //             }
-    //         }
-    //     } else { followCam.radius -= 0.2 }
-    // } while (hit.pickedMesh !== sphere1.shape && iter < 30)
-
-    //VERSION WITH PICKEDPOINT
 
     var ray = new Ray(followCam.position.subtract(followCam.getDirection(Axis.Z).scale(2)), followCam.getDirection(Axis.Z), 15);
     var hit = scene.pickWithRay(ray, cameraCollision);
@@ -170,4 +146,11 @@ export function teleport(mesh: AvatarSoft, position: Vector3, offsetY = 5) {
         mesh.shape.position = new Vector3(position.x, heightGround + offsetY, position.z)
         mesh.setRayPosition()
     } else { console.log("t'as pas de sol là bas"); }
+}
+
+export function getAvatarByShape(shape: AbstractMesh, lists = [wsClient.night_monster_list, wsClient.player_list]) {
+    for (const list of lists) {
+        var avatar = list.get(shape.name);
+        if (avatar) return avatar;
+    }
 }

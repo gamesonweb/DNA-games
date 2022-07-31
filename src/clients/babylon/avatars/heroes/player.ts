@@ -16,7 +16,7 @@ export class Player extends Avatar {
         let shape = createShape(avatar_username, scene);
         super(scene, avatar_username, shape, p)
         this.bulletList = [];
-        this.bulletDelay = p?.bulletDelay || 500;
+        this.bulletDelay = p?.bulletDelay || 1000;
     }
 
     take_damage(source: Mesh, amount: number) {

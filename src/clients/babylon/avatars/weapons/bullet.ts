@@ -2,7 +2,7 @@ import { Axis, Mesh, MeshBuilder, Vector3 } from "babylonjs";
 import { meshes, wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../main";
-import { distance, removeFromList } from "../../others/tools";
+import { distance, getAvatarByShape, removeFromList } from "../../others/tools";
 import { Player } from "../heroes/player";
 import { Monster } from "../monsters/monster";
 
@@ -25,21 +25,19 @@ export class Bullet extends Mesh {
     this.angle = myShooter.shape.getDirection(Axis.Z)
     this.position = this.myShooter.shape.position.clone();
     this.originalPositionBullet = this.position.clone()
-    this.speedCoeff = 0.05;
+    this.speedCoeff = 0.10;
     this.rotation = this.angle
     meshes.push(this)
     this.position.x = this.position.x + this.angle.x * 3;
     this.position.z = this.position.z + this.angle.z * 3;
     this.checkCollisions = true;
-    this.damage = p?.damage || 10;
+    this.damage = p?.damage || 40;
     Bullet.id++;
 
     this.onCollide = e => {
-      if (e?.parent instanceof Monster) {
-        let monster = e.parent as Monster;
-        if (this.myShooter.name === sphere1!.name) {
-          // console.log(wsClient.night_monster_list);
-
+      if (e) {
+        var monster = getAvatarByShape(e, [wsClient.night_monster_list])
+        if (monster && this.myShooter.name === sphere1!.name) {
           wsClient.send(
             JSON.stringify({
               route: serverMessages.DAMAGE_MONSTER,
