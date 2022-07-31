@@ -27,22 +27,27 @@ export abstract class SceneSoft extends Scene {
       {
         modelID: "Desert.babylon",
         meshName: "Desert",
-        position: new Vector3(0, offset, 0)
+        position: new Vector3(400, offset, 100)
       },
       {
         modelID: "mossy.babylon",
         meshName: "Mossy",
-        position: new Vector3(400, offset, 100)
+        position: new Vector3(0, offset, 0)
       },
       {
         modelID: "snowMountain.babylon",
         meshName: "Snow",
-        position: new Vector3(400, offset, 280)
+        position: new Vector3(0, offset, -220)
       },
       {
         modelID: "volcan.babylon",
         meshName: "Volcan",
-        position: new Vector3(-100, offset, 500)
+        position: new Vector3(200, offset, 450)
+      },
+      {
+        modelID: "Sand.babylon",
+        meshName: "Sable",
+        position: new Vector3(200, offset - 7.5, 150)
       },
     ]
 
