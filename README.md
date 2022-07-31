@@ -18,7 +18,7 @@ VENTURELLI Antoine | FISSORE Davide | BERNIGAUD Noé
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://zupimages.net/up/22/19/39hp.png" alt="Venturelli Antoine" width="200"/> | <img src="https://zupimages.net/up/22/19/di99.png" alt="Architecture Dossiers" width="200"/> | <img src="https://zupimages.net/up/22/19/dak6.png" alt="BERNIGAUD Noé" width="200"/>
 
-We are three students at the University of Côte d'Azur. Together, we form <b>*D.N.A. Production*</b>, a team formed to develop this project from start to end.
+We are three students at the University of Côte d'Azur. Together, we form <b>*D.N.A. Production*</b>.
   
 <ul>
   <li>VENTURELLI Antoine was our models, animations, particules effects, and textures specialist.</li>
