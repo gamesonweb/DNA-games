@@ -33,7 +33,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
   }
   damage_monster(messageReceived: any): void {
   }
-  fire_bullet(messageReceived: any): void {
+  player_hit(messageReceived: any): void {
   }
   position(messageReceived: any): void {
     let messageContent: receiveContent = JSON.parse(messageReceived.content);

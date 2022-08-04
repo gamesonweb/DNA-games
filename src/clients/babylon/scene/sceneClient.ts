@@ -1,5 +1,6 @@
 import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
+import { Bullet } from "../avatars/weapons/bullet";
 import { engine, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
@@ -20,6 +21,7 @@ export class SceneClient extends SceneSoft {
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
+    bulletList: Bullet[];
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -42,6 +44,8 @@ export class SceneClient extends SceneSoft {
                 sphere1.isJumping ? sphere1.applyJump() : sphere1.applyGravity();
             }
         }
+
+        this.bulletList = []
     }
 
     /*configureAssetManager() {

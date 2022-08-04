@@ -14,10 +14,10 @@ export const serverMessages = {
     KILL_ALL_NIGHT_MONSTER: "kill_all_night_monster",
     MOVE_MONSTER: "move_monster",
     DAMAGE_MONSTER: "damage_monster",
-    FIRE_BULLET: "fireBullet",
     HOUR: "hour",
     SPAWN_MONSTER: "spawn_monster",
     MONSTER_HIT: "monster_hit",
+    PLAYER_HIT: "player_hit",
     MONSTER_POSITION_LIST: "position_monster_list"
 }
 
@@ -104,6 +104,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                     break;
                 }
 
+                //avatar_hit: the avatar fires a hit
+                case serverMessages.PLAYER_HIT: {
+                    this.player_hit(messageReceived)
+                    break;
+                }
+
                 //monster_hit: the monster try to hit players
                 case serverMessages.MONSTER_HIT: {
                     this.monster_hit(messageReceived)
@@ -123,10 +129,10 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 }
 
                 //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
-                case serverMessages.FIRE_BULLET: {
-                    this.fire_bullet(messageReceived)
-                    break;
-                }
+                // case serverMessages.ATTACK_0: {
+                //     this.attack_0(messageReceived)
+                //     break;
+                // }
 
                 case serverMessages.HOUR: {
                     this.hour(messageReceived)
@@ -202,7 +208,7 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
      * route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
      * @param messageReceived 
      */
-    abstract fire_bullet(messageReceived: any): void;
+    // abstract attack_0(messageReceived: any): void;
 
     /**
      * position: add the player if they aren't in our list yet, move the avatar to the input position
@@ -219,6 +225,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
 
     abstract hour(messageReceived: any): void;
     abstract spawn_monster(messageReceived: any): void;
+
+    /**
+     * player_hit: the player fire corresponding hit
+     * @param messageReceived 
+     */
+    abstract player_hit(messageReceived: any): void;
 
     /**
      * monster_hit: the monster try to hit players

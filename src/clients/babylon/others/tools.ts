@@ -154,3 +154,11 @@ export function getAvatarByShape(shape: AbstractMesh, lists = [wsClient.night_mo
         if (avatar) return avatar;
     }
 }
+
+export function getAvatarByName(name: string, lists = [wsClient.night_monster_list, wsClient.player_list]) {
+    var avatar: AvatarSoft | undefined
+    for (const list of lists) {
+        avatar = list.get(name);
+        if (avatar) return avatar;
+    }
+}

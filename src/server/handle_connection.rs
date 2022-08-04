@@ -95,7 +95,7 @@ pub async fn handle_connection(
                                 .unwrap()
                                 .push(Message::Text(return_message));
                         }
-                        "fireBullet" => {
+                        "player_hit" => {
                             shared_messages.lock().unwrap().push(msg.clone());
                         }
                         "ping" => {

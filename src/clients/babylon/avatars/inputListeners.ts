@@ -1,9 +1,12 @@
-import { Axis, FollowCamera } from "babylonjs";
+import { Axis, FollowCamera, Quaternion } from "babylonjs";
+import { wsClient } from "../../connection/connectionClient";
+import { serverMessages } from "../../connection/connectionSoft";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
 import { teleport } from "../others/tools";
+import { Player } from "./heroes/player";
 
-export type InputStates = {
+type InputStates = {
     jump: boolean,
     goForeward: boolean
     goLeft: boolean,
@@ -11,7 +14,7 @@ export type InputStates = {
     goRight: boolean,
     rotateRight: boolean,
     rotateLeft: boolean,
-    attack: boolean
+    attack_0: boolean
 }
 
 let createInputStates = (): InputStates => {
@@ -23,7 +26,7 @@ let createInputStates = (): InputStates => {
         goRight: false,
         rotateRight: false,
         rotateLeft: false,
-        attack: false
+        attack_0: false
     }
 }
 
@@ -142,7 +145,7 @@ function mouseListener(evt: MouseEvent, isPressed: boolean) {
     if ((input === document.activeElement) && isPressed) { return }
     switch (evt.which) {
         case 1:
-            inputStates.attack = isPressed;
+            inputStates.attack_0 = isPressed;
             break;
         default:
             break;
@@ -194,5 +197,69 @@ export function pointerLockAndMouseMove() {
 let keyPressListener = (evt: KeyboardEvent) => {
     if (evt.code === "KeyC") {
         chatRef.current!.toggleChat()
+    }
+}
+
+export function inputEffects(player: Player) {
+
+    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack_0)
+        player.didSomething = true;
+
+    let direction = player.shape.getDirection(Axis.Z)
+
+    let coeff_diagonal = 1
+    if ((inputStates.goForeward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
+
+    //forward/backward movement
+    if (inputStates.goForeward) {
+        player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+    } else if (inputStates.goBackward) {
+        player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
+    }
+
+    //left/right movement
+    if (inputStates.goLeft) {
+        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+        player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 1.5));
+    } else if (inputStates.goRight) {
+        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+        player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.5));
+    }
+
+    //player rotation
+    if (inputStates.rotateRight) {
+        player.shape.rotate(Axis.Y, +0.05)
+    } else if (inputStates.rotateLeft) {
+        player.shape.rotate(Axis.Y, -0.05)
+    }
+
+    //player's attack_0
+    if (inputStates.attack_0) {
+        // player fires the correspondng hit (not onlyDisplay)
+        player.hit(0)
+        // we send it so server
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.PLAYER_HIT,
+                content: JSON.stringify({
+                    username: player.name,
+                    hitmode: 0
+                })
+            })
+        )
+    }
+
+    //jump
+    if (inputStates.jump) {
+        if (player.canJump) {
+            player.isJumping = true;
+            player.canJump = false
+            setTimeout(() => {
+                player.isJumping = false
+            }, player.timeJumping)
+            // setTimeout(() => {
+            //   this.canJump = true
+            // }, this.timeJumping)
+        }
     }
 }

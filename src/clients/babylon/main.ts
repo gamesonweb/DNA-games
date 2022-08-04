@@ -4,7 +4,7 @@ import { displayLoadingScreen } from "../reactComponents/loadingScreen";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/heroes/player";
 
-import { inializeInputListeners } from "./avatars/inputListeners";
+import { inializeInputListeners, inputEffects } from "./avatars/inputListeners";
 import { adjustCameraPosition } from "./others/tools";
 import { SceneClient } from "./scene/sceneClient";
 
@@ -19,8 +19,8 @@ export var startRenderLoop = function (engine: Engine) {
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
-      wsClient.player_list.forEach(e => e.updateBulletPosition())
-      sphere1?.move();
+      scene.bulletList.forEach(e => e.update())
+      if (sphere1) inputEffects(sphere1)
       if (sphere1) adjustCameraPosition(scene, sphere1)
       // console.log(engine.getFps().toFixed() + " fps");
     }

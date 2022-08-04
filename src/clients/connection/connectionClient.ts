@@ -1,10 +1,12 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
+import { Mage } from "../babylon/avatars/heroes/classes/mage";
+import { Warrior } from "../babylon/avatars/heroes/classes/warrior";
 import { Player } from "../babylon/avatars/heroes/player";
 import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
-import { getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
+import { getAvatarByName, getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef, initChat } from "../reactComponents/chat";
 import { askUsername } from "../reactComponents/login";
@@ -46,7 +48,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     login(messageReceived: any): void {
-        var sphere = new Player(scene, messageReceived.content);
+        var sphere = new Mage(scene, messageReceived.content);
         var sender_name = messageReceived.content;
         this.player_list.set(sender_name, sphere);
         if (sender_name === username) {
@@ -81,14 +83,15 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     damage_monster(messageReceived: any): void {
     }
 
-    fire_bullet(messageReceived: any): void {
-        if (messageReceived.content !== username) {
-            let firing_player = this.player_list.get(messageReceived.content)
-            if (firing_player) {
-                firing_player.addBullet(true);
-            }
-        }
-    }
+    // hit_0(messageReceived: any): void {
+    //     if (messageReceived.content !== username) {
+    //         let firing_player = this.player_list.get(messageReceived.content)
+    //         if (firing_player) {
+    //             // firing_player.addBullet(true);
+    //             firing_player.hit(0, true)
+    //         }
+    //     }
+    // }
 
     position(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
@@ -102,14 +105,16 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     spawn_monster(messageReceived: any): void {
     }
 
+    player_hit(messageReceived: any): void {
+        let messageContent = JSON.parse(messageReceived.content);
+        let avatar = wsClient.player_list.get(messageContent.username)
+        if (avatar) avatar.hit(messageContent.hitmode);
+    }
+
     monster_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
-        // console.log("monster hits: " + messageContent.username + ", hitmode: " + messageContent.hitmode);
-        let monster = this.night_monster_list.get(messageContent.username);
-        setTimeout(() => {
-            if (monster) monster.hit(messageContent.hitmode);
-            else { }//console.log("monster " + messageContent.username + "tried to hit but doesn't exist");
-        }, 100)
+        let avatar = wsClient.night_monster_list.get(messageContent.username)
+        if (avatar) avatar.hit(messageContent.hitmode);
     }
 
     static setGlobalWebSocket(): void {
@@ -214,7 +219,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
                         currentHealth: data.health
                     }
                 })
-                : new Player(scene, data.username, {
+                : new Mage(scene, data.username, {
                     health: {
                         maxHealth: data.maxHealth,
                         currentHealth: data.health

@@ -4,7 +4,6 @@ import { serverMessages } from "../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../main";
 import { distance, getAvatarByShape, removeFromList } from "../../others/tools";
 import { Player } from "../heroes/player";
-import { Monster } from "../monsters/monster";
 
 export class Bullet extends Mesh {
   myShooter: Player;
@@ -35,9 +34,9 @@ export class Bullet extends Mesh {
     Bullet.id++;
 
     this.onCollide = e => {
-      if (e) {
+      if (e && !this.displayOnly) {
         var monster = getAvatarByShape(e, [wsClient.night_monster_list])
-        if (monster && this.myShooter.name === sphere1!.name) {
+        if (monster) {
           wsClient.send(
             JSON.stringify({
               route: serverMessages.DAMAGE_MONSTER,
@@ -60,16 +59,14 @@ export class Bullet extends Mesh {
   update() {
     if (this.speedCoeff <= 0.02) this.dispose();
     this.moveWithCollisions(this.angle.scale(this.speedCoeff))
-    // this.position.x = this.position.x + this.angle.x * this.speedCoeff;
-    // this.position.z = this.position.z + this.angle.z * this.speedCoeff;
     if (distance(this.position, this.originalPositionBullet) > 15) {
       this.dispose()
     }
   }
 
   dispose(): void {
-    super.dispose()
-    removeFromList(this, this.myShooter.bulletList)
+    removeFromList(this, scene.bulletList)
     removeFromList(this, meshes)
+    super.dispose()
   }
 }
