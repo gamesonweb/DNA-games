@@ -49,8 +49,9 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
 
   hour(messageReceived: any): void {
     let hour = messageReceived.content;
+
     //tue les monstres de nuit quand le jour se lève
-    if (hour === 8) {
+    if (hour == 8) {
       for (const value of this.night_monster_list.values()) {
         value.dispose();
       }
@@ -62,7 +63,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
       }
       ))
     }
-    if (hour === 22) {
+    if (hour == 22) {
       generate_zombie_wave()
     }
     // console.log(hour);

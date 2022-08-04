@@ -109,7 +109,10 @@ function zombie_apply_AI(monster: AvatarSoft) {
 }
 
 export function generate_zombie_wave() {
+  console.log(ws.player_list.values());
+
   for (var player of ws.player_list.values()) {
+
     for (var i = 0; i < 3 + Math.random() * 3; i++) {
       var zombie_x = Math.random() > 0.5 ? player.shape.position.x + 5 + Math.random() * 10 : player.shape.position.x - 5 - Math.random() * 10
       var zombie_z = Math.random() > 0.5 ? player.shape.position.z + 5 + Math.random() * 10 : player.shape.position.z - 5 - Math.random() * 10
