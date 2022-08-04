@@ -22,7 +22,9 @@ pub async fn game_events(
         if hour >= 24.0 {
             hour = 0.0;
         }
-        println!("hour: {}", hour);
+        if hour % 1.0 == 0.0 {
+            println!("hour: {}", hour);
+        }
 
         //build the vector of all positions messages in the monsters' position map
         let mut list_pos_monster = vec![];
