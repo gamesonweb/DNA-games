@@ -80,4 +80,6 @@ export abstract class Avatar extends AvatarSoft {
     console.log("ERROR: tried to call non-implemented attack_3 on avatar ", this);
   }
 
+  abstract take_damage(source: Mesh, amount: number): void
+
 }

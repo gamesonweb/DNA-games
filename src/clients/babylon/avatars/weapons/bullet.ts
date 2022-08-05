@@ -37,11 +37,7 @@ export class Bullet extends Mesh {
       if (e && !this.displayOnly) {
         var monster = getAvatarByShape(e, [wsClient.night_monster_list])
         if (monster) {
-          wsClient.send(
-            JSON.stringify({
-              route: serverMessages.DAMAGE_MONSTER,
-              content: JSON.stringify({ username: monster.name, damage: this.damage })
-            }))
+          monster.take_damage(this, this.damage)
         }
       }
       this.dispose()

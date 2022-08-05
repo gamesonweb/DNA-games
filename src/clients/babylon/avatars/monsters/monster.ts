@@ -1,7 +1,9 @@
-import { Axis, Scene } from "babylonjs";
+import { Axis, Mesh, Scene } from "babylonjs";
+import { wsClient } from "../../../connection/connectionClient";
+import { serverMessages } from "../../../connection/connectionSoft";
 import { sphere1 } from "../../main";
 import { ModelEnum } from "../../others/models";
-import { createBasicShape, distance, isInHitbox } from "../../others/tools";
+import { createBasicShape, isInCone } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 import { Health } from "../meshWithHealth";
 
@@ -11,6 +13,14 @@ export class Monster extends Avatar {
         let shape = createBasicShape(avatar_username, scene)
         super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), p)
         this.shape.name = this.name
+    }
+
+    take_damage(source: Mesh, amount: number) {
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.DAMAGE_MONSTER,
+                content: JSON.stringify({ username: this.name, damage: amount })
+            }))
     }
 
     //The monster hit in front of him. The hit is represented by a hitbox (an invisible mesh), which damage the player if they interesect
@@ -48,7 +58,7 @@ export class Monster extends Avatar {
         // console.log("zombie uses attack_0");
 
 
-        if (isInHitbox(sphere1?.shape.position!, this.shape.position, 2, this.shape.getDirection(Axis.Z), 1, Math.PI / 4)) {
+        if (isInCone(sphere1?.shape.position!, this.shape.position, 2, this.shape.getDirection(Axis.Z), 1, Math.PI / 4)) {
             // console.log("Successful hit");
             sphere1?.take_damage(this.shape, 10);
         }

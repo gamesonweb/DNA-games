@@ -163,7 +163,7 @@ export function getAvatarByName(name: string, lists = [wsClient.night_monster_li
     }
 }
 
-export function isInHitbox(positionTarget: Vector3, centerHitbox: Vector3, rayon: number, direction: Vector3, hauteur: number, angle: number, isRectangle = false) {
+export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: number, direction: Vector3, hauteur: number, angle: number) {
     if (distance(positionTarget, centerHitbox, true) > rayon) return false;
     // console.log("distance validée");
 

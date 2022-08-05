@@ -50,7 +50,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     login(messageReceived: any): void {
         var sender_name = messageReceived.content;
         if (sender_name === username) {
-            var sphere = new Mage(scene, messageReceived.content);
+            var sphere = new Warrior(scene, messageReceived.content);
             this.player_list.set(sender_name, sphere);
             set_my_sphere();
             setPositionUpdateSender()
