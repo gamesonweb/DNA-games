@@ -9,9 +9,9 @@ import { Health } from "../meshWithHealth";
 
 export class Monster extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
+    constructor(scene: Scene, avatar_username: string, health = 100, speed = 0.2) {
         let shape = createBasicShape(avatar_username, scene)
-        super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), p)
+        super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), health, speed)
         this.shape.name = this.name
     }
 

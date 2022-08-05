@@ -1,12 +1,11 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
 import { Mage } from "../babylon/avatars/heroes/classes/mage";
-import { Warrior } from "../babylon/avatars/heroes/classes/warrior";
 import { Player } from "../babylon/avatars/heroes/player";
 import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
-import { getAvatarByName, getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
+import { getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef, initChat } from "../reactComponents/chat";
 import { askUsername } from "../reactComponents/login";
@@ -108,7 +107,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     player_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
         let avatar = wsClient.player_list.get(messageContent.username)
-        if (avatar) avatar.hit(messageContent.hitmode);
+        if (avatar) avatar.hit(messageContent.hitmode, true);
     }
 
     monster_hit(messageReceived: any): void {
@@ -218,18 +217,8 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         list.set(
             data.username,
             isMonster ?
-                new Monster(scene, data.username, {
-                    health: {
-                        maxHealth: data.maxHealth,
-                        currentHealth: data.health
-                    }
-                })
-                : new Warrior(scene, data.username, {
-                    health: {
-                        maxHealth: data.maxHealth,
-                        currentHealth: data.health
-                    }
-                }));
+                new Monster(scene, data.username)
+                : new Mage(scene, data.username));
         avatar_to_update = list.get(data.username);
         if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }

@@ -131,7 +131,7 @@ export function generate_zombie_wave() {
 
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let name = "zombie" + zombie_counter
-  let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene));
+  let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene), 100);
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.night_monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);
