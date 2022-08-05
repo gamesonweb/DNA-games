@@ -32,7 +32,6 @@ export type position = { pos_x: number, pos_y: number, pos_z: number, }
 export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft, R extends Scene> extends WebSocket {
     player_list: Map<string, T>
     night_monster_list: Map<string, S>
-    username: string;
     scene?: R;
 
     constructor(url: string, scene?: R) {
@@ -41,7 +40,6 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
         this.onerror = this.onError;
         this.player_list = new Map<string, T>();
         this.night_monster_list = new Map<string, S>();
-        this.username = "";
         this.scene = scene;
     }
 

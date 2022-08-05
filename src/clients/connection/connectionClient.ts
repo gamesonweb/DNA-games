@@ -39,7 +39,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     set_username(messageReceived: any): void {
         console.log("USERNAME UPDATED FROM " + username + " TO " + messageReceived.content);
-        this.username = messageReceived.content;
+        username = messageReceived.content;
     }
 
     ping(): void {
@@ -48,10 +48,10 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     login(messageReceived: any): void {
-        var sphere = new Warrior(scene, messageReceived.content);
         var sender_name = messageReceived.content;
-        this.player_list.set(sender_name, sphere);
         if (sender_name === username) {
+            var sphere = new Mage(scene, messageReceived.content);
+            this.player_list.set(sender_name, sphere);
             set_my_sphere();
             setPositionUpdateSender()
         }
@@ -61,7 +61,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     message(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
-        if (messageContent.username !== this.username)
+        if (messageContent.username !== username)
             chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
     }
 
@@ -220,7 +220,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
                         currentHealth: data.health
                     }
                 })
-                : new Mage(scene, data.username, {
+                : new Warrior(scene, data.username, {
                     health: {
                         maxHealth: data.maxHealth,
                         currentHealth: data.health
@@ -274,8 +274,6 @@ export function establishConnection(name: string) {
             username = makeid(10);
         }
         console.log("connection successfully established!");
-        wsClient.username = username
-        wsClient.setEventListener()
 
         //GET THE PING BETWEEN CLIENT AND SERVER (CURRENTLY 1 PING RIGHT AFTER CONENCTION IS INITIALIZED, DISPLAY PING IN CONSOLE)
         pingServer();

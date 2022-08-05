@@ -4,7 +4,7 @@ import { Avatar } from "../avatarHeavy";
 import { Health } from "../meshWithHealth";
 import { Bullet } from "../weapons/bullet";
 
-export class Player extends Avatar {
+export abstract class Player extends Avatar {
     bulletList: Bullet[];
     bulletDelay: number;
 

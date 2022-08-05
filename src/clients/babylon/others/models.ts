@@ -6,7 +6,7 @@ import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
 import { unmountComponentAtNode } from "react-dom";
 import { loadingRef } from "../../reactComponents/loadingScreen";
-import { sendLogin } from "../../connection/connectionClient";
+import { sendLogin, wsClient } from "../../connection/connectionClient";
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 export class ModelEnum {
@@ -195,6 +195,7 @@ export class ModelEnum {
         loadingRef.current!.setContent("Loading... " + stat)
 
         if (ModelEnum.remainingLoad === 0) {
+            wsClient.setEventListener()
             sendLogin();
             unmountComponentAtNode(document.getElementById('root')!);
             startRenderLoop(engine);
