@@ -1,5 +1,4 @@
 import { Axis, MeshBuilder, Scene, Vector3 } from "babylonjs";
-import { windowExists } from "../../../reactComponents/tools";
 import { sphere1 } from "../../main";
 import { ModelEnum } from "../../others/models";
 import { createBasicShape, distance } from "../../others/tools";
@@ -9,11 +8,12 @@ import { Health } from "../meshWithHealth";
 export class Monster extends Avatar {
 
     constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
-        let shape = createShape(avatar_username, scene)
-        super(scene, avatar_username, shape, p)
+        let shape = createBasicShape(avatar_username, scene)
+        super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), p)
         this.shape.name = this.name
     }
 
+    //The monster hit in front of him. The hit is represented by a hitbox (an invisible mesh), which damage the player if they interesect
     attack_0(onlyDisplay = false) {
         if (sphere1 && distance(sphere1.shape.position, this.shape.position) < 2) {
             /* TODO : Monster hit by spawning a hitbox ahead */
@@ -45,15 +45,4 @@ export class Monster extends Avatar {
             setTimeout(() => hitbox.dispose(), 500);
         }
     }
-}
-
-function createShape(avatar_username: String, scene: Scene) {
-    let shape = createBasicShape(avatar_username, scene)
-    if (windowExists() && ModelEnum.PumpkinMonster.rootMesh != undefined) {
-        shape.isVisible = false
-        let model = ModelEnum.PumpkinMonster.rootMesh?.clone();
-        model.isPickable = false;
-        shape.addChild(model)
-    }
-    return shape
 }

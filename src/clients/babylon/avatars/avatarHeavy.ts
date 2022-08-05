@@ -1,4 +1,5 @@
 import { Mesh, Scene, } from "babylonjs";
+import { shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
@@ -14,7 +15,7 @@ export abstract class Avatar extends AvatarSoft {
   attack_2_cd: number;
   attack_3_cd: number;
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, p?: { bulletDelay?: number, health?: Health }) {
 
     super(scene, avatar_username, shape, p);
 
@@ -22,7 +23,12 @@ export abstract class Avatar extends AvatarSoft {
     plane.isPickable = false;
     this.shape.addChild(plane)
 
-    shadowGenerator?.addShadowCaster(this.shape)
+    this.shape.addChild(model);
+    shadowGenerator?.addShadowCaster(model);
+    this.shape.isVisible = false;
+    this.model = model;
+
+    shadowGeneratorCampfire.addShadowCaster(this.model);
 
     //initialize date of last instance for each attack type
     this.attack_0_date = 0

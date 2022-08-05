@@ -8,10 +8,10 @@ export class Player extends Avatar {
     bulletList: Bullet[];
     bulletDelay: number;
 
-    constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
+    constructor(scene: Scene, avatar_username: string, model: Mesh, p?: { bulletDelay?: number, health?: Health }) {
 
         let shape = createShape(avatar_username, scene);
-        super(scene, avatar_username, shape, p)
+        super(scene, avatar_username, shape, model, p)
         this.bulletList = [];
         this.bulletDelay = p?.bulletDelay || 1000;
     }

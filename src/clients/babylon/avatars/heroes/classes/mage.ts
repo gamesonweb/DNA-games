@@ -1,14 +1,22 @@
 import { Scene } from "babylonjs";
 import { scene } from "../../../main";
+import { ModelEnum } from "../../../others/models";
+import { shadowGenerator } from "../../../scene/sceneClient";
 import { Health } from "../../meshWithHealth";
 import { Bullet } from "../../weapons/bullet";
 import { Player } from "../player";
 
 export class Mage extends Player {
     constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
-        super(scene, avatar_username, {})
+        super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), {})
 
-        //attack_0 cd
+        let model = ModelEnum.Mage.rootMesh!.clone();
+        this.shape.addChild(model);
+        shadowGenerator?.addShadowCaster(model);
+        this.shape.isVisible = false;
+        this.model = model;
+
+
         this.attack_0_cd = 1000
     }
 
