@@ -6,6 +6,9 @@ import { Player } from "../player";
 export class Healer extends Player {
     constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
         super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), {})
+
+        this.tableAttackcd[0] = 1200
+        this.tableAttackcd[1] = 15000
     }
 
     attack_0(onlyDisplay = false) {

@@ -9,7 +9,8 @@ export class Warrior extends Player {
     constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
         super(scene, avatar_username, ModelEnum.Warrior.rootMesh!.clone(), {})
 
-        this.tableAttackcd[0] = 1000
+        this.tableAttackcd[0] = 1500
+        this.tableAttackcd[1] = 12000
     }
 
     attack_0(onlyDisplay = false) {

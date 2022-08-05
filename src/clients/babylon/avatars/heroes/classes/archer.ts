@@ -6,6 +6,9 @@ import { Player } from "../player";
 export class Archer extends Player {
     constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
         super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), {})
+
+        this.tableAttackcd[0] = 600
+        this.tableAttackcd[1] = 9000
     }
 
     attack_0(onlyDisplay = false) {
