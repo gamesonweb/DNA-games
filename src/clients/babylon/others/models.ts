@@ -13,6 +13,7 @@ export class ModelEnum {
     static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Campfire = new ModelEnum("campfire", "gltf", 0.25);
     static Mage = new ModelEnum("mage", "gltf", 1.2);
+    static Warrior = new ModelEnum("warrior", "gltf", 1)
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -47,7 +48,7 @@ export class ModelEnum {
         //     throw new Error("No asset menager in scene !")
         // }
 
-        SceneLoader.ImportMesh("", "models/" + this.name + "/", (this.extension === "gltf" ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+        SceneLoader.ImportMesh("", "models/" + this.name + "/", ((this.extension === "gltf" && this.name !== "warrior") ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
             this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
         })
 
@@ -137,6 +138,21 @@ export class ModelEnum {
                     m.isPickable = false;
                     m.checkCollisions = false;
                 });
+                // let modelSphere1 = this.rootMesh.clone();
+                // sphere1?.shape.addChild(modelSphere1);
+                // shadowGenerator?.addShadowCaster(modelSphere1);
+
+                // if (sphere1) {
+                //     sphere1.shape.isVisible = false;
+                //     sphere1.model = modelSphere1;
+                // }
+                break;
+
+            case "warrior":
+                meshes.forEach(m => {
+                    m.isPickable = false;
+                    m.checkCollisions = false;
+                });
                 let modelSphere1 = this.rootMesh.clone();
                 sphere1?.shape.addChild(modelSphere1);
                 shadowGenerator?.addShadowCaster(modelSphere1);
@@ -178,7 +194,7 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: SceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage];
+        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
     }
