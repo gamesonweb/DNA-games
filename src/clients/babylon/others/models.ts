@@ -6,6 +6,7 @@ import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
 import { unmountComponentAtNode } from "react-dom";
 import { loadingRef } from "../../reactComponents/loadingScreen";
+import { sendLogin } from "../../connection/connectionClient";
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 export class ModelEnum {
@@ -121,7 +122,6 @@ export class ModelEnum {
                 shadowGeneratorCampfire = new ShadowGenerator(128, campfireLight);
                 shadowGeneratorCampfire.filteringQuality = ShadowGenerator.QUALITY_LOW;
                 shadowGeneratorCampfire.darkness = 0;
-                shadowGeneratorCampfire.addShadowCaster(sphere1!.shape);
 
                 //campfire light animation
                 let animFireLight = createFireAnimation();
@@ -138,14 +138,6 @@ export class ModelEnum {
                     m.isPickable = false;
                     m.checkCollisions = false;
                 });
-                // let modelSphere1 = this.rootMesh.clone();
-                // sphere1?.shape.addChild(modelSphere1);
-                // shadowGenerator?.addShadowCaster(modelSphere1);
-
-                // if (sphere1) {
-                //     sphere1.shape.isVisible = false;
-                //     sphere1.model = modelSphere1;
-                // }
                 break;
 
             case "warrior":
@@ -153,14 +145,6 @@ export class ModelEnum {
                     m.isPickable = false;
                     m.checkCollisions = false;
                 });
-                let modelSphere1 = this.rootMesh.clone();
-                sphere1?.shape.addChild(modelSphere1);
-                shadowGenerator?.addShadowCaster(modelSphere1);
-
-                if (sphere1) {
-                    sphere1.shape.isVisible = false;
-                    sphere1.model = modelSphere1;
-                }
                 break;
 
             // case "terrain":
@@ -211,6 +195,7 @@ export class ModelEnum {
         loadingRef.current!.setContent("Loading... " + stat)
 
         if (ModelEnum.remainingLoad === 0) {
+            sendLogin();
             unmountComponentAtNode(document.getElementById('root')!);
             startRenderLoop(engine);
 

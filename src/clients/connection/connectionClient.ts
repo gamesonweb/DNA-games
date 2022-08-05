@@ -48,7 +48,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     login(messageReceived: any): void {
-        var sphere = new Mage(scene, messageReceived.content);
+        var sphere = new Warrior(scene, messageReceived.content);
         var sender_name = messageReceived.content;
         this.player_list.set(sender_name, sphere);
         if (sender_name === username) {
@@ -125,7 +125,8 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
 
 //login to the server with the given username
-function setUsername() {
+export function sendLogin() {
+    console.log("sending login to server");
     wsClient.send(
         JSON.stringify(
             {
@@ -273,7 +274,6 @@ export function establishConnection(name: string) {
             username = makeid(10);
         }
         console.log("connection successfully established!");
-        setUsername();
         wsClient.username = username
         wsClient.setEventListener()
 
