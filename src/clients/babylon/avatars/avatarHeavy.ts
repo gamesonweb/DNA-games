@@ -6,14 +6,8 @@ import { AvatarSoft } from "./avatarSoft";
 import { Health } from "./meshWithHealth";
 
 export abstract class Avatar extends AvatarSoft {
-  attack_0_date: number;
-  attack_1_date: number;
-  attack_2_date: number;
-  attack_3_date: number;
-  attack_0_cd: number;
-  attack_1_cd: number;
-  attack_2_cd: number;
-  attack_3_cd: number;
+  tableAttackcd: number[];
+  tableAttackDate: number[];
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, p?: { bulletDelay?: number, health?: Health }) {
 
@@ -31,16 +25,10 @@ export abstract class Avatar extends AvatarSoft {
     shadowGeneratorCampfire.addShadowCaster(this.model);
 
     //initialize date of last instance for each attack type
-    this.attack_0_date = 0
-    this.attack_1_date = 0
-    this.attack_2_date = 0
-    this.attack_3_date = 0
+    this.tableAttackDate = [0, 0, 0, 0]
 
     //default attack cd, will be overrided for all usable attack
-    this.attack_0_cd = 1000
-    this.attack_1_cd = 1000
-    this.attack_2_cd = 1000
-    this.attack_3_cd = 1000
+    this.tableAttackcd = [0, 1000, 1000, 1000]
   }
 
   dispose(): void {
@@ -48,6 +36,7 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   hit(hitmode_id: number, onlyDisplay = false) {
+    if (!this.attackIsReady(hitmode_id)) return
     switch (hitmode_id) {
       case 0:
         this.attack_0(onlyDisplay)
@@ -65,6 +54,14 @@ export abstract class Avatar extends AvatarSoft {
         console.log("ERROR: tried to call hit(", hitmode_id, ") on avatar ", this);
 
     }
+  }
+
+  attackIsReady(id: number) {
+    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.tableAttackcd[id] < Date.now()) {
+      this.tableAttackDate[id] = Date.now()
+      return true
+    }
+    return false
   }
 
   attack_0(onlyDisplay = false) {

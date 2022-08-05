@@ -17,14 +17,11 @@ export class Mage extends Player {
         this.model = model;
 
 
-        this.attack_0_cd = 1000
+        this.tableAttackcd[0] = 1000
     }
 
     attack_0(onlyDisplay = false) {
-        if (!this.attack_0_date || this.attack_0_date + this.attack_0_cd < Date.now()) {
-            this.attack_0_date = Date.now()
-            scene.bulletList.push(new Bullet(this, onlyDisplay))
-        }
+        scene.bulletList.push(new Bullet(this, onlyDisplay))
     }
 
     attack_1(onlyDisplay = false) {
