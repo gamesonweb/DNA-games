@@ -2,12 +2,11 @@ import { Axis, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { ModelEnum } from "../../../others/models";
 import { isInCone } from "../../../others/tools";
-import { Health } from "../../meshWithHealth";
 import { Player } from "../player";
 
 export class Warrior extends Player {
-    constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
-        super(scene, avatar_username, ModelEnum.Warrior.rootMesh!.clone(), {})
+    constructor(scene: Scene, avatar_username: string) {
+        super(scene, avatar_username, ModelEnum.Warrior.rootMesh!.clone(), 120, 0.2)
 
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 12000

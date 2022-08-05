@@ -15,16 +15,16 @@ export abstract class MeshWithHealth implements Health {
   shape: Mesh;
 
 
-  constructor(name: string, scene: Scene, shape: Mesh, healthParam?: Health) {
+  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number) {
     this.name = name;
     this.shape = shape;
     // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
     this.shape.checkCollisions = true;
     this.shape.showBoundingBox = true;
-    this.maxHealth = (healthParam?.maxHealth || healthParam?.currentHealth) || 100
-    this.minHealth = healthParam?.minHealth || 0
+    this.maxHealth = healthParam
+    this.minHealth = 0
     this.healthBar = new HealthBar(this.shape, scene);
-    this.currentHealth = this.healthSet(healthParam?.currentHealth || this.maxHealth)
+    this.currentHealth = this.healthSet(this.maxHealth)
   }
 
   dispose() {

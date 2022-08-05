@@ -1,11 +1,10 @@
 import { Scene } from "babylonjs";
 import { ModelEnum } from "../../../others/models";
-import { Health } from "../../meshWithHealth";
 import { Player } from "../player";
 
 export class Archer extends Player {
-    constructor(scene: Scene, avatar_username: string, p?: { bulletDelay?: number, health?: Health }) {
-        super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), {})
+    constructor(scene: Scene, avatar_username: string) {
+        super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 80, 0.25)
 
         this.tableAttackcd[0] = 800
         this.tableAttackcd[1] = 9000

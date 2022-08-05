@@ -1,19 +1,13 @@
 import { Mesh, Scene, Vector3 } from "babylonjs";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
-import { Health } from "../meshWithHealth";
-import { Bullet } from "../weapons/bullet";
 
 export abstract class Player extends Avatar {
-    bulletList: Bullet[];
-    bulletDelay: number;
 
-    constructor(scene: Scene, avatar_username: string, model: Mesh, p?: { bulletDelay?: number, health?: Health }) {
+    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number) {
 
         let shape = createShape(avatar_username, scene);
-        super(scene, avatar_username, shape, model, p)
-        this.bulletList = [];
-        this.bulletDelay = p?.bulletDelay || 1000;
+        super(scene, avatar_username, shape, model, health, speed)
     }
 
     take_damage(source: Mesh, amount: number) {

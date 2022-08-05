@@ -1,6 +1,6 @@
 import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
 import { SceneSoft } from "../scene/sceneSoft";
-import { Health, MeshWithHealth } from "./meshWithHealth";
+import { MeshWithHealth } from "./meshWithHealth";
 
 export abstract class AvatarSoft extends MeshWithHealth {
   speed_coeff: number;
@@ -14,23 +14,16 @@ export abstract class AvatarSoft extends MeshWithHealth {
   jumpRay: Ray;
   gravity_acceleration: number;
   canHit: boolean;
-
   model: Mesh | undefined;
 
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, p?: { bulletDelay?: number, health?: Health }) {
-    super(avatar_username, scene, shape, p?.health);
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number) {
+    super(avatar_username, scene, shape, health);
 
     this.gravity_acceleration = 0;
     this.name = avatar_username
 
-    // sphere.parent = this;
-    // this.addChild(sphere)
-    // this.addChild(queue)
-    // queue.position = new Vector3(0, 0, -0.3);
-    // this.sphere = sphere;
-
-    this.speed_coeff = 0.20;
+    this.speed_coeff = speed;
     this.didSomething = false;
 
     this.shape.position = new Vector3(0, 1, 0);

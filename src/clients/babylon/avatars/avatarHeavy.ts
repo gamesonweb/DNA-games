@@ -3,15 +3,14 @@ import { shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
-import { Health } from "./meshWithHealth";
 
 export abstract class Avatar extends AvatarSoft {
   tableAttackcd: number[];
   tableAttackDate: number[];
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, p?: { bulletDelay?: number, health?: Health }) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number) {
 
-    super(scene, avatar_username, shape, p);
+    super(scene, avatar_username, shape, health, speed);
 
     let plane = createLabel(this.name, this, scene);
     plane.isPickable = false;
