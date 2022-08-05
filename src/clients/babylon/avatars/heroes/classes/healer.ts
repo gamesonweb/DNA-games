@@ -9,10 +9,10 @@ export class Healer extends Player {
     }
 
     attack_0(onlyDisplay = false) {
-
+        //lance un projectile infligeant des degats si touche un ennemi et soignant si touche un allié
     }
 
     attack_1(onlyDisplay = false) {
-
+        //créer un cercle devant lui qui heal sur la durée et boost l'attaque, puis inflige des dégats aux monstres à la fin
     }
 }

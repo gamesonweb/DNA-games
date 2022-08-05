@@ -25,6 +25,6 @@ export class Mage extends Player {
     }
 
     attack_1(onlyDisplay = false) {
-
+        //long cone infligeant un burst de degats et l'etat brulure
     }
 }

@@ -25,6 +25,6 @@ export class Warrior extends Player {
     }
 
     attack_1(onlyDisplay = false) {
-
+        //attack tournoyante sur la durée + invicibilité
     }
 }
