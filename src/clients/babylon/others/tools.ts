@@ -1,4 +1,4 @@
-import { AbstractMesh, Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, RayHelper, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { AbstractMesh, Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, RayHelper, Scene, StandardMaterial, Vector2, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
 import { wsClient } from "../../connection/connectionClient";
 import { ws } from "../../connection/connectionFictive";
@@ -18,8 +18,8 @@ export function makeid(length: number) {
     return result;
 }
 
-export function distance(a: Vector3, b: Vector3) {
-    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2);
+export function distance(a: Vector3, b: Vector3, two_d = false) {
+    return Math.sqrt((a.x - b.x) ** 2 + (two_d ? 0 : (a.y - b.y) ** 2) + (a.z - b.z) ** 2);
 }
 
 /** Remove elt from L with side effect */
@@ -161,4 +161,23 @@ export function getAvatarByName(name: string, lists = [wsClient.night_monster_li
         avatar = list.get(name);
         if (avatar) return avatar;
     }
+}
+
+export function isInHitbox(positionTarget: Vector3, centerHitbox: Vector3, rayon: number, direction: Vector3, hauteur: number, angle: number, isRectangle = false) {
+    if (distance(positionTarget, centerHitbox, true) > rayon) return false;
+    // console.log("distance validée");
+
+    if (positionTarget.y > centerHitbox.y + hauteur || positionTarget.y < centerHitbox.y - hauteur) return false;
+    // console.log("hauteur validée");
+
+    var vector = positionTarget.subtract(centerHitbox)
+    direction.normalize()
+    vector.normalize()
+    var angleTarget = Math.acos((direction.x * vector.x + direction.z * vector.z) / (Math.sqrt(direction.x ** 2 + direction.z ** 2)) * (Math.sqrt(vector.x ** 2 + vector.z ** 2)))
+
+    // if (angleTarget < angle) console.log("angle validé");
+    // else console.log("angle pas validé");
+
+
+    return angleTarget < angle
 }

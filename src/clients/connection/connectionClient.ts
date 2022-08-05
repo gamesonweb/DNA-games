@@ -114,7 +114,11 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     monster_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
         let avatar = wsClient.night_monster_list.get(messageContent.username)
-        if (avatar) avatar.hit(messageContent.hitmode);
+        if (avatar) {
+            console.log("monster hit");
+            avatar.hit(messageContent.hitmode);
+        }
+
     }
 
     static setGlobalWebSocket(): void {
