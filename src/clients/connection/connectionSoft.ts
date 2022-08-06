@@ -18,7 +18,8 @@ export const serverMessages = {
     SPAWN_MONSTER: "spawn_monster",
     MONSTER_HIT: "monster_hit",
     PLAYER_HIT: "player_hit",
-    MONSTER_POSITION_LIST: "position_monster_list"
+    MONSTER_POSITION_LIST: "position_monster_list",
+    KNOCKBACK_MONSTER: "knockback_monster"
 }
 
 export type receiveContent = {
@@ -26,12 +27,16 @@ export type receiveContent = {
     username: string, direction: Vector3, health?: number, maxHealth?: number
 }
 
+export type knockbackContent = {
+    username: string, direction: Vector3, power: number
+}
+
 export type position = { pos_x: number, pos_y: number, pos_z: number, }
 
 
 export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft, R extends Scene> extends WebSocket {
     player_list: Map<string, T>
-    night_monster_list: Map<string, S>
+    monster_list: Map<string, S>
     scene?: R;
 
     constructor(url: string, scene?: R) {
@@ -39,7 +44,7 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
         this.onopen = this.onOpen
         this.onerror = this.onError;
         this.player_list = new Map<string, T>();
-        this.night_monster_list = new Map<string, S>();
+        this.monster_list = new Map<string, S>();
         this.scene = scene;
     }
 
@@ -126,6 +131,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                     break;
                 }
 
+                //knockback_monster: push the monster in the target direction
+                case serverMessages.KNOCKBACK_MONSTER: {
+                    this.knockback_monster(messageReceived)
+                    break;
+                }
+
                 //route fireBullet: fireBullet with sender's avatar if the ender is not ourselves
                 // case serverMessages.ATTACK_0: {
                 //     this.attack_0(messageReceived)
@@ -162,9 +173,9 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
      * @param messageReceived 
      */
     kill_monster(messageReceived: any) {
-        let monster_to_kill = this.night_monster_list.get(messageReceived.content);
+        let monster_to_kill = this.monster_list.get(messageReceived.content);
         if (monster_to_kill !== undefined) monster_to_kill.dispose();
-        this.night_monster_list.delete(messageReceived.content);
+        this.monster_list.delete(messageReceived.content);
     }
 
     /**
@@ -235,4 +246,6 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
      * @param messageReceived 
      */
     abstract monster_hit(messageReceived: any): void;
+
+    abstract knockback_monster(messageReceived: any): void;
 }

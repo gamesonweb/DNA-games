@@ -76,7 +76,7 @@ pub async fn handle_connection(
         else {
             let msg_text = msg.to_text().unwrap();
 
-            println!("Received a message from {}: {}", addr, msg_text);
+            // println!("Received a message from {}: {}", addr, msg_text);
 
             let json_res: Result<serde_json::Value, serde_json::Error> =
                 serde_json::from_str(msg_text);
@@ -192,13 +192,17 @@ pub async fn handle_connection(
                             for position in content {
                                 let move_data: MoveMonsterData =
                                     serde_json::from_str(&position).unwrap();
-                                println!("{:?}", move_data);
+                                // println!("{:?}", move_data);
                                 update_position(move_data, monster_list.clone());
                             }
                         }
                         "monster_hit" => {
-                            println!("MONSTER HIT ROUTE RECEIVED");
+                            // println!("MONSTER HIT ROUTE RECEIVED");
                             monster_action.lock().unwrap().push(msg.clone());
+                        }
+                        "knockback_monster" => {
+                            println!("KNOCKBACK ROUTE RECEIVED");
+                            shared_messages.lock().unwrap().push(msg.clone());
                         }
                         "spawn_monster" => {
                             println!("SPAWN MONSTER ROUTE RECEIVED");

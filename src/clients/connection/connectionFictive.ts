@@ -3,7 +3,7 @@ import { generate_zombie_wave } from "../../indexServer";
 import { AvatarFictive } from "../babylon/avatars/avatarFictif";
 import { createBasicShape } from "../babylon/others/tools";
 import { SceneFictive } from "../babylon/scene/sceneFictive";
-import { ConnectionSoft, receiveContent, serverMessages } from "./connectionSoft";
+import { ConnectionSoft, knockbackContent, receiveContent, serverMessages } from "./connectionSoft";
 
 export let zombie_counter = 0;
 export let ws: ConnectionServer;
@@ -52,10 +52,10 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
 
     //tue les monstres de nuit quand le jour se lève
     if (hour == 8) {
-      for (const value of this.night_monster_list.values()) {
+      for (const value of this.monster_list.values()) {
         value.dispose();
       }
-      this.night_monster_list.clear();
+      this.monster_list.clear();
       zombie_counter = 0;
       ws.send(JSON.stringify({
         route: serverMessages.KILL_ALL_NIGHT_MONSTER,
@@ -74,6 +74,15 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
   }
 
   monster_hit(messageReceived: any): void {
+  }
+
+  knockback_monster(messageReceived: any): void {
+    let messageContent: knockbackContent = JSON.parse(messageReceived.content);
+    let monster = this.monster_list.get(messageContent.username)
+    if (monster) {
+      let direction_knockback = new Vector3(messageContent.direction._x, messageContent.direction._y, messageContent.direction._z)
+      monster.knockback(direction_knockback, messageContent.power)
+    }
   }
 
   static setGlobalWebSocket(scene: SceneFictive, port: string): void {

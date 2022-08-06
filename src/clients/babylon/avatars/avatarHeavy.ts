@@ -7,6 +7,7 @@ import { AvatarSoft } from "./avatarSoft";
 export abstract class Avatar extends AvatarSoft {
   tableAttackcd: number[];
   tableAttackDate: number[];
+  weightCategory: number;
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number) {
 
@@ -28,6 +29,8 @@ export abstract class Avatar extends AvatarSoft {
 
     //default attack cd, will be overrided for all usable attack
     this.tableAttackcd = [0, 1000, 1000, 1000]
+
+    this.weightCategory = 1
   }
 
   dispose(): void {
@@ -76,6 +79,6 @@ export abstract class Avatar extends AvatarSoft {
     console.log("ERROR: tried to call non-implemented attack_3 on avatar ", this);
   }
 
-  abstract take_damage(source: Mesh, amount: number): void
+  abstract take_damage(source: Mesh, amount: number, knockback_power: number): void
 
 }

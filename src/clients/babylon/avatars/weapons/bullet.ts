@@ -35,7 +35,7 @@ export class Bullet extends Mesh {
 
     this.onCollide = e => {
       if (e && !this.displayOnly) {
-        var monster = getAvatarByShape(e, [wsClient.night_monster_list])
+        var monster = getAvatarByShape(e, [wsClient.monster_list])
         if (monster) {
           monster.take_damage(this, this.damage)
         }

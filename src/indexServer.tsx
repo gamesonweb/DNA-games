@@ -39,16 +39,15 @@ export function main() {
     scene.render()
   });
 
-  // var port = "8080"
-  var port = process.argv[2]
+  var port = process ? process.argv[2] : "8080"
   ConnectionServer.setGlobalWebSocket(scene, port)
 
   setInterval(() => {
-    if (ws.night_monster_list.size > 0) {
+    if (ws.monster_list.size > 0) {
       // let fps = engine.getFps()
       // console.log(fps.toFixed() + " fps");
       // let fpsRatio = 60 / engine.getFps()
-      for (const monster of ws.night_monster_list.values()) {
+      for (const monster of ws.monster_list.values()) {
         // monster.applyGravity(10 * fpsRatio)
         monster.applyGravity(30)
         var direction = monster.shape.getDirection(Axis.Z);
@@ -65,7 +64,7 @@ export function main() {
 
 function make_pos_list_msg() {
   let message = []
-  for (const monster of ws.night_monster_list.values()) {
+  for (const monster of ws.monster_list.values()) {
     message.push(
       JSON.stringify({
         username: monster.name,
@@ -113,7 +112,7 @@ export function generate_zombie_wave() {
 
   for (var player of ws.player_list.values()) {
 
-    for (var i = 0; i < 3 + Math.random() * 3; i++) {
+    for (var i = 0; i < 3; i++) {
       var zombie_x = Math.random() > 0.5 ? player.shape.position.x + 5 + Math.random() * 10 : player.shape.position.x - 5 - Math.random() * 10
       var zombie_z = Math.random() > 0.5 ? player.shape.position.z + 5 + Math.random() * 10 : player.shape.position.z - 5 - Math.random() * 10
       var zombie_y = 0
@@ -133,7 +132,7 @@ function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let name = "zombie" + zombie_counter
   let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene), 100);
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
-  ws.night_monster_list.set(generated_zombie.name, generated_zombie);
+  ws.monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);
   ws.send(JSON.stringify({
     route: serverMessages.SPAWN_MONSTER,

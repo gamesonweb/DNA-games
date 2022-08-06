@@ -1,6 +1,7 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
 import { Mage } from "../babylon/avatars/heroes/classes/mage";
+import { Warrior } from "../babylon/avatars/heroes/classes/warrior";
 import { Player } from "../babylon/avatars/heroes/player";
 import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
@@ -49,7 +50,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     login(messageReceived: any): void {
         var sender_name = messageReceived.content;
         if (sender_name === username) {
-            var sphere = new Mage(scene, messageReceived.content);
+            var sphere = new Warrior(scene, messageReceived.content);
             this.player_list.set(sender_name, sphere);
             set_my_sphere();
             setPositionUpdateSender()
@@ -66,20 +67,23 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_data(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
-        avatar_update_from_serveur(messageContent, this.night_monster_list, 100, true);
+        avatar_update_from_serveur(messageContent, this.monster_list, 100, true);
     }
 
     kill_all_night_monster(messageReceived: any) {
-        for (const value of wsClient.night_monster_list.values()) {
+        for (const value of wsClient.monster_list.values()) {
             value.dispose();
         }
-        wsClient.night_monster_list.clear();
+        wsClient.monster_list.clear();
     }
 
     move_monster(messageReceived: any): void {
     }
 
     damage_monster(messageReceived: any): void {
+    }
+
+    knockback_monster(messageReceived: any): void {
     }
 
     // hit_0(messageReceived: any): void {
@@ -112,7 +116,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
-        let avatar = wsClient.night_monster_list.get(messageContent.username)
+        let avatar = wsClient.monster_list.get(messageContent.username)
         if (avatar) {
             console.log("monster hit");
             avatar.hit(messageContent.hitmode);
@@ -223,10 +227,10 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
 
-    if (avatar_to_update?.name === "zombie0") {
-        // console.log("current position: " + avatar_to_update.shape.position);
-        // console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
-    }
+    // if (avatar_to_update?.name === "zombie0") {
+    // console.log("current position: " + avatar_to_update.shape.position);
+    // console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
+    // }
 
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_update) {

@@ -148,14 +148,14 @@ export function teleport(mesh: AvatarSoft, position: Vector3, offsetY = 5) {
     } else { console.log("t'as pas de sol là bas"); }
 }
 
-export function getAvatarByShape(shape: AbstractMesh, lists = [wsClient.night_monster_list, wsClient.player_list]) {
+export function getAvatarByShape(shape: AbstractMesh, lists = [wsClient.monster_list, wsClient.player_list]) {
     for (const list of lists) {
         var avatar = list.get(shape.name);
         if (avatar) return avatar;
     }
 }
 
-export function getAvatarByName(name: string, lists = [wsClient.night_monster_list, wsClient.player_list]) {
+export function getAvatarByName(name: string, lists = [wsClient.monster_list, wsClient.player_list]) {
     var avatar: AvatarSoft | undefined
     for (const list of lists) {
         avatar = list.get(name);

@@ -5,7 +5,6 @@ import { sphere1 } from "../../main";
 import { ModelEnum } from "../../others/models";
 import { createBasicShape, isInCone } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
-import { Health } from "../meshWithHealth";
 
 export class Monster extends Avatar {
 
@@ -15,11 +14,19 @@ export class Monster extends Avatar {
         this.shape.name = this.name
     }
 
-    take_damage(source: Mesh, amount: number) {
+    take_damage(source: Mesh, amount: number, knockback_power = 1) {
         wsClient.send(
             JSON.stringify({
                 route: serverMessages.DAMAGE_MONSTER,
                 content: JSON.stringify({ username: this.name, damage: amount })
+            }))
+        let direction = this.shape.position.subtract(source.position)
+        if (knockback_power == 0) return;
+        let power = knockback_power / this.weightCategory
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.KNOCKBACK_MONSTER,
+                content: JSON.stringify({ username: this.name, direction: direction, power: power })
             }))
     }
 

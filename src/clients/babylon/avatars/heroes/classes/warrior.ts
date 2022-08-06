@@ -14,14 +14,13 @@ export class Warrior extends Player {
 
     attack_0(onlyDisplay = false) {
         if (!onlyDisplay) {
-            wsClient.night_monster_list.forEach(monster => {
+            wsClient.monster_list.forEach(monster => {
                 if (isInCone(monster.shape.position!, this.shape.position, 3, this.shape.getDirection(Axis.Z), 1, Math.PI / 2)) {
                     // console.log("Successful hit");
                     monster.take_damage(this.shape, 40);
                 }
             })
         }
-
     }
 
     attack_1(onlyDisplay = false) {

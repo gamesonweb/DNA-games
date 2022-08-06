@@ -10,12 +10,10 @@ export abstract class Player extends Avatar {
         super(scene, avatar_username, shape, model, health, speed)
     }
 
-    take_damage(source: Mesh, amount: number) {
+    take_damage(source: Mesh, amount: number, knockback_power = 1) {
         this.healthMinus(amount);
-        let direction = new Vector3(this.shape.position.x - source.position.x, this.shape.position.y - source.position.y, this.shape.position.z - source.position.z)
-        direction.normalize();
-        direction.y += 0.5
-        this.knockback(direction, 1)
+        let direction = this.shape.position.subtract(source.position)
+        this.knockback(direction, knockback_power / this.weightCategory)
     }
 
     // addBullet(displayOnly = false) {

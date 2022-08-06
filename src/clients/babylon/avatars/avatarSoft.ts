@@ -90,6 +90,11 @@ export abstract class AvatarSoft extends MeshWithHealth {
   }
 
   knockback(direction: Vector3, power: number) {
+    console.log("call to knockback on ", this.name);
+
+    direction.normalize()
+    direction.y += 0.5
+    direction.normalize()
     let scaledDirection = direction.scale(power)
     // console.log("knockback direction: ", scaledDirection);
 
