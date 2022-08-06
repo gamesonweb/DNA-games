@@ -50,10 +50,6 @@ export function main() {
       for (const monster of ws.monster_list.values()) {
         // monster.applyGravity(10 * fpsRatio)
         monster.applyGravity(30)
-        var direction = monster.shape.getDirection(Axis.Z);
-        // monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 4 * fpsRatio));
-        monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
-        monster.setRayPosition()
         zombie_apply_AI(monster);
       }
       ws.send(make_pos_list_msg());
@@ -83,12 +79,21 @@ function make_pos_list_msg() {
 
 
 function zombie_apply_AI(monster: AvatarSoft) {
+
+  //moves the zombie forward if possible
+  if (monster.canMove) {
+    var direction = monster.shape.getDirection(Axis.Z);
+    monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
+  }
+
+  monster.setRayPosition()
+
   let player_to_target: AvatarSoft | null = nearest_player(monster);
   if (player_to_target) {
+    //zombie looks at the nearest player
     monster.shape.lookAt(new Vector3(player_to_target.shape.position.x, monster.shape.position.y, player_to_target.shape.position.z));
+    //zombie hit if the nearest player is in his range
     if (monster.canHit && distance(monster.shape.position, player_to_target.shape.position) < 1.5) {
-      // console.log("monster can hit: ", monster.canHit);
-
       ws.send(
         JSON.stringify({
           route: serverMessages.MONSTER_HIT,

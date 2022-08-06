@@ -210,20 +210,22 @@ export function inputEffects(player: Player) {
     let coeff_diagonal = 1
     if ((inputStates.goForeward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
 
-    //forward/backward movement
-    if (inputStates.goForeward) {
-        player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-    } else if (inputStates.goBackward) {
-        player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
-    }
+    if (player.canMove) {
+        //forward/backward movement
+        if (inputStates.goForeward) {
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+        } else if (inputStates.goBackward) {
+            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
+        }
 
-    //left/right movement
-    if (inputStates.goLeft) {
-        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-        player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 1.5));
-    } else if (inputStates.goRight) {
-        direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-        player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.5));
+        //left/right movement
+        if (inputStates.goLeft) {
+            direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 1.5));
+        } else if (inputStates.goRight) {
+            direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.5));
+        }
     }
 
     //player rotation

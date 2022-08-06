@@ -1,4 +1,4 @@
-import { Mesh, Scene, Vector3 } from "babylonjs";
+import { Mesh, Scene } from "babylonjs";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 

@@ -14,6 +14,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   jumpRay: Ray;
   gravity_acceleration: number;
   canHit: boolean;
+  canMove: boolean;
   model: Mesh | undefined;
 
 
@@ -38,6 +39,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.timeJumping = 250;
 
     this.canHit = true;
+    this.canMove = true;
   }
 
   dispose(): void {
@@ -89,18 +91,20 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.ray.origin = this.shape.position
   }
 
-  knockback(direction: Vector3, power: number) {
-    console.log("call to knockback on ", this.name);
+  knockback(direction: Vector3, power: number, cumulate = false) {
+    if (this.canMove || cumulate) {
+      console.log("call to knockback on ", this.name);
+      direction.normalize()
+      direction.y += 0.3
+      direction.normalize()
+      let scaledDirection = direction.scale(power / 2)
+      // console.log("knockback direction: ", scaledDirection);
+      this.canMove = false;
 
-    direction.normalize()
-    direction.y += 0.5
-    direction.normalize()
-    let scaledDirection = direction.scale(power)
-    // console.log("knockback direction: ", scaledDirection);
-
-    let intervalKnockBack = setInterval(() => {
-      if (this.shape) this.shape.moveWithCollisions(scaledDirection)
-    }, 100 / 6)
-    setTimeout(() => { clearInterval(intervalKnockBack) }, 200)
+      let intervalKnockBack = setInterval(() => {
+        if (this && this.shape) this.shape.moveWithCollisions(scaledDirection)
+      }, 100 / 6)
+      setTimeout(() => { clearInterval(intervalKnockBack); if (this) this.canMove = true }, 150)
+    }
   }
 }
