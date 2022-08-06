@@ -116,10 +116,11 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_hit(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
-        let avatar = wsClient.monster_list.get(messageContent.username)
-        if (avatar) {
+        let monster = wsClient.monster_list.get(messageContent.username)
+        //timeout to sync attack with the position of attack TODO use varriable instead of 100
+        if (monster) {
             console.log("monster hit");
-            avatar.hit(messageContent.hitmode);
+            monster.hit(messageContent.hitmode);
         }
 
     }

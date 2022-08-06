@@ -95,7 +95,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     if (this.canMove || cumulate) {
       console.log("call to knockback on ", this.name);
       direction.normalize()
-      direction.y += 0.3
+      direction.y += 0.2
       direction.normalize()
       let scaledDirection = direction.scale(power / 2)
       // console.log("knockback direction: ", scaledDirection);
