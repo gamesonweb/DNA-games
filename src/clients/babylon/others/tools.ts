@@ -170,6 +170,8 @@ export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: 
     if (positionTarget.y > centerHitbox.y + hauteur || positionTarget.y < centerHitbox.y - hauteur) return false;
     // console.log("hauteur validée");
 
+    if (angle >= Math.PI) return true;
+
     var vector = positionTarget.subtract(centerHitbox)
     direction.normalize()
     vector.normalize()

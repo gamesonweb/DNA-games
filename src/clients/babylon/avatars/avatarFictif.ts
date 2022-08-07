@@ -24,8 +24,8 @@ export class AvatarFictive extends AvatarSoft {
             let intervalKnockBack = setInterval(() => {
                 if (this && this.shape) this.shape.moveWithCollisions(scaledDirection)
             }, 100 / 6)
-            setTimeout(() => { clearInterval(intervalKnockBack) }, 150)
-            setTimeout(() => { if (this) this.canMove = true }, 250)
+            setTimeout(() => { clearInterval(intervalKnockBack) }, 150 * power)
+            setTimeout(() => { if (this) this.canMove = true }, 150 * power + 100)
         }
     }
 }

@@ -14,7 +14,8 @@ type InputStates = {
     goRight: boolean,
     rotateRight: boolean,
     rotateLeft: boolean,
-    attack_0: boolean
+    attack_0: boolean,
+    attack_1: boolean,
 }
 
 let createInputStates = (): InputStates => {
@@ -26,7 +27,8 @@ let createInputStates = (): InputStates => {
         goRight: false,
         rotateRight: false,
         rotateLeft: false,
-        attack_0: false
+        attack_0: false,
+        attack_1: false,
     }
 }
 
@@ -117,20 +119,6 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
             teleport(sphere1, scene.groundsData[3].position)
         }
     }
-    //tp forest
-    // else if (evt.code === "Numpad5") {
-    //     if (pos_forest && sphere1) {
-    //         sphere1.shape.position = pos_forest
-    //         sphere1.shape.position.y += 20
-    //     }
-    // }
-    //tp pos_lowPo
-    // else if (evt.code === "Numpad6") {
-    //     if (pos_lowPo && sphere1) {
-    //         sphere1.shape.position = pos_lowPo
-    //         sphere1.shape.position.y += 20
-    //     }
-    // }
 
     //rotation
     else if (evt.code === "ArrowRight") {
@@ -143,8 +131,11 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
 function mouseListener(evt: MouseEvent, isPressed: boolean) {
     if ((input === document.activeElement) && isPressed) { return }
-    switch (evt.which) {
-        case 1:
+    switch (evt.button) {
+        case 2:
+            inputStates.attack_1 = isPressed;
+            break;
+        case 0:
             inputStates.attack_0 = isPressed;
             break;
         default:
@@ -246,6 +237,22 @@ export function inputEffects(player: Player) {
                 content: JSON.stringify({
                     username: player.name,
                     hitmode: 0
+                })
+            })
+        )
+    }
+
+    //player's attack_1
+    if (inputStates.attack_1) {
+        // player fires the correspondng hit (not onlyDisplay)
+        player.hit(1)
+        // we send it so server
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.PLAYER_HIT,
+                content: JSON.stringify({
+                    username: player.name,
+                    hitmode: 1
                 })
             })
         )

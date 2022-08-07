@@ -15,6 +15,7 @@ export class Monster extends Avatar {
     }
 
     take_damage(source: Mesh, amount: number, knockback_power = 1) {
+        if (!this.takeHits) return
         wsClient.send(
             JSON.stringify({
                 route: serverMessages.DAMAGE_MONSTER,
@@ -43,7 +44,7 @@ export class Monster extends Avatar {
                 }
             }
         },
-            100
+            120
         )
     }
 }

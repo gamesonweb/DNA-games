@@ -14,8 +14,9 @@ export class Warrior extends Player {
 
     attack_0(onlyDisplay = false) {
         if (!onlyDisplay) {
+            console.log("warrior hits with normal attack");
             wsClient.monster_list.forEach(monster => {
-                if (isInCone(monster.shape.position!, this.shape.position, 3, this.shape.getDirection(Axis.Z), 1, Math.PI / 2)) {
+                if (isInCone(monster.shape.position!, this.shape.position, 2, this.shape.getDirection(Axis.Z), 1, Math.PI / 2)) {
                     // console.log("Successful hit");
                     monster.take_damage(this.shape, 40);
                 }
@@ -24,6 +25,27 @@ export class Warrior extends Player {
     }
 
     attack_1(onlyDisplay = false) {
-        //attack tournoyante sur la durée + invicibilité
+        //attack tournoyante sur la durée + invicibilité.
+
+        if (!onlyDisplay) {
+            console.log("warrior starts ultimate");
+            this.takeHits = false
+            this.canHit = false
+            let ultimateDamageInterval = setInterval(() => {
+                if (this) wsClient.monster_list.forEach(monster => {
+                    if (isInCone(monster.shape.position, this.shape.position, 4, this.shape.getDirection(Axis.Z), 1, Math.PI)) {
+                        monster.take_damage(this.shape, 10);
+                    }
+                })
+            }, 250);
+            setTimeout(() => {
+                console.log("warrior ends ultimate");
+                clearInterval(ultimateDamageInterval);
+                if (this) {
+                    this.takeHits = true
+                    this.canHit = true
+                }
+            }, 3010)
+        }
     }
 }

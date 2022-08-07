@@ -11,6 +11,7 @@ export abstract class Player extends Avatar {
     }
 
     take_damage(source: Mesh, amount: number, knockback_power = 1) {
+        if (!this.takeHits) return
         this.healthMinus(amount);
         let direction = this.shape.position.subtract(source.position)
         this.knockback(direction, knockback_power / this.weightCategory)

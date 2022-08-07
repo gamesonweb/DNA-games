@@ -15,6 +15,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   gravity_acceleration: number;
   canHit: boolean;
   canMove: boolean;
+  takeHits: boolean;
   model: Mesh | undefined;
 
 
@@ -40,6 +41,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.canHit = true;
     this.canMove = true;
+    this.takeHits = true;
   }
 
   dispose(): void {
@@ -104,7 +106,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       let intervalKnockBack = setInterval(() => {
         if (this && this.shape) this.shape.moveWithCollisions(scaledDirection)
       }, 100 / 6)
-      setTimeout(() => { clearInterval(intervalKnockBack); if (this) this.canMove = true }, 150)
+      setTimeout(() => { clearInterval(intervalKnockBack); if (this) this.canMove = true }, 150 * power)
     }
   }
 }
