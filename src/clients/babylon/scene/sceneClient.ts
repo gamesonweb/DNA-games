@@ -21,6 +21,7 @@ export class SceneClient extends SceneSoft {
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     grassTaskCounter: number;
+    treeTaskCounter: number;
     bulletList: Bullet[];
 
     constructor(engine: Engine) {
@@ -38,6 +39,7 @@ export class SceneClient extends SceneSoft {
 
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
+        this.treeTaskCounter = 0;
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -161,6 +163,10 @@ export class SceneClient extends SceneSoft {
         if (!(++this.grassTaskCounter < this.groundsData.length + 1)) this.grassGeneration()
     }
 
+    setUpForTree() {
+        if (!(++this.treeTaskCounter < 1)) this.treeGeneration()
+    }
+
     private grassGeneration() {
         ModelEnum.addLoadingTask(1);
         var model = ModelEnum.Grass.rootMesh;
@@ -169,26 +175,76 @@ export class SceneClient extends SceneSoft {
             model.scaling = new Vector3(1, 1, 1);
 
             //Creation of 400 herbs at random positions, scaling and orientation
-            for (var i = 0; i < 2000; i++) {
+            for (let i = 0; i < 2000; i++) {
 
                 let x = Math.random() * 200 - 100;
                 let z = Math.random() * 200 - 100;
-                let height = this.getHeightAtPoint(x, z)
+                let height = this.getHeightAtPoint(x, z);
 
-                if (height != undefined && height <= -15) {
-                    //Parameters
-                    let scaleRatio = 3 - Math.random() * 2.5
-                    let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
-                    let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
-                    let translationVector = new Vector3(x, height - 0.2, z);
-                    let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
-
-                    //Creation of thin instance
-                    model.thinInstanceAdd(scaleRotateTranslateMatrix);
+                if (height != undefined) {
+                    this.createThinInstance(model, x, height, z);
                 }
             }
 
-            ModelEnum.loadingDone()
+            ModelEnum.loadingDone();
         }
     }
-};
+
+    private treeGeneration() {
+        ModelEnum.addLoadingTask(1);
+        var model = ModelEnum.Tree.rootMesh;
+
+        if (model != undefined) {
+            let childs = model.getChildMeshes() as Mesh[];
+
+            let c1 = childs[0];
+            let c2 = childs[1];
+
+            let c1m = Mesh.MergeMeshes([c1]);
+            let c2m = Mesh.MergeMeshes([c2]);
+
+            for (let i = 0; i < 100; i++) {
+                let x = Math.random() * 200 - 100;
+                let z = Math.random() * 200 - 100;
+                let height = this.getHeightAtPoint(x, z);
+
+                if (height != undefined && model != undefined && c1m && c2m) {
+                    let matrix = this.createThinInstance(c1m, x, height, z);
+                    this.createThinInstance(c2m, x, height, z, matrix);
+                }
+
+            }
+            // this.treePositions.forEach(position => {
+            //     let x = position.x;
+            //     let z = position.z;
+            //     let height = this.getHeightAtPoint(x, z);
+
+            //     if (height != undefined && model != undefined && c1m && c2m) {
+            //         let matrix = this.createThinInstance(c1m, x, height, z);
+            //         this.createThinInstance(c2m, x, height, z, matrix);
+            //     }
+            // });
+
+            ModelEnum.loadingDone();
+        }
+
+    }
+
+    private createThinInstance(model: Mesh, x: number, height: number, z: number, transformMatrix?: Matrix): Matrix {
+        if (transformMatrix != undefined) {
+            model.thinInstanceAdd(transformMatrix);
+            return transformMatrix;
+        }
+
+        //Parameters
+        let scaleRatio = 3 - Math.random() * 2.5
+        let scalingVector = new Vector3(scaleRatio, scaleRatio, scaleRatio);
+        let rotationQuaternion = Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
+        let translationVector = new Vector3(x, height - 0.2, z);
+        let scaleRotateTranslateMatrix = Matrix.Compose(scalingVector, rotationQuaternion, translationVector);
+
+        //Creation of thin instance
+        model.thinInstanceAdd(scaleRotateTranslateMatrix);
+        return scaleRotateTranslateMatrix;
+    }
+}

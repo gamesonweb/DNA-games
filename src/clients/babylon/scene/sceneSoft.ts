@@ -14,6 +14,7 @@ export abstract class SceneSoft extends Scene {
   //assetManager: AssetsManager | undefined;
   heightRay: Ray;
   groundsData: { modelID: string; meshName: string; position: Vector3; }[];
+  treePositions: { x: number; z: number }[];
 
   constructor(engine: Engine) {
     // This creates a basic Babylon Scene object (non-mesh)
@@ -49,6 +50,25 @@ export abstract class SceneSoft extends Scene {
         meshName: "Sable",
         position: new Vector3(200, offset - 7.5, 150)
       },
+    ]
+
+    this.treePositions = [
+      { x: 1, z: 2 }, { x: 3, z: 2 }, { x: 4, z: 2 }, { x: 2, z: 6 }, { x: 10, z: 10 },
+      { x: 3, z: 21 }, { x: 8, z: 8 }, { x: 1, z: 9 }, { x: 4, z: 15 }, { x: 25, z: 24 },
+      { x: 27, z: 24 }, { x: 29, z: 24 }, { x: 50, z: 40 }, { x: 45, z: 45 }, { x: 34, z: 43 },
+      { x: 64, z: 42 }, { x: 10, z: 24 }, { x: 4, z: 30 }, { x: 4, z: 50 },
+      { x: 1, z: 2 }, { x: 3, z: 2 }, { x: 4, z: 2 }, { x: 2, z: 6 }, { x: 10, z: 10 },
+      { x: 3, z: 21 }, { x: 8, z: 8 }, { x: 1, z: 9 }, { x: 4, z: 15 }, { x: 25, z: 24 },
+      { x: 27, z: 24 }, { x: 29, z: 24 }, { x: 50, z: 40 }, { x: 45, z: 45 }, { x: 34, z: 43 },
+      { x: 64, z: 42 }, { x: 10, z: 24 }, { x: 4, z: 30 }, { x: 4, z: 50 },
+      { x: 1, z: 2 }, { x: 3, z: 2 }, { x: 4, z: 2 }, { x: 2, z: 6 }, { x: 10, z: 10 },
+      { x: 3, z: 21 }, { x: 8, z: 8 }, { x: 1, z: 9 }, { x: 4, z: 15 }, { x: 25, z: 24 },
+      { x: 27, z: 24 }, { x: 29, z: 24 }, { x: 50, z: 40 }, { x: 45, z: 45 }, { x: 34, z: 43 },
+      { x: 64, z: 42 }, { x: 10, z: 24 }, { x: 4, z: 30 }, { x: 4, z: 50 },
+      { x: 1, z: 2 }, { x: 3, z: 2 }, { x: 4, z: 2 }, { x: 2, z: 6 }, { x: 10, z: 10 },
+      { x: 3, z: 21 }, { x: 8, z: 8 }, { x: 1, z: 9 }, { x: 4, z: 15 }, { x: 25, z: 24 },
+      { x: 27, z: 24 }, { x: 29, z: 24 }, { x: 50, z: 40 }, { x: 45, z: 45 }, { x: 34, z: 43 },
+      { x: 64, z: 42 }, { x: 10, z: 24 }, { x: 4, z: 30 }, { x: 4, z: 50 },
     ]
 
     this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 100);

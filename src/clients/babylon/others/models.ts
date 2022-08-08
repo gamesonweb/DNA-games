@@ -11,10 +11,12 @@ export var shadowGeneratorCampfire: ShadowGenerator;
 
 export class ModelEnum {
     static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
-    static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Campfire = new ModelEnum("campfire", "gltf", 0.25);
     static Mage = new ModelEnum("mage", "gltf", 1.2);
-    static Warrior = new ModelEnum("warrior", "gltf", 1)
+    static Warrior = new ModelEnum("warrior", "gltf", 1);
+
+    static Grass = new ModelEnum("grass", "gltf", 0.02);
+    static Tree = new ModelEnum("pine_tree", "gltf", 1)
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -49,7 +51,7 @@ export class ModelEnum {
         //     throw new Error("No asset menager in scene !")
         // }
 
-        SceneLoader.ImportMesh("", "models/" + this.name + "/", ((this.extension === "gltf" && this.name !== "warrior") ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+        SceneLoader.ImportMesh("", "models/" + this.name + "/", ((this.extension === "gltf" && this.name !== "warrior" && this.name !== "pine_tree") ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
             this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
         })
 
@@ -60,11 +62,14 @@ export class ModelEnum {
         this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
         this.rootMesh.name = this.name;
 
+
+        let all_meshes = [...meshes];
+        let model;
+
         ModelEnum.loadingDone();
 
         switch (this.name) {
             case "grass":
-                let all_meshes = [...meshes];
                 all_meshes.forEach(m => {
                     if (m.material) {
                         m.material.backFaceCulling = true;
@@ -75,7 +80,7 @@ export class ModelEnum {
                 all_meshes.shift();
 
                 //Merging of all twig of grass in an unique mesh
-                let model = Mesh.MergeMeshes(all_meshes);
+                model = Mesh.MergeMeshes(all_meshes);
                 if (model) {
                     this.rootMesh = model;
                     scene.setUpForGrass();
@@ -146,6 +151,23 @@ export class ModelEnum {
                     m.checkCollisions = false;
                 });
                 break;
+            case "pine_tree":
+                // all_meshes.shift();
+
+                //Merging of all twig of grass in an unique mesh
+                // console.log(all_meshes);
+
+                //Need to separate because of bug of disaparition when merged with MultiMaterial
+                // model = Mesh.MergeMeshes(all_meshes, undefined, undefined, undefined, undefined, true);
+
+
+                // if (model) {
+                //     this.rootMesh = model;
+
+                // }
+                scene.setUpForTree();
+                break;
+
 
             // case "terrain":
             //     this.rootMesh = meshes[0] as Mesh;
@@ -178,7 +200,7 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: SceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior];
+        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior, this.Tree];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
     }
