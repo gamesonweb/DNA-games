@@ -1,7 +1,7 @@
-import { AssetsManager, Axis, DirectionalLight, Engine, HemisphericLight, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { AssetsManager, Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
 import { Bullet } from "../avatars/weapons/bullet";
-import { engine, sphere1, startRenderLoop } from "../main";
+import { engine, scene, sphere1, startRenderLoop } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
@@ -20,6 +20,8 @@ export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
+    waterBlurPostProcess: BlurPostProcess | undefined;
+    waterBluePostProcess: ImageProcessingPostProcess | undefined;
     grassTaskCounter: number;
     treeTaskCounter: number;
     bulletList: Bullet[];
@@ -41,9 +43,35 @@ export class SceneClient extends SceneSoft {
         this.grassTaskCounter = 0;
         this.treeTaskCounter = 0;
 
+
+
+
         this.beforeRender = () => {
             if (sphere1) {
                 sphere1.isJumping ? sphere1.applyJump() : sphere1.applyGravity();
+            }
+            if (scene.activeCamera) {
+                if (scene.activeCamera.position.y < water.position.y) {
+                    if (this.waterBlurPostProcess == undefined) this.waterBlurPostProcess = new BlurPostProcess("Horizontal blur", new Vector2(1.0, 0), 64, 1.0, scene.activeCamera);
+
+                    if (this.waterBluePostProcess == undefined) {
+                        this.waterBluePostProcess = new ImageProcessingPostProcess("processing", 1.0, scene.activeCamera);
+                        this.waterBluePostProcess.vignetteWeight = 40;
+                        this.waterBluePostProcess.vignetteStretch = 1;
+                        this.waterBluePostProcess.vignetteColor = new BABYLON.Color4(0, 0, 1, 0);
+                        this.waterBluePostProcess.vignetteEnabled = true;
+                        console.log("testt")
+                    } else {
+                        this.waterBluePostProcess.vignetteEnabled = true;
+                    }
+
+                } else {
+                    if (this.waterBlurPostProcess != undefined) {
+                        this.waterBlurPostProcess.dispose();
+                        this.waterBlurPostProcess = undefined;
+                    }
+                    if (this.waterBluePostProcess != undefined) this.waterBluePostProcess.vignetteEnabled = false;
+                }
             }
         }
 
@@ -137,7 +165,7 @@ export class SceneClient extends SceneSoft {
         this.water.isPickable = false;
 
         this.waterMaterial = new WaterMaterial("waterMaterial", this, new Vector2(256, 256));
-        this.waterMaterial.backFaceCulling = true;
+        this.waterMaterial.backFaceCulling = false;
         this.waterMaterial.bumpTexture = new Texture("./textures/waterbump.png", this, undefined, undefined, undefined, () => {
             ModelEnum.loadingDone();
         });
