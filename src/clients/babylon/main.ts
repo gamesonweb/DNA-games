@@ -16,6 +16,9 @@ export var sphere1: Player | undefined;
 let doneOnce = false;
 
 export var startRenderLoop = function (engine: Engine) {
+  setInterval(() => {
+    console.log(engine.getFps().toFixed() + " fps")
+  }, 2000)
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
