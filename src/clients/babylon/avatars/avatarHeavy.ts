@@ -38,7 +38,7 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   hit(hitmode_id: number, onlyDisplay = false) {
-    if (!this.attackIsReady(hitmode_id)) return
+    if (!this.attackIsReady(hitmode_id) || this.canHit == false) return
     switch (hitmode_id) {
       case 0:
         this.attack_0(onlyDisplay)
