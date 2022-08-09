@@ -95,30 +95,30 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
         if (sphere1) sphere1.shape.position.y += 10
     }
 
-    //tp pos_canyon
-    else if (evt.code === "Digit1") {
-        if (scene.groundsData[0] && sphere1) {
-            teleport(sphere1, scene.groundsData[0].position)
-        }
-    }
-    //tp pos_snow
-    else if (evt.code === "Digit2") {
-        if (scene.groundsData[1] && sphere1) {
-            teleport(sphere1, scene.groundsData[1].position)
-        }
-    }
-    //tp pos_volcan
-    else if (evt.code === "Digit3") {
-        if (scene.groundsData[2] && sphere1) {
-            teleport(sphere1, scene.groundsData[2].position)
-        }
-    }
-    //tp pos_volcanc
-    else if (evt.code === "Digit4") {
-        if (scene.groundsData[3] && sphere1) {
-            teleport(sphere1, scene.groundsData[3].position)
-        }
-    }
+    // //tp pos_canyon
+    // else if (evt.code === "Digit1") {
+    //     if (scene.groundsData[0] && sphere1) {
+    //         teleport(sphere1, scene.groundsData[0].position)
+    //     }
+    // }
+    // //tp pos_snow
+    // else if (evt.code === "Digit2") {
+    //     if (scene.groundsData[1] && sphere1) {
+    //         teleport(sphere1, scene.groundsData[1].position)
+    //     }
+    // }
+    // //tp pos_volcan
+    // else if (evt.code === "Digit3") {
+    //     if (scene.groundsData[2] && sphere1) {
+    //         teleport(sphere1, scene.groundsData[2].position)
+    //     }
+    // }
+    // //tp pos_volcanc
+    // else if (evt.code === "Digit4") {
+    //     if (scene.groundsData[3] && sphere1) {
+    //         teleport(sphere1, scene.groundsData[3].position)
+    //     }
+    // }
 
     //rotation
     else if (evt.code === "ArrowRight") {

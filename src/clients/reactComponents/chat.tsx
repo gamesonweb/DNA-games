@@ -1,7 +1,7 @@
 import { Component, createRef, ReactNode, RefObject, StrictMode } from "react"
 import { render } from "react-dom"
-import { canvas, sphere1 } from "../babylon/main"
-import { getTimeToString } from "../babylon/others/tools"
+import { canvas, scene, sphere1 } from "../babylon/main"
+import { getTimeToString, teleport } from "../babylon/others/tools"
 import { sendMessage } from "../connection/connectionClient"
 import { windowExists } from "./tools"
 
@@ -59,10 +59,51 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     sendMessageFromPlayer(msg: string) {
-        var time = getTimeToString()
         if (sphere1) {
+            if (msg[0] == "/") {
+                this.cheatcode(msg)
+                return
+            }
+            var time = getTimeToString()
             this.writeMessageInChat(time, sphere1.name, msg, true)
             sendMessage(time, msg)
+        }
+    }
+
+    cheatcode(msg: string) {
+        switch (msg) {
+            //teleport cheat codes
+            case "/tp_forest": {
+                if (scene.groundsData[1] && sphere1) {
+                    this.writeMessageInChat("", "success", "teleport to forest island.", false)
+                    teleport(sphere1, scene.groundsData[1].position)
+                }
+                break;
+            }
+            case "/tp_desert": {
+                if (scene.groundsData[0] && sphere1) {
+                    this.writeMessageInChat("", "success", "teleport to desert island.", false)
+                    teleport(sphere1, scene.groundsData[0].position)
+                }
+                break;
+            }
+            case "/tp_volcan": {
+                if (scene.groundsData[3] && sphere1) {
+                    this.writeMessageInChat("", "success", "teleport to volcan island.", false)
+                    teleport(sphere1, scene.groundsData[3].position)
+                }
+                break;
+            }
+            case "/tp_mountain": {
+                if (scene.groundsData[2] && sphere1) {
+                    this.writeMessageInChat("", "success", "teleport to mountain island.", false)
+                    teleport(sphere1, scene.groundsData[2].position)
+                }
+                break;
+            }
+            default: {
+                this.writeMessageInChat("", "error", msg + " is not a valid command.", false)
+            }
         }
     }
 
