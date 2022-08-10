@@ -24,7 +24,8 @@ export const serverMessages = {
 
 export type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, direction: Vector3, class: string, health?: number, maxHealth?: number
+    username: string, direction: Vector3, class: string, ydiroffset: number,
+    health?: number, maxHealth?: number
 }
 
 export type knockbackContent = {

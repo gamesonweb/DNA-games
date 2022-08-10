@@ -167,7 +167,8 @@ function sendPosition(player: Avatar) {
         health: player.currentHealth,
         maxHealth: player.maxHealth,
         direction: player.shape.getDirection(Axis.Z),
-        class: player.class
+        class: player.class,
+        ydiroffset: player.offset_dir_y
     })
 
     //console.log("sending " + position_player);
@@ -214,7 +215,9 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
                 new Monster(scene, data.username)
                 : playerClassCreator(data.class, data.username));
         avatar_to_update = list.get(data.username);
-        if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
+        if (avatar_to_update) {
+            avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
+        }
     }
 
     //avatar_to_move should now be affected and we can give it the new position
@@ -227,6 +230,8 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
 
         let target = avatar_to_update.shape.position.add(data.direction);
         avatar_to_update.shape.lookAt(target);
+
+        avatar_to_update.offset_dir_y = data.ydiroffset
 
         avatar_to_update.shape.computeWorldMatrix(true)
 

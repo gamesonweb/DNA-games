@@ -18,6 +18,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   takeHits: boolean;
   model: Mesh | undefined;
   class: string;
+  offset_dir_y: number;
 
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number) {
@@ -32,7 +33,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.shape.position = new Vector3(0, 1, 0);
     this.oldPosition = this.shape.position.clone();
-
+    this.offset_dir_y = 0;
 
     this.ray = new Ray(this.shape.position, new Vector3(0, -1, 0), 1.2);
     this.jumpRay = new Ray(this.shape.position, new Vector3(0, 1, 0), 1.2);

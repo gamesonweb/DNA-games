@@ -39,7 +39,7 @@ export abstract class Projectile {
 
     //direction projectile
     var directionShooter = myShooter.shape.getDirection(Axis.Z)
-    var defaultAngle = this.myShooter == sphere1 ? new Vector3(directionShooter.x, scene.activeCamera!.getDirection(Axis.Z).y + 0.35, directionShooter.z) : directionShooter
+    var defaultAngle = new Vector3(directionShooter.x, myShooter.offset_dir_y, directionShooter.z)
     this.angle = p.direction || defaultAngle
     this.angle = this.angle.normalize()
     this.shape.rotation = this.angle

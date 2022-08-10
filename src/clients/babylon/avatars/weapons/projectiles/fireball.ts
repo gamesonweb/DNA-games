@@ -1,8 +1,7 @@
 import { AbstractMesh, Mesh, MeshBuilder, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
-import { ws } from "../../../../connection/connectionFictive";
 import { scene } from "../../../main";
-import { distance, getAvatarByShape } from "../../../others/tools";
+import { distance } from "../../../others/tools";
 import { AvatarSoft } from "../../avatarSoft";
 import { Projectile } from "../projectile";
 
