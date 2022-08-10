@@ -12,7 +12,7 @@ export class Fireball extends Projectile {
             myShooter,
             displayOnly,
             opt.damage || 40,
-            opt.range || 15,
+            opt.range || 20,
             opt.speed || 0.20,
             undefined,
             { direction: opt.direction, position: opt.position })
