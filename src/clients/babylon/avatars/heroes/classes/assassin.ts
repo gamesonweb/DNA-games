@@ -1,11 +1,12 @@
 import { Scene } from "babylonjs";
 import { ModelEnum } from "../../../others/models";
-import { Health } from "../../meshWithHealth";
 import { Player } from "../player";
 
 export class Assassin extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 90, 0.25)
+
+        this.class = "Assassin"
 
         this.tableAttackcd[0] = 1000
         this.tableAttackcd[1] = 10000

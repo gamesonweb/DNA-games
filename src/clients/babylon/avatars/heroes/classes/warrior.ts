@@ -8,6 +8,8 @@ export class Warrior extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Warrior.rootMesh!.clone(), 120, 0.2)
 
+        this.class = "Warrior"
+
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 12000
     }

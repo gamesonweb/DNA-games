@@ -17,6 +17,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   canMove: boolean;
   takeHits: boolean;
   model: Mesh | undefined;
+  class: string;
 
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number) {
@@ -24,6 +25,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.gravity_acceleration = 0;
     this.name = avatar_username
+    this.class = "Avatar"
 
     this.speed_coeff = speed;
     this.didSomething = false;

@@ -1,12 +1,10 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
-import { Mage } from "../babylon/avatars/heroes/classes/mage";
-import { Warrior } from "../babylon/avatars/heroes/classes/warrior";
 import { Player } from "../babylon/avatars/heroes/player";
 import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
-import { getTimeToString, isVector3Equal, makeid } from "../babylon/others/tools";
+import { getTimeToString, isVector3Equal, makeid, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef, initChat } from "../reactComponents/chat";
 import { askUsername } from "../reactComponents/login";
@@ -50,7 +48,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     login(messageReceived: any): void {
         var sender_name = messageReceived.content;
         if (sender_name === username) {
-            var sphere = new Mage(scene, messageReceived.content);
+            var sphere = playerClassCreator(username, username)
             this.player_list.set(sender_name, sphere);
             set_my_sphere();
             setPositionUpdateSender()
@@ -85,16 +83,6 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     knockback_monster(messageReceived: any): void {
     }
-
-    // hit_0(messageReceived: any): void {
-    //     if (messageReceived.content !== username) {
-    //         let firing_player = this.player_list.get(messageReceived.content)
-    //         if (firing_player) {
-    //             // firing_player.addBullet(true);
-    //             firing_player.hit(0, true)
-    //         }
-    //     }
-    // }
 
     position(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
@@ -171,14 +159,15 @@ function setPositionUpdateSender() {
 function sendPosition(player: Avatar) {
     player.shape.computeWorldMatrix(true);
     player.didSomething = false;
-    var position_player = JSON.stringify({
+    var info_player = JSON.stringify({
         pos_x: player.shape.position.x,
         pos_y: player.shape.position.y,
         pos_z: player.shape.position.z,
         username: username,
         health: player.currentHealth,
         maxHealth: player.maxHealth,
-        direction: player.shape.getDirection(Axis.Z)
+        direction: player.shape.getDirection(Axis.Z),
+        class: player.class
     })
 
     //console.log("sending " + position_player);
@@ -186,7 +175,7 @@ function sendPosition(player: Avatar) {
     wsClient.send(
         JSON.stringify({
             route: serverMessages.POSITION,
-            content: position_player
+            content: info_player
         }))
 }
 
@@ -223,15 +212,10 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
             data.username,
             isMonster ?
                 new Monster(scene, data.username)
-                : new Mage(scene, data.username));
+                : playerClassCreator(data.class, data.username));
         avatar_to_update = list.get(data.username);
         if (avatar_to_update) avatar_to_update.shape.position = new Vector3(data.pos_x, data.pos_y, data.pos_z);
     }
-
-    // if (avatar_to_update?.name === "zombie0") {
-    // console.log("current position: " + avatar_to_update.shape.position);
-    // console.log("received pos: " + data.pos_x + ", " + data.pos_y + ", ", + data.pos_z);
-    // }
 
     //avatar_to_move should now be affected and we can give it the new position
     if (avatar_to_update) {
@@ -252,6 +236,7 @@ export function avatar_update_from_serveur(data: receiveContent, list: Map<Strin
         avatar_to_update.healthSet(health)
 
     }
+
     //for debugging, should NOT happen ever
     else { console.log("WTF???????") }
 }

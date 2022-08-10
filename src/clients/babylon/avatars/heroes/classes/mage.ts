@@ -8,6 +8,8 @@ export class Mage extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 90, 0.2)
 
+        this.class = "Mage"
+
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 8000
     }

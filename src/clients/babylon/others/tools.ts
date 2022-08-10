@@ -1,10 +1,14 @@
-import { AbstractMesh, Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, RayHelper, Scene, StandardMaterial, Vector2, Vector3 } from "babylonjs";
+import { AbstractMesh, Axis, Color3, FollowCamera, Mesh, MeshBuilder, Ray, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { AdvancedDynamicTexture, Rectangle, TextBlock } from "babylonjs-gui";
 import { wsClient } from "../../connection/connectionClient";
-import { ws } from "../../connection/connectionFictive";
 import { windowExists } from "../../reactComponents/tools";
 import { Avatar } from "../avatars/avatarHeavy";
 import { AvatarSoft } from "../avatars/avatarSoft";
+import { Archer } from "../avatars/heroes/classes/archer";
+import { Assassin } from "../avatars/heroes/classes/assassin";
+import { Healer } from "../avatars/heroes/classes/healer";
+import { Mage } from "../avatars/heroes/classes/mage";
+import { Warrior } from "../avatars/heroes/classes/warrior";
 import { scene, sphere1 } from "../main";
 
 export function makeid(length: number) {
@@ -182,4 +186,22 @@ export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: 
 
 
     return angleTarget < angle
+}
+
+export function playerClassCreator(playerClass: string, username: string): Avatar {
+    switch (playerClass) {
+        case "Warrior":
+            return new Warrior(scene, username)
+        case "Mage":
+            return new Mage(scene, username)
+        case "Archer":
+            return new Archer(scene, username)
+        case "Assassin":
+            return new Assassin(scene, username)
+        case "Healer":
+            return new Healer(scene, username)
+        default:
+            console.log("error in playerClassCreator function, class ", playerClass, " does not exist! Returning warrior.");
+            return new Warrior(scene, username)
+    }
 }

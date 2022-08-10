@@ -7,6 +7,8 @@ export class Healer extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 100, 0.2)
 
+        this.class = "Healer"
+
         this.tableAttackcd[0] = 1200
         this.tableAttackcd[1] = 15000
     }
