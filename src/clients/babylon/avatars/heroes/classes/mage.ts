@@ -1,8 +1,7 @@
 import { Scene } from "babylonjs";
 import { scene } from "../../../main";
 import { ModelEnum } from "../../../others/models";
-import { Health } from "../../meshWithHealth";
-import { Bullet } from "../../weapons/bullet";
+import { Fireball } from "../../weapons/projectiles/fireball";
 import { Player } from "../player";
 
 export class Mage extends Player {
@@ -14,7 +13,9 @@ export class Mage extends Player {
     }
 
     attack_0(onlyDisplay = false) {
-        scene.bulletList.push(new Bullet(this, onlyDisplay))
+        console.log("mage ", this.name, " casts normal attack");
+
+        scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
     }
 
     attack_1(onlyDisplay = false) {

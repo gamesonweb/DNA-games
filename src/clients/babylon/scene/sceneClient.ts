@@ -1,7 +1,7 @@
-import { AssetsManager, Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
-import { Bullet } from "../avatars/weapons/bullet";
-import { engine, scene, sphere1, startRenderLoop } from "../main";
+import { Projectile } from "../avatars/weapons/projectile";
+import { scene, sphere1 } from "../main";
 import { ModelEnum } from "../others/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
@@ -24,7 +24,7 @@ export class SceneClient extends SceneSoft {
     waterBluePostProcess: ImageProcessingPostProcess | undefined;
     grassTaskCounter: number;
     treeTaskCounter: number;
-    bulletList: Bullet[];
+    projectileList: Projectile[];
 
     constructor(engine: Engine) {
         // This creates a basic Babylon Scene object (non-mesh)
@@ -75,7 +75,7 @@ export class SceneClient extends SceneSoft {
             }
         }
 
-        this.bulletList = []
+        this.projectileList = []
     }
 
     /*configureAssetManager() {

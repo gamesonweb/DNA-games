@@ -22,7 +22,7 @@ export var startRenderLoop = function (engine: Engine) {
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
-      scene.bulletList.forEach(e => e.update())
+      scene.projectileList.forEach(e => e.update())
       if (sphere1) inputEffects(sphere1)
       if (sphere1) adjustCameraPosition(scene, sphere1)
       // console.log(engine.getFps().toFixed() + " fps");
