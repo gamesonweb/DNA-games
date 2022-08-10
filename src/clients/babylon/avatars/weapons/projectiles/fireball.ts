@@ -19,11 +19,7 @@ export class Fireball extends Projectile {
     }
 
     collide(mesh: AbstractMesh | undefined) {
-        if (mesh && !this.displayOnly) {
-            // var monster = getAvatarByShape(mesh, [wsClient.monster_list])
-            // if (monster) {
-            //     monster.take_damage(this.shape, this.damage)
-            // }
+        if (!this.displayOnly) {
             wsClient.monster_list.forEach(monster => {
                 var dist = distance(monster.shape.position, this.shape.position)
                 if (dist < 4) monster.take_damage(this.shape, Math.round(this.damage / Math.max(dist, 1)))
