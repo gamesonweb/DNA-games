@@ -83,22 +83,25 @@ export abstract class Avatar extends AvatarSoft {
 
   triggerStatus(statut: string) {
     switch (statut) {
+
       case "burn":
         var burningDamage = setInterval(() => {
-          this.take_damage(this.shape, 10, 0)
+          if (this) this.take_damage(this.shape, 10, 0)
         }, 500)
         setTimeout(() => {
           clearInterval(burningDamage)
         }, 2000)
         break;
+
       case "poisoned":
         var poisoningDamage = setInterval(() => {
-          this.take_damage(this.shape, 5, 0)
+          if (this) this.take_damage(this.shape, 5, 0)
         }, 500)
         setTimeout(() => {
-          clearInterval(burningDamage)
-        }, 5000)
+          clearInterval(poisoningDamage)
+        }, 10000)
         break;
+
       default:
         console.log(statut, " effect does not exist");
     }

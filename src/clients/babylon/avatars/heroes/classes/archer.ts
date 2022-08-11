@@ -1,5 +1,7 @@
 import { Scene } from "babylonjs";
+import { scene } from "../../../main";
 import { ModelEnum } from "../../../others/models";
+import { Arrow } from "../../weapons/projectiles/arrow";
 import { Player } from "../player";
 
 export class Archer extends Player {
@@ -14,6 +16,8 @@ export class Archer extends Player {
 
     attack_0(onlyDisplay = false) {
         //tire une fleche monocible avec une proba d'empoisoner l'ennemi
+        console.log("archer ", this.name, " casts normal attack");
+        scene.projectileList.push(new Arrow(this, onlyDisplay, {}))
     }
 
     attack_1(onlyDisplay = false) {
