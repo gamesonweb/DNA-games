@@ -1,6 +1,6 @@
 import { AbstractMesh, Axis, Mesh, Vector3 } from "babylonjs";
 import { meshes } from "../../../connection/connectionClient";
-import { scene, sphere1 } from "../../main";
+import { scene } from "../../main";
 import { distance, removeFromList } from "../../others/tools";
 import { AvatarSoft } from "../avatarSoft";
 
@@ -47,8 +47,9 @@ export abstract class Projectile {
     //starting position projectile
     this.shape.position = p.position || this.myShooter.shape.position.clone().add(new Vector3(0, 0.8, 0));
     this.originalPositionBullet = this.shape.position.clone()
-    this.shape.position.x = this.shape.position.x + this.angle.x * 2;
-    this.shape.position.z = this.shape.position.z + this.angle.z * 2;
+    var angle2d = new Vector3(this.angle.x, 0, this.angle.z).normalize()
+    this.shape.position.x = this.shape.position.x + angle2d.x * 2;
+    this.shape.position.z = this.shape.position.z + angle2d.z * 2;
 
     //on collision effect
     this.shape.onCollide = e => {

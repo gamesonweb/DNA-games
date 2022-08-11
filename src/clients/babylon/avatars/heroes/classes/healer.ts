@@ -1,6 +1,7 @@
 import { Scene } from "babylonjs";
+import { scene } from "../../../main";
 import { ModelEnum } from "../../../others/models";
-import { Health } from "../../meshWithHealth";
+import { Potion } from "../../weapons/projectiles/potion";
 import { Player } from "../player";
 
 export class Healer extends Player {
@@ -15,6 +16,8 @@ export class Healer extends Player {
 
     attack_0(onlyDisplay = false) {
         //lance un projectile infligeant des degats si touche un ennemi et soignant si touche un allié
+        console.log("mage ", this.name, " casts normal attack");
+        scene.projectileList.push(new Potion(this, onlyDisplay, {}))
     }
 
     attack_1(onlyDisplay = false) {
