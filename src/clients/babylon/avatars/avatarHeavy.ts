@@ -81,4 +81,27 @@ export abstract class Avatar extends AvatarSoft {
 
   abstract take_damage(source: Mesh, amount: number, knockback_power: number): void
 
+  triggerStatus(statut: string) {
+    switch (statut) {
+      case "burn":
+        var burningDamage = setInterval(() => {
+          this.take_damage(this.shape, 10, 0)
+        }, 500)
+        setTimeout(() => {
+          clearInterval(burningDamage)
+        }, 2000)
+        break;
+      case "poisoned":
+        var poisoningDamage = setInterval(() => {
+          this.take_damage(this.shape, 5, 0)
+        }, 500)
+        setTimeout(() => {
+          clearInterval(burningDamage)
+        }, 5000)
+        break;
+      default:
+        console.log(statut, " effect does not exist");
+    }
+  }
+
 }
