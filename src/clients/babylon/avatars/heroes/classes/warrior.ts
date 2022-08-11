@@ -43,7 +43,7 @@ export class Warrior extends Player {
             //Hits all monsters in a circle around the warrior every 250ms
             let ultimateDamageInterval = setInterval(() => {
                 if (this) wsClient.monster_list.forEach(monster => {
-                    if (isInCone(monster.shape.position, this.shape.position, 4, this.shape.getDirection(Axis.Z), 1, Math.PI)) {
+                    if (isInCone(monster.shape.position, this.shape.position, 3, this.shape.getDirection(Axis.Z), 1, Math.PI)) {
                         monster.take_damage(this.shape, 10);
                     }
                 })

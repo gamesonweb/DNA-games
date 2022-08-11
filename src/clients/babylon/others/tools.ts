@@ -135,7 +135,7 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
         m.visibility = Math.min(followCam.radius / 4, 1);
     })
 
-    sphere1.offset_dir_y = followCam.getDirection(Axis.Z).y + 0.35
+    sphere1.offset_dir_y = followCam.getDirection(Axis.Z).y + 0.30
 }
 
 function cameraCollision(mesh: AbstractMesh) {

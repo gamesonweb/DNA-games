@@ -47,8 +47,8 @@ export abstract class Projectile {
     //starting position projectile
     this.shape.position = p.position || this.myShooter.shape.position.clone().add(new Vector3(0, 0.8, 0));
     this.originalPositionBullet = this.shape.position.clone()
-    this.shape.position.x = this.shape.position.x + this.angle.x * 3;
-    this.shape.position.z = this.shape.position.z + this.angle.z * 3;
+    this.shape.position.x = this.shape.position.x + this.angle.x * 2;
+    this.shape.position.z = this.shape.position.z + this.angle.z * 2;
 
     //on collision effect
     this.shape.onCollide = e => {
