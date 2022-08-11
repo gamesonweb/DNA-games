@@ -1,6 +1,8 @@
-import { Scene } from "babylonjs";
+import { Axis, Scene, Vector3 } from "babylonjs";
+import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
 import { ModelEnum } from "../../../others/models";
+import { distance } from "../../../others/tools";
 import { Arrow } from "../../weapons/projectiles/arrow";
 import { Player } from "../player";
 
@@ -21,6 +23,22 @@ export class Archer extends Player {
     }
 
     attack_1(onlyDisplay = false) {
-        //fait un bond arrière puis tire une volée de flèche en l'air sur son ancienne position, tombant en cercle devant et infligeant des dégats
+
+        //ANIMATION
+
+        if (onlyDisplay) return
+        //fait un bond arrière puis tire une volée de flèche en l'air sur son ancienne position, tombant en cercle à son ancienne position et infligeant des dégats
+        console.log("archer ", this.name, " casts special attack");
+        var directionArcher = this.shape.getDirection(Axis.Z)
+        var positionCast = this.shape.position.clone()
+        this.knockback(new Vector3(-directionArcher.x, 0, -directionArcher.z), 2, true)
+        setTimeout(() => {
+            wsClient.monster_list.forEach(monster => {
+                if (distance(monster.shape.position, positionCast, true) < 10) {
+                    monster.take_damage(this.shape, 40, 0.5)
+                    monster.triggerStatus("poisoned")
+                }
+            })
+        }, 500)
     }
 }

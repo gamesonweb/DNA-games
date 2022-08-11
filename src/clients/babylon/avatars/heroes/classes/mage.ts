@@ -18,7 +18,6 @@ export class Mage extends Player {
 
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
-
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
     }
 
