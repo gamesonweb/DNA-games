@@ -8,6 +8,7 @@ export abstract class Avatar extends AvatarSoft {
   tableAttackcd: number[];
   tableAttackDate: number[];
   weightCategory: number;
+  statusStacks: { burn: number; poison: number; bleed: number; };
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number) {
 
@@ -31,6 +32,8 @@ export abstract class Avatar extends AvatarSoft {
     this.tableAttackcd = [0, 1000, 1000, 1000]
 
     this.weightCategory = 1
+
+    this.statusStacks = { burn: 0, poison: 0, bleed: 0 }
   }
 
   dispose(): void {
@@ -84,22 +87,46 @@ export abstract class Avatar extends AvatarSoft {
   triggerStatus(statut: string) {
     switch (statut) {
 
+      //burn, large damage over short period, does not cumulate
       case "burn":
+        if (this.statusStacks.burn >= 1) return
+        this.statusStacks.burn++
         var burningDamage = setInterval(() => {
           if (this) this.take_damage(this.shape.position, 10, 0)
         }, 500)
         setTimeout(() => {
+          this.statusStacks.burn--
           clearInterval(burningDamage)
         }, 2000)
         break;
 
+      //poison, small damage over long period, does cumulate
       case "poisoned":
+        this.statusStacks.poison++
         var poisoningDamage = setInterval(() => {
           if (this) this.take_damage(this.shape.position, 5, 0)
         }, 500)
         setTimeout(() => {
+          this.statusStacks.poison--
           clearInterval(poisoningDamage)
         }, 10000)
+        break;
+
+      //bleed, large damage over long period, does not cumulate
+      case "bleed":
+        if (this.statusStacks.bleed >= 1) {
+          console.log("bleed already applied");
+          return
+        }
+        this.statusStacks.bleed++
+        console.log("applying bleed, stack now ", this.statusStacks.bleed);
+        var bleedingDamage = setInterval(() => {
+          if (this) this.take_damage(this.shape.position, 5, 0)
+        }, 200)
+        setTimeout(() => {
+          this.statusStacks.bleed--
+          clearInterval(bleedingDamage)
+        }, 6000)
         break;
 
       default:
