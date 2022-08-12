@@ -27,7 +27,7 @@ export class Potion extends Projectile {
         if (!this.displayOnly) {
             wsClient.monster_list.forEach(monster => {
                 var dist = distance(monster.shape.position, this.shape.position)
-                if (dist < 4) monster.take_damage(this.shape, this.damage)
+                if (dist < 4) monster.take_damage(this.shape.position, this.damage)
             })
         }
         this.dispose()

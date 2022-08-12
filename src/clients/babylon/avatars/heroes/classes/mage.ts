@@ -32,7 +32,7 @@ export class Mage extends Player {
             wsClient.monster_list.forEach(monster => {
                 if (isInCone(monster.shape.position, this.shape.position, 10, this.shape.getDirection(Axis.Z), 1, Math.PI / 3)) {
                     console.log("distance Mage-Monstre: ", distance(this.shape.position, monster.shape.position));
-                    monster.take_damage(this.shape, 10, (10 - distance(this.shape.position, monster.shape.position, true)) / 2);
+                    monster.take_damage(this.shape.position, 10, (10 - distance(this.shape.position, monster.shape.position, true)) / 2);
                     monster.triggerStatus("burn");
                 }
             })

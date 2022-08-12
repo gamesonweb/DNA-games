@@ -1,4 +1,4 @@
-import { Axis, Mesh, Scene } from "babylonjs";
+import { Axis, Mesh, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { sphere1 } from "../../main";
@@ -14,14 +14,14 @@ export class Monster extends Avatar {
         this.shape.name = this.name
     }
 
-    take_damage(source: Mesh, amount: number, knockback_power = 1) {
+    take_damage(source: Vector3, amount: number, knockback_power = 1) {
         if (!this.takeHits) return
         wsClient.send(
             JSON.stringify({
                 route: serverMessages.DAMAGE_MONSTER,
                 content: JSON.stringify({ username: this.name, damage: amount })
             }))
-        let direction = this.shape.position.subtract(source.position)
+        let direction = this.shape.position.subtract(source)
         if (knockback_power == 0) return;
         let power = knockback_power / this.weightCategory
         wsClient.send(
@@ -40,7 +40,7 @@ export class Monster extends Avatar {
             if (this) {
                 if (isInCone(sphere1?.shape.position!, this.shape.position, 2, this.shape.getDirection(Axis.Z), 1, Math.PI / 4)) {
                     // console.log("Successful hit");
-                    sphere1?.take_damage(this.shape, 10);
+                    sphere1?.take_damage(this.shape.position, 10);
                 }
             }
         },

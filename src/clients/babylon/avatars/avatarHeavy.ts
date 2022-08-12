@@ -1,4 +1,4 @@
-import { Mesh, Scene, } from "babylonjs";
+import { Mesh, Scene, Vector3, } from "babylonjs";
 import { shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
@@ -79,14 +79,14 @@ export abstract class Avatar extends AvatarSoft {
     console.log("ERROR: tried to call non-implemented attack_3 on avatar ", this);
   }
 
-  abstract take_damage(source: Mesh, amount: number, knockback_power: number): void
+  abstract take_damage(source: Vector3, amount: number, knockback_power: number): void
 
   triggerStatus(statut: string) {
     switch (statut) {
 
       case "burn":
         var burningDamage = setInterval(() => {
-          if (this) this.take_damage(this.shape, 10, 0)
+          if (this) this.take_damage(this.shape.position, 10, 0)
         }, 500)
         setTimeout(() => {
           clearInterval(burningDamage)
@@ -95,7 +95,7 @@ export abstract class Avatar extends AvatarSoft {
 
       case "poisoned":
         var poisoningDamage = setInterval(() => {
-          if (this) this.take_damage(this.shape, 5, 0)
+          if (this) this.take_damage(this.shape.position, 5, 0)
         }, 500)
         setTimeout(() => {
           clearInterval(poisoningDamage)

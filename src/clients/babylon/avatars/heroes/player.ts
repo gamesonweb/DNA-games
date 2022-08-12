@@ -1,4 +1,4 @@
-import { Mesh, Scene } from "babylonjs";
+import { Mesh, Scene, Vector3 } from "babylonjs";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 
@@ -10,10 +10,10 @@ export abstract class Player extends Avatar {
         super(scene, avatar_username, shape, model, health, speed)
     }
 
-    take_damage(source: Mesh, amount: number, knockback_power = 1) {
+    take_damage(source: Vector3, amount: number, knockback_power = 1) {
         if (!this.takeHits) return
         this.healthMinus(amount);
-        let direction = this.shape.position.subtract(source.position)
+        let direction = this.shape.position.subtract(source)
         this.knockback(direction, knockback_power / this.weightCategory)
     }
 

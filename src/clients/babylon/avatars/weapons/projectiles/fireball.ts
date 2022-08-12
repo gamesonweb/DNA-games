@@ -21,7 +21,7 @@ export class Fireball extends Projectile {
         if (!this.displayOnly) {
             wsClient.monster_list.forEach(monster => {
                 var dist = distance(monster.shape.position, this.shape.position)
-                if (dist < 4) monster.take_damage(this.shape, Math.round(this.damage / Math.max(dist, 1)))
+                if (dist < 4) monster.take_damage(this.shape.position, Math.round(this.damage / Math.max(dist, 1)))
             })
         }
         this.dispose()

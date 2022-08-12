@@ -35,7 +35,7 @@ export class Archer extends Player {
         setTimeout(() => {
             wsClient.monster_list.forEach(monster => {
                 if (distance(monster.shape.position, positionCast, true) < 10) {
-                    monster.take_damage(this.shape, 40, 0.5)
+                    monster.take_damage(positionCast, 40, 0.5)
                     monster.triggerStatus("poisoned")
                 }
             })

@@ -20,7 +20,7 @@ export class Warrior extends Player {
             wsClient.monster_list.forEach(monster => {
                 if (isInCone(monster.shape.position!, this.shape.position, 2, this.shape.getDirection(Axis.Z), 1, Math.PI / 2)) {
                     // console.log("Successful hit");
-                    monster.take_damage(this.shape, 40);
+                    monster.take_damage(this.shape.position, 40);
                 }
             })
         }
@@ -44,7 +44,7 @@ export class Warrior extends Player {
             let ultimateDamageInterval = setInterval(() => {
                 if (this) wsClient.monster_list.forEach(monster => {
                     if (isInCone(monster.shape.position, this.shape.position, 3, this.shape.getDirection(Axis.Z), 1, Math.PI)) {
-                        monster.take_damage(this.shape, 10);
+                        monster.take_damage(this.shape.position, 10);
                     }
                 })
             }, 250);

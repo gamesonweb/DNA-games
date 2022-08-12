@@ -21,7 +21,7 @@ export class Arrow extends Projectile {
         if (!this.displayOnly && mesh) {
             var monster = getAvatarByShape(mesh, [wsClient.monster_list])
             if (monster) {
-                monster.take_damage(this.shape, this.damage)
+                monster.take_damage(this.shape.position, this.damage)
                 monster.triggerStatus("poisoned")
             }
         }
