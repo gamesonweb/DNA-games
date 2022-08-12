@@ -51,7 +51,7 @@ export class ModelEnum {
         //     throw new Error("No asset menager in scene !")
         // }
 
-        SceneLoader.ImportMesh("", "models/" + this.name + "/", ((this.extension === "gltf" && this.name !== "warrior" && this.name !== "pine_tree") ? "scene" : this.name) + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+        SceneLoader.ImportMesh("", "models/" + this.name + "/", this.name + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
             this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
         })
 
