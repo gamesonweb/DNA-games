@@ -23,12 +23,18 @@ export class Monster extends Avatar {
             }))
         let direction = this.shape.position.subtract(source)
         if (knockback_power == 0) return;
+        this.knockback(direction, knockback_power, false)
+    }
+
+    knockback(direction: Vector3, knockback_power: number, cumulate = false): void {
         let power = knockback_power / this.weightCategory
-        wsClient.send(
-            JSON.stringify({
-                route: serverMessages.KNOCKBACK_MONSTER,
-                content: JSON.stringify({ username: this.name, direction: direction, power: power })
-            }))
+        if (this.canMove || cumulate) {
+            wsClient.send(
+                JSON.stringify({
+                    route: serverMessages.KNOCKBACK_MONSTER,
+                    content: JSON.stringify({ username: this.name, direction: direction, power: power })
+                }))
+        }
     }
 
     //The monster hit in front of him. The hit is represented by a hitbox (an invisible mesh), which damage the player if they interesect
