@@ -14,6 +14,7 @@ export class ModelEnum {
     static Campfire = new ModelEnum("campfire", "gltf", 0.25);
     static Mage = new ModelEnum("mage", "gltf", 1.2);
     static Warrior = new ModelEnum("warrior", "gltf", 1);
+    static Assassin = new ModelEnum("Rogue", "gltf", 1);
 
     static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Tree = new ModelEnum("pine_tree", "gltf", 1)
@@ -80,7 +81,7 @@ export class ModelEnum {
                 all_meshes.shift();
 
                 //Merging of all twig of grass in an unique mesh
-                model = Mesh.MergeMeshes(all_meshes);
+                model = Mesh.MergeMeshes(all_meshes, false);
                 if (model) {
                     this.rootMesh = model;
                     scene.setUpForGrass();
@@ -200,7 +201,7 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: SceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior, this.Tree];
+        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior, this.Assassin, this.Tree];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
     }

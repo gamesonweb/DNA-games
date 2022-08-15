@@ -77,7 +77,7 @@ export function set_my_sphere() {
 
     let cameraBuilder = new FollowCamera(sphere1.name + "Camera", sphere1.shape.position.multiply(new Vector3(1, -1, 1)), scene, sphere1.shape);
     cameraBuilder.rotationOffset = 180;
-    // cameraBuilder.minZ = 5;
+    // cameraBuilder.maxZ = 100;
     scene.activeCamera = cameraBuilder;
 
 
