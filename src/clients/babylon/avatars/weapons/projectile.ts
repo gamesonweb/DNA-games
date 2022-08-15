@@ -42,7 +42,7 @@ export abstract class Projectile {
     var defaultAngle = new Vector3(directionShooter.x, myShooter.offset_dir_y, directionShooter.z)
     this.angle = p.direction || defaultAngle
     this.angle = this.angle.normalize()
-    this.shape.rotation = this.angle
+    this.shape.lookAt(this.shape.position.add(this.angle))
 
     //starting position projectile
     this.shape.position = p.position || this.myShooter.shape.position.clone().add(new Vector3(0, 0.8, 0));
