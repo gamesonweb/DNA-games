@@ -238,6 +238,9 @@ export class SceneClient extends SceneSoft {
 
                 if (height != undefined && model != undefined && c1m && c2m) {
                     let matrix = this.createThinInstance(c1m, x, height, z);
+                    var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
+                    collider.position = new Vector3(x, height + 1.2, z)
+                    collider.checkCollisions = true
                     this.createThinInstance(c2m, x, height, z, matrix);
                 }
 
