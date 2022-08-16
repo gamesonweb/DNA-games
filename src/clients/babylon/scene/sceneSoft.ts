@@ -19,6 +19,7 @@ export abstract class SceneSoft extends Scene {
   constructor(engine: Engine) {
     // This creates a basic Babylon Scene object (non-mesh)
     super(engine)
+    // this.debugLayer.show();
     // console.log("Creating scene soft")
     this.collisionsEnabled = true;
     this.createCamera()

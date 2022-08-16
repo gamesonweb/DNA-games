@@ -1,6 +1,6 @@
 import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
-import { engine, scene, sphere1, startRenderLoop } from "../main";
-import { SceneClient, shadowGenerator } from "../scene/sceneClient";
+import { engine, scene, startRenderLoop } from "../main";
+import { SceneClient } from "../scene/sceneClient";
 
 import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";

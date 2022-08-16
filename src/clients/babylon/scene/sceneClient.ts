@@ -201,9 +201,10 @@ export class SceneClient extends SceneSoft {
 
         if (model != undefined) {
             model.scaling = new Vector3(1, 1, 1);
+            model.addLODLevel(50, null)
 
             //Creation of 400 herbs at random positions, scaling and orientation
-            for (let i = 0; i < 2000; i++) {
+            for (let i = 0; i < 200; i++) {
 
                 let x = Math.random() * 200 - 100;
                 let z = Math.random() * 200 - 100;
@@ -231,17 +232,51 @@ export class SceneClient extends SceneSoft {
             let c1m = Mesh.MergeMeshes([c1]);
             let c2m = Mesh.MergeMeshes([c2]);
 
-            for (let i = 0; i < 100; i++) {
-                let x = Math.random() * 200 - 100;
-                let z = Math.random() * 200 - 100;
+            // var lowResTronc = MeshBuilder.CreateBox("arbre_tronc", { height: 4, width: 0.6, depth: 0.6 })
+            // var lowResFeillage = MeshBuilder.CreateBox("arbre_feuillage", { size: 3 })
+
+            c1m?.simplify(
+                [
+                    { quality: 0.6, distance: 0, optimizeMesh: true },
+                    { quality: 0.4, distance: 50, optimizeMesh: true },
+                    { quality: 0.05, distance: 100, optimizeMesh: true },
+                ],
+                false,
+                BABYLON.SimplificationType.QUADRATIC,
+                function () {
+                    alert("LOD finisehd, let's have a beer!");
+                },
+            );
+            c2m?.simplify(
+                [
+                    { quality: 0.6, distance: 0, optimizeMesh: true },
+                    { quality: 0.4, distance: 50, optimizeMesh: true },
+                    { quality: 0.05, distance: 100, optimizeMesh: true },
+                ],
+                false,
+                BABYLON.SimplificationType.QUADRATIC,
+                function () {
+                    alert("LOD finisehd, let's have a beer!");
+                },
+            );
+
+            // c1m?.addLODLevel(100, null)
+            // c2m?.addLODLevel(100, null)
+
+            for (let i = 0; i < 300; i++) {
+                let x = Math.random() * 150 - 75;
+                let z = Math.random() * 150 - 75;
                 let height = this.getHeightAtPoint(x, z);
 
                 if (height != undefined && model != undefined && c1m && c2m) {
-                    let matrix = this.createThinInstance(c1m, x, height, z);
+                    // let matrix = this.createThinInstance(c1m, x, height, z);
+                    let matrix = this.createInstance(c1m, x, height, z)
                     var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
                     collider.position = new Vector3(x, height + 1.2, z)
                     collider.checkCollisions = true
-                    this.createThinInstance(c2m, x, height, z, matrix);
+                    collider.isVisible = false
+                    // this.createThinInstance(c2m, x, height, z, matrix);
+                    this.createInstance(c2m, x, height, z, matrix);
                 }
 
             }
@@ -277,5 +312,27 @@ export class SceneClient extends SceneSoft {
         //Creation of thin instance
         model.thinInstanceAdd(scaleRotateTranslateMatrix);
         return scaleRotateTranslateMatrix;
+    }
+
+    private createInstance(model: Mesh, x: number, height: number, z: number, p?: { scale: Vector3, rotation: Quaternion }) {
+
+        //Parameters
+        let scaleRatio = 3 - Math.random() * 1.5
+        let scalingVector = p ? p.scale : new Vector3(scaleRatio, scaleRatio, scaleRatio);
+        let rotationQuaternion = p ? p.rotation : Quaternion.RotationAxis(Axis.Y, Math.random() * Math.PI);
+
+
+        //Creation of thin instance
+        var instance = model.createInstance("instance")
+        instance.position = new Vector3(x, height, z)
+        instance.rotationQuaternion = rotationQuaternion
+        instance.scaling = scalingVector
+
+        instance.freezeWorldMatrix()
+        instance.isPickable = false
+        instance.material?.freeze()
+        instance.doNotSyncBoundingInfo = true;
+
+        return { scale: scalingVector, rotation: rotationQuaternion };
     }
 }
