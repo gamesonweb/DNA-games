@@ -237,8 +237,7 @@ export class SceneClient extends SceneSoft {
 
             c1m?.simplify(
                 [
-                    { quality: 0.6, distance: 0, optimizeMesh: true },
-                    { quality: 0.4, distance: 50, optimizeMesh: true },
+                    { quality: 0.3, distance: 50, optimizeMesh: true },
                     { quality: 0.05, distance: 100, optimizeMesh: true },
                 ],
                 false,
@@ -249,8 +248,7 @@ export class SceneClient extends SceneSoft {
             );
             c2m?.simplify(
                 [
-                    { quality: 0.6, distance: 0, optimizeMesh: true },
-                    { quality: 0.4, distance: 50, optimizeMesh: true },
+                    { quality: 0.3, distance: 50, optimizeMesh: true },
                     { quality: 0.05, distance: 100, optimizeMesh: true },
                 ],
                 false,
