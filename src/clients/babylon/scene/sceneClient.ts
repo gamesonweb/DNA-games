@@ -118,6 +118,7 @@ export class SceneClient extends SceneSoft {
             ground.freezeWorldMatrix();
             ground.receiveShadows = true;
             ground.isPickable = true;
+            // ground.material?.freeze()
             this.grounds!.push(ground.name);
 
             this.setUpForGrass();
@@ -328,7 +329,8 @@ export class SceneClient extends SceneSoft {
 
         instance.freezeWorldMatrix()
         instance.isPickable = false
-        instance.material?.freeze()
+        if (instance.material) instance.material.needDepthPrePass = true
+        // instance.material?.freeze()
         instance.doNotSyncBoundingInfo = true;
 
         return { scale: scalingVector, rotation: rotationQuaternion };

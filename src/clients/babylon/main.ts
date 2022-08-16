@@ -58,6 +58,7 @@ export let initFunction = async function () {
   //startRenderLoop(engine, canvas);
 
   let scene = new SceneClient(engine);
+  scene.skipPointerMovePicking = true
   //scene.assetManager?.load();
   //Here load all models
 
