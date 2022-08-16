@@ -233,9 +233,6 @@ export class SceneClient extends SceneSoft {
             let c1m = Mesh.MergeMeshes([c1]);
             let c2m = Mesh.MergeMeshes([c2]);
 
-            // var lowResTronc = MeshBuilder.CreateBox("arbre_tronc", { height: 4, width: 0.6, depth: 0.6 })
-            // var lowResFeillage = MeshBuilder.CreateBox("arbre_feuillage", { size: 3 })
-
             c1m?.simplify(
                 [
                     { quality: 0.3, distance: 50, optimizeMesh: true },
@@ -262,9 +259,11 @@ export class SceneClient extends SceneSoft {
             // c1m?.addLODLevel(100, null)
             // c2m?.addLODLevel(100, null)
 
-            for (let i = 0; i < 300; i++) {
-                let x = Math.random() * 150 - 75;
-                let z = Math.random() * 150 - 75;
+            /* POSITION TREES FROM STOCKED LIST */
+
+            this.treePositions.forEach((positionData) => {
+                let x = positionData.x
+                let z = positionData.z
                 let height = this.getHeightAtPoint(x, z);
 
                 if (height != undefined && model != undefined && c1m && c2m) {
@@ -277,8 +276,29 @@ export class SceneClient extends SceneSoft {
                     // this.createThinInstance(c2m, x, height, z, matrix);
                     this.createInstance(c2m, x, height, z, matrix);
                 }
+            })
 
-            }
+            /* GENERATE RANDOM TREE POSITION */
+
+            // for (let i = 0; i < 300; i++) {
+            //     let x = Math.random() * 150 - 75;
+            //     let z = Math.random() * 150 - 75;
+            //     let height = this.getHeightAtPoint(x, z);
+            //     console.log("{ x: ", (Math.round(x * 100) / 100).toFixed(2), ", z: ", (Math.round(z * 100) / 100).toFixed(2), " }");
+
+
+            //     if (height != undefined && model != undefined && c1m && c2m) {
+            //         // let matrix = this.createThinInstance(c1m, x, height, z);
+            //         let matrix = this.createInstance(c1m, x, height, z)
+            //         var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
+            //         collider.position = new Vector3(x, height + 1.2, z)
+            //         collider.checkCollisions = true
+            //         collider.isVisible = false
+            //         // this.createThinInstance(c2m, x, height, z, matrix);
+            //         this.createInstance(c2m, x, height, z, matrix);
+            //     }
+
+            // }
             // this.treePositions.forEach(position => {
             //     let x = position.x;
             //     let z = position.z;
