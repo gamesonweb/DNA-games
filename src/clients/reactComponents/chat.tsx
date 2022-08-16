@@ -101,6 +101,12 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 }
                 break;
             }
+            case "/pos": {
+                if (sphere1) {
+                    console.log(sphere1.shape.position);
+                }
+                break;
+            }
             default: {
                 this.writeMessageInChat("", "error", msg + " is not a valid command.", false)
             }
