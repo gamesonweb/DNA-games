@@ -8,7 +8,7 @@ import { Player } from "../player";
 
 export class Archer extends Player {
     constructor(scene: Scene, avatar_username: string) {
-        super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 80, 0.25)
+        super(scene, avatar_username, ModelEnum.Archer.rootMesh!.clone(), 80, 0.25)
 
         this.class = "Archer"
 

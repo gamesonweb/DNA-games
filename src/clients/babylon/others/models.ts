@@ -10,12 +10,15 @@ import { sendLogin, wsClient } from "../../connection/connectionClient";
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 export class ModelEnum {
-    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
-    static Campfire = new ModelEnum("campfire", "gltf", 0.25);
     static Mage = new ModelEnum("mage", "gltf", 1.2);
     static Warrior = new ModelEnum("warrior", "gltf", 1);
     static Assassin = new ModelEnum("Rogue", "gltf", 1);
+    static Archer = new ModelEnum("mage", "gltf", 1);
+    static Healer = new ModelEnum("mage", "gltf", 1);
 
+    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
+
+    static Campfire = new ModelEnum("campfire", "gltf", 0.25);
     static Grass = new ModelEnum("grass", "gltf", 0.02);
     static Tree = new ModelEnum("pine_tree", "gltf", 1)
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
@@ -152,6 +155,16 @@ export class ModelEnum {
                     m.checkCollisions = false;
                 });
                 break;
+
+            case "Rogue":
+                this.rootMesh.rotate(Axis.Y, Math.PI);
+                this.rootMesh.scaling = new Vector3(0.8, 0.8, 0.8)
+                meshes.forEach(m => {
+                    m.isPickable = false;
+                    m.checkCollisions = false;
+                });
+                break;
+
             case "pine_tree":
                 // all_meshes.shift();
 
@@ -201,7 +214,11 @@ export class ModelEnum {
     }
 
     static createAllModels(scene: SceneClient) {
-        var allModels = [this.PumpkinMonster, this.Grass, this.Campfire, this.Mage, this.Warrior, this.Assassin, this.Tree];
+        var allModels = [
+            this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer,
+            this.PumpkinMonster,
+            this.Grass, this.Campfire, this.Tree
+        ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
     }

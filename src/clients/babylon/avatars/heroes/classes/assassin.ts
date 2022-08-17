@@ -19,6 +19,8 @@ export class Assassin extends Player {
         //coup monocible, inflige des dégats et l'état bleeding
 
         if (!onlyDisplay) {
+            console.log("assassin normal attack");
+
             //select the nearest monster in the attack's cone
             var targetMonster: Monster | undefined
             var distanceNearest = 5
