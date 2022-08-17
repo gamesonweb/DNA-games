@@ -1,4 +1,4 @@
-import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, Texture, Vector2, Vector3 } from "babylonjs";
+import { Axis, BlurPostProcess, Color3, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
@@ -179,6 +179,19 @@ export class SceneClient extends SceneSoft {
 
         water = this.water
 
+        var water_ground = MeshBuilder.CreatePlane("water_ground", { size: 2000 })
+        var material = new StandardMaterial("water_round_mat", scene)
+        material.alpha = 1;
+        material.diffuseColor = new BABYLON.Color3(146 / 255, 115 / 255, 82 / 255);
+        water_ground.material = material
+        water_ground.checkCollisions = true
+        water_ground.rotate(Axis.X, Math.PI / 2)
+        water_ground.position.y = -27
+        water_ground.freezeWorldMatrix();
+        water_ground.isPickable = true;
+        this.grounds!.push(water_ground.name);
+        this.waterMaterial!.addToRenderList(water_ground);
+
         return this.water;
     }
 
@@ -212,7 +225,7 @@ export class SceneClient extends SceneSoft {
                 let height = this.getHeightAtPoint(x, z);
 
                 if (height != undefined) {
-                    this.createThinInstance(model, x, height, z);
+                    this.createInstance(model, x, height, z);
                 }
             }
 
@@ -241,7 +254,7 @@ export class SceneClient extends SceneSoft {
                 false,
                 BABYLON.SimplificationType.QUADRATIC,
                 function () {
-                    alert("LOD finisehd, let's have a beer!");
+                    console.log("LOD troncs finished");
                 },
             );
             c2m?.simplify(
@@ -252,7 +265,7 @@ export class SceneClient extends SceneSoft {
                 false,
                 BABYLON.SimplificationType.QUADRATIC,
                 function () {
-                    alert("LOD finisehd, let's have a beer!");
+                    console.log("LOD feuillages finished");
                 },
             );
 
@@ -349,7 +362,7 @@ export class SceneClient extends SceneSoft {
 
         instance.freezeWorldMatrix()
         instance.isPickable = false
-        if (instance.material) instance.material.needDepthPrePass = true
+        // if (instance.material) instance.material.needDepthPrePass = true
         // instance.material?.freeze()
         instance.doNotSyncBoundingInfo = true;
 
