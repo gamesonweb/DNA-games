@@ -43,9 +43,6 @@ export class SceneClient extends SceneSoft {
         this.grassTaskCounter = 0;
         this.treeTaskCounter = 0;
 
-
-
-
         this.beforeRender = () => {
             if (sphere1) {
                 sphere1.isJumping ? sphere1.applyJump() : sphere1.applyGravity();
@@ -179,16 +176,11 @@ export class SceneClient extends SceneSoft {
 
         water = this.water
 
-        var water_ground = MeshBuilder.CreatePlane("water_ground", { size: 2000 })
+        var water_ground = this.createWaterGround()
         var material = new StandardMaterial("water_round_mat", scene)
         material.alpha = 1;
         material.diffuseColor = new BABYLON.Color3(146 / 255, 115 / 255, 82 / 255);
         water_ground.material = material
-        water_ground.checkCollisions = true
-        water_ground.rotate(Axis.X, Math.PI / 2)
-        water_ground.position.y = -27
-        water_ground.freezeWorldMatrix();
-        water_ground.isPickable = true;
         this.grounds!.push(water_ground.name);
         this.waterMaterial!.addToRenderList(water_ground);
 

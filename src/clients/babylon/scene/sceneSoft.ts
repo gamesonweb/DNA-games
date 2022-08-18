@@ -1,4 +1,4 @@
-import { AssetsManager, Engine, FreeCamera, Scene, Vector3, Ray } from "babylonjs";
+import { AssetsManager, Engine, FreeCamera, Scene, Vector3, Ray, MeshBuilder, Axis } from "babylonjs";
 
 export const groundParameters = {
   width: 100,
@@ -53,7 +53,7 @@ export abstract class SceneSoft extends Scene {
       },
     ]
 
-    this.treePositions = GROUND_DATA
+    this.treePositions = TREE_POSITION_DATA
 
 
     this.heightRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0), 100);
@@ -92,9 +92,19 @@ export abstract class SceneSoft extends Scene {
   abstract loadGround(path: String, modelID: String, meshName: String, position: Vector3, scaling: number): void;
 
   abstract createGround(): void;
+
+  createWaterGround() {
+    var water_ground = MeshBuilder.CreatePlane("water_ground", { size: 2000 })
+    water_ground.checkCollisions = true
+    water_ground.rotate(Axis.X, Math.PI / 2)
+    water_ground.position.y = -27
+    water_ground.freezeWorldMatrix();
+    water_ground.isPickable = true;
+    return water_ground
+  }
 };
 
-const GROUND_DATA = [
+const TREE_POSITION_DATA = [
   { x: 40.86, z: -25.59 },
   { x: -13.02, z: 43.70 },
   { x: -9.60, z: 3.96 },
