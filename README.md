@@ -46,7 +46,7 @@ Terrain
 -Blender (shader, ANT landscape...)
 -problématiques d'export
 
-Gravité
+Gravité & Saut
 -laser and moves every frames
 
 Camera
