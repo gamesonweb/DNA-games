@@ -46,6 +46,9 @@ Terrain
 -Blender (shader, ANT landscape...)
 -problématiques d'export
 
+Gravité
+-laser and moves every frames
+
 Camera
 -caméra s'enfonce dans les textures, utilisation d'un système de laser
 
