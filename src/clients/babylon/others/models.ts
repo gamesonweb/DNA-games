@@ -1,4 +1,4 @@
-import { AnimationGroup, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { AnimationGroup, AssetContainer, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { engine, scene, startRenderLoop } from "../main";
 import { SceneClient } from "../scene/sceneClient";
 
@@ -15,6 +15,7 @@ export class ModelEnum {
     static Assassin = new ModelEnum("Rogue", "gltf", 1);
     static Archer = new ModelEnum("mage", "gltf", 1);
     static Healer = new ModelEnum("mage", "gltf", 1);
+    static Ranger = new ModelEnum("ranger", "glb", 1);
 
     static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
 
@@ -29,6 +30,7 @@ export class ModelEnum {
     rootMesh: Mesh | undefined
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
+    container: AssetContainer = new AssetContainer();
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -43,25 +45,21 @@ export class ModelEnum {
     }
 
     createModel(scene: SceneClient) {
-        // console.log(scene.assetManager);
-
-        //A priori, all gltf extension file will be (automatically) named "scene", else the same name of the respective folder
-        // if (scene.assetManager) {
-        //     let meshTask = scene.assetManager.addMeshTask(this.name + "_task", "", "models/" + this.name + "/", (this.extension == "gltf" ? "scene" : this.name) + "." + this.extension);
-        //     meshTask.onSuccess = (task) => {
-        //         this.callback(task.loadedMeshes, task.loadedParticleSystems, task.loadedSkeletons, task.loadedAnimationGroups)
-        //     }
-        // } else {
-        //     throw new Error("No asset menager in scene !")
-        // }
-
-        SceneLoader.ImportMesh("", "models/" + this.name + "/", this.name + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
-            this.callback(loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups)
+        // SceneLoader.ImportMesh("", "models/" + this.name + "/", this.name + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
+        //     this.callback(loadedMeshes, loadedSkeletons, loadedAnimationGroups)
+        // })
+        SceneLoader.LoadAssetContainer("models/" + this.name + "/", this.name + "." + this.extension, scene, (container) => {
+            this.callback(container, container.meshes, container.skeletons, container.animationGroups)
         })
-
     }
 
-    callback(meshes: any[], particules: IParticleSystem[], skeletons: Skeleton[], animations: AnimationGroup[]) {
+    duplicate(container: AssetContainer) {
+        let entries = container.instantiateModelsToScene(undefined, false, { doNotInstantiate: true });
+        return entries;
+    }
+
+    callback(container: AssetContainer, meshes: any[], skeletons: Skeleton[], animations: AnimationGroup[]) {
+        this.container = container;
         this.rootMesh = meshes[0] as Mesh;
         this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
         this.rootMesh.name = this.name;
@@ -149,6 +147,16 @@ export class ModelEnum {
                 });
                 break;
 
+            case "ranger":
+                this.rootMesh.rotate(Axis.Y, Math.PI);
+                this.rootMesh.scaling = new Vector3(1.5, 1.5, 1.5)
+                meshes.forEach(m => {
+                    m.isPickable = false;
+                    m.checkCollisions = false;
+                });
+                animations[0].stop();
+                break;
+
             case "warrior":
                 meshes.forEach(m => {
                     m.isPickable = false;
@@ -166,47 +174,8 @@ export class ModelEnum {
                 break;
 
             case "pine_tree":
-                // all_meshes.shift();
-
-                //Merging of all twig of grass in an unique mesh
-                // console.log(all_meshes);
-
-                //Need to separate because of bug of disaparition when merged with MultiMaterial
-                // model = Mesh.MergeMeshes(all_meshes, undefined, undefined, undefined, undefined, true);
-
-
-                // if (model) {
-                //     this.rootMesh = model;
-
-                // }
                 scene.setUpForTree();
                 break;
-
-
-            // case "terrain":
-            //     this.rootMesh = meshes[0] as Mesh;
-            //     meshes[0].position = new Vector3(0, -5, 0);
-            //     meshes[0].checkCollisions = true;
-            //     meshes[0].collisionsEnabled = true;
-            //     this.rootMesh.showBoundingBox = true;
-
-            //     this.rootMesh.bakeCurrentTransformIntoVertices();
-
-
-            //     var myGround = MeshBuilder.CreateGround("myGround", { width: 100, height: 100, subdivisions: 64 }, scene);
-            //     // myGround.rotate(Axis.Z, Math.PI / 3)
-
-
-            //     let data = VertexData.ExtractFromMesh(this.rootMesh);
-            //     console.log(data);
-
-
-            //     data.applyToMesh(myGround);
-            //     myGround.flipFaces();
-
-            //     myGround.scaling = new Vector3(10, 10, 10)
-            //     myGround.checkCollisions = true
-            //     break;
 
             default:
                 break;
@@ -215,7 +184,7 @@ export class ModelEnum {
 
     static createAllModels(scene: SceneClient) {
         var allModels = [
-            this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer,
+            this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
             this.PumpkinMonster,
             this.Grass, this.Campfire, this.Tree
         ];

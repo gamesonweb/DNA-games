@@ -204,6 +204,6 @@ export function playerClassCreator(playerClass: string, username: string): Avata
             return new Healer(scene, username)
         default:
             console.log("error in playerClassCreator function, class ", playerClass, " does not exist! Returning warrior.");
-            return new Warrior(scene, username)
+            return new Mage(scene, username)
     }
 }

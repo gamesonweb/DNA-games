@@ -3,8 +3,8 @@ import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
-import { teleport } from "../others/tools";
 import { Player } from "./heroes/player";
+import { Mage } from "./heroes/classes/mage";
 
 type InputStates = {
     jump: boolean,
@@ -270,5 +270,6 @@ export function inputEffects(player: Player) {
             //   this.canJump = true
             // }, this.timeJumping)
         }
+        new Mage(scene, "test");
     }
 }

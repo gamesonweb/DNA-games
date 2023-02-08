@@ -1,4 +1,4 @@
-import { Axis, Scene } from "babylonjs";
+import { Axis, InstantiatedEntries, Mesh, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
 import { ModelEnum } from "../../../others/models";
@@ -7,9 +7,12 @@ import { Fireball } from "../../weapons/projectiles/fireball";
 import { Player } from "../player";
 
 export class Mage extends Player {
+    modelContainer: InstantiatedEntries;
     constructor(scene: Scene, avatar_username: string) {
-        super(scene, avatar_username, ModelEnum.Mage.rootMesh!.clone(), 90, 0.2)
+        var modelContainer = ModelEnum.Ranger.duplicate(ModelEnum.Ranger.container)
+        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, 90, 0.2)
 
+        this.modelContainer = modelContainer
         this.class = "Mage"
 
         this.tableAttackcd[0] = 1500
@@ -19,11 +22,14 @@ export class Mage extends Player {
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
+        this.modelContainer.animationGroups[0].start()
+        this.modelContainer.animationGroups[0].loopAnimation = true;
     }
 
     attack_1(onlyDisplay = false) {
         //long cone infligeant un burst de degats et l'etat brulure, poussant les ennemis
         console.log("mage ", this.name, " casts special attack");
+        this.modelContainer.animationGroups[0].stop()
 
         //ANIMATION (TODO)
 
