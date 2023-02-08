@@ -7,6 +7,12 @@
   
 ***
 
+# Launch the Game (Development)
+
+In project's root:
+- cargo run (lauch rust server)
+- npm run startc (launch js client, works with starts too ?)
+
 # Goal 
   The goal of this project was the creation of a 3D Multiplayer Survival RPG game with [<b>Babylon.js</b>](https://www.babylonjs.com/) in Spring of 2023 for the Game on Web 2023 contest. The theme was "XXXXXXX".
   
