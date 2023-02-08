@@ -93,7 +93,7 @@ export class SceneClient extends SceneSoft {
         light.position = new Vector3(0, 40, 0);
 
         // Default intensity is 1.
-        light.intensity = 0.7;
+        light.intensity = 1;
 
         hemiLight = new HemisphericLight("light2", new Vector3(0, 1, 0), this);
         hemiLight.intensity = 0.35;

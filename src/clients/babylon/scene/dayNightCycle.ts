@@ -141,13 +141,13 @@ function createLightAnimation(isIntensity: boolean) {
 
     keys.push({
         frame: 0,
-        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
 
     keys.push({
-        frame: 500 * ratio,
-        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        frame: 400 * ratio,
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     if (!isIntensity) {
@@ -158,21 +158,21 @@ function createLightAnimation(isIntensity: boolean) {
     }
 
     keys.push({
-        frame: (isIntensity ? 1100 : 800) * ratio,
-        value: isIntensity ? 0.8 : new Color3(1, 1, 1)
+        frame: (isIntensity ? 1000 : 800) * ratio,
+        value: isIntensity ? 1.6 : new Color3(1, 1, 1)
     });
 
     //Zenith
     if (isIntensity) {
         keys.push({
             frame: 1400 * ratio,
-            value: 0.9
+            value: 2
         });
     }
 
     keys.push({
-        frame: 1700 * ratio,
-        value: isIntensity ? 0.8 : new Color3(1, 1, 1)
+        frame: 1800 * ratio,
+        value: isIntensity ? 1.6 : new Color3(1, 1, 1)
     });
 
     if (!isIntensity) {
@@ -184,12 +184,12 @@ function createLightAnimation(isIntensity: boolean) {
 
     keys.push({
         frame: 2300 * ratio,
-        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     keys.push({
         frame: 2400 * ratio,
-        value: isIntensity ? 0.1 : new Color3(194 / 255, 197 / 255, 204 / 255)
+        value: isIntensity ? 0.2 : new Color3(194 / 255, 197 / 255, 204 / 255)
     });
 
     //Adding keys to the animation object
@@ -255,32 +255,32 @@ function createHemiLightAnimation() {
 
     keys.push({
         frame: 0,
-        value: 0
+        value: 0.1
     });
 
     keys.push({
-        frame: 500 * ratio,
-        value: 0
+        frame: 400 * ratio,
+        value: 0.1
     });
 
     keys.push({
-        frame: 1100 * ratio,
-        value: 0.35
+        frame: 1000 * ratio,
+        value: 0.7
     });
 
     keys.push({
-        frame: 1700 * ratio,
-        value: 0.35
+        frame: 1800 * ratio,
+        value: 0.7
     });
 
     keys.push({
         frame: 2300 * ratio,
-        value: 0
+        value: 0.1
     });
 
     keys.push({
         frame: 2400 * ratio,
-        value: 0
+        value: 0.1
     });
 
     //Adding keys to the animation object
