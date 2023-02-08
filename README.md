@@ -21,7 +21,7 @@ In project's root:
 # The *D.N.A. Production* team
 
 FISSORE Davide | BERNIGAUD Noé 
-:-------------------------:|:-------------------------:|:-------------------------:
+:-------------------------:|:-------------------------:
 <img src="https://zupimages.net/up/23/06/ol5u.png" alt="Fissore Davide" width="200"/> | <img src="https://zupimages.net/up/22/19/dak6.png" alt="BERNIGAUD Noé" width="200"/>
 
 We are two students at the University of Côte d'Azur. Together, we form <b>*D.N.A. Production*</b>.
