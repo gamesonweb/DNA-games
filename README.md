@@ -20,14 +20,13 @@ In project's root:
 
 # The *D.N.A. Production* team
 
-VENTURELLI Antoine | FISSORE Davide | BERNIGAUD Noé 
+FISSORE Davide | BERNIGAUD Noé 
 :-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://zupimages.net/up/22/19/39hp.png" alt="Venturelli Antoine" width="200"/> | <img src="https://zupimages.net/up/22/19/di99.png" alt="Architecture Dossiers" width="200"/> | <img src="https://zupimages.net/up/22/19/dak6.png" alt="BERNIGAUD Noé" width="200"/>
+<img src="https://zupimages.net/up/23/06/ol5u.png" alt="Fissore Davide" width="200"/> | <img src="https://zupimages.net/up/22/19/dak6.png" alt="BERNIGAUD Noé" width="200"/>
 
-We are three students at the University of Côte d'Azur. Together, we form <b>*D.N.A. Production*</b>.
+We are two students at the University of Côte d'Azur. Together, we form <b>*D.N.A. Production*</b>.
   
 <ul>
-  <li>VENTURELLI Antoine was our models, animations, particules effects, and textures specialist.</li>
   <li>FISSORE Davide was in charge of the menus and the structure of the project.</li>
   <li>BERNIGAUD Noe was taking care of the Rust server, map creation, and the musics and sound effects.</li>
 </ul>
