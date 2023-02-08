@@ -352,6 +352,9 @@ export class SceneClient extends SceneSoft {
         instance.rotationQuaternion = rotationQuaternion
         instance.scaling = scalingVector
 
+        //UNCOMMENT HERE TO ADD SHADOWS TO TREE
+        //shadowGenerator?.addShadowCaster(instance);
+
         instance.freezeWorldMatrix()
         instance.isPickable = false
         // if (instance.material) instance.material.needDepthPrePass = true
