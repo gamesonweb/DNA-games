@@ -254,6 +254,5 @@ export function inputEffects(player: Player) {
             //   this.canJump = true
             // }, this.timeJumping)
         }
-        new Mage(scene, "test");
     }
 }
