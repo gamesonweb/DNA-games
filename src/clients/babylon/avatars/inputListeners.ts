@@ -8,7 +8,8 @@ import { Mage } from "./heroes/classes/mage";
 
 type InputStates = {
     jump: boolean,
-    goForeward: boolean
+    goForeward: boolean,
+    goForward_previous: boolean,
     goLeft: boolean,
     goBackward: boolean,
     goRight: boolean,
@@ -22,6 +23,7 @@ let createInputStates = (): InputStates => {
     return {
         jump: false,
         goForeward: false,
+        goForward_previous: false,
         goLeft: false,
         goBackward: false,
         goRight: false,
@@ -71,13 +73,14 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
     if ((input === document.activeElement) && isPressed) { return }
 
-    // tirer
+    // sauter
     if (evt.code === "Space") {
         inputStates.jump = isPressed;
     }
 
     // movements
     else if (evt.code === "KeyW") {
+        inputStates.goForward_previous = inputStates.goForeward
         inputStates.goForeward = isPressed;
     }
     else if (evt.code === "KeyS") {
@@ -94,31 +97,6 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
     else if (evt.code === "KeyK") {
         if (sphere1) sphere1.shape.position.y += 10
     }
-
-    // //tp pos_canyon
-    // else if (evt.code === "Digit1") {
-    //     if (scene.groundsData[0] && sphere1) {
-    //         teleport(sphere1, scene.groundsData[0].position)
-    //     }
-    // }
-    // //tp pos_snow
-    // else if (evt.code === "Digit2") {
-    //     if (scene.groundsData[1] && sphere1) {
-    //         teleport(sphere1, scene.groundsData[1].position)
-    //     }
-    // }
-    // //tp pos_volcan
-    // else if (evt.code === "Digit3") {
-    //     if (scene.groundsData[2] && sphere1) {
-    //         teleport(sphere1, scene.groundsData[2].position)
-    //     }
-    // }
-    // //tp pos_volcanc
-    // else if (evt.code === "Digit4") {
-    //     if (scene.groundsData[3] && sphere1) {
-    //         teleport(sphere1, scene.groundsData[3].position)
-    //     }
-    // }
 
     //rotation
     else if (evt.code === "ArrowRight") {
@@ -203,9 +181,15 @@ export function inputEffects(player: Player) {
 
     if (player.canMove) {
         //forward/backward movement
+        if (inputStates.goForeward != inputStates.goForward_previous) {
+            console.log("change walk anim status");
+            player.walk_anim(inputStates.goForeward)
+            inputStates.goForward_previous = inputStates.goForeward
+        }
         if (inputStates.goForeward) {
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-        } else if (inputStates.goBackward) {
+        } else { player.walk_anim(false); }
+        if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
         }
 

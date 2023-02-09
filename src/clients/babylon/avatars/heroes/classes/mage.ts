@@ -8,12 +8,16 @@ import { Player } from "../player";
 
 export class Mage extends Player {
     modelContainer: InstantiatedEntries;
+    status: String;
     constructor(scene: Scene, avatar_username: string) {
         var modelContainer = ModelEnum.Ranger.duplicate(ModelEnum.Ranger.container)
         super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, 90, 0.2)
 
         this.modelContainer = modelContainer
+
         this.class = "Mage"
+
+        this.status = "Idle"
 
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 8000
@@ -22,8 +26,6 @@ export class Mage extends Player {
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
-        this.modelContainer.animationGroups[0].start()
-        this.modelContainer.animationGroups[0].loopAnimation = true;
     }
 
     attack_1(onlyDisplay = false) {
@@ -42,6 +44,17 @@ export class Mage extends Player {
                     monster.triggerStatus("burn");
                 }
             })
+        }
+    }
+
+    walk_anim(on: boolean) {
+        if (on && this.status != "Walking") {
+            this.modelContainer.animationGroups[0].start()
+            this.modelContainer.animationGroups[0].loopAnimation = true;
+            this.status = "Walking"
+        } else if (!on && this.status == "Walking") {
+            this.modelContainer.animationGroups[0].stop()
+            this.status = "Idle"
         }
     }
 }
