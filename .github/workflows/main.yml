@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: 
+          npm install -g typescript;
           npm -f i;
           npm run buildc;
           git config --global user.name 'Your Name';
