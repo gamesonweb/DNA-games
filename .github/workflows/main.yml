@@ -1,4 +1,4 @@
-name: Build LaTeX document
+name: Build Client
 on: push
 jobs:
   build:
@@ -19,20 +19,14 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
           
-      - run: 
-          echo "1";
-          npm install -g typescript;
-          echo "2";
-          npm -f ci;
-          echo "3";
-          node src/switchServerClient.js t c src/index.tsx && npm run build;
-          echo "3.50";
-          rm -rf build-client; mv build build-client;
-          echo "4";
-          git config --global user.name 'Your Name';
-          echo "5";
-          git config --global user.email 'your-username@users.noreply.github.com';
-          echo "6";
-          git commit -am "Automated report";
-          echo "7";
-          git push
+      - run: npm install -g typescript;
+      - run: npm -f ci;
+      - run: node src/switchServerClient.js t c src/index.tsx;
+      - run: npm run build 
+        env:
+          CI: ""
+      - run: rm -rf build-client; mv build build-client;
+      - run: git config --global user.name 'Your Name';
+      - run: git config --global user.email 'your-username@users.noreply.github.com';
+      - run: git commit -am "Automated report";
+      - run: git push
