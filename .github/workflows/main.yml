@@ -1,0 +1,32 @@
+name: Build Client
+on: push
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+          
+      - run: npm install -g typescript;
+      - run: npm -f ci;
+      - run: node src/switchServerClient.js t c src/index.tsx;
+      - run: npm run build 
+        env:
+          CI: ""
+      - run: rm -rf build-client; mv build build-client;
+      - run: git config --local user.name actions-user
+      - run: git config --local user.email "actions@github.com"
+      - run: git commit -am "Automated report";
+      - run: git push -u origin client-branch
