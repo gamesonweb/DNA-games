@@ -1,4 +1,4 @@
-name: Build Client
+name: Build Server
 on: push
 jobs:
   build:
@@ -24,17 +24,21 @@ jobs:
       - run: npm -f ci;
 
       # Preparing the build
-      - run: node src/switchServerClient.js t c src/index.tsx;
+      - run: node src/switchServerClient.js t s src/index.tsx;
       - run: npm run build
         env:
           CI: ""
+
+      # Copy target and build server to folder server
+      - run: mkdir server
+      - run: cp -r target build-server server
 
       # Push to branch
       - name: Push
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: client-branch # The branch name where you want to push the assets
-          FOLDER: build # The directory where your assets are generated
+          BRANCH: branch-server # The branch name where you want to push the assets
+          FOLDER: server # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
