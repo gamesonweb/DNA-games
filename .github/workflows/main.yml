@@ -25,7 +25,9 @@ jobs:
           echo "2";
           npm -f i;
           echo "3";
-          npm run buildc;
+          node src/switchServerClient.js t c src/index.tsx && npm run build;
+          echo "3.50";
+          mv build build-client;
           echo "4";
           git config --global user.name 'Your Name';
           echo "5";
