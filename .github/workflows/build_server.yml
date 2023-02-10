@@ -28,10 +28,11 @@ jobs:
       - run: npm run build
         env:
           CI: ""
+      - run: mv build build-server
 
       # Copy target and build server to folder server
       - run: mkdir server
-      - run: cp -r target build-server server
+      - run: cp -r target build-server Procfile .slugignore Cargo* src server
 
       # Push to branch
       - name: Push
