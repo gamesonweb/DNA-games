@@ -29,4 +29,4 @@ jobs:
       - run: git config --local user.name actions-user
       - run: git config --local user.email "actions@github.com"
       - run: git commit -am "Automated report";
-      - run: git push
+      - run: git push -u origin client-branch
