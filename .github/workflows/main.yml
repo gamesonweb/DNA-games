@@ -20,10 +20,17 @@ jobs:
           cache-dependency-path: package-lock.json
           
       - run: 
+          echo "1";
           npm install -g typescript;
+          echo "2";
           npm -f i;
+          echo "3";
           npm run buildc;
+          echo "4";
           git config --global user.name 'Your Name';
+          echo "5";
           git config --global user.email 'your-username@users.noreply.github.com';
+          echo "6";
           git commit -am "Automated report";
+          echo "7";
           git push
