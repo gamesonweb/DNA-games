@@ -19,6 +19,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: package-lock.json
 
+      # Set adress for online connection
+      - run: echo "export const SERVER_LINK = 'wss://games-on-web-2022.herokuapp.com/';" > src/clients/connection/server_address.ts
+
       # Adding node modules
       - run: npm install -g typescript;
       - run: npm -f ci;

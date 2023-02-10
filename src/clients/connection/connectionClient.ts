@@ -10,6 +10,7 @@ import { chatRef, initChat } from "../reactComponents/chat";
 import { askUsername } from "../reactComponents/login";
 import { ErrorNoServer } from "../reactComponents/noServer";
 import { ConnectionSoft, position, receiveContent, serverMessages } from "./connectionSoft";
+import { SERVER_LINK } from "./server_address";
 
 export var username: string;
 export var meshes: Mesh[] = [];
@@ -19,10 +20,7 @@ export let wsClient: ConnectionClient;
 export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClient> {
     timeSendPing: number;
     constructor() {
-        //RUNNING SERVER ON LOCAL FOR DEV
-        super("ws://127.0.0.1:8080");
-        // RUNNING SERVER ON HEROKU FOR DEPLOYMENT
-        // super("wss://mmoactiongameserver.herokuapp.com/");
+        super(SERVER_LINK);
         this.timeSendPing = 0;
     }
 
