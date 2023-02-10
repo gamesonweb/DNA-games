@@ -26,7 +26,7 @@ jobs:
         env:
           CI: ""
       - run: rm -rf build-client; mv build build-client;
-      - run: git config --global user.name 'Your Name';
-      - run: git config --global user.email 'your-username@users.noreply.github.com';
+      - run: git config --local user.name actions-user
+      - run: git config --local user.email "actions@github.com"
       - run: git commit -am "Automated report";
       - run: git push
