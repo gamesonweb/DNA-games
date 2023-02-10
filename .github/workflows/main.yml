@@ -23,7 +23,7 @@ jobs:
           echo "1";
           npm install -g typescript;
           echo "2";
-          npm -f i;
+          npm -f ci;
           echo "3";
           node src/switchServerClient.js t c src/index.tsx && npm run build;
           echo "3.50";
