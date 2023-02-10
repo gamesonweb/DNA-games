@@ -1,0 +1,43 @@
+name: Build Server
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: cp * .
+      - run: ls
+
+      # Add node dependency
+      # - name: Use Node.js 16.x
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 16.x
+      #     cache: "npm"
+      #     cache-dependency-path: package-lock.json
+
+      # # Adding node modules
+      # - run: npm install -g typescript;
+      # - run: npm -f ci;
+
+      # # Preparing the build
+      # - run: node src/switchServerClient.js t c src/index.tsx;
+      # - run: npm run build
+      #   env:
+      #     CI: ""
+
+      # # Push to branch
+      # - name: Push
+      #   uses: s0/git-publish-subdir-action@develop
+      #   env:
+      #     REPO: self
+      #     BRANCH: client-branch # The branch name where you want to push the assets
+      #     FOLDER: build # The directory where your assets are generated
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+      #     MESSAGE: "Build: ({sha}) {msg}" # The commit message
