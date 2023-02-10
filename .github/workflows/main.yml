@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: 
-          npm i;
+          npm -f i;
           npm run buildc;
           git config --global user.name 'Your Name';
           git config --global user.email 'your-username@users.noreply.github.com';
