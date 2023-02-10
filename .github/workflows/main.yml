@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: 
-          npm run buildc
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-username@users.noreply.github.com'
-          git commit -am "Automated report"
+          npm run buildc;
+          git config --global user.name 'Your Name';
+          git config --global user.email 'your-username@users.noreply.github.com';
+          git commit -am "Automated report";
           git push
