@@ -26,12 +26,12 @@ export class Mage extends Player {
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
+        this.modelContainer.animationGroups[0].start()
     }
 
     attack_1(onlyDisplay = false) {
         //long cone infligeant un burst de degats et l'etat brulure, poussant les ennemis
         console.log("mage ", this.name, " casts special attack");
-        this.modelContainer.animationGroups[0].stop()
 
         //ANIMATION (TODO)
 
@@ -49,11 +49,11 @@ export class Mage extends Player {
 
     walk_anim(on: boolean) {
         if (on && this.status != "Walking") {
-            this.modelContainer.animationGroups[0].start()
-            this.modelContainer.animationGroups[0].loopAnimation = true;
+            this.modelContainer.animationGroups[1].start()
+            this.modelContainer.animationGroups[1].loopAnimation = true;
             this.status = "Walking"
         } else if (!on && this.status == "Walking") {
-            this.modelContainer.animationGroups[0].stop()
+            this.modelContainer.animationGroups[1].stop()
             this.status = "Idle"
         }
     }
