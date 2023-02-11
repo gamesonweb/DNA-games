@@ -21,7 +21,8 @@
     "buildc": "node src/switchServerClient.js t c src/index.tsx && npm run build && node src/switchServerClient.js f c",
     "builds": "node src/switchServerClient.js t s src/index.tsx && npm run build && node src/switchServerClient.js f s",
     "startc": "node src/switchServerClient.js t c src/index.tsx && npm run start",
-    "starts": "node src/switchServerClient.js t s src/index.tsx && npm run start"
+    "starts": "node src/switchServerClient.js t s src/index.tsx && npm run start",
+    "heroku-postbuild": ""
   },
   "eslintConfig": {
     "extends": [

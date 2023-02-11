@@ -19,6 +19,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: package-lock.json
 
+      # Set adress for online connection
+      - run: echo "export const SERVER_LINK = 'wss://games-on-web-2022.herokuapp.com/';" > src/clients/connection/server_address.ts
+
       # Adding node modules
       - run: npm install -g typescript;
       - run: npm -f ci;
@@ -34,7 +37,7 @@ jobs:
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: client-branch # The branch name where you want to push the assets
+          BRANCH: branch-client # The branch name where you want to push the assets
           FOLDER: build # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
