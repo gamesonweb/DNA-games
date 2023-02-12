@@ -25,10 +25,10 @@ export class Mage extends Player {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
         this.canMove = false;
-        this.status = CharacterState.Punching
+        this.update_status(CharacterState.Punching)
         setTimeout(() => {
             this.canMove = true
-            this.status = CharacterState.Idle
+            this.update_status(CharacterState.Idle)
         }, 1000)
     }
 
@@ -50,12 +50,29 @@ export class Mage extends Player {
         }
     }
 
-    animate_from_status() {
-        switch (this.status) {
+    update_status(new_status: CharacterState) {
+        if (new_status != this.status) {
+            var animation_indice = this.get_status_indice(this.status)
+            if (animation_indice != -1) {
+                this.modelContainer.animationGroups[animation_indice].stop()
+            }
+            this.status = new_status
+            animation_indice = this.get_status_indice(new_status)
+            if (animation_indice != -1) {
+                this.modelContainer.animationGroups[animation_indice].reset()
+                this.modelContainer.animationGroups[animation_indice].play()
+                this.modelContainer.animationGroups[animation_indice].loopAnimation = true
+            }
+        }
+    }
+
+    get_status_indice(status: CharacterState) {
+        var animation_indice = -1
+        switch (status) {
             case CharacterState.Walking_bw:
                 break
             case CharacterState.Walking_fw:
-                this.modelContainer.animationGroups[1].start()
+                animation_indice = 1
                 break
             case CharacterState.Running:
                 break
@@ -66,13 +83,14 @@ export class Mage extends Player {
             case CharacterState.Jumping:
                 break
             case CharacterState.Punching:
-                this.modelContainer.animationGroups[0].start()
+                this.modelContainer.animationGroups[0].play()
+                animation_indice = 0
                 break
             case CharacterState.Swimming:
                 break
             default:
                 console.log("error animation: " + this.name + " in status " + this.status);
-
         }
+        return animation_indice
     }
 }

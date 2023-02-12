@@ -18,7 +18,7 @@ let doneOnce = false;
 export var startRenderLoop = function (engine: Engine) {
   setInterval(() => {
     console.log(engine.getFps().toFixed() + " fps")
-    console.log("state: " + sphere1?.status);
+    console.log("state: " + sphere1?.getStatus());
 
   }, 2000)
   engine.runRenderLoop(function () {
@@ -28,7 +28,6 @@ export var startRenderLoop = function (engine: Engine) {
       if (sphere1) inputEffects(sphere1)
       if (sphere1) adjustCameraPosition(scene, sphere1)
       // console.log(engine.getFps().toFixed() + " fps");
-      if (sphere1) sphere1.animate_from_status();
     }
   });
   engine.resize()

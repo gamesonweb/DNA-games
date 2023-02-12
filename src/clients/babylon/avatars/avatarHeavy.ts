@@ -2,7 +2,7 @@ import { Mesh, Scene, Vector3, } from "babylonjs";
 import { shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
-import { AvatarSoft } from "./avatarSoft";
+import { AvatarSoft, CharacterState } from "./avatarSoft";
 
 export abstract class Avatar extends AvatarSoft {
   tableAttackcd: number[];
@@ -80,10 +80,6 @@ export abstract class Avatar extends AvatarSoft {
   }
   attack_3(onlyDisplay = false) {
     console.log("ERROR: tried to call non-implemented attack_3 on avatar ", this);
-  }
-
-  animate_from_status(): void {
-    console.log("walk_anim not implemented here");
   }
 
   abstract take_damage(source: Vector3, amount: number, knockback_power: number): void
