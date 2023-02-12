@@ -1,1 +1,0 @@
-web: ./target/release/tokyo_server

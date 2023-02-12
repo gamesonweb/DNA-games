@@ -1,6 +1,2 @@
-node_modules
-build-client
-public
-src
-Cargo.toml
-Cargo.lock
+*.png
+Landscape*

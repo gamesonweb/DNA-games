@@ -1,9 +1,0 @@
-**/build-client/*
-**/build/*
-**/public/*
-**/node_modules/*
-**/src/clients/*
-**/build/*
-**/textures/*
-*.png
-Landscape*
