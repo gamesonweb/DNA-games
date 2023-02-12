@@ -24,6 +24,6 @@ yarn-error.log*
 TODO
 
 /target/*
-/build_client/*
-/build_server/*
+/build-client/*
+/build-server/*
 .vscode/settings.json
