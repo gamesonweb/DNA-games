@@ -8,7 +8,10 @@ ADD build-server build-server
 ADD public public 
 ADD src src
 ADD Cargo* ./
-COPY node_modules node_modules
+# COPY node_modules node_modules
+
+RUN echo '{"dependencies": {"live-server": "^1.2.2","ws": "^8.12.0","xhr2": "^0.2.1"}}' > package.json
+RUN npm i
 
 RUN cargo build
 # RUN npm i
