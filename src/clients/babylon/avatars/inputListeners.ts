@@ -188,21 +188,12 @@ export function inputEffects(player: Player) {
         if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
         }
-
-        //left/right movement
-        if (inputStates.goLeft) {
-            direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 1.5));
-        } else if (inputStates.goRight) {
-            direction = direction.applyRotationQuaternion(Quaternion.FromEulerAngles(0, BABYLON.Tools.ToRadians(90), 0));
-            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.5));
-        }
     }
 
     //player rotation
-    if (inputStates.rotateRight) {
+    if (inputStates.rotateRight || inputStates.goRight) {
         player.shape.rotate(Axis.Y, +0.05)
-    } else if (inputStates.rotateLeft) {
+    } else if (inputStates.rotateLeft || inputStates.goLeft) {
         player.shape.rotate(Axis.Y, -0.05)
     }
 
@@ -240,7 +231,7 @@ export function inputEffects(player: Player) {
 
     //jump
     if (inputStates.jump) {
-        if (player.canJump) {
+        if (player.canJump && player.status != CharacterState.Punching) {
             player.isJumping = true;
             player.status = CharacterState.Jumping
             player.canJump = false

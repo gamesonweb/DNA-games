@@ -24,7 +24,6 @@ export class Mage extends Player {
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
-        this.modelContainer.animationGroups[0].start()
         this.canMove = false;
         this.status = CharacterState.Punching
         setTimeout(() => {
@@ -51,17 +50,6 @@ export class Mage extends Player {
         }
     }
 
-    walk_anim(on: boolean) {
-        if (on && this.status != CharacterState.Walking_fw) {
-            this.modelContainer.animationGroups[1].start()
-            this.modelContainer.animationGroups[1].loopAnimation = true;
-            this.status = CharacterState.Walking_fw
-        } else if (!on && this.status == CharacterState.Walking_fw) {
-            this.modelContainer.animationGroups[1].stop()
-            this.status = CharacterState.Idle
-        }
-    }
-
     animate_from_status() {
         switch (this.status) {
             case CharacterState.Walking_bw:
@@ -78,6 +66,7 @@ export class Mage extends Player {
             case CharacterState.Jumping:
                 break
             case CharacterState.Punching:
+                this.modelContainer.animationGroups[0].start()
                 break
             case CharacterState.Swimming:
                 break
