@@ -1,9 +1,0 @@
-{
-  "files.exclude": {
-    // "node_modules": true,
-    // "**/src/server": true,
-    // "build": true,
-    // "public": true,
-    //"target": true,
-  }
-}
