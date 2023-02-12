@@ -184,7 +184,7 @@ export function inputEffects(player: Player) {
             if (player.status != CharacterState.Falling && player.status != CharacterState.Jumping) {
                 player.status = CharacterState.Walking_fw
             }
-        } else { player.status = CharacterState.Idle }
+        } else { if (player.status == CharacterState.Walking_fw) player.status = CharacterState.Idle }
         if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
         }
