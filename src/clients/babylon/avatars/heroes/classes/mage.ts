@@ -15,6 +15,14 @@ export class Mage extends Player {
 
         this.modelContainer = modelContainer
 
+        for (let aniCounter = 0; aniCounter < modelContainer.animationGroups.length; aniCounter++) {
+            for (let index = 0; index < modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
+                let animation = modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
+                animation.enableBlending = true
+                animation.blendingSpeed = 0.1
+            }
+        }
+
         this.class = "Mage"
 
         this.tableAttackcd[0] = 1500
