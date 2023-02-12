@@ -192,9 +192,9 @@ export function inputEffects(player: Player) {
 
     //player rotation
     if (inputStates.rotateRight || inputStates.goRight) {
-        player.shape.rotate(Axis.Y, +0.05)
+        player.shape.rotate(Axis.Y, +0.03)
     } else if (inputStates.rotateLeft || inputStates.goLeft) {
-        player.shape.rotate(Axis.Y, -0.05)
+        player.shape.rotate(Axis.Y, -0.03)
     }
 
     //player's attack_0

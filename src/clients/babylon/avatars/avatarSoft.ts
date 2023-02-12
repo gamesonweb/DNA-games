@@ -31,6 +31,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   class: string;
   offset_dir_y: number;
   protected status: CharacterState;
+  falling_counter: number;
 
   constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number) {
     super(avatar_username, scene, shape, health);
@@ -58,6 +59,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.takeHits = true;
 
     this.status = CharacterState.Idle
+
+    this.falling_counter = 20;
   }
 
   dispose(): void {
@@ -79,13 +82,17 @@ export abstract class AvatarSoft extends MeshWithHealth {
       if (hit !== null && hit.pickedPoint && this.shape.position.y > hit.pickedPoint.y + 1.2) {
         this.shape.position.y += this.gravity_acceleration + SceneSoft.gravityIntensity * (scale - 1);
       } else {
-        if (this.status == CharacterState.Falling) this.update_status(CharacterState.Idle)
+        if (this.status == CharacterState.Falling) {
+          this.falling_counter = 20
+          this.update_status(CharacterState.Idle)
+        }
         this.gravity_acceleration = SceneSoft.gravityIntensity;
         this.canJump = true;
       }
       //else above the void
     } else {
-      this.update_status(CharacterState.Falling)
+      this.falling_counter--
+      if (this.falling_counter <= 0) this.update_status(CharacterState.Falling)
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale, 0));
       // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2 * scale;
