@@ -5,12 +5,6 @@
 /.pnp
 .pnp.js
 
-
-!/node_modules/react-scripts
-/node_modules/react-scripts/*
-!/node_modules/react-scripts/config
-/node_modules/react-scripts/config/*
-!/node_modules/react-scripts/config/webpack.config.js
 # testing
 /coverage
 
