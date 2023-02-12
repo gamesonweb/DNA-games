@@ -82,7 +82,7 @@ export abstract class Avatar extends AvatarSoft {
     console.log("ERROR: tried to call non-implemented attack_3 on avatar ", this);
   }
 
-  walk_anim(on: boolean): void {
+  animate_from_status(): void {
     console.log("walk_anim not implemented here");
   }
 

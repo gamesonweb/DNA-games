@@ -5,11 +5,11 @@ import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
 import { Player } from "./heroes/player";
 import { Mage } from "./heroes/classes/mage";
+import { CharacterState } from "./avatarSoft";
 
 type InputStates = {
     jump: boolean,
     goForeward: boolean,
-    goForward_previous: boolean,
     goLeft: boolean,
     goBackward: boolean,
     goRight: boolean,
@@ -23,7 +23,6 @@ let createInputStates = (): InputStates => {
     return {
         jump: false,
         goForeward: false,
-        goForward_previous: false,
         goLeft: false,
         goBackward: false,
         goRight: false,
@@ -80,7 +79,6 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 
     // movements
     else if (evt.code === "KeyW") {
-        inputStates.goForward_previous = inputStates.goForeward
         inputStates.goForeward = isPressed;
     }
     else if (evt.code === "KeyS") {
@@ -181,14 +179,12 @@ export function inputEffects(player: Player) {
 
     if (player.canMove) {
         //forward/backward movement
-        if (inputStates.goForeward != inputStates.goForward_previous) {
-            console.log("change walk anim status");
-            player.walk_anim(inputStates.goForeward)
-            inputStates.goForward_previous = inputStates.goForeward
-        }
         if (inputStates.goForeward) {
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-        } else { player.walk_anim(false); }
+            if (player.status != CharacterState.Falling && player.status != CharacterState.Jumping) {
+                player.status = CharacterState.Walking_fw
+            }
+        } else { player.status = CharacterState.Idle }
         if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
         }
@@ -246,9 +242,11 @@ export function inputEffects(player: Player) {
     if (inputStates.jump) {
         if (player.canJump) {
             player.isJumping = true;
+            player.status = CharacterState.Jumping
             player.canJump = false
             setTimeout(() => {
                 player.isJumping = false
+                if (player.status == CharacterState.Jumping) player.status = CharacterState.Falling
             }, player.timeJumping)
             // setTimeout(() => {
             //   this.canJump = true
