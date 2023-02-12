@@ -33,7 +33,7 @@ jobs:
       # Copy target and build server to folder server
       - run: mkdir server
       # - run: cp -r target build-server Procfile .slugignore Cargo* package* tsconfig.json public src server
-      - run: cp -r build-server Cargo* package* tsconfig.json public src Dockerfile .dockerignore node_modules server
+      - run: cp -r build-server Cargo* package* tsconfig.json public src Dockerfile .dockerignore server
 
       # Push to branch
       - name: Push
