@@ -7,7 +7,7 @@ WORKDIR /home/circleci/project
 ADD build-server build-server
 ADD public public 
 ADD src src
-ADD Cargo* .
+ADD Cargo* ./
 COPY node_modules node_modules
 
 RUN cargo build
