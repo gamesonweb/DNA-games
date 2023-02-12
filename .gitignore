@@ -23,12 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 TODO
 
-/target/debug/
-/target/release/.fingerprint/
-/target/release/build/
-/target/release/deps/
-/target/release/examples/
-/target/release/incremental/
-/target/.rustc_info.json
-target/.rustc_info.json
+/target/*
+/build_client/*
+/build_server/*
 .vscode/settings.json
