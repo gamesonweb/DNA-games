@@ -23,7 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 TODO
 
+/build/*
 /target/*
 /build-client/*
 /build-server/*
 .vscode/settings.json
+src/index.tsx
