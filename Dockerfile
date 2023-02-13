@@ -28,7 +28,6 @@ WORKDIR main
 COPY --from=builder /tokyo_server/target/x86_64-unknown-linux-musl/release/tokyo_server ./tokyo_server.exe
 
 ADD build-server build-server
-ADD public public 
 
 EXPOSE 8080/tcp
 EXPOSE 8080/udp
@@ -37,4 +36,4 @@ RUN echo '{"dependencies": {"live-server": "^1.2.2","ws": "^8.12.0","xhr2": "^0.
 
 RUN npm i
 
-CMD ls; ./tokyo_server.exe
+CMD ./tokyo_server.exe
