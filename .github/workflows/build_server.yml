@@ -29,11 +29,9 @@ jobs:
       - run: npm -f ci;
 
       # Preparing the build
-      - run: node src/switchServerClient.js t s src/index.tsx;
-      - run: npm run build
+      - run: npm run builds
         env:
           CI: ""
-      - run: mv build build-server
 
       # Copy target and build server to folder server
       - run: mkdir server
