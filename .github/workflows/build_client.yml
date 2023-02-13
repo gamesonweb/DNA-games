@@ -2,7 +2,7 @@ name: Build Client
 on: push
 
 concurrency:
-  group: build-and-test
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
