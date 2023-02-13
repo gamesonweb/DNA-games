@@ -17,8 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "buildc": "node src/switchServerClient.js t c src/index.tsx && npm run build && node src/switchServerClient.js f c",
-    "builds": "node src/switchServerClient.js t s src/index.tsx && npm run build && node src/switchServerClient.js f s",
+    "build_client": "node src/switchServerClient.js t c src/index.tsx && npm run build && node src/switchServerClient.js f c",
+    "build_server": "node src/switchServerClient.js t s src/index.tsx && npm run build && node src/switchServerClient.js f s",
     "client": "node src/switchServerClient.js t c src/index.tsx && npm run start",
     "server": "node src/switchServerClient.js t s src/index.tsx && npm run start"
   },

@@ -29,13 +29,12 @@ jobs:
       - run: npm -f ci;
 
       # Preparing the build
-      - run: npm run builds
+      - run: npm run build_server
         env:
           CI: ""
 
       # Copy target and build server to folder server
       - run: mkdir server
-      # - run: cp -r target build-server Procfile .slugignore Cargo* package* tsconfig.json public src server
       - run: cp -r build-server Cargo* package* tsconfig.json public src Dockerfile .dockerignore server
 
       # Push to branch
