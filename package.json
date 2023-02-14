@@ -5,9 +5,11 @@
   "dependencies": {
     "babylonjs-gui": "^5.10.0",
     "babylonjs-materials": "^5.16.0",
+    "bootstrap": "^5.2.3",
     "express": "^4.18.1",
     "live-server": "^1.2.2",
     "react": "^16.13.1",
+    "react-bootstrap": "^2.7.2",
     "react-dom": "^16.13.1",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",

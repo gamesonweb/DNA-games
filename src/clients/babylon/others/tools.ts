@@ -8,6 +8,7 @@ import { Archer } from "../avatars/heroes/classes/archer";
 import { Assassin } from "../avatars/heroes/classes/assassin";
 import { Healer } from "../avatars/heroes/classes/healer";
 import { Mage } from "../avatars/heroes/classes/mage";
+import { PLAYER_CLASSES_TYPE } from "../avatars/heroes/classes/playerClasses";
 import { Warrior } from "../avatars/heroes/classes/warrior";
 import { scene, sphere1 } from "../main";
 
@@ -190,7 +191,7 @@ export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: 
     return angleTarget < angle
 }
 
-export function playerClassCreator(playerClass: string, username: string): Avatar {
+export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: string): Avatar {
     switch (playerClass) {
         case "Warrior":
             return new Warrior(scene, username)
@@ -202,8 +203,5 @@ export function playerClassCreator(playerClass: string, username: string): Avata
             return new Assassin(scene, username)
         case "Healer":
             return new Healer(scene, username)
-        default:
-            console.log("error in playerClassCreator function, class ", playerClass, " does not exist! Returning warrior.");
-            return new Mage(scene, username)
     }
 }

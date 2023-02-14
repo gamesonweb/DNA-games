@@ -4,7 +4,7 @@ import { displayLoadingScreen } from "../reactComponents/loadingScreen";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/heroes/player";
 
-import { inializeInputListeners, inputEffects } from "./avatars/inputListeners";
+import { inializeInputListeners as initializeInputListeners, inputEffects } from "./avatars/inputListeners";
 import { adjustCameraPosition } from "./others/tools";
 import { SceneClient } from "./scene/sceneClient";
 
@@ -65,7 +65,7 @@ export let initFunction = async function () {
   //Here load all models
 
   setWindowParams()
-  inializeInputListeners();
+  initializeInputListeners();
   return scene
 };
 

@@ -1,5 +1,6 @@
-import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
+import { Animation, Axis, className, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
+import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses";
 import { Player } from "../babylon/avatars/heroes/player";
 import { Monster } from "../babylon/avatars/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
@@ -12,6 +13,7 @@ import { ConnectionSoft, position, receiveContent, serverMessages } from "./conn
 import { SERVER_LINK } from "./server_address";
 
 export var username: string;
+export var playerClass: PLAYER_CLASSES_TYPE = "Mage";
 export var meshes: Mesh[] = [];
 
 export let wsClient: ConnectionClient;
@@ -49,8 +51,12 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     login(messageReceived: any): void {
         var sender_name = messageReceived.content;
+        console.log({ sender_name });
+        console.log({ username, playerClass });
+
+
         if (sender_name === username) {
-            var sphere = playerClassCreator(username, username)
+            var sphere = playerClassCreator(playerClass, username)
             this.player_list.set(sender_name, sphere);
             set_my_sphere();
             setPositionUpdateSender()
@@ -115,9 +121,9 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     }
 
-    static setGlobalWebSocket(playerName: string): void {
+    static setGlobalWebSocket(className: PLAYER_CLASSES_TYPE, playerName: string): void {
         wsClient = new ConnectionClient();
-        establishConnection(playerName);
+        establishConnection(className, playerName);
     }
 }
 
@@ -239,13 +245,16 @@ export function avatar_update_from_server(data: receiveContent, list: Map<String
     else { console.log("WTF???????") }
 }
 
-export function establishConnection(name: string) {
+export function establishConnection(className: PLAYER_CLASSES_TYPE, name: string) {
     initFunction().then(e => {
         setScene(e)
         scene.collisionsEnabled = true
         var username_entry = name;
+        console.log(name);
+
         var formatted_username_entry = username_entry?.replace(/["']/g, "");
         username = formatted_username_entry ? formatted_username_entry : "";
+        playerClass = className
 
         if (username.length > 12) {
             username = username.slice(0, 12);
@@ -254,6 +263,5 @@ export function establishConnection(name: string) {
         if (username === "") {
             username = makeid(10);
         }
-        console.log("connection successfully established!");
     });
 }

@@ -1,5 +1,6 @@
 import { Scene, Vector3 } from "babylonjs"
 import { AvatarSoft } from "../babylon/avatars/avatarSoft"
+import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses"
 
 export const serverMessages = {
     SET_USERNAME: "usernameSetter",
@@ -24,7 +25,7 @@ export const serverMessages = {
 
 export type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
-    username: string, direction: Vector3, class: string, ydiroffset: number,
+    username: string, direction: Vector3, class: PLAYER_CLASSES_TYPE, ydiroffset: number,
     health?: number, maxHealth?: number
 }
 
@@ -65,6 +66,8 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 }
 
                 case serverMessages.LOGIN: {
+                    console.log({ messageReceived });
+
                     this.login(messageReceived)
                     break;
                 }
