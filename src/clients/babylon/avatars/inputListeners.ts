@@ -1,10 +1,9 @@
-import { Axis, FollowCamera, Quaternion } from "babylonjs";
+import { Axis, FollowCamera } from "babylonjs";
 import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
 import { chatRef, input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
 import { Player } from "./heroes/player";
-import { Mage } from "./heroes/classes/mage";
 import { CharacterState } from "./avatarSoft";
 
 type InputStates = {
@@ -136,8 +135,8 @@ export function pointerLockAndMouseMove() {
             }
         }
         if (scene.activeCamera) {
+            var camera = scene.activeCamera as FollowCamera;
             if (evt.movementY < 0) {
-                var camera = scene.activeCamera as FollowCamera;
                 // var bottomRay = new Ray(camera.position, new Vector3(0, -1, 0), 2 + Math.sqrt(-evt.movementY))
                 // var bottomHit = scene.pickWithRay(bottomRay, cameraBackCollision)
                 // if (!bottomHit?.pickedMesh) {
@@ -146,7 +145,6 @@ export function pointerLockAndMouseMove() {
                 // }
             }
             if (evt.movementY > 0) {
-                var camera = scene.activeCamera as FollowCamera;
                 camera.heightOffset += Math.sqrt(evt.movementY) / 20
                 camera.heightOffset = Math.min(8, camera.heightOffset)
 
@@ -181,10 +179,10 @@ export function inputEffects(player: Player) {
         //forward/backward movement
         if (inputStates.goForeward) {
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-            if (player.getStatus() != CharacterState.Falling && player.getStatus() != CharacterState.Jumping) {
+            if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
                 player.update_status(CharacterState.Walking_fw)
             }
-        } else { if (player.getStatus() == CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
+        } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
         if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
         }
@@ -231,13 +229,13 @@ export function inputEffects(player: Player) {
 
     //jump
     if (inputStates.jump) {
-        if (player.canJump && player.getStatus() != CharacterState.Punching) {
+        if (player.canJump && player.getStatus() !== CharacterState.Punching) {
             player.isJumping = true;
             player.update_status(CharacterState.Jumping)
             player.canJump = false
             setTimeout(() => {
                 player.isJumping = false
-                if (player.getStatus() == CharacterState.Jumping) player.update_status(CharacterState.Falling)
+                if (player.getStatus() === CharacterState.Jumping) player.update_status(CharacterState.Falling)
             }, player.timeJumping)
             // setTimeout(() => {
             //   this.canJump = true

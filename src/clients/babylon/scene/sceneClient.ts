@@ -1,4 +1,4 @@
-import { Axis, BlurPostProcess, Color3, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
+import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
 import { WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
@@ -49,9 +49,9 @@ export class SceneClient extends SceneSoft {
             }
             if (scene.activeCamera) {
                 if (scene.activeCamera.position.y < water.position.y) {
-                    if (this.waterBlurPostProcess == undefined) this.waterBlurPostProcess = new BlurPostProcess("Horizontal blur", new Vector2(1.0, 0), 64, 1.0, scene.activeCamera);
+                    if (this.waterBlurPostProcess === undefined) this.waterBlurPostProcess = new BlurPostProcess("Horizontal blur", new Vector2(1.0, 0), 64, 1.0, scene.activeCamera);
 
-                    if (this.waterBluePostProcess == undefined) {
+                    if (this.waterBluePostProcess === undefined) {
                         this.waterBluePostProcess = new ImageProcessingPostProcess("processing", 1.0, scene.activeCamera);
                         this.waterBluePostProcess.vignetteWeight = 40;
                         this.waterBluePostProcess.vignetteStretch = 1;
@@ -63,11 +63,11 @@ export class SceneClient extends SceneSoft {
                     }
 
                 } else {
-                    if (this.waterBlurPostProcess != undefined) {
+                    if (this.waterBlurPostProcess !== undefined) {
                         this.waterBlurPostProcess.dispose();
                         this.waterBlurPostProcess = undefined;
                     }
-                    if (this.waterBluePostProcess != undefined) this.waterBluePostProcess.vignetteEnabled = false;
+                    if (this.waterBluePostProcess !== undefined) this.waterBluePostProcess.vignetteEnabled = false;
                 }
             }
         }
@@ -205,7 +205,7 @@ export class SceneClient extends SceneSoft {
         ModelEnum.addLoadingTask(1);
         var model = ModelEnum.Grass.rootMesh;
 
-        if (model != undefined) {
+        if (model !== undefined) {
             model.scaling = new Vector3(1, 1, 1);
             model.addLODLevel(50, null)
 
@@ -216,7 +216,7 @@ export class SceneClient extends SceneSoft {
                 let z = Math.random() * 200 - 100;
                 let height = this.getHeightAtPoint(x, z);
 
-                if (height != undefined) {
+                if (height !== undefined) {
                     this.createInstance(model, x, height, z);
                 }
             }
@@ -229,7 +229,7 @@ export class SceneClient extends SceneSoft {
         ModelEnum.addLoadingTask(1);
         var model = ModelEnum.Tree.rootMesh;
 
-        if (model != undefined) {
+        if (model !== undefined) {
             let childs = model.getChildMeshes() as Mesh[];
 
             let c1 = childs[0];
@@ -271,7 +271,7 @@ export class SceneClient extends SceneSoft {
                 let z = positionData.z
                 let height = this.getHeightAtPoint(x, z);
 
-                if (height != undefined && model != undefined && c1m && c2m) {
+                if (height !== undefined && model !== undefined && c1m && c2m) {
                     // let matrix = this.createThinInstance(c1m, x, height, z);
                     let matrix = this.createInstance(c1m, x, height, z)
                     var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
@@ -292,7 +292,7 @@ export class SceneClient extends SceneSoft {
             //     console.log("{ x: ", (Math.round(x * 100) / 100).toFixed(2), ", z: ", (Math.round(z * 100) / 100).toFixed(2), " }");
 
 
-            //     if (height != undefined && model != undefined && c1m && c2m) {
+            //     if (height !== undefined && model !== undefined && c1m && c2m) {
             //         // let matrix = this.createThinInstance(c1m, x, height, z);
             //         let matrix = this.createInstance(c1m, x, height, z)
             //         var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
@@ -309,7 +309,7 @@ export class SceneClient extends SceneSoft {
             //     let z = position.z;
             //     let height = this.getHeightAtPoint(x, z);
 
-            //     if (height != undefined && model != undefined && c1m && c2m) {
+            //     if (height !== undefined && model !== undefined && c1m && c2m) {
             //         let matrix = this.createThinInstance(c1m, x, height, z);
             //         this.createThinInstance(c2m, x, height, z, matrix);
             //     }
@@ -321,7 +321,7 @@ export class SceneClient extends SceneSoft {
     }
 
     private createThinInstance(model: Mesh, x: number, height: number, z: number, transformMatrix?: Matrix): Matrix {
-        if (transformMatrix != undefined) {
+        if (transformMatrix !== undefined) {
             model.thinInstanceAdd(transformMatrix);
             return transformMatrix;
         }

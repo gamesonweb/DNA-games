@@ -2,7 +2,7 @@ import { Mesh, Scene, Vector3, } from "babylonjs";
 import { shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
-import { AvatarSoft, CharacterState } from "./avatarSoft";
+import { AvatarSoft } from "./avatarSoft";
 
 export abstract class Avatar extends AvatarSoft {
   tableAttackcd: number[];
@@ -41,7 +41,7 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   hit(hitmode_id: number, onlyDisplay = false) {
-    if (!this.attackIsReady(hitmode_id) || this.canHit == false) return
+    if (!this.attackIsReady(hitmode_id) || this.canHit === false) return
     switch (hitmode_id) {
       case 0:
         this.attack_0(onlyDisplay)

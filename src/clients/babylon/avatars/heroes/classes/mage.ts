@@ -59,14 +59,14 @@ export class Mage extends Player {
     }
 
     update_status(new_status: CharacterState) {
-        if (new_status != this.status) {
+        if (new_status !== this.status) {
             var animation_indice = this.get_status_indice(this.status)
-            if (animation_indice != -1) {
+            if (animation_indice !== -1) {
                 this.modelContainer.animationGroups[animation_indice].stop()
             }
             this.status = new_status
             animation_indice = this.get_status_indice(new_status)
-            if (animation_indice != -1) {
+            if (animation_indice !== -1) {
                 this.modelContainer.animationGroups[animation_indice].reset()
                 this.modelContainer.animationGroups[animation_indice].play()
                 this.modelContainer.animationGroups[animation_indice].loopAnimation = true

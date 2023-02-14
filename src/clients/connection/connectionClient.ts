@@ -1,4 +1,4 @@
-import { Animation, Axis, className, Mesh, Vector3 } from "babylonjs";
+import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
 import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses";
 import { Player } from "../babylon/avatars/heroes/player";

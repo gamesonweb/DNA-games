@@ -82,7 +82,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       if (hit !== null && hit.pickedPoint && this.shape.position.y > hit.pickedPoint.y + 1.2) {
         this.shape.position.y += this.gravity_acceleration + SceneSoft.gravityIntensity * (scale - 1);
       } else {
-        if (this.status == CharacterState.Falling) {
+        if (this.status === CharacterState.Falling) {
           this.falling_counter = 20
           this.update_status(CharacterState.Idle)
         }
@@ -102,7 +102,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   applyJump() {
     var hits = this.shape.getScene().multiPickWithRay(this.jumpRay, (m) => { return m.isPickable });
 
-    var filtered = (hits?.filter(e => (this?.shape != undefined) && e.pickedMesh?.name !== this?.shape.name))
+    var filtered = (hits?.filter(e => (this?.shape !== undefined) && e.pickedMesh?.name !== this?.shape.name))
 
     if (filtered !== undefined && filtered.length > 0) {
       var hit = filtered[0]

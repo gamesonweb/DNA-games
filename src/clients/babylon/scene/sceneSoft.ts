@@ -1,4 +1,4 @@
-import { AssetsManager, Engine, FreeCamera, Scene, Vector3, Ray, MeshBuilder, Axis } from "babylonjs";
+import { Engine, FreeCamera, Scene, Vector3, Ray, MeshBuilder, Axis } from "babylonjs";
 
 export const groundParameters = {
   width: 100,

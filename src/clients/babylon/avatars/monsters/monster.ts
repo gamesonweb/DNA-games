@@ -1,4 +1,4 @@
-import { Axis, Mesh, Scene, Vector3 } from "babylonjs";
+import { Axis, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../connection/connectionClient";
 import { serverMessages } from "../../../connection/connectionSoft";
 import { sphere1 } from "../../main";
@@ -22,7 +22,7 @@ export class Monster extends Avatar {
                 content: JSON.stringify({ username: this.name, damage: amount })
             }))
         let direction = this.shape.position.subtract(source)
-        if (knockback_power == 0) return;
+        if (knockback_power === 0) return;
         this.knockback(direction, knockback_power, false)
     }
 
