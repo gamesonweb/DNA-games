@@ -1,5 +1,5 @@
 import { Component, ReactNode, StrictMode } from "react";
-import { Form, InputGroup } from "react-bootstrap";
+import { Col, Form, InputGroup } from "react-bootstrap";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { render, unmountComponentAtNode } from "react-dom";
@@ -24,65 +24,67 @@ export class ReactLogin extends Component<{}, State> {
 
   render(): ReactNode {
     let rowParam = "justify-content-center px-3 text-white "
-    return <Container fluid className="d-flex align-items-center justify-content-center fullHeight bg-black w-100 m-0 p-0">
-      <Row className="w-50 mx-auto">
-        <Row className={rowParam}>
-          Hi curious explorer !
-        </Row>
-        <Row className={rowParam}>
-          You are entering a fantastic world
-        </Row>
-        <Row className={rowParam + "mb-3"}>  But before : </Row>
+    return <Container fluid className="d-flex align-items-center justify-content-center fullHeight bg-black">
+      <Row className="justify-content-center w-100">
+        <Col className="col-xl-4 col-md-6 col-9">
+          <Row className={rowParam}>
+            Hi curious explorer !
+          </Row>
+          <Row className={rowParam}>
+            You are entering a fantastic world
+          </Row>
+          <Row className={rowParam + "mb-3"}>  But before : </Row>
 
-        <Row className={rowParam}>
+          <Row className={rowParam}>
 
-          <InputGroup size="sm" className="mb-3">
-            <InputGroup.Text className="w-25">Your class:</InputGroup.Text>
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Text className="w-25">Your class:</InputGroup.Text>
 
-            <Form.Select
-              defaultValue={PLAYER_CLASSES_LIST[0]}
-              onChange={e =>
-                this.setState({ class: e.currentTarget.value as PLAYER_CLASSES_TYPE })
-              }
-            >
-              <option disabled hidden>{PLAYER_CLASSES_LIST[0]}</option>
-              {PLAYER_CLASSES_LIST.map((option, index) => {
-                return <option key={index} >
-                  {option}
-                </option>
-              })}
-            </Form.Select>
-          </InputGroup>
-        </Row>
-
-        <Row className={rowParam}>
-          <InputGroup size="sm" className="mb-3">
-            <InputGroup.Text className="w-25">Your name: </InputGroup.Text>
-            <Form.Control
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              autoFocus
-
-              onChange={e => {
-                let val = e.currentTarget.value;
-                if (val.match(/^([a-z0-9A-Z]|-)*$/) === null) {
-                  e.currentTarget.value = val.substring(0, val.length - 1)
+              <Form.Select
+                defaultValue={PLAYER_CLASSES_LIST[0]}
+                onChange={e =>
+                  this.setState({ class: e.currentTarget.value as PLAYER_CLASSES_TYPE })
                 }
-                this.setState({ name: e.currentTarget.value! })
-              }}
+              >
+                <option disabled hidden>{PLAYER_CLASSES_LIST[0]}</option>
+                {PLAYER_CLASSES_LIST.map((option, index) => {
+                  return <option key={index} >
+                    {option}
+                  </option>
+                })}
+              </Form.Select>
+            </InputGroup>
+          </Row>
 
-              onKeyDown={e => {
-                if (e.key === "Enter" || e.key === "NumpadEnter") {
-                  console.log(this.state);
+          <Row className={rowParam}>
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Text className="w-25">Your name: </InputGroup.Text>
+              <Form.Control
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                autoFocus
 
-                  ConnectionClient.setGlobalWebSocket(this.state.class, this.state.name)
-                  unmountComponentAtNode(document.getElementById('root')!);
-                  initChat();
-                }
-              }}
-            />
-          </InputGroup>
-        </Row>
+                onChange={e => {
+                  let val = e.currentTarget.value;
+                  if (val.match(/^([a-z0-9A-Z]|-)*$/) === null) {
+                    e.currentTarget.value = val.substring(0, val.length - 1)
+                  }
+                  this.setState({ name: e.currentTarget.value! })
+                }}
+
+                onKeyDown={e => {
+                  if (e.key === "Enter" || e.key === "NumpadEnter") {
+                    console.log(this.state);
+
+                    ConnectionClient.setGlobalWebSocket(this.state.class, this.state.name)
+                    unmountComponentAtNode(document.getElementById('root')!);
+                    initChat();
+                  }
+                }}
+              />
+            </InputGroup>
+          </Row>
+        </Col>
       </Row>
     </Container>
   }
