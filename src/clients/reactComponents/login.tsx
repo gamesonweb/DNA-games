@@ -1,6 +1,7 @@
 import { Component, KeyboardEvent, ReactNode, StrictMode } from "react";
 import { render, unmountComponentAtNode } from "react-dom";
-import { establishConnection } from "../connection/connectionClient";
+import { ConnectionClient, establishConnection } from "../connection/connectionClient";
+import { initChat } from "./chat";
 import { windowExists } from "./tools";
 
 export class ReactLogin extends Component<{}, {}> {
@@ -21,8 +22,9 @@ export class ReactLogin extends Component<{}, {}> {
   }
   inputKeyDown(e: KeyboardEvent<HTMLInputElement>): void {
     if (e.key === "Enter" || e.key === "NumpadEnter") {
-      establishConnection(e.currentTarget.value)
+      ConnectionClient.setGlobalWebSocket(e.currentTarget.value)
       unmountComponentAtNode(document.getElementById('root')!);
+      initChat();
     }
   }
 }

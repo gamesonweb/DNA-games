@@ -61,7 +61,7 @@ pub async fn game_events(
                 .unwrap();
 
             //send updated monster data to all clients
-            if (hour > 22.0 || hour < 7.0) {
+            if hour > 22.0 || hour < 7.0 {
                 recp.unbounded_send(Message::from(monster_position_update_message.clone()))
                     .unwrap();
             }

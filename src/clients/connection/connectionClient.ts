@@ -6,8 +6,7 @@ import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeid, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
-import { chatRef, initChat } from "../reactComponents/chat";
-import { askUsername } from "../reactComponents/login";
+import { chatRef } from "../reactComponents/chat";
 import { ErrorNoServer } from "../reactComponents/noServer";
 import { ConnectionSoft, position, receiveContent, serverMessages } from "./connectionSoft";
 import { SERVER_LINK } from "./server_address";
@@ -26,7 +25,14 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     onOpen(evt?: Event | undefined) {
         console.log("Opening");
-        askUsername()
+        //GET THE PING BETWEEN CLIENT AND SERVER (CURRENTLY 1 PING RIGHT AFTER CONNECTION IS INITIALIZED, DISPLAY PING IN CONSOLE)
+        wsClient.timeSendPing = Date.now()
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.PING,
+                content: username
+            })
+        )
     }
 
     onError() {
@@ -39,8 +45,6 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     ping(): void {
-        let pingMs = Date.now() - this.timeSendPing;
-        // console.log("PING: " + pingMs + "ms");
     }
 
     login(messageReceived: any): void {
@@ -63,7 +67,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     monster_data(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
-        avatar_update_from_serveur(messageContent, this.monster_list, 100, true);
+        avatar_update_from_server(messageContent, this.monster_list, 100, true);
     }
 
     kill_all_night_monster(messageReceived: any) {
@@ -84,7 +88,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     position(messageReceived: any): void {
         let messageContent: receiveContent = JSON.parse(messageReceived.content);
-        avatar_update_from_serveur(messageContent, this.player_list, 50);
+        avatar_update_from_server(messageContent, this.player_list, 50);
     }
 
     hour(messageReceived: any): void {
@@ -111,8 +115,9 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     }
 
-    static setGlobalWebSocket(): void {
+    static setGlobalWebSocket(playerName: string): void {
         wsClient = new ConnectionClient();
+        establishConnection(playerName);
     }
 }
 
@@ -127,16 +132,6 @@ export function sendLogin() {
                 route: serverMessages.LOGIN,
                 content: username
             }));
-}
-
-function pingServer() {
-    wsClient.timeSendPing = Date.now()
-    wsClient.send(
-        JSON.stringify({
-            route: serverMessages.PING,
-            content: username
-        })
-    )
 }
 
 
@@ -196,7 +191,7 @@ export function objToPosition({ position }: Mesh): position {
     return { pos_x: position.x, pos_y: position.y, pos_z: position.y }
 }
 
-export function avatar_update_from_serveur(data: receiveContent, list: Map<String, Avatar>, time_ms: number, isMonster: boolean = false) {
+export function avatar_update_from_server(data: receiveContent, list: Map<String, Avatar>, time_ms: number, isMonster: boolean = false) {
     //We parse the message's content to get something of the form:
     //{pos_x: int, pos_y: int, pos_z: int, username: string}
     if (data.username === username && list === wsClient.player_list) return
@@ -260,10 +255,5 @@ export function establishConnection(name: string) {
             username = makeid(10);
         }
         console.log("connection successfully established!");
-
-        //GET THE PING BETWEEN CLIENT AND SERVER (CURRENTLY 1 PING RIGHT AFTER CONENCTION IS INITIALIZED, DISPLAY PING IN CONSOLE)
-        pingServer();
-
-        initChat()
     });
 }

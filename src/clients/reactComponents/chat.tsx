@@ -60,7 +60,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
 
     sendMessageFromPlayer(msg: string) {
         if (sphere1) {
-            if (msg[0] == "/") {
+            if (msg[0] === "/") {
                 this.cheatcode(msg)
                 return
             }

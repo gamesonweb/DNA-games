@@ -6,7 +6,6 @@ RUN update-ca-certificates
 
 WORKDIR ./tokyo_server
 
-ADD src src
 COPY ./Cargo.toml ./Cargo.toml
 
 RUN echo "fn main() {}" > dummy.rs
@@ -14,6 +13,7 @@ RUN echo "fn main() {}" > dummy.rs
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
+ADD src src
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 RUN cargo build --target x86_64-unknown-linux-musl --release
 

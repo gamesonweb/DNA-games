@@ -19,6 +19,7 @@ use tungstenite::protocol::Message;
 use crate::server::{broadcast, game_events, handle_connection, utils::find_js_file};
 
 #[derive(Deserialize, Debug)]
+#[allow(non_snake_case)]
 struct Direction {
     _isDirty: bool,
     _x: f32,

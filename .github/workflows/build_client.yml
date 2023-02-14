@@ -1,6 +1,10 @@
 name: Build Client
 on: push
 
+env:
+  # Modify this line to set the link of the server
+  URL_SERVER: wss://games-on-web-2022.herokuapp.com/
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -21,8 +25,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       # Set address for online connection
-      # Modify this line to set the link of the server
-      - run: echo "export const SERVER_LINK = 'wss://games-on-web-2022.herokuapp.com/';" > src/clients/connection/server_address.ts
+      - run: sed -i "s#ws:.*#$URL_SERVER\";#" src/clients/connection/server_address.ts
 
       # Adding node modules
       - run: npm install -g typescript;
