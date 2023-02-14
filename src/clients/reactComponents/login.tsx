@@ -42,7 +42,7 @@ export class ReactLogin extends Component<{}, State> {
             <Form.Select
               defaultValue={PLAYER_CLASSES_LIST[0]}
               onChange={e =>
-                this.setState({ class: e.currentTarget.tagName as PLAYER_CLASSES_TYPE })
+                this.setState({ class: e.currentTarget.value as PLAYER_CLASSES_TYPE })
               }
             >
               <option disabled hidden>{PLAYER_CLASSES_LIST[0]}</option>
@@ -73,6 +73,8 @@ export class ReactLogin extends Component<{}, State> {
 
               onKeyDown={e => {
                 if (e.key === "Enter" || e.key === "NumpadEnter") {
+                  console.log(this.state);
+
                   ConnectionClient.setGlobalWebSocket(this.state.class, this.state.name)
                   unmountComponentAtNode(document.getElementById('root')!);
                   initChat();

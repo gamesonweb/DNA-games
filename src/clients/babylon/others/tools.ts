@@ -140,7 +140,7 @@ export function adjustCameraPosition(scene: Scene, sphere1: AvatarSoft) {
 }
 
 function cameraCollision(mesh: AbstractMesh) {
-    return (scene.grounds.includes(mesh.name) || mesh.name == sphere1?.shape.name)
+    return (scene.grounds.includes(mesh.name) || mesh.name === sphere1?.shape.name)
 }
 
 export function cameraBackCollision(mesh: AbstractMesh) {
