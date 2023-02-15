@@ -7,10 +7,14 @@ body {
   padding: 0;
 }
 
-#canvas {
+/* #canvas {
   width: 100%;
   height: 100%;
-  touch-action: none;
+ 
+} */
+
+#babylonjsLoadingDiv{
+  display: none!important;
 }
 
 .sc::-webkit-scrollbar {
@@ -54,11 +58,6 @@ body {
   padding: 10px;
   overflow: auto;
   margin-bottom: 2pt;
-}
-
-#chatAnchor {
-  bottom: 10px;
-  position: absolute;
 }
 
 .loadingReact,

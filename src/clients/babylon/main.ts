@@ -1,6 +1,5 @@
 import { Engine, FollowCamera, Vector3 } from "babylonjs";
 import { username, wsClient } from "../connection/connectionClient";
-import { displayLoadingScreen } from "../reactComponents/loadingScreen";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/heroes/player";
 
@@ -53,7 +52,6 @@ export let initFunction = async function () {
 
   engine = await asyncEngineCreation();
   // engine.displayLoadingUI();
-  displayLoadingScreen()
   console.log("Loading screen");
 
   if (!engine) throw new Error('engine should not be null.');

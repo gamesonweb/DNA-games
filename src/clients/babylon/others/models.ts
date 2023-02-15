@@ -1,12 +1,10 @@
+import 'babylonjs-loaders';
 import { AnimationGroup, AssetContainer, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { engine, scene, startRenderLoop } from "../main";
 import { SceneClient } from "../scene/sceneClient";
-
-import 'babylonjs-loaders';
 import { createFire, createFireAnimation } from "./particules";
-import { unmountComponentAtNode } from "react-dom";
-import { loadingRef } from "../../reactComponents/loadingScreen";
 import { sendLogin, wsClient } from "../../connection/connectionClient";
+import { loadingRef } from '../../reactComponents/main';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 export class ModelEnum {
@@ -199,16 +197,12 @@ export class ModelEnum {
 
     static loadingDone() {
         ModelEnum.remainingLoad--;
-        let doneLoad = ModelEnum.totalLoad - ModelEnum.remainingLoad;
-        let stat = Math.round(doneLoad / ModelEnum.totalLoad * 100 * 100) / 100 + "%";
-        loadingRef.current!.setContent("Loading... " + stat)
+        loadingRef.current!.updateContent()
 
         if (ModelEnum.remainingLoad === 0) {
             wsClient.setEventListener()
             sendLogin();
-            unmountComponentAtNode(document.getElementById('root')!);
             startRenderLoop(engine);
-
         }
     }
 

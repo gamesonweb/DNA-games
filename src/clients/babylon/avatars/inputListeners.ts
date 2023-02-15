@@ -1,10 +1,11 @@
 import { Axis, FollowCamera } from "babylonjs";
 import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
-import { chatRef, input } from "../../reactComponents/chat";
+import { input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
 import { Player } from "./heroes/player";
 import { CharacterState } from "./avatarSoft";
+import { chatRef } from "../../reactComponents/main";
 
 type InputStates = {
     jump: boolean,

@@ -1,33 +1,32 @@
-import { Component, createRef, ReactNode, StrictMode } from "react";
-import { render} from "react-dom";
-import { windowExists } from "./tools";
+import { Component, ReactNode } from "react";
+import { ModelEnum } from "../babylon/others/models";
+import { SECTION } from "./main";
 
-export class ReactLoadingScreen extends Component<{}, {content: string}> {
-    constructor(props: string) {
-        super(props)
-        this.state = {
-            content: "Loading... "
-        }
-    }
+type Props = { setSection: (section: SECTION) => void }
 
-    setContent(text: string){
-        this.setState({ content: text })
+export class ReactLoadingScreen extends Component<Props, { content: number }> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      content: 0
     }
-    
+  }
+
+  updateContent() {
+    let content = ((1 - ModelEnum.remainingLoad / ModelEnum.totalLoad) * 100);
+    this.setState({ content });
+    if (ModelEnum.remainingLoad === 0) {
+      this.props.setSection("GAME");
+    }
+  }
+
+  numToStr() {
+    return this.state.content.toFixed(2)
+  }
+
   render(): ReactNode {
-    return <div className="loadingReact">{this.state.content} </div>
+    return <div className="loadingReact">Loading: {this.numToStr()} % </div>
   }
 }
 
-export let loadingRef = createRef<ReactLoadingScreen>();
-
-export function displayLoadingScreen() {
-  if (windowExists())
-    render(
-      <StrictMode>
-        <ReactLoadingScreen ref={loadingRef} />
-      </StrictMode>,
-      document.getElementById("root")
-    );
-}
 

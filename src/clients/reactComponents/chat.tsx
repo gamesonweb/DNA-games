@@ -1,9 +1,7 @@
-import { Component, createRef, ReactNode, RefObject, StrictMode } from "react"
-import { render } from "react-dom"
+import { Component, createRef, ReactNode, RefObject } from "react"
 import { canvas, scene, sphere1 } from "../babylon/main"
 import { getTimeToString, teleport } from "../babylon/others/tools"
 import { sendMessage } from "../connection/connectionClient"
-import { windowExists } from "./tools"
 
 export var input: HTMLInputElement
 
@@ -131,30 +129,21 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     render(): ReactNode {
-        return (<div onClick={() => this.enterChat()} style={{ display: this.state.displayChat ? "" : "none" }}>
-            <div id="chatbox" className='sc' ref={this.chatRef}>
-                {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
-                    <div key={pos}>
-                        {date}
-                        <span style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}> {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</span>
-                        {isStatus ? "" : content.replace(/</g, "&lt;")}
-                        <br />
-                    </div>
-                )}
-            </div>
-            <input ref={this.inputRef} style={{ visibility: (this.state.visible ? "visible" : "hidden") }} type="text" id="message" maxLength={60} size={55} onKeyDown={e => this.inputChange(e)} />
-        </div>)
+        return (
+            <div onClick={() => this.enterChat()} style={{
+                display: this.state.displayChat ? "" : "none", bottom: "10px", position: "absolute"
+            }} >
+                <div id="chatbox" className='sc' ref={this.chatRef}>
+                    {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
+                        <div key={pos}>
+                            {date}
+                            <span style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}> {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</span>
+                            {isStatus ? "" : content.replace(/</g, "&lt;")}
+                            <br />
+                        </div>
+                    )}
+                </div>
+                <input ref={this.inputRef} style={{ visibility: (this.state.visible ? "visible" : "hidden") }} type="text" id="message" maxLength={60} size={55} onKeyDown={e => this.inputChange(e)} />
+            </div>)
     }
-}
-
-export let chatRef = createRef<Chat>();
-
-export function initChat() {
-    if (windowExists())
-        render(
-            <StrictMode>
-                <Chat ref={chatRef} />
-            </StrictMode>,
-            document.getElementById("chatAnchor")
-        );
 }

@@ -7,7 +7,7 @@ import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeid, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
-import { chatRef } from "../reactComponents/chat";
+import { chatRef } from "../reactComponents/main";
 import { ErrorNoServer } from "../reactComponents/noServer";
 import { ConnectionSoft, position, receiveContent, serverMessages } from "./connectionSoft";
 import { SERVER_LINK } from "./server_address";
