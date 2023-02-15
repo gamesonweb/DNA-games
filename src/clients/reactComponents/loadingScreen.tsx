@@ -1,4 +1,5 @@
 import { Component, ReactNode } from "react";
+import { Col, ProgressBar, Row } from "react-bootstrap";
 import { ModelEnum } from "../babylon/others/models";
 import { SECTION } from "./main";
 
@@ -25,7 +26,11 @@ export class ReactLoadingScreen extends Component<Props, { content: number }> {
   }
 
   render(): ReactNode {
-    return <div className="loadingReact">Loading: {this.numToStr()} % </div>
+    let rowParam = "justify-content-center px-3 text-white "
+    return <Col className="col-xl-4 col-md-6 col-9">
+      <Row className={rowParam}>Loading: {this.numToStr()} % </Row>
+      <ProgressBar animated now={this.state.content} className="p-0" />
+    </Col>
   }
 }
 
