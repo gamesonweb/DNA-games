@@ -3,7 +3,7 @@ on: push
 
 env:
   # Modify this line to set the link of the server
-  URL_SERVER: wss://games-on-web-2022.herokuapp.com/
+  URL_SERVER: wss://mmoactiongameserver.herokuapp.com/
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -1,6 +1,10 @@
 name: Build Server
 on: push
 
+env:
+  # Modify this line to set the link of the server
+  HEROKU_LINK: mmoactiongameserver
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -33,17 +37,22 @@ jobs:
       - run: mkdir server
       - run: cp -r build-server Cargo* package* tsconfig.json public src Dockerfile .dockerignore server
 
-      # Push to branch
-      - name: Push
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: branch-server # The branch name where you want to push the assets
-          FOLDER: server # The directory where your assets are generated
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-          MESSAGE: "Build: ({sha}) {msg}" # The commit message
-
       # Push the docker file updated
-      - run: echo "${{ secrets.DOCKER_SECRET }}" | docker login -u fisso9900 --password-stdin
-      - run: docker image build -t fisso9900/gow2023server .
-      - run: docker push fisso9900/gow2023server
+      - name: Docker login
+        run: echo "${{ secrets.DOCKER_SECRET }}" | docker login -u fisso9900 --password-stdin
+
+      - name: Heroku login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_SECRET }}
+        run: heroku container:login
+
+      - name: Build Docker image
+        run: docker build -t registry.heroku.com/$HEROKU_LINK/web:latest .
+
+      - name: Push Docker image
+        run: docker push registry.heroku.com/$HEROKU_LINK/web
+
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a $HEROKU_LINK web
