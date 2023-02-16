@@ -28,8 +28,6 @@ export abstract class MeshWithHealth implements Health {
   }
 
   dispose() {
-    // console.log("zombie " + this.name + "disappears");
-
     this.shape.dispose();
   }
 
@@ -92,6 +90,9 @@ class HealthBar {
     var healthBarMaterial = new StandardMaterial(parent.name + "hb1mat", scene);
     healthBarMaterial.backFaceCulling = false;
     healthBarMaterial.emissiveColor = HealthBar.colorHealthHigh;
+    healthBarMaterial.diffuseColor = Color3.Black()
+    healthBarMaterial.specularColor = Color3.Black()
+    healthBarMaterial.ambientColor = Color3.Black()
     healthBar.parent = healthBarContainer;
     healthBar.material = healthBarMaterial;
     healthBar.isPickable = false;

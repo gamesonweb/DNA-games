@@ -90,6 +90,7 @@ export function setScene(e: SceneClient | undefined) {
     throw new Error("Undefined Scene")
   } else {
     scene = e
+    setWindowParams()
   }
 }
 
