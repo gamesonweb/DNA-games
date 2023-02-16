@@ -60,7 +60,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     sendMessageFromPlayer(msg: string) {
         if (sphere1) {
             if (msg[0] === "/") {
-                this.cheatcode(msg)
+                this.cheatCode(msg)
                 return
             }
             var time = getTimeToString()
@@ -69,7 +69,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
         }
     }
 
-    cheatcode(msg: string) {
+    cheatCode(msg: string) {
         switch (msg) {
             //teleport cheat codes
             case "/tp_forest": {
@@ -154,7 +154,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 </Row>
                 <Row>
                     <InputGroup size="sm" className="mb-3" style={{ visibility: (this.state.visible ? "visible" : "hidden") }}>
-                        <InputGroup.Text className="w-25">Msg: </InputGroup.Text>
+                        <InputGroup.Text className="w-25">Message: </InputGroup.Text>
                         <Form.Control
                             aria-label="Small"
                             aria-describedby="inputGroup-sizing-sm"

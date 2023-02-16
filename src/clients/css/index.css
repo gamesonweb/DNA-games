@@ -43,20 +43,13 @@ body {
 }
 
 #chatbox {
-  /* position: absolute; */
-  /* left: 0; */
-  /* bottom: 30pt; */
   color: #dcdcccee;
   background-color: rgba(0, 0, 0, 0.267);
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.889);
-  /* width: 300pt; */
-  height: 150pt;
-  text-align: left;
+  width: 100%;
   margin: 0 auto;
-  /* margin-bottom: 25px; */
   padding: 10px;
-  overflow: auto;
   margin-bottom: 2pt;
 }
 
