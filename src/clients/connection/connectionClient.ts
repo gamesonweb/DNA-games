@@ -51,10 +51,6 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
 
     login(messageReceived: any): void {
         var sender_name = messageReceived.content;
-        console.log({ sender_name });
-        console.log({ username, playerClass });
-
-
         if (sender_name === username) {
             var sphere = playerClassCreator(playerClass, username)
             this.player_list.set(sender_name, sphere);
@@ -62,13 +58,18 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
             setPositionUpdateSender()
         }
         console.log("LOGIN IN: " + messageReceived.content);
-        chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, true);
+        chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, "Login");
+    }
+
+    logout(messageReceived: any): void {
+        chatRef.current!.displayStatusInChat(getTimeToString(), messageReceived.content, "Logout");
+        super.logout(messageReceived)
     }
 
     message(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content);
         if (messageContent.username !== username)
-            chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, false);
+            chatRef.current!.writeMessageInChat(messageContent.time, messageContent.username, messageContent.message, "OtherPlayerMsg");
     }
 
     monster_data(messageReceived: any): void {

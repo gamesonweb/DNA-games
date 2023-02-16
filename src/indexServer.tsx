@@ -21,9 +21,6 @@ export function main() {
   var engine: Engine
 
   if (windowExists()) {
-    var canvas = document.getElementById("canvas") as HTMLCanvasElement
-    canvas.style.width = "100%"
-    canvas.style.height = "100%"
     engine = new Engine(canvas);
     scene = new SceneFictive(engine)
     scene.activeCamera?.attachControl(true)

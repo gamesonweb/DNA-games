@@ -6,13 +6,20 @@ import { sendMessage } from "../connection/connectionClient"
 
 export var input: HTMLInputElement
 
+export const messageInformationList = ["Login", "Logout"] as const;
+export type MessageInformation = (typeof messageInformationList)[number];
+
+
+export const messagePlayersList = ["AuthorMsg", "OtherPlayerMsg"] as const
+export type MessagePlayers = (typeof messagePlayersList)[number];
+
+export type MessageType = MessagePlayers | MessageInformation
+
 type MessageContent = {
     sender: string,
-    isAuthor: boolean,
     date: string,
     content: string,
-    isStatus: boolean,
-    isConnected: boolean
+    msgType: MessageType
 }
 
 export class Chat extends Component<{}, { visible: boolean, content: MessageContent[], displayChat: boolean }>{
@@ -59,12 +66,12 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
 
     sendMessageFromPlayer(msg: string) {
         if (sphere1) {
-            if (msg[0] === "/") {
+            if (msg.startsWith("/")) {
                 this.cheatCode(msg)
                 return
             }
             var time = getTimeToString()
-            this.writeMessageInChat(time, sphere1.name, msg, true)
+            this.writeMessageInChat(time, sphere1.name, msg, "AuthorMsg")
             sendMessage(time, msg)
         }
     }
@@ -74,28 +81,28 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
             //teleport cheat codes
             case "/tp_forest": {
                 if (scene.groundsData[1] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to forest island.", false)
+                    this.writeMessageInChat("", "success", "teleport to forest island.", "OtherPlayerMsg")
                     teleport(sphere1, scene.groundsData[1].position)
                 }
                 break;
             }
             case "/tp_desert": {
                 if (scene.groundsData[0] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to desert island.", false)
+                    this.writeMessageInChat("", "success", "teleport to desert island.", "OtherPlayerMsg")
                     teleport(sphere1, scene.groundsData[0].position)
                 }
                 break;
             }
             case "/tp_volcan": {
                 if (scene.groundsData[3] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to volcan island.", false)
+                    this.writeMessageInChat("", "success", "teleport to volcan island.", "OtherPlayerMsg")
                     teleport(sphere1, scene.groundsData[3].position)
                 }
                 break;
             }
             case "/tp_mountain": {
                 if (scene.groundsData[2] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to mountain island.", false)
+                    this.writeMessageInChat("", "success", "teleport to mountain island.", "OtherPlayerMsg")
                     teleport(sphere1, scene.groundsData[2].position)
                 }
                 break;
@@ -107,7 +114,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 break;
             }
             default: {
-                this.writeMessageInChat("", "error", msg + " is not a valid command.", false)
+                this.writeMessageInChat("", "error", msg + " is not a valid command.", "OtherPlayerMsg")
             }
         }
     }
@@ -116,22 +123,37 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
         this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
     }
 
-    writeMessageInChat(date: string, sender: string, content: string, isAuthor: boolean) {
+    writeMessageInChat(date: string, sender: string, content: string, msgType: MessagePlayers) {
         let msgs = this.state.content;
-
-        msgs.push({ content, date, sender, isAuthor, isConnected: true, isStatus: false })
+        msgs.push({ content, date, sender, msgType })
         this.setState({ content: msgs }, this.scrollBottom)
-
     }
 
-    displayStatusInChat(date: string, sender: string, isConnected: boolean) {
-        let content = (isConnected ? " " : " dis") + "connected."
+    displayStatusInChat(date: string, sender: string, msgType: MessageInformation) {
         let msgs = this.state.content;
-        msgs.push({ content, date, sender, isAuthor: false, isStatus: true, isConnected })
+        msgs.push({ content: "New " + msgType + ": ", date, sender, msgType })
         this.setState({ content: msgs }, this.scrollBottom)
+    }
+
+    isMessagePlayer = (m: string) => messagePlayersList.includes(m as MessagePlayers)
+
+    senderTextDisplay(e: { sender: string, msgType: MessageType, content: string }) {
+        return " " + (this.isMessagePlayer(e.msgType) ? "Mage" : e.content) + " " + e.sender
+    }
+
+    messagePlayers(e: { msgType: MessageType, content: string }) {
+        return (this.isMessagePlayer(e.msgType)) ? (": " + e.content.replace(/</g, "&lt;")) : ""
     }
 
     render(): ReactNode {
+        const colorAuthor = (msgType: MessageType) => {
+            switch (msgType) {
+                case "AuthorMsg": return "#0ca418ee"
+                case "OtherPlayerMsg": return "#2162fbee"
+                case "Logout": return "#FF0000 "
+                case "Login": return "#00FF00"
+            }
+        }
         return (
             <Col onClick={() => this.enterChat()} style={{
                 position: "absolute",
@@ -141,15 +163,15 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 width: "360px"
             }} className="d-flex flex-row bd-highlight flex-column align-self-end justify-content-end">
                 <Row ref={this.chatRef} className='sc overflow-auto' id="chatbox">
-                    {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
+                    {this.state.content.map(({ content, date, sender, msgType }, pos) =>
                         <Row key={pos}>
-                            <Col className="col-2">{date}</Col>
-                            <Col className={!isAuthor ? "" : "col-5"}
-                                style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}>
-                                {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}
-                            </Col>
-                            {!isAuthor ? <></> : <Col className="text-break">{isStatus ? "" : content.replace(/</g, "&lt;")}</Col>}
-
+                            <p className="p-0 m-0 text-break">
+                                {date}
+                                <span style={{ color: colorAuthor(msgType) }}>
+                                    {this.senderTextDisplay({ sender, msgType, content })}
+                                </span>
+                                {this.messagePlayers({ msgType, content })}
+                            </p>
                         </Row>
                     )}
                 </Row>

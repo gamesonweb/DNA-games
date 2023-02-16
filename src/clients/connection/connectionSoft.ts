@@ -66,8 +66,6 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                 }
 
                 case serverMessages.LOGIN: {
-                    console.log({ messageReceived });
-
                     this.login(messageReceived)
                     break;
                 }
@@ -173,6 +171,12 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
     }
 
     /**
+     * login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
+     * @param messageReceived 
+     */
+    abstract login(messageReceived: any): void;
+
+    /**
      * kill_monster: kill the monster with passed username
      * @param messageReceived 
      */
@@ -189,12 +193,6 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
     kill_all_night_monster(messageReceived: any) { }
 
     abstract set_username(messageReceived: any): void;
-
-    /**
-     * login route: create avatar, link the new avatar with its user in the player_list, set my sphere if I'm the one who logged in
-     * @param messageReceived 
-     */
-    abstract login(messageReceived: any): void;
 
     /**
      * message route: write the message content in the chat if the sender isn't us
