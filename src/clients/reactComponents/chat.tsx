@@ -1,4 +1,5 @@
 import { Component, createRef, ReactNode, RefObject } from "react"
+import { Col, Form, InputGroup, Row } from "react-bootstrap"
 import { canvas, scene, sphere1 } from "../babylon/main"
 import { getTimeToString, teleport } from "../babylon/others/tools"
 import { sendMessage } from "../connection/connectionClient"
@@ -112,7 +113,6 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     writeMessageInChat(date: string, sender: string, content: string, isAuthor: boolean) {
-        // let chat = document.getElementById("chatbox")
         let msgs = this.state.content;
 
         msgs.push({ content, date, sender, isAuthor, isConnected: true, isStatus: false })
@@ -130,20 +130,34 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
 
     render(): ReactNode {
         return (
-            <div onClick={() => this.enterChat()} style={{
-                display: this.state.displayChat ? "" : "none", bottom: "10px", position: "absolute"
-            }} >
-                <div id="chatbox" className='sc' ref={this.chatRef}>
+            <Col onClick={() => this.enterChat()} style={{
+                position: "absolute",
+                bottom: "10px",
+                left: "10px",
+                height: "30%"
+            }} className="col-5 d-flex flex-row bd-highlight mb-3 flex-column col-5 align-self-end justify-content-end">
+                <Row ref={this.chatRef} className='sc overflow-auto' id="chatbox">
                     {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
-                        <div key={pos}>
-                            {date}
-                            <span style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}> {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</span>
-                            {isStatus ? "" : content.replace(/</g, "&lt;")}
+                        <Row key={pos}>
+                            <Col className="col-2">{date}</Col>
+                            <Col className="col-5 text-break" style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}>{sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</Col>
+                            <Col className="text-break">{isStatus ? "" : content.replace(/</g, "&lt;")}</Col>
                             <br />
-                        </div>
+                        </Row>
                     )}
-                </div>
-                <input ref={this.inputRef} style={{ visibility: (this.state.visible ? "visible" : "hidden") }} type="text" id="message" maxLength={60} size={55} onKeyDown={e => this.inputChange(e)} />
-            </div>)
+                </Row>
+                <Row>
+                    <InputGroup size="sm" className="mb-3" style={{ visibility: (this.state.visible ? "visible" : "hidden") }}>
+                        <InputGroup.Text className="w-25">Msg: </InputGroup.Text>
+                        <Form.Control
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                            autoFocus
+                            ref={this.inputRef}
+                            onKeyDown={e => this.inputChange(e as any)}
+                        />
+                    </InputGroup>
+                </Row>
+            </Col>)
     }
 }
