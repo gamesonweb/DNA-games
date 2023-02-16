@@ -78,3 +78,8 @@ body {
 .fullHeight{
   height: 100vh;
 }
+
+#scene-explorer-host{
+  height: 100%;
+  z-index: 300;
+}

@@ -11,7 +11,7 @@ export class Mage extends Player {
     modelContainer: InstantiatedEntries;
     constructor(scene: Scene, avatar_username: string) {
         var modelContainer = ModelEnum.Ranger.duplicate(ModelEnum.Ranger.container)
-        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, 90, 0.2)
+        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, 90, 0.2, ModelEnum.Ranger.intrinsicParameterMesh)
 
         this.modelContainer = modelContainer
 

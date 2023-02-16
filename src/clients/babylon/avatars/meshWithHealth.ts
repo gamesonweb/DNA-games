@@ -1,4 +1,5 @@
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { intrinsicParameterMesh } from "../others/models";
 
 export type Health = {
   maxHealth?: number;
@@ -15,7 +16,7 @@ export abstract class MeshWithHealth implements Health {
   shape: Mesh;
 
 
-  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number) {
+  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number, p?: intrinsicParameterMesh) {
     this.name = name;
     this.shape = shape;
     // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
@@ -23,7 +24,7 @@ export abstract class MeshWithHealth implements Health {
     this.shape.showBoundingBox = true;
     this.maxHealth = healthParam
     this.minHealth = 0
-    this.healthBar = new HealthBar(this.shape, scene);
+    this.healthBar = new HealthBar(this.shape, scene, p);
     this.currentHealth = this.healthSet(this.maxHealth)
   }
 
@@ -68,7 +69,7 @@ class HealthBar {
   height: number;
   width: number;
 
-  constructor(parent: Mesh, scene: Scene, p?: { height: number, width: number }) {
+  constructor(parent: Mesh, scene: Scene, p?: intrinsicParameterMesh) {
     this.height = p?.height || 0.15;
     this.width = p?.width || 1;
     let [width, height] = [this.width, this.height]
@@ -78,7 +79,7 @@ class HealthBar {
     healthBarContainerMaterial.backFaceCulling = false;
 
     var healthBarContainer = MeshBuilder.CreatePlane(parent.name + "hb2", { width, height }, scene);
-    healthBarContainer.position = new Vector3(0, 1.2, 0);     // Position above player.
+    healthBarContainer.position = new Vector3(0, p?.healthYAbove || 1.2, 0);     // Position above player.
     healthBarContainer.parent = parent;
     healthBarContainer.material = healthBarContainerMaterial;
     healthBarContainer.billboardMode = Mesh.BILLBOARDMODE_Y
@@ -86,7 +87,7 @@ class HealthBar {
 
     // The healthBar
     var healthBar = MeshBuilder.CreatePlane(parent.name + "hb1", { width, height }, scene);
-    healthBar.position = new Vector3(0, 0, -.01);
+    healthBar.position = new Vector3(0, 0, -0.01);
     var healthBarMaterial = new StandardMaterial(parent.name + "hb1mat", scene);
     healthBarMaterial.backFaceCulling = false;
     healthBarMaterial.emissiveColor = HealthBar.colorHealthHigh;

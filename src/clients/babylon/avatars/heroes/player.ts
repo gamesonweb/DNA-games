@@ -1,13 +1,13 @@
 import { Mesh, Scene, Vector3 } from "babylonjs";
+import { intrinsicParameterMesh } from "../../others/models";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 
 export abstract class Player extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number) {
-
+    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number, p?: intrinsicParameterMesh) {
         let shape = createShape(avatar_username, scene);
-        super(scene, avatar_username, shape, model, health, speed)
+        super(scene, avatar_username, shape, model, health, speed, p)
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {

@@ -11,6 +11,7 @@ import { Mage } from "../avatars/heroes/classes/mage";
 import { PLAYER_CLASSES_TYPE } from "../avatars/heroes/classes/playerClasses";
 import { Warrior } from "../avatars/heroes/classes/warrior";
 import { scene, sphere1 } from "../main";
+import { intrinsicParameterMesh } from "./models";
 
 export function makeid(length: number) {
     var result = '';
@@ -47,10 +48,12 @@ export function isVector3Equal(v1: Vector3, v2: Vector3) {
 }
 
 
-export var createLabel = function (text: string, mesh: Avatar, scene: Scene) {
-    var plane = MeshBuilder.CreatePlane("plane", { size: 5 }, scene);
+export var createLabel = function (text: string, mesh: Avatar, scene: Scene, p?: intrinsicParameterMesh) {
+    console.log(p);
+
+    var plane = MeshBuilder.CreatePlane(text + "plane", { size: 5 }, scene);
     plane.billboardMode = Mesh.BILLBOARDMODE_Y;
-    plane.position.y = 2.5;
+    plane.position.y = p?.textYAbove || 2.5;
 
     if (windowExists()) {
         var advancedTexture = AdvancedDynamicTexture.CreateForMesh(plane);

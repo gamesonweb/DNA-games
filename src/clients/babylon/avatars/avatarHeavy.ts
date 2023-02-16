@@ -1,5 +1,5 @@
 import { Mesh, Scene, Vector3, } from "babylonjs";
-import { shadowGeneratorCampfire } from "../others/models";
+import { intrinsicParameterMesh, shadowGeneratorCampfire } from "../others/models";
 import { createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
@@ -10,13 +10,15 @@ export abstract class Avatar extends AvatarSoft {
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number, p?: intrinsicParameterMesh) {
 
-    super(scene, avatar_username, shape, health, speed);
+    super(scene, avatar_username, shape, health, speed, p);
 
-    let plane = createLabel(this.name, this, scene);
+    let plane = createLabel(this.name, this, scene, p);
     plane.isPickable = false;
     this.shape.addChild(plane)
+
+    plane.position.y = p?.textYAbove || 1.3
 
     this.shape.addChild(model);
     shadowGenerator?.addShadowCaster(model);

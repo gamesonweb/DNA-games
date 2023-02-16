@@ -7,19 +7,27 @@ import { sendLogin, wsClient } from "../../connection/connectionClient";
 import { loadingRef } from '../../reactComponents/main';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
+
+export type intrinsicParameterMesh = {
+    height?: number;
+    width?: number;
+    healthYAbove?: number;
+    textYAbove?: number
+}
+
 export class ModelEnum {
-    static Mage = new ModelEnum("mage", "gltf", 1.2);
-    static Warrior = new ModelEnum("warrior", "gltf", 1);
-    static Assassin = new ModelEnum("Rogue", "gltf", 1);
-    static Archer = new ModelEnum("mage", "gltf", 1);
-    static Healer = new ModelEnum("mage", "gltf", 1);
-    static Ranger = new ModelEnum("ranger", "glb", 1);
+    static Mage = new ModelEnum("mage", "gltf", 1.2, {});
+    static Warrior = new ModelEnum("warrior", "gltf", 1, {});
+    static Assassin = new ModelEnum("Rogue", "gltf", 1, {});
+    static Archer = new ModelEnum("mage", "gltf", 1, {});
+    static Healer = new ModelEnum("mage", "gltf", 1, {});
+    static Ranger = new ModelEnum("ranger", "glb", 1, { healthYAbove: 2, textYAbove: 2.3 });
 
-    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2);
+    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2, {});
 
-    static Campfire = new ModelEnum("campfire", "gltf", 0.25);
-    static Grass = new ModelEnum("grass", "gltf", 0.02);
-    static Tree = new ModelEnum("pine_tree", "gltf", 1)
+    static Campfire = new ModelEnum("campfire", "gltf", 0.25, {});
+    static Grass = new ModelEnum("grass", "gltf", 0.02, {});
+    static Tree = new ModelEnum("pine_tree", "gltf", 1, {})
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -29,6 +37,7 @@ export class ModelEnum {
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
     container: AssetContainer = new AssetContainer();
+    intrinsicParameterMesh?: intrinsicParameterMesh;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -36,10 +45,11 @@ export class ModelEnum {
 
 
 
-    constructor(name: string, extension: string, scaling: number) {
+    constructor(name: string, extension: string, scaling: number, p?: intrinsicParameterMesh) {
         this.name = name;
         this.extension = extension;
         this.scaling = scaling;
+        this.intrinsicParameterMesh = p
     }
 
     createModel(scene: SceneClient) {
