@@ -112,20 +112,23 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
         }
     }
 
+    scrollBottom = () => {
+        this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
+    }
+
     writeMessageInChat(date: string, sender: string, content: string, isAuthor: boolean) {
         let msgs = this.state.content;
 
         msgs.push({ content, date, sender, isAuthor, isConnected: true, isStatus: false })
-        this.setState({ content: msgs })
-        this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
+        this.setState({ content: msgs }, this.scrollBottom)
+
     }
 
     displayStatusInChat(date: string, sender: string, isConnected: boolean) {
         let content = (isConnected ? " " : " dis") + "connected."
         let msgs = this.state.content;
         msgs.push({ content, date, sender, isAuthor: false, isStatus: true, isConnected })
-        this.setState({ content: msgs })
-        this.chatRef.current!.scrollTop = this.chatRef.current!.scrollHeight
+        this.setState({ content: msgs }, this.scrollBottom)
     }
 
     render(): ReactNode {
@@ -140,9 +143,12 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                     {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
                         <Row key={pos}>
                             <Col className="col-2">{date}</Col>
-                            <Col className="col-5 text-break" style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}>{sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}</Col>
-                            <Col className="text-break">{isStatus ? "" : content.replace(/</g, "&lt;")}</Col>
-                            <br />
+                            <Col className={!isAuthor ? "" : "col-5"}
+                                style={{ color: (isStatus ? (isConnected ? "#00FF00" : "#FF0000 ") : (isAuthor ? "#0ca418ee" : "#2162fbee")) }}>
+                                {sender + (isStatus ? content : "")}{isStatus ? "" : " (Mage): "}
+                            </Col>
+                            {!isAuthor ? <></> : <Col className="text-break">{isStatus ? "" : content.replace(/</g, "&lt;")}</Col>}
+
                         </Row>
                     )}
                 </Row>
