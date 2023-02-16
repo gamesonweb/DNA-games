@@ -12,22 +12,23 @@ export type intrinsicParameterMesh = {
     height?: number;
     width?: number;
     healthYAbove?: number;
-    textYAbove?: number
+    textYAbove?: number;
+    className: string
 }
 
 export class ModelEnum {
-    static Mage = new ModelEnum("mage", "gltf", 1.2, {});
-    static Warrior = new ModelEnum("warrior", "gltf", 1, {});
-    static Assassin = new ModelEnum("Rogue", "gltf", 1, {});
-    static Archer = new ModelEnum("mage", "gltf", 1, {});
-    static Healer = new ModelEnum("mage", "gltf", 1, {});
-    static Ranger = new ModelEnum("ranger", "glb", 1, { healthYAbove: 2, textYAbove: 2.3 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "mage", });
+    static Warrior = new ModelEnum("gltf", 1, { className: "warrior", });
+    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", });
+    static Archer = new ModelEnum("gltf", 1, { className: "mage", });
+    static Healer = new ModelEnum("gltf", 1, { className: "mage", });
+    static Ranger = new ModelEnum("glb", 1, { className: "ranger", healthYAbove: 2, textYAbove: 2.3, });
 
-    static PumpkinMonster = new ModelEnum("pumpkin_monster", "gltf", 2, {});
+    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "pumpkin_monster", healthYAbove: 1.4, textYAbove: 1.7, });
 
-    static Campfire = new ModelEnum("campfire", "gltf", 0.25, {});
-    static Grass = new ModelEnum("grass", "gltf", 0.02, {});
-    static Tree = new ModelEnum("pine_tree", "gltf", 1, {})
+    static Campfire = new ModelEnum("gltf", 0.25, { className: "campfire", });
+    static Grass = new ModelEnum("gltf", 0.02, { className: "grass", });
+    static Tree = new ModelEnum("gltf", 1, { className: "pine_tree", })
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -45,8 +46,8 @@ export class ModelEnum {
 
 
 
-    constructor(name: string, extension: string, scaling: number, p?: intrinsicParameterMesh) {
-        this.name = name;
+    constructor(extension: string, scaling: number, p: intrinsicParameterMesh) {
+        this.name = p.className;
         this.extension = extension;
         this.scaling = scaling;
         this.intrinsicParameterMesh = p
