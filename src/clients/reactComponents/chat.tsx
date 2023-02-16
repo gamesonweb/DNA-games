@@ -137,8 +137,9 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 position: "absolute",
                 bottom: "10px",
                 left: "10px",
-                height: "30%"
-            }} className="col-5 d-flex flex-row bd-highlight mb-3 flex-column col-5 align-self-end justify-content-end">
+                height: "30%",
+                width: "360px"
+            }} className="d-flex flex-row bd-highlight flex-column align-self-end justify-content-end">
                 <Row ref={this.chatRef} className='sc overflow-auto' id="chatbox">
                     {this.state.content.map(({ content, date, isAuthor, sender, isStatus, isConnected }, pos) =>
                         <Row key={pos}>
