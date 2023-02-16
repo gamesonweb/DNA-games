@@ -1,11 +1,11 @@
 import { Mesh, Scene, Vector3 } from "babylonjs";
-import { intrinsicParameterMesh } from "../../others/models";
+import { intrinsicModelProperties } from "../../others/models";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 
 export abstract class Player extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number, p?: intrinsicParameterMesh) {
+    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number, p?: intrinsicModelProperties) {
         let shape = createShape(avatar_username, scene);
         super(scene, avatar_username, shape, model, health, speed, p)
     }

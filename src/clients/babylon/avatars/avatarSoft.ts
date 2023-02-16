@@ -1,5 +1,5 @@
 import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
-import { intrinsicParameterMesh } from "../others/models";
+import { intrinsicModelProperties } from "../others/models";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
 
@@ -34,7 +34,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   protected status: CharacterState;
   falling_counter: number;
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number, p?: intrinsicParameterMesh) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number, p?: intrinsicModelProperties) {
     super(avatar_username, scene, shape, health, p);
 
     this.gravity_acceleration = 0;

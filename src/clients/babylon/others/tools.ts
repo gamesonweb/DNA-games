@@ -11,7 +11,7 @@ import { Mage } from "../avatars/heroes/classes/mage";
 import { PLAYER_CLASSES_TYPE } from "../avatars/heroes/classes/playerClasses";
 import { Warrior } from "../avatars/heroes/classes/warrior";
 import { scene, sphere1 } from "../main";
-import { intrinsicParameterMesh } from "./models";
+import { intrinsicModelProperties } from "./models";
 
 export function makeid(length: number) {
     var result = '';
@@ -48,7 +48,7 @@ export function isVector3Equal(v1: Vector3, v2: Vector3) {
 }
 
 
-export var createLabel = function (text: string, mesh: Avatar, scene: Scene, p?: intrinsicParameterMesh) {
+export var createLabel = function (text: string, mesh: Avatar, scene: Scene, p?: intrinsicModelProperties) {
     console.log(p);
 
     var plane = MeshBuilder.CreatePlane(text + "plane", { size: 5 }, scene);

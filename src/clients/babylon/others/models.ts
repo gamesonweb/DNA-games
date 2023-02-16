@@ -8,12 +8,12 @@ import { loadingRef } from '../../reactComponents/main';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
-export type intrinsicParameterMesh = {
-    height?: number;
-    width?: number;
-    healthYAbove?: number;
-    textYAbove?: number;
-    className: string
+export type intrinsicModelProperties = {
+    readonly height?: number;
+    readonly width?: number;
+    readonly healthYAbove?: number;
+    readonly textYAbove?: number;
+    readonly className: string
 }
 
 export class ModelEnum {
@@ -38,7 +38,7 @@ export class ModelEnum {
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
     container: AssetContainer = new AssetContainer();
-    intrinsicParameterMesh?: intrinsicParameterMesh;
+    intrinsicParameterMesh?: intrinsicModelProperties;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -46,7 +46,7 @@ export class ModelEnum {
 
 
 
-    constructor(extension: string, scaling: number, p: intrinsicParameterMesh) {
+    constructor(extension: string, scaling: number, p: intrinsicModelProperties) {
         this.name = p.className;
         this.extension = extension;
         this.scaling = scaling;

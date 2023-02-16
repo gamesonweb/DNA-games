@@ -1,5 +1,5 @@
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
-import { intrinsicParameterMesh } from "../others/models";
+import { intrinsicModelProperties } from "../others/models";
 
 export type Health = {
   maxHealth?: number;
@@ -16,7 +16,7 @@ export abstract class MeshWithHealth implements Health {
   shape: Mesh;
 
 
-  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number, p?: intrinsicParameterMesh) {
+  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number, p?: intrinsicModelProperties) {
     this.name = name;
     this.shape = shape;
     // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
@@ -69,7 +69,7 @@ class HealthBar {
   height: number;
   width: number;
 
-  constructor(parent: Mesh, scene: Scene, p?: intrinsicParameterMesh) {
+  constructor(parent: Mesh, scene: Scene, p?: intrinsicModelProperties) {
     this.height = p?.height || 0.15;
     this.width = p?.width || 1;
     let [width, height] = [this.width, this.height]
