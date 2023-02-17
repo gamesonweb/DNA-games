@@ -46,10 +46,6 @@ export function inializeInputListeners() {
         keyListener(evt, false)
     });
 
-    canvas.addEventListener("keypress", (evt) => {
-        keyPressListener(evt)
-    })
-
     canvas.addEventListener('keydown', (evt) => {
         if ((evt.code === "Enter" || evt.code === "NumpadEnter")) {
             inputStates = createInputStates()
@@ -157,12 +153,6 @@ export function pointerLockAndMouseMove() {
 
     canvas.onpointerdown = function () {
         if (!isLocked()) canvas.requestPointerLock();
-    }
-}
-
-let keyPressListener = (evt: KeyboardEvent) => {
-    if (evt.code === "KeyC") {
-        chatRef.current!.toggleChat()
     }
 }
 

@@ -22,7 +22,7 @@ type MessageContent = {
     msgType: MessageType
 }
 
-export class Chat extends Component<{}, { visible: boolean, content: MessageContent[], displayChat: boolean }>{
+export class Chat extends Component<{}, { visible: boolean, content: MessageContent[] }>{
     inputRef: RefObject<HTMLInputElement>;
     chatRef: RefObject<HTMLDivElement>;
 
@@ -30,8 +30,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
         super(props)
         this.state = {
             visible: false,
-            content: [],
-            displayChat: true
+            content: []
         }
         this.inputRef = createRef<HTMLInputElement>()
         this.chatRef = createRef<HTMLDivElement>()
@@ -43,13 +42,8 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     enterChat() {
-        this.setState({ visible: true, displayChat: true })
+        this.setState({ visible: true })
         this.inputRef.current?.focus()
-        // console.log("Show");
-    }
-
-    toggleChat() {
-        this.setState({ displayChat: !this.state.displayChat })
     }
 
     inputChange(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -178,12 +172,11 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                     </Row>
                 </Col>
                 <Row>
-                    <InputGroup size="sm" className="mb-3" style={{ visibility: (this.state.visible ? "visible" : "hidden") }}>
+                    <InputGroup size="sm" className="mb-3" style={{ opacity: this.state.visible ? 1 : 0.3 }}>
                         <InputGroup.Text className="w-25">Message: </InputGroup.Text>
                         <Form.Control
                             aria-label="Small"
                             aria-describedby="inputGroup-sizing-sm"
-                            autoFocus
                             ref={this.inputRef}
                             onKeyDown={e => this.inputChange(e as any)}
                         />
