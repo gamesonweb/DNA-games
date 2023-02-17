@@ -1,6 +1,7 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
+import { ModelEnum } from "./clients/babylon/others/models";
 import { giveMonsterName } from "./clients/babylon/others/namesMonsters";
 import { createBasicShape, distance } from "./clients/babylon/others/tools";
 import { SceneFictive } from "./clients/babylon/scene/sceneFictive";
@@ -133,7 +134,7 @@ export function generate_zombie_wave() {
 
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let name = giveMonsterName()
-  let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene), 100);
+  let generated_zombie = new AvatarFictive(scene, name, createBasicShape(name, scene), ModelEnum.PumpkinMonster.intrinsicParameterMesh);
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);

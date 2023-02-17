@@ -16,13 +16,13 @@ export abstract class MeshWithHealth implements Health {
   shape: Mesh;
 
 
-  constructor(name: string, scene: Scene, shape: Mesh, healthParam: number, p?: intrinsicModelProperties) {
+  constructor(name: string, scene: Scene, shape: Mesh, p: intrinsicModelProperties) {
     this.name = name;
     this.shape = shape;
     // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
     this.shape.checkCollisions = true;
     this.shape.showBoundingBox = true;
-    this.maxHealth = healthParam
+    this.maxHealth = p.health
     this.minHealth = 0
     this.healthBar = new HealthBar(this.shape, scene, p);
     this.currentHealth = this.healthSet(this.maxHealth)

@@ -8,9 +8,9 @@ import { Avatar } from "../avatarHeavy";
 
 export class Monster extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, health = 100, speed = 0.2) {
+    constructor(scene: Scene, avatar_username: string) {
         let shape = createBasicShape(avatar_username, scene)
-        super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), health, speed, ModelEnum.PumpkinMonster.intrinsicParameterMesh)
+        super(scene, avatar_username, shape, ModelEnum.PumpkinMonster.rootMesh!.clone(), ModelEnum.PumpkinMonster.intrinsicParameterMesh)
         this.shape.name = this.name
     }
 

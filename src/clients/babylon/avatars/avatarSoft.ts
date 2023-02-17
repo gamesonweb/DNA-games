@@ -34,14 +34,14 @@ export abstract class AvatarSoft extends MeshWithHealth {
   protected status: CharacterState;
   falling_counter: number;
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, health: number, speed: number, p?: intrinsicModelProperties) {
-    super(avatar_username, scene, shape, health, p);
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelProperties) {
+    super(avatar_username, scene, shape, p);
 
     this.gravity_acceleration = 0;
     this.name = avatar_username
     this.class = "Avatar"
 
-    this.speed_coeff = speed;
+    this.speed_coeff = p.speed;
     this.didSomething = false;
 
     this.shape.position = new Vector3(0, 1, 0);

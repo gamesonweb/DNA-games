@@ -10,9 +10,9 @@ export abstract class Avatar extends AvatarSoft {
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, health: number, speed: number, p?: intrinsicModelProperties) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, p: intrinsicModelProperties) {
 
-    super(scene, avatar_username, shape, health, speed, p);
+    super(scene, avatar_username, shape, p);
 
     let plane = createLabel(this.name, this, scene, p);
     plane.isPickable = false;

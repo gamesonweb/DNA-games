@@ -13,22 +13,24 @@ export type intrinsicModelProperties = {
     readonly width?: number;
     readonly healthYAbove?: number;
     readonly textYAbove?: number;
-    readonly className: string
+    readonly className: string;
+    readonly health: number;
+    readonly speed: number
 }
 
 export class ModelEnum {
-    static Mage = new ModelEnum("gltf", 1.2, { className: "mage", });
-    static Warrior = new ModelEnum("gltf", 1, { className: "warrior", });
-    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", });
-    static Archer = new ModelEnum("gltf", 1, { className: "mage", });
-    static Healer = new ModelEnum("gltf", 1, { className: "mage", });
-    static Ranger = new ModelEnum("glb", 1, { className: "ranger", healthYAbove: 2, textYAbove: 2.3, });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "mage", health: 90, speed: 0.2 });
+    static Warrior = new ModelEnum("gltf", 1, { className: "warrior", health: 120, speed: 0.2 });
+    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25 });
+    static Archer = new ModelEnum("gltf", 1, { className: "mage", health: 80, speed: 0.25 });
+    static Healer = new ModelEnum("gltf", 1, { className: "mage", health: 100, speed: 0.2 });
+    static Ranger = new ModelEnum("glb", 1, { className: "ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.2 });
 
-    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "pumpkin_monster", healthYAbove: 1.4, textYAbove: 1.7, });
+    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "pumpkin_monster", healthYAbove: 1.4, textYAbove: 1.7, health: 100, speed: 0.2 });
 
-    static Campfire = new ModelEnum("gltf", 0.25, { className: "campfire", });
-    static Grass = new ModelEnum("gltf", 0.02, { className: "grass", });
-    static Tree = new ModelEnum("gltf", 1, { className: "pine_tree", })
+    static Campfire = new ModelEnum("gltf", 0.25, { className: "campfire", health: 50, speed: 2 });
+    static Grass = new ModelEnum("gltf", 0.02, { className: "grass", health: 50, speed: 2 });
+    static Tree = new ModelEnum("gltf", 1, { className: "pine_tree", health: 50, speed: 2 });
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
     name: string;
@@ -38,7 +40,7 @@ export class ModelEnum {
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
     container: AssetContainer = new AssetContainer();
-    intrinsicParameterMesh?: intrinsicModelProperties;
+    intrinsicParameterMesh: intrinsicModelProperties;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;

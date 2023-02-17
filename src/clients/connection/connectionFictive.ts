@@ -1,6 +1,7 @@
-import { Vector3 } from "babylonjs";
+import { ModelShape, Vector3 } from "babylonjs";
 import { generate_zombie_wave } from "../../indexServer";
 import { AvatarFictive } from "../babylon/avatars/avatarFictif";
+import { ModelEnum } from "../babylon/others/models";
 import { createBasicShape } from "../babylon/others/tools";
 import { SceneFictive } from "../babylon/scene/sceneFictive";
 import { ConnectionSoft, knockbackContent, receiveContent, serverMessages } from "./connectionSoft";
@@ -38,7 +39,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
     let messageContent: receiveContent = JSON.parse(messageReceived.content);
     let avatar_to_update = this.player_list.get(messageContent.username);
     if (avatar_to_update === undefined) {
-      this.player_list.set(messageContent.username, new AvatarFictive(this.scene!, messageContent.username, createBasicShape(messageContent.username, this.scene!), messageContent.health!));
+      this.player_list.set(messageContent.username, new AvatarFictive(this.scene!, messageContent.username, createBasicShape(messageContent.username, this.scene!), ModelEnum.PumpkinMonster.intrinsicParameterMesh));
       avatar_to_update = this.player_list.get(messageContent.username);
     }
     if (avatar_to_update) {

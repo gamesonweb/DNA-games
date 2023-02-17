@@ -5,9 +5,9 @@ import { Avatar } from "../avatarHeavy";
 
 export abstract class Player extends Avatar {
 
-    constructor(scene: Scene, avatar_username: string, model: Mesh, health: number, speed: number, p?: intrinsicModelProperties) {
+    constructor(scene: Scene, avatar_username: string, model: Mesh, p: intrinsicModelProperties) {
         let shape = createShape(avatar_username, scene);
-        super(scene, avatar_username, shape, model, health, speed, p)
+        super(scene, avatar_username, shape, model, p)
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
