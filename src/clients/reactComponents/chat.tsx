@@ -165,7 +165,7 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 <Row ref={this.chatRef} className='sc overflow-auto' id="chatbox">
                     {this.state.content.map(({ content, date, sender, msgType }, pos) =>
                         <Row key={pos}>
-                            <p className="p-0 m-0 text-break">
+                            <p className="p-0 m-0" style={{ "wordBreak": "break-all" }}>
                                 {date}
                                 <span style={{ color: colorAuthor(msgType) }}>
                                     {this.senderTextDisplay({ sender, msgType, content })}
