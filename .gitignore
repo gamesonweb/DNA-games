@@ -30,3 +30,5 @@ TODO
 .vscode/settings.json
 src/index.tsx
 .vscode/*
+
+*.blend
