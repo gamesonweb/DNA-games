@@ -16,10 +16,12 @@ export class Mage extends Player {
         this.modelContainer = modelContainer
 
         for (let aniCounter = 0; aniCounter < modelContainer.animationGroups.length; aniCounter++) {
+            console.log("set up animation transition for groupe " + aniCounter + " (" + modelContainer.animationGroups[aniCounter].name);
+
             for (let index = 0; index < modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
                 let animation = modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
                 animation.enableBlending = true
-                animation.blendingSpeed = 0.1
+                animation.blendingSpeed = 0.08
             }
         }
 
@@ -78,23 +80,28 @@ export class Mage extends Player {
         var animation_indice = -1
         switch (status) {
             case CharacterState.Walking_bw:
+                animation_indice = 7
                 break
             case CharacterState.Walking_fw:
-                animation_indice = 1
+                animation_indice = 6
                 break
             case CharacterState.Running:
+                animation_indice = 4
                 break
             case CharacterState.Falling:
-                break
-            case CharacterState.Idle:
-                break
-            case CharacterState.Jumping:
-                break
-            case CharacterState.Punching:
-                this.modelContainer.animationGroups[0].play()
                 animation_indice = 0
                 break
+            case CharacterState.Idle:
+                animation_indice = 1
+                break
+            case CharacterState.Jumping:
+                animation_indice = 0
+                break
+            case CharacterState.Punching:
+                animation_indice = 3
+                break
             case CharacterState.Swimming:
+                animation_indice = 5
                 break
             default:
                 console.log("error animation: " + this.name + " in status " + this.status);

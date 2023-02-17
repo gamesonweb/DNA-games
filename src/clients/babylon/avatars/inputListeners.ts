@@ -176,7 +176,10 @@ export function inputEffects(player: Player) {
         } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
         if (!inputStates.goForeward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
-        }
+            if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+                player.update_status(CharacterState.Walking_bw)
+            }
+        } if (!inputStates.goBackward) { if (player.getStatus() === CharacterState.Walking_bw) player.update_status(CharacterState.Idle) }
     }
 
     //player rotation
