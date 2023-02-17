@@ -162,19 +162,21 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 height: "30%",
                 width: "360px"
             }} className="d-flex flex-row bd-highlight flex-column align-self-end justify-content-end">
-                <Row ref={this.chatRef} className='sc overflow-auto' id="chatbox">
-                    {this.state.content.map(({ content, date, sender, msgType }, pos) =>
-                        <Row key={pos}>
-                            <p className="p-0 m-0" style={{ "wordBreak": "break-all" }}>
-                                {date}
-                                <span style={{ color: colorAuthor(msgType) }}>
-                                    {this.senderTextDisplay({ sender, msgType, content })}
-                                </span>
-                                {this.messagePlayers({ msgType, content })}
-                            </p>
-                        </Row>
-                    )}
-                </Row>
+                <Col className='sc' id="chatbox" ref={this.chatRef} style={{ overflowX: "hidden", overflowY: "auto" }}>
+                    <Row>
+                        {this.state.content.map(({ content, date, sender, msgType }, pos) =>
+                            <Row key={pos} style={{ margin: "0 auto" }}>
+                                <p className="p-0 m-0" style={{ "wordBreak": "break-all" }}>
+                                    {date}
+                                    <span style={{ color: colorAuthor(msgType) }}>
+                                        {this.senderTextDisplay({ sender, msgType, content })}
+                                    </span>
+                                    {this.messagePlayers({ msgType, content })}
+                                </p>
+                            </Row>
+                        )}
+                    </Row>
+                </Col>
                 <Row>
                     <InputGroup size="sm" className="mb-3" style={{ visibility: (this.state.visible ? "visible" : "hidden") }}>
                         <InputGroup.Text className="w-25">Message: </InputGroup.Text>
