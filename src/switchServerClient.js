@@ -1,37 +1,38 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let mv = process.argv[2]
-let what = process.argv[3]
+const changeIndexContent = (isClient) => {
+  fs.writeFileSync(
+    "src/index.tsx",
+    `import { main } from "./${
+      isClient ? "indexClient" : "indexServer"
+    }";\nmain()`
+  );
+};
 
-if (mv == "t") {
-  fs.writeFileSync('src/index.tsx', `
-    import { main } from "./${what === "c" ? "indexClient" : "indexServer"}";
-    main()`);
-} else {
-  let dest = what === "c" ? "./build-client" : "./build-server"
+const prependServerInput = (isClient) => {
+  if (!isClient) {
+    let path = "./build/static/js/";
+    let fic = path + fs.readdirSync(path).filter((e) => e.endsWith("js"))[0];
+    let firstLine = `const WebSocket = require('ws');var XMLHttpRequest = require('xhr2');var fs = require('fs');var serverFolderFilesDir = process.cwd();console.log(serverFolderFilesDir);console.log(process.cwd());const liveServer = require("live-server");liveServer.start({open: false,port: 3000});`;
+    let ct = firstLine + fs.readFileSync(fic).toString();
+    fs.writeFileSync(fic, ct);
+  }
+};
+
+const moveBuildFolder = (isClient) => {
+  let dest = isClient ? "./build-client" : "./build-server";
+  prependServerInput(isClient);
   fs.rmSync(dest, { recursive: true, force: true });
   fs.renameSync("build", dest, function (err) {
-    if (err) throw err
-    console.log('Successfully renamed - AKA moved!')
-  })
-  if (what !== "c") { // that is : dealing with serveur building
-    let path = dest + "/static/js/"
-    let fic = path + fs.readdirSync(path).filter(e => e.endsWith("js"))[0]
-    let firstLine = ` 
-const WebSocket = require('ws')
-var XMLHttpRequest = require('xhr2');
-var fs = require('fs')
-var serverFolderFilesDir = process.cwd()
-console.log(serverFolderFilesDir);
-//process.chdir('..');
-console.log(process.cwd());
-const liveServer = require("live-server");
+    if (err) throw err;
+    console.log("Successfully renamed - AKA moved!");
+  });
+  changeIndexContent(true);
+};
 
-liveServer.start({
-  open: false,
-  port: 3000
-});`
-    let ct = firstLine + fs.readFileSync(fic).toString()
-    fs.writeFileSync(fic, ct)
-  }
-}
+const main = (move, isClient) => {
+  if (move) changeIndexContent(isClient);
+  else moveBuildFolder(isClient);
+};
+
+main(process.argv[2] === "t", process.argv[3] === "c");
