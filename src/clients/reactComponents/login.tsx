@@ -1,5 +1,5 @@
 import { Component, ReactNode, StrictMode } from "react";
-import { Col, Form, InputGroup } from "react-bootstrap";
+import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
 import { render } from "react-dom";
 import { PLAYER_CLASSES_LIST, PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses";
@@ -21,6 +21,11 @@ export class ReactLogin extends Component<Props, State> {
       name: "",
       class: PLAYER_CLASSES_LIST[0]
     }
+  }
+
+  goToLoadingPanel() {
+    ConnectionClient.setGlobalWebSocket(this.state.class, this.state.name)
+    this.props.setSection("LOADING")
   }
 
   render(): ReactNode {
@@ -73,14 +78,12 @@ export class ReactLogin extends Component<Props, State> {
 
             onKeyDown={e => {
               if (e.key === "Enter" || e.key === "NumpadEnter") {
-                console.log(this.state);
-
-                ConnectionClient.setGlobalWebSocket(this.state.class, this.state.name)
-                this.props.setSection("LOADING")
+                this.goToLoadingPanel()
               }
             }}
           />
         </InputGroup>
+        <Button onClick={this.goToLoadingPanel} id="accessButton" className="btn-sm">Enter</Button>
       </Row>
     </Col>
   }
