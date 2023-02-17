@@ -208,3 +208,7 @@ export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: s
             return new Healer(scene, username)
     }
 }
+
+export function shuffle<T>(array: T[]) {
+    array.sort(() => Math.random() - 0.5);
+}

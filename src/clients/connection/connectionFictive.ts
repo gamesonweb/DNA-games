@@ -5,7 +5,6 @@ import { createBasicShape } from "../babylon/others/tools";
 import { SceneFictive } from "../babylon/scene/sceneFictive";
 import { ConnectionSoft, knockbackContent, receiveContent, serverMessages } from "./connectionSoft";
 
-export let zombie_counter = 0;
 export let ws: ConnectionServer;
 
 export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictive, SceneFictive>{
@@ -56,7 +55,6 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
         value.dispose();
       }
       this.monster_list.clear();
-      zombie_counter = 0;
       ws.send(JSON.stringify({
         route: serverMessages.KILL_ALL_NIGHT_MONSTER,
         content: ""
@@ -88,8 +86,4 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
   static setGlobalWebSocket(scene: SceneFictive, port: string): void {
     ws = new ConnectionServer(scene, port);
   }
-}
-
-export function setCounter(value: number) {
-  zombie_counter = value
 }
