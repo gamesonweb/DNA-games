@@ -6,7 +6,7 @@ import { sendMessage } from "../connection/connectionClient"
 
 export var input: HTMLInputElement
 
-export const messageInformationList = ["Login", "Logout"] as const;
+export const messageInformationList = ["Login", "Logout", "CheatCode"] as const;
 export type MessageInformation = (typeof messageInformationList)[number];
 
 
@@ -71,32 +71,33 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
     }
 
     cheatCode(msg: string) {
+        let msgContent: string = "";
         switch (msg) {
             //teleport cheat codes
             case "/tp_forest": {
                 if (scene.groundsData[1] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to forest island.", "OtherPlayerMsg")
+                    msgContent = "teleport to forest island."
                     teleport(sphere1, scene.groundsData[1].position)
                 }
                 break;
             }
             case "/tp_desert": {
                 if (scene.groundsData[0] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to desert island.", "OtherPlayerMsg")
+                    msgContent = "teleport to desert island."
                     teleport(sphere1, scene.groundsData[0].position)
                 }
                 break;
             }
             case "/tp_volcan": {
                 if (scene.groundsData[3] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to volcan island.", "OtherPlayerMsg")
+                    msgContent = "teleport to volcan island.";
                     teleport(sphere1, scene.groundsData[3].position)
                 }
                 break;
             }
             case "/tp_mountain": {
                 if (scene.groundsData[2] && sphere1) {
-                    this.writeMessageInChat("", "success", "teleport to mountain island.", "OtherPlayerMsg")
+                    msgContent = "teleport to mountain island."
                     teleport(sphere1, scene.groundsData[2].position)
                 }
                 break;
@@ -108,8 +109,12 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 break;
             }
             default: {
-                this.writeMessageInChat("", "error", msg + " is not a valid command.", "OtherPlayerMsg")
+                msgContent = msg + " is not a valid command.";
+                break;
             }
+        }
+        if (msgContent !== "") {
+            this.displayStatusInChat("Cheat! ", msgContent, "CheatCode")
         }
     }
 
@@ -146,6 +151,8 @@ export class Chat extends Component<{}, { visible: boolean, content: MessageCont
                 case "OtherPlayerMsg": return "#2162fbee"
                 case "Logout": return "#FF0000 "
                 case "Login": return "#00FF00"
+                case "CheatCode": return "#9e6a98"
+                default: throw Error(`Chat: color for ${msgType} is not selected`)
             }
         }
         return (
