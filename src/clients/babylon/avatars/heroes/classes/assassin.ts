@@ -7,7 +7,7 @@ import { Player } from "../player";
 
 export class Assassin extends Player {
     constructor(scene: Scene, avatar_username: string) {
-        super(scene, avatar_username, ModelEnum.Assassin.rootMesh!.clone(), ModelEnum.Assassin.intrinsicParameterMesh)
+        super(scene, avatar_username, ModelEnum.Assassin.intrinsicParameterMesh)
 
         this.class = "Assassin"
 

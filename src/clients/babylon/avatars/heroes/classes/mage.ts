@@ -8,18 +8,14 @@ import { Player } from "../player";
 import { CharacterState } from "../../avatarSoft";
 
 export class Mage extends Player {
-    modelContainer: InstantiatedEntries;
     constructor(scene: Scene, avatar_username: string) {
-        var modelContainer = ModelEnum.Ranger.duplicate(ModelEnum.Ranger.container)
-        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, ModelEnum.Ranger.intrinsicParameterMesh)
+        super(scene, avatar_username, ModelEnum.Ranger.intrinsicParameterMesh)
 
-        this.modelContainer = modelContainer
+        for (let aniCounter = 0; aniCounter < this.modelContainer.animationGroups.length; aniCounter++) {
+            console.log("set up animation transition for groupe " + aniCounter + " (" + this.modelContainer.animationGroups[aniCounter].name);
 
-        for (let aniCounter = 0; aniCounter < modelContainer.animationGroups.length; aniCounter++) {
-            console.log("set up animation transition for groupe " + aniCounter + " (" + modelContainer.animationGroups[aniCounter].name);
-
-            for (let index = 0; index < modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
-                let animation = modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
+            for (let index = 0; index < this.modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
+                let animation = this.modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
                 animation.enableBlending = true
                 animation.blendingSpeed = 0.08
             }

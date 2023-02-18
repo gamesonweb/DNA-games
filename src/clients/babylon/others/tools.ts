@@ -10,6 +10,7 @@ import { Healer } from "../avatars/heroes/classes/healer";
 import { Mage } from "../avatars/heroes/classes/mage";
 import { PLAYER_CLASSES_TYPE } from "../avatars/heroes/classes/playerClasses";
 import { Warrior } from "../avatars/heroes/classes/warrior";
+import { Player } from "../avatars/heroes/player";
 import { scene, sphere1 } from "../main";
 import { intrinsicModelProperties } from "./models";
 
@@ -194,7 +195,7 @@ export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: 
     return angleTarget < angle
 }
 
-export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: string): Avatar {
+export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: string): Player {
     switch (playerClass) {
         case "Warrior":
             return new Warrior(scene, username)

@@ -1,13 +1,16 @@
-import { Mesh, Scene, Vector3 } from "babylonjs";
+import { InstantiatedEntries, Mesh, Scene, Vector3 } from "babylonjs";
 import { intrinsicModelProperties } from "../../others/models";
 import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 
 export abstract class Player extends Avatar {
+    modelContainer: InstantiatedEntries
 
-    constructor(scene: Scene, avatar_username: string, model: Mesh, p: intrinsicModelProperties) {
+    constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
         let shape = createShape(avatar_username, scene);
-        super(scene, avatar_username, shape, model, p)
+        var modelContainer = p.duplicateModel()
+        super(scene, avatar_username, shape, modelContainer.rootNodes[0] as Mesh, p)
+        this.modelContainer = modelContainer
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
