@@ -5,7 +5,7 @@ import { Player } from "../babylon/avatars/classes/heroes/player";
 import { Monster } from "../babylon/avatars/classes/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
-import { getTimeToString, isVector3Equal, makeid, playerClassCreator } from "../babylon/others/tools";
+import { getTimeToString, isVector3Equal, makeId, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef } from "../reactComponents/main";
 import { ErrorNoServer } from "../reactComponents/noServer";
@@ -262,7 +262,7 @@ export function establishConnection(className: PLAYER_CLASSES_TYPE, name: string
         }
 
         if (username === "") {
-            username = makeid(10);
+            username = makeId(10);
         }
     });
 }

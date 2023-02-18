@@ -14,13 +14,12 @@ import { Healer } from "../avatars/classes/heroes/healer";
 import { Mage } from "../avatars/classes/heroes/mage";
 import { Warrior } from "../avatars/classes/heroes/warrior";
 
-export function makeid(length: number) {
+export function makeId(length: number) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
 }
