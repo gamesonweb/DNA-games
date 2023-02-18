@@ -2,6 +2,7 @@ import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
 import { intrinsicModelProperties } from "./classes/models";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
+import { AVATAR_CLASSES } from "./classes/classesTypes";
 
 export enum CharacterState {
   Idle,
@@ -29,7 +30,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   canMove: boolean;
   takeHits: boolean;
   model: Mesh | undefined;
-  class: string;
+  readonly class: AVATAR_CLASSES;
   offset_dir_y: number;
   protected status: CharacterState;
   falling_counter: number;
@@ -39,7 +40,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.gravity_acceleration = 0;
     this.name = avatar_username
-    this.class = p.className
+    this.class = p.className as AVATAR_CLASSES
 
     this.speed_coeff = p.speed;
     this.didSomething = false;

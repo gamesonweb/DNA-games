@@ -20,7 +20,7 @@ export type intrinsicModelPropertiesOptional = {
     duplicateModel?: () => InstantiatedEntries
 }
 
-type extension_type = "glb" | "gltf"
+type extensionType = "glb" | "gltf"
 
 export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertiesOptional>>
 
@@ -39,14 +39,14 @@ export class ModelEnum {
     static Tree = new ModelEnum("gltf", 1, { className: "PineTree", health: 50, speed: 2 });
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
-    private name: ALL_CLASSES;
-    extension: extension_type;
-    scaling: number;
+    private readonly className: ALL_CLASSES;
+    private readonly extension: extensionType;
+    private readonly scaling: number;
     rootMesh: Mesh | undefined
-    particules: IParticleSystem[] = [];
-    skeletons: Skeleton[] = [];
-    container: AssetContainer = new AssetContainer();
-    intrinsicParameterMesh: Readonly<Required<intrinsicModelProperties>>;
+    private readonly particules: IParticleSystem[] = [];
+    private readonly skeletons: Skeleton[] = [];
+    private container: AssetContainer = new AssetContainer();
+    readonly intrinsicParameterMesh: Readonly<Required<intrinsicModelProperties>>;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -54,8 +54,8 @@ export class ModelEnum {
 
 
 
-    constructor(extension: extension_type, scaling: number, p: intrinsicModelPropertiesOptional) {
-        this.name = p.className;
+    constructor(extension: extensionType, scaling: number, p: intrinsicModelPropertiesOptional) {
+        this.className = p.className;
         this.extension = extension;
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
@@ -68,7 +68,7 @@ export class ModelEnum {
         // SceneLoader.ImportMesh("", "models/" + this.name + "/", this.name + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
         //     this.callback(loadedMeshes, loadedSkeletons, loadedAnimationGroups)
         // })
-        SceneLoader.LoadAssetContainer("models/" + this.name + "/", this.name + "." + this.extension, scene, (container) => {
+        SceneLoader.LoadAssetContainer("models/" + this.className + "/", this.className + "." + this.extension, scene, (container) => {
             this.callback(container, container.meshes, container.skeletons, container.animationGroups)
         })
     }
@@ -82,7 +82,7 @@ export class ModelEnum {
         this.container = container;
         this.rootMesh = meshes[0] as Mesh;
         this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
-        this.rootMesh.name = this.name;
+        this.rootMesh.name = this.className;
 
 
         let all_meshes = [...meshes];
@@ -90,7 +90,7 @@ export class ModelEnum {
 
         ModelEnum.loadingDone();
 
-        switch (this.name) {
+        switch (this.className) {
             case "Grass":
                 all_meshes.forEach(m => {
                     if (m.material) {
@@ -119,18 +119,18 @@ export class ModelEnum {
                 // });
 
                 //left eye
-                let left_eye = MeshBuilder.CreateSphere(this.name + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
+                let left_eye = MeshBuilder.CreateSphere(this.className + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
                 left_eye.position = new Vector3(0.122, 1.108, 0.125);
                 left_eye.parent = this.rootMesh;
 
-                var eyeMaterial = new StandardMaterial(this.name + "_material", scene);
+                var eyeMaterial = new StandardMaterial(this.className + "_material", scene);
 
                 eyeMaterial.diffuseColor = new Color3(1, 0.5, 0);
                 eyeMaterial.emissiveColor = new Color3(1, 0.5, 0);
                 left_eye.material = eyeMaterial;
 
                 //right eye
-                let right_eye = left_eye.clone(this.name + "_right_eye");
+                let right_eye = left_eye.clone(this.className + "_right_eye");
                 right_eye.position = new Vector3(-0.11, 1.08, 0.15)
                 break;
 
@@ -138,7 +138,7 @@ export class ModelEnum {
                 this.rootMesh.position = new Vector3(5, -0.5, 5);
 
                 //campfire light
-                let campfireLight = new PointLight(this.name + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
+                let campfireLight = new PointLight(this.className + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
                 campfireLight.diffuse = new Color3(1, 0.5, 0);
                 campfireLight.specular = new Color3(1, 0.5, 0);
                 campfireLight.range = 15;

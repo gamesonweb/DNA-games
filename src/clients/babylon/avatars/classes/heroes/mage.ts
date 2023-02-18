@@ -1,4 +1,4 @@
-import { Axis, InstantiatedEntries, Mesh, Scene } from "babylonjs";
+import { Axis, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
 import { isInCone, distance } from "../../../others/tools";
@@ -20,9 +20,6 @@ export class Mage extends Player {
                 animation.blendingSpeed = 0.08
             }
         }
-
-        this.class = "Mage"
-
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 8000
     }
