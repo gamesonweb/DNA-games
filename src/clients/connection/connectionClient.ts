@@ -1,4 +1,5 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
+import { refReactMain } from "../../indexClient";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
 import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes";
 import { Player } from "../babylon/avatars/classes/heroes/player";
@@ -8,7 +9,6 @@ import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeId, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
 import { chatRef } from "../reactComponents/main";
-import { ErrorNoServer } from "../reactComponents/noServer";
 import { ConnectionSoft, position, receiveContent, serverMessages } from "./connectionSoft";
 import { SERVER_LINK } from "./server_address";
 
@@ -38,7 +38,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     onError() {
-        ErrorNoServer()
+        refReactMain.current!.setSection("NO_SERVER")
     }
 
     set_username(messageReceived: any): void {

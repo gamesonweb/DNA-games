@@ -1,7 +1,14 @@
 import { Vector3 } from "babylonjs";
+import { Scene } from "babylonjs/scene";
+import { createBasicShape } from "../others/tools";
 import { AvatarSoft } from "./avatarSoft";
+import { intrinsicModelProperties } from "./classes/models";
 
 export class AvatarFictive extends AvatarSoft {
+
+    constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
+        super(scene, avatar_username, createBasicShape(avatar_username, scene), p)
+    }
 
     dispose(): void {
         super.dispose()

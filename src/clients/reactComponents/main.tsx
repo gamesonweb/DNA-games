@@ -3,8 +3,9 @@ import { Container, Row } from "react-bootstrap";
 import { Chat } from "./chat";
 import { ReactLoadingScreen } from "./loadingScreen";
 import { ReactLogin } from "./login";
+import { ReactNoServer } from "./noServer";
 
-export type SECTION = "GAME" | "LOGIN" | "LOADING"
+export type SECTION = "GAME" | "LOGIN" | "LOADING" | "NO_SERVER"
 
 export let chatRef = createRef<Chat>();
 export let loadingRef = createRef<ReactLoadingScreen>();
@@ -22,6 +23,7 @@ export default class ReactMain extends Component<{}, { section: SECTION }> {
       case "GAME": return <Chat ref={chatRef} />
       case "LOADING": return <ReactLoadingScreen ref={loadingRef} setSection={this.setSection} />
       case "LOGIN": return <ReactLogin setSection={this.setSection} />
+      case "NO_SERVER": return <ReactNoServer />
     }
   }
 

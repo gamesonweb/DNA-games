@@ -1,11 +1,9 @@
-import { Component, ReactNode, StrictMode } from "react";
+import { Component, ReactNode } from "react";
 import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
-import { render } from "react-dom";
 import { PLAYER_CLASSES_LIST, PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes";
 import { ConnectionClient } from "../connection/connectionClient";
-import ReactMain, { SECTION } from "./main";
-import { windowExists } from "./tools";
+import { SECTION } from "./main";
 
 type State = {
   name: string,
@@ -87,14 +85,4 @@ export class ReactLogin extends Component<Props, State> {
       </Row>
     </Col>
   }
-}
-
-export function askUsername() {
-  if (windowExists())
-    render(
-      <StrictMode>
-        <ReactMain />
-      </StrictMode>,
-      document.getElementById("root")
-    );
 }

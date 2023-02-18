@@ -1,8 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import './clients/css/index.css';
-import { askUsername } from './clients/reactComponents/login';
+
+import { createRef, StrictMode } from 'react';
+import { render } from 'react-dom';
+import ReactMain from './clients/reactComponents/main';
+import { windowExists } from './clients/reactComponents/tools';
+
+export const refReactMain = createRef<ReactMain>()
 
 export function main() {
-  askUsername();
+  if (windowExists())
+    render(
+      <StrictMode>
+        <ReactMain ref={refReactMain} />
+      </StrictMode>,
+      document.getElementById("root")
+    );
 }
