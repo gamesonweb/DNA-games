@@ -69,9 +69,9 @@ class HealthBar {
   height: number;
   width: number;
 
-  constructor(parent: Mesh, scene: Scene, p?: intrinsicModelProperties) {
-    this.height = p?.height || 0.15;
-    this.width = p?.width || 1;
+  constructor(parent: Mesh, scene: Scene, p: intrinsicModelProperties) {
+    this.height = p.height;
+    this.width = p.width;
     let [width, height] = [this.width, this.height]
     // the healthBarContainer
     var healthBarContainerMaterial = new StandardMaterial(parent.name + "hb2mat", scene);

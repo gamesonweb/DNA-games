@@ -1,5 +1,5 @@
 import 'babylonjs-loaders';
-import { AnimationGroup, AssetContainer, Axis, Color3, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { engine, scene, startRenderLoop } from "../main";
 import { SceneClient } from "../scene/sceneClient";
 import { createFire, createFireAnimation } from "./particules";
@@ -8,15 +8,18 @@ import { loadingRef } from '../../reactComponents/main';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
-export type intrinsicModelProperties = {
-    readonly height?: number;
-    readonly width?: number;
-    readonly healthYAbove?: number;
-    readonly textYAbove?: number;
-    readonly className: string;
-    readonly health: number;
-    readonly speed: number
+export type intrinsicModelPropertiesOptional = {
+    height?: number;
+    width?: number;
+    healthYAbove?: number;
+    textYAbove?: number;
+    className: string;
+    health: number;
+    speed: number;
+    duplicateModel?: () => InstantiatedEntries
 }
+
+export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertiesOptional>>
 
 export class ModelEnum {
     static Mage = new ModelEnum("gltf", 1.2, { className: "mage", health: 90, speed: 0.2 });
@@ -40,7 +43,7 @@ export class ModelEnum {
     particules: IParticleSystem[] = [];
     skeletons: Skeleton[] = [];
     container: AssetContainer = new AssetContainer();
-    intrinsicParameterMesh: intrinsicModelProperties;
+    intrinsicParameterMesh: Readonly<Required<intrinsicModelProperties>>;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -48,11 +51,14 @@ export class ModelEnum {
 
 
 
-    constructor(extension: string, scaling: number, p: intrinsicModelProperties) {
+    constructor(extension: string, scaling: number, p: intrinsicModelPropertiesOptional) {
         this.name = p.className;
         this.extension = extension;
         this.scaling = scaling;
-        this.intrinsicParameterMesh = p
+        this.intrinsicParameterMesh = {
+            height: 0.15, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
+            duplicateModel: () => this.duplicate(this.container)
+        }
     }
 
     createModel(scene: SceneClient) {
@@ -196,8 +202,7 @@ export class ModelEnum {
     static createAllModels(scene: SceneClient) {
         var allModels = [
             this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
-            this.PumpkinMonster,
-            this.Grass, this.Campfire, this.Tree
+            this.PumpkinMonster, this.Grass, this.Campfire, this.Tree
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
