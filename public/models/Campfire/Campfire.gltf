@@ -1,447 +1,397 @@
 {
-    "asset" : {
-        "generator" : "Khronos glTF Blender I/O v1.8.19",
-        "version" : "2.0"
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v1.8.19",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [6]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "campfire_model:subtool14_campfire_model6_stone2_0"
     },
-    "scene" : 0,
-    "scenes" : [
-        {
-            "name" : "Scene",
-            "nodes" : [
-                6
-            ]
+    {
+      "mesh": 1,
+      "name": "campfire_model:subtool14_campfire_model6_stone_0"
+    },
+    {
+      "mesh": 2,
+      "name": "campfire_model:subtool14_campfire_model6_wood_0"
+    },
+    {
+      "children": [0, 1, 2],
+      "name": "campfire_model:subtool14"
+    },
+    {
+      "children": [3],
+      "name": "RootNode"
+    },
+    {
+      "children": [4],
+      "name": "8e156acce6294511aac49a657a75e889.fbx",
+      "rotation": [0.7071068286895752, 0, 0, 0.7071068286895752]
+    },
+    {
+      "children": [5],
+      "name": "Sketchfab_model",
+      "rotation": [-0.7071068286895752, 0, 0, 0.7071068286895752]
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "campfire_model6_stone2",
+      "normalTexture": {
+        "index": 0
+      },
+      "occlusionTexture": {
+        "index": 1
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.22016607224941254,
+        "metallicRoughnessTexture": {
+          "index": 1
         }
-    ],
-    "nodes" : [
-        {
-            "mesh" : 0,
-            "name" : "campfire_model:subtool14_campfire_model6_stone2_0"
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "campfire_model6_stone",
+      "normalTexture": {
+        "index": 3
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
         },
-        {
-            "mesh" : 1,
-            "name" : "campfire_model:subtool14_campfire_model6_stone_0"
-        },
-        {
-            "mesh" : 2,
-            "name" : "campfire_model:subtool14_campfire_model6_wood_0"
-        },
-        {
-            "children" : [
-                0,
-                1,
-                2
-            ],
-            "name" : "campfire_model:subtool14"
-        },
-        {
-            "children" : [
-                3
-            ],
-            "name" : "RootNode"
-        },
-        {
-            "children" : [
-                4
-            ],
-            "name" : "8e156acce6294511aac49a657a75e889.fbx",
-            "rotation" : [
-                0.7071068286895752,
-                0,
-                0,
-                0.7071068286895752
-            ]
-        },
-        {
-            "children" : [
-                5
-            ],
-            "name" : "Sketchfab_model",
-            "rotation" : [
-                -0.7071068286895752,
-                0,
-                0,
-                0.7071068286895752
-            ]
+        "metallicFactor": 0.23230478167533875,
+        "metallicRoughnessTexture": {
+          "index": 5
         }
-    ],
-    "materials" : [
-        {
-            "doubleSided" : true,
-            "name" : "campfire_model6_stone2",
-            "normalTexture" : {
-                "index" : 0
-            },
-            "occlusionTexture" : {
-                "index" : 1
-            },
-            "pbrMetallicRoughness" : {
-                "baseColorTexture" : {
-                    "index" : 2
-                },
-                "metallicFactor" : 0.22016607224941254,
-                "metallicRoughnessTexture" : {
-                    "index" : 1
-                }
-            }
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [1, 1, 1],
+      "emissiveTexture": {
+        "index": 6
+      },
+      "name": "campfire_model6_wood",
+      "normalTexture": {
+        "index": 7
+      },
+      "occlusionTexture": {
+        "index": 8
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 9
         },
-        {
-            "doubleSided" : true,
-            "name" : "campfire_model6_stone",
-            "normalTexture" : {
-                "index" : 3
-            },
-            "pbrMetallicRoughness" : {
-                "baseColorTexture" : {
-                    "index" : 4
-                },
-                "metallicFactor" : 0.23230478167533875,
-                "metallicRoughnessTexture" : {
-                    "index" : 5
-                }
-            }
-        },
-        {
-            "doubleSided" : true,
-            "emissiveFactor" : [
-                1,
-                1,
-                1
-            ],
-            "emissiveTexture" : {
-                "index" : 6
-            },
-            "name" : "campfire_model6_wood",
-            "normalTexture" : {
-                "index" : 7
-            },
-            "occlusionTexture" : {
-                "index" : 8
-            },
-            "pbrMetallicRoughness" : {
-                "baseColorTexture" : {
-                    "index" : 9
-                },
-                "metallicFactor" : 0,
-                "metallicRoughnessTexture" : {
-                    "index" : 8
-                }
-            }
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 8
         }
-    ],
-    "meshes" : [
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "campfire_model:subtool14_campfire_model6_stone2_0",
+      "primitives": [
         {
-            "name" : "campfire_model:subtool14_campfire_model6_stone2_0",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 0,
-                        "NORMAL" : 1,
-                        "TEXCOORD_0" : 2
-                    },
-                    "indices" : 3,
-                    "material" : 0
-                }
-            ]
-        },
-        {
-            "name" : "campfire_model:subtool14_campfire_model6_stone_0",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 4,
-                        "NORMAL" : 5,
-                        "TEXCOORD_0" : 6
-                    },
-                    "indices" : 7,
-                    "material" : 1
-                }
-            ]
-        },
-        {
-            "name" : "campfire_model:subtool14_campfire_model6_wood_0",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 8,
-                        "NORMAL" : 9,
-                        "TEXCOORD_0" : 10
-                    },
-                    "indices" : 11,
-                    "material" : 2
-                }
-            ]
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
         }
-    ],
-    "textures" : [
+      ]
+    },
+    {
+      "name": "campfire_model:subtool14_campfire_model6_stone_0",
+      "primitives": [
         {
-            "sampler" : 0,
-            "source" : 0
-        },
-        {
-            "sampler" : 0,
-            "source" : 1
-        },
-        {
-            "sampler" : 0,
-            "source" : 2
-        },
-        {
-            "sampler" : 0,
-            "source" : 3
-        },
-        {
-            "sampler" : 0,
-            "source" : 4
-        },
-        {
-            "sampler" : 0,
-            "source" : 5
-        },
-        {
-            "sampler" : 0,
-            "source" : 6
-        },
-        {
-            "sampler" : 0,
-            "source" : 7
-        },
-        {
-            "sampler" : 0,
-            "source" : 8
-        },
-        {
-            "sampler" : 0,
-            "source" : 9
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1
         }
-    ],
-    "images" : [
+      ]
+    },
+    {
+      "name": "campfire_model:subtool14_campfire_model6_wood_0",
+      "primitives": [
         {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone2_normal",
-            "uri" : "textures/campfire_model6_stone2_normal.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone2_metallicRoughness",
-            "uri" : "textures/campfire_model6_stone2_metallicRoughness.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone2_baseColor",
-            "uri" : "textures/campfire_model6_stone2_baseColor.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone_normal",
-            "uri" : "textures/campfire_model6_stone_normal.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone_baseColor",
-            "uri" : "textures/campfire_model6_stone_baseColor.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_stone_metallicRoughness",
-            "uri" : "textures/campfire_model6_stone_metallicRoughness.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_wood_emissive",
-            "uri" : "textures/campfire_model6_wood_emissive.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_wood_normal",
-            "uri" : "textures/campfire_model6_wood_normal.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_wood_metallicRoughness",
-            "uri" : "textures/campfire_model6_wood_metallicRoughness.png"
-        },
-        {
-            "mimeType" : "image/png",
-            "name" : "campfire_model6_wood_baseColor",
-            "uri" : "textures/campfire_model6_wood_baseColor.png"
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 2
         }
-    ],
-    "accessors" : [
-        {
-            "bufferView" : 0,
-            "componentType" : 5126,
-            "count" : 1470,
-            "max" : [
-                3.940741539001465,
-                2.396153450012207,
-                4.408881187438965
-            ],
-            "min" : [
-                -4.078296184539795,
-                -0.14906930923461914,
-                -3.61665415763855
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 1,
-            "componentType" : 5126,
-            "count" : 1470,
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 2,
-            "componentType" : 5126,
-            "count" : 1470,
-            "type" : "VEC2"
-        },
-        {
-            "bufferView" : 3,
-            "componentType" : 5123,
-            "count" : 1470,
-            "type" : "SCALAR"
-        },
-        {
-            "bufferView" : 4,
-            "componentType" : 5126,
-            "count" : 1830,
-            "max" : [
-                4.833526134490967,
-                3.6911497116088867,
-                2.7277672290802
-            ],
-            "min" : [
-                -3.5341217517852783,
-                -0.1439189910888672,
-                -6.050844192504883
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 5,
-            "componentType" : 5126,
-            "count" : 1830,
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 6,
-            "componentType" : 5126,
-            "count" : 1830,
-            "type" : "VEC2"
-        },
-        {
-            "bufferView" : 7,
-            "componentType" : 5123,
-            "count" : 1830,
-            "type" : "SCALAR"
-        },
-        {
-            "bufferView" : 8,
-            "componentType" : 5126,
-            "count" : 838,
-            "max" : [
-                2.9557993412017822,
-                4.714932441711426,
-                2.9668049812316895
-            ],
-            "min" : [
-                -2.010793447494507,
-                -0.04477357864379883,
-                -2.7114508152008057
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 9,
-            "componentType" : 5126,
-            "count" : 838,
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 10,
-            "componentType" : 5126,
-            "count" : 838,
-            "type" : "VEC2"
-        },
-        {
-            "bufferView" : 11,
-            "componentType" : 5123,
-            "count" : 1116,
-            "type" : "SCALAR"
-        }
-    ],
-    "bufferViews" : [
-        {
-            "buffer" : 0,
-            "byteLength" : 17640,
-            "byteOffset" : 0
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 17640,
-            "byteOffset" : 17640
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 11760,
-            "byteOffset" : 35280
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 2940,
-            "byteOffset" : 47040
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 21960,
-            "byteOffset" : 49980
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 21960,
-            "byteOffset" : 71940
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 14640,
-            "byteOffset" : 93900
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 3660,
-            "byteOffset" : 108540
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 10056,
-            "byteOffset" : 112200
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 10056,
-            "byteOffset" : 122256
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 6704,
-            "byteOffset" : 132312
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 2232,
-            "byteOffset" : 139016
-        }
-    ],
-    "samplers" : [
-        {
-            "magFilter" : 9729,
-            "minFilter" : 9987
-        }
-    ],
-    "buffers" : [
-        {
-            "byteLength" : 141248,
-            "uri" : "campfire.bin"
-        }
-    ]
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    },
+    {
+      "sampler": 0,
+      "source": 6
+    },
+    {
+      "sampler": 0,
+      "source": 7
+    },
+    {
+      "sampler": 0,
+      "source": 8
+    },
+    {
+      "sampler": 0,
+      "source": 9
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone2_normal",
+      "uri": "textures/campfire_model6_stone2_normal.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone2_metallicRoughness",
+      "uri": "textures/campfire_model6_stone2_metallicRoughness.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone2_baseColor",
+      "uri": "textures/campfire_model6_stone2_baseColor.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone_normal",
+      "uri": "textures/campfire_model6_stone_normal.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone_baseColor",
+      "uri": "textures/campfire_model6_stone_baseColor.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_stone_metallicRoughness",
+      "uri": "textures/campfire_model6_stone_metallicRoughness.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_wood_emissive",
+      "uri": "textures/campfire_model6_wood_emissive.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_wood_normal",
+      "uri": "textures/campfire_model6_wood_normal.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_wood_metallicRoughness",
+      "uri": "textures/campfire_model6_wood_metallicRoughness.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "campfire_model6_wood_baseColor",
+      "uri": "textures/campfire_model6_wood_baseColor.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 1470,
+      "max": [3.940741539001465, 2.396153450012207, 4.408881187438965],
+      "min": [-4.078296184539795, -0.14906930923461914, -3.61665415763855],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1470,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1470,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 1470,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 1830,
+      "max": [4.833526134490967, 3.6911497116088867, 2.7277672290802],
+      "min": [-3.5341217517852783, -0.1439189910888672, -6.050844192504883],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 1830,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 1830,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 1830,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 838,
+      "max": [2.9557993412017822, 4.714932441711426, 2.9668049812316895],
+      "min": [-2.010793447494507, -0.04477357864379883, -2.7114508152008057],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 838,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 838,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5123,
+      "count": 1116,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 17640,
+      "byteOffset": 0
+    },
+    {
+      "buffer": 0,
+      "byteLength": 17640,
+      "byteOffset": 17640
+    },
+    {
+      "buffer": 0,
+      "byteLength": 11760,
+      "byteOffset": 35280
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2940,
+      "byteOffset": 47040
+    },
+    {
+      "buffer": 0,
+      "byteLength": 21960,
+      "byteOffset": 49980
+    },
+    {
+      "buffer": 0,
+      "byteLength": 21960,
+      "byteOffset": 71940
+    },
+    {
+      "buffer": 0,
+      "byteLength": 14640,
+      "byteOffset": 93900
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3660,
+      "byteOffset": 108540
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10056,
+      "byteOffset": 112200
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10056,
+      "byteOffset": 122256
+    },
+    {
+      "buffer": 0,
+      "byteLength": 6704,
+      "byteOffset": 132312
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2232,
+      "byteOffset": 139016
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 141248,
+      "uri": "Campfire.bin"
+    }
+  ]
 }
