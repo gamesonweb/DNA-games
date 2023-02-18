@@ -1,5 +1,9 @@
 name: Build Server
-on: push
+
+on:
+  push:
+    branches:
+      - main
 
 env:
   # Modify this line to set the link of the server
