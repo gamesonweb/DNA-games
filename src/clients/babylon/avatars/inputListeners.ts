@@ -1,7 +1,6 @@
 import { Axis, FollowCamera } from "babylonjs";
 import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
-import { input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
 import { Player } from "./classes/heroes/player";
 import { CharacterState } from "./avatarSoft";
@@ -65,14 +64,10 @@ export function inializeInputListeners() {
 }
 
 function keyListener(evt: KeyboardEvent, isPressed: boolean) {
-
-    if ((input === document.activeElement) && isPressed) { return }
-
     // sauter
     if (evt.code === "Space") {
         inputStates.jump = isPressed;
     }
-
     // movements
     else if (evt.code === "KeyW") {
         inputStates.goForeward = isPressed;
@@ -102,7 +97,6 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
 }
 
 function mouseListener(evt: MouseEvent, isPressed: boolean) {
-    if ((input === document.activeElement) && isPressed) { return }
     switch (evt.button) {
         case 2:
             inputStates.attack_1 = isPressed;

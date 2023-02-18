@@ -4,16 +4,14 @@ import { canvas, scene, sphere1 } from "../babylon/main"
 import { getTimeToString, teleport } from "../babylon/others/tools"
 import { sendMessage } from "../connection/connectionClient"
 
-export var input: HTMLInputElement
-
-export const messageInformationList = ["Login", "Logout", "CheatCode"] as const;
-export type MessageInformation = (typeof messageInformationList)[number];
+const messageInformationList = ["Login", "Logout", "CheatCode"] as const;
+type MessageInformation = (typeof messageInformationList)[number];
 
 
-export const messagePlayersList = ["AuthorMsg", "OtherPlayerMsg"] as const
-export type MessagePlayers = (typeof messagePlayersList)[number];
+const messagePlayersList = ["AuthorMsg", "OtherPlayerMsg"] as const
+type MessagePlayers = (typeof messagePlayersList)[number];
 
-export type MessageType = MessagePlayers | MessageInformation
+type MessageType = MessagePlayers | MessageInformation
 
 type MessageContent = {
     sender: string,
