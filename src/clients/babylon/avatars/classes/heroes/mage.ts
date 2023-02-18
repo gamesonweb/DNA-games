@@ -87,7 +87,7 @@ export class Mage extends Player {
                 animation_indice = 3
                 break
             case CharacterState.Jumping:
-                animation_indice = 4
+                animation_indice = 1
                 break
             case CharacterState.Punching:
                 animation_indice = 5

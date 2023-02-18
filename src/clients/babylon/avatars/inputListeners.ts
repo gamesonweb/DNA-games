@@ -175,14 +175,14 @@ export function inputEffects(player: Player) {
                 }
             }
             else {
-                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 2));
+                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.8));
                 if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
                     player.update_status(CharacterState.Walking_fw)
                 }
             }
         } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
         if (!inputStates.goForward && inputStates.goBackward) {
-            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
+            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 3));
             if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
                 player.update_status(CharacterState.Walking_bw)
             }
