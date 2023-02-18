@@ -5,6 +5,7 @@ import { SceneClient } from "../../scene/sceneClient";
 import { createFire, createFireAnimation } from "../../others/particules";
 import { sendLogin, wsClient } from "../../../connection/connectionClient";
 import { loadingRef } from '../../../reactComponents/main';
+import { ALL_CLASSES } from './classesTypes';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
@@ -13,31 +14,33 @@ export type intrinsicModelPropertiesOptional = {
     width?: number;
     healthYAbove?: number;
     textYAbove?: number;
-    className: string;
+    className: ALL_CLASSES;
     health: number;
     speed: number;
     duplicateModel?: () => InstantiatedEntries
 }
 
+type extension_type = "glb" | "gltf"
+
 export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertiesOptional>>
 
 export class ModelEnum {
-    static Mage = new ModelEnum("gltf", 1.2, { className: "mage", health: 90, speed: 0.2 });
-    static Warrior = new ModelEnum("gltf", 1, { className: "warrior", health: 120, speed: 0.2 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.2 });
+    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.2 });
     static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25 });
-    static Archer = new ModelEnum("gltf", 1, { className: "mage", health: 80, speed: 0.25 });
-    static Healer = new ModelEnum("gltf", 1, { className: "mage", health: 100, speed: 0.2 });
-    static Ranger = new ModelEnum("glb", 1, { className: "ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.2 });
+    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, speed: 0.25 });
+    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, speed: 0.2 });
+    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.2 });
 
-    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "pumpkin_monster", healthYAbove: 1.4, textYAbove: 1.7, health: 100, speed: 0.2 });
+    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, speed: 0.2 });
 
-    static Campfire = new ModelEnum("gltf", 0.25, { className: "campfire", health: 50, speed: 2 });
-    static Grass = new ModelEnum("gltf", 0.02, { className: "grass", health: 50, speed: 2 });
-    static Tree = new ModelEnum("gltf", 1, { className: "pine_tree", health: 50, speed: 2 });
+    static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, speed: 2 });
+    static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, speed: 2 });
+    static Tree = new ModelEnum("gltf", 1, { className: "PineTree", health: 50, speed: 2 });
     // static Terrain = new ModelEnum("terrain", "gltf", 10);
 
-    name: string;
-    extension: string;
+    private name: ALL_CLASSES;
+    extension: extension_type;
     scaling: number;
     rootMesh: Mesh | undefined
     particules: IParticleSystem[] = [];
@@ -51,7 +54,7 @@ export class ModelEnum {
 
 
 
-    constructor(extension: string, scaling: number, p: intrinsicModelPropertiesOptional) {
+    constructor(extension: extension_type, scaling: number, p: intrinsicModelPropertiesOptional) {
         this.name = p.className;
         this.extension = extension;
         this.scaling = scaling;
@@ -88,7 +91,7 @@ export class ModelEnum {
         ModelEnum.loadingDone();
 
         switch (this.name) {
-            case "grass":
+            case "Grass":
                 all_meshes.forEach(m => {
                     if (m.material) {
                         m.material.backFaceCulling = true;
@@ -106,7 +109,7 @@ export class ModelEnum {
                 }
                 break;
 
-            case "pumpkin_monster":
+            case "Pumpkin":
                 this.rootMesh.position.y -= 0.5;
                 this.rootMesh.rotate(Axis.Y, Math.PI)
 
@@ -131,7 +134,7 @@ export class ModelEnum {
                 right_eye.position = new Vector3(-0.11, 1.08, 0.15)
                 break;
 
-            case "campfire":
+            case "Campfire":
                 this.rootMesh.position = new Vector3(5, -0.5, 5);
 
                 //campfire light
@@ -156,7 +159,7 @@ export class ModelEnum {
                 createFire(this.rootMesh);
                 break;
 
-            case "mage":
+            case "Mage":
                 this.rootMesh.rotate(Axis.Y, Math.PI);
                 meshes.forEach(m => {
                     m.isPickable = false;
@@ -164,7 +167,7 @@ export class ModelEnum {
                 });
                 break;
 
-            case "ranger":
+            case "Ranger":
                 this.rootMesh.rotate(Axis.Y, Math.PI);
                 this.rootMesh.scaling = new Vector3(1.5, 1.5, 1.5)
                 meshes.forEach(m => {
@@ -174,7 +177,7 @@ export class ModelEnum {
                 animations[0].stop();
                 break;
 
-            case "warrior":
+            case "Warrior":
                 meshes.forEach(m => {
                     m.isPickable = false;
                     m.checkCollisions = false;
@@ -190,7 +193,7 @@ export class ModelEnum {
                 });
                 break;
 
-            case "pine_tree":
+            case "PineTree":
                 scene.setUpForTree();
                 break;
 
