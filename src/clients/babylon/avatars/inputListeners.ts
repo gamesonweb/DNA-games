@@ -8,7 +8,7 @@ import { chatRef } from "../../reactComponents/main";
 
 type InputStates = {
     jump: boolean,
-    goForeward: boolean,
+    goForward: boolean,
     goLeft: boolean,
     goBackward: boolean,
     goRight: boolean,
@@ -21,7 +21,7 @@ type InputStates = {
 let createInputStates = (): InputStates => {
     return {
         jump: false,
-        goForeward: false,
+        goForward: false,
         goLeft: false,
         goBackward: false,
         goRight: false,
@@ -34,7 +34,7 @@ let createInputStates = (): InputStates => {
 
 export let inputStates: InputStates;
 
-export function inializeInputListeners() {
+export function initializeInputListeners() {
     inputStates = createInputStates()
 
     canvas.addEventListener('keydown', (evt) => {
@@ -64,13 +64,13 @@ export function inializeInputListeners() {
 }
 
 function keyListener(evt: KeyboardEvent, isPressed: boolean) {
-    // sauter
+    // jump
     if (evt.code === "Space") {
         inputStates.jump = isPressed;
     }
     // movements
     else if (evt.code === "KeyW") {
-        inputStates.goForeward = isPressed;
+        inputStates.goForward = isPressed;
     }
     else if (evt.code === "KeyS") {
         inputStates.goBackward = isPressed;
@@ -82,7 +82,7 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
         inputStates.goRight = isPressed;
     }
 
-    //giga jump (development only)
+    // mega jump (development only)
     else if (evt.code === "KeyK") {
         if (sphere1) sphere1.shape.position.y += 10
     }
@@ -152,23 +152,23 @@ export function pointerLockAndMouseMove() {
 
 export function inputEffects(player: Player) {
 
-    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForeward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack_0)
+    if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack_0)
         player.didSomething = true;
 
     let direction = player.shape.getDirection(Axis.Z)
 
     let coeff_diagonal = 1
-    if ((inputStates.goForeward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
+    if ((inputStates.goForward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
 
     if (player.canMove) {
         //forward/backward movement
-        if (inputStates.goForeward) {
+        if (inputStates.goForward) {
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
             if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
                 player.update_status(CharacterState.Walking_fw)
             }
         } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
-        if (!inputStates.goForeward && inputStates.goBackward) {
+        if (!inputStates.goForward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 2));
             if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
                 player.update_status(CharacterState.Walking_bw)

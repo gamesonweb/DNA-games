@@ -6,6 +6,7 @@ import { createFire, createFireAnimation } from "../../others/particules";
 import { sendLogin, wsClient } from "../../../connection/connectionClient";
 import { loadingRef } from '../../../reactComponents/main';
 import { ALL_CLASSES } from './classesTypes';
+import { windowExists } from '../../../reactComponents/tools';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
@@ -218,13 +219,15 @@ export class ModelEnum {
     }
 
     static loadingDone() {
-        ModelEnum.remainingLoad--;
-        loadingRef.current!.updateContent()
+        if (windowExists()) {
+            ModelEnum.remainingLoad--;
+            loadingRef.current!.updateContent()
 
-        if (ModelEnum.remainingLoad === 0) {
-            wsClient.setEventListener()
-            sendLogin();
-            startRenderLoop(engine);
+            if (ModelEnum.remainingLoad === 0) {
+                wsClient.setEventListener()
+                sendLogin();
+                startRenderLoop(engine);
+            }
         }
     }
 

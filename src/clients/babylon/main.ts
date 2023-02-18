@@ -3,7 +3,7 @@ import { username, wsClient } from "../connection/connectionClient";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/classes/heroes/player";
 
-import { inializeInputListeners as initializeInputListeners, inputEffects } from "./avatars/inputListeners";
+import { initializeInputListeners as initializeInputListeners, inputEffects } from "./avatars/inputListeners";
 import { adjustCameraPosition } from "./others/tools";
 import { SceneClient } from "./scene/sceneClient";
 
@@ -63,7 +63,7 @@ export let initFunction = async function () {
   //Here load all models
 
   setWindowParams()
-  initializeInputListeners();
+  if (windowExists()) initializeInputListeners();
   return scene
 };
 
