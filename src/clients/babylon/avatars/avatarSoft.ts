@@ -1,5 +1,5 @@
 import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
-import { intrinsicModelProperties } from "../others/models";
+import { intrinsicModelProperties } from "./classes/models";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
 
@@ -39,7 +39,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.gravity_acceleration = 0;
     this.name = avatar_username
-    this.class = "Avatar"
+    this.class = p.className
 
     this.speed_coeff = p.speed;
     this.didSomething = false;

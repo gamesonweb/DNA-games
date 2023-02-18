@@ -2,7 +2,7 @@ import { Component, ReactNode, StrictMode } from "react";
 import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
 import { render } from "react-dom";
-import { PLAYER_CLASSES_LIST, PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses";
+import { PLAYER_CLASSES_LIST, PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes";
 import { ConnectionClient } from "../connection/connectionClient";
 import ReactMain, { SECTION } from "./main";
 import { windowExists } from "./tools";

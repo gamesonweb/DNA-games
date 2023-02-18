@@ -1,11 +1,11 @@
 import { Axis, InstantiatedEntries, Mesh, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
-import { ModelEnum } from "../../../others/models";
-import { distance, isInCone } from "../../../others/tools";
-import { Fireball } from "../../weapons/projectiles/fireball";
-import { Player } from "../player";
+import { isInCone, distance } from "../../../others/tools";
 import { CharacterState } from "../../avatarSoft";
+import { Fireball } from "../../weapons/projectiles/fireball";
+import { ModelEnum } from "../models";
+import { Player } from "./player";
 
 export class Mage extends Player {
     constructor(scene: Scene, avatar_username: string) {

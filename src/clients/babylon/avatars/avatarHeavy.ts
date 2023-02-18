@@ -1,5 +1,5 @@
 import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
-import { intrinsicModelProperties, shadowGeneratorCampfire } from "../others/models";
+import { intrinsicModelProperties, shadowGeneratorCampfire } from "./classes/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";

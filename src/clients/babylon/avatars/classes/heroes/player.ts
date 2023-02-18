@@ -1,7 +1,7 @@
 import { InstantiatedEntries, Mesh, Scene, Vector3 } from "babylonjs";
-import { intrinsicModelProperties } from "../../others/models";
-import { createBasicShape } from "../../others/tools";
-import { Avatar } from "../avatarHeavy";
+import { intrinsicModelProperties } from "../models";
+import { createBasicShape } from "../../../others/tools";
+import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
 

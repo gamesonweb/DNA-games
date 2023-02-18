@@ -1,6 +1,6 @@
 import { Scene, Vector3 } from "babylonjs"
 import { AvatarSoft } from "../babylon/avatars/avatarSoft"
-import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses"
+import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes"
 
 export const serverMessages = {
     SET_USERNAME: "usernameSetter",

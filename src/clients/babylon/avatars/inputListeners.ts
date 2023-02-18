@@ -3,7 +3,7 @@ import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
 import { input } from "../../reactComponents/chat";
 import { canvas, scene, sphere1 } from "../main";
-import { Player } from "./heroes/player";
+import { Player } from "./classes/heroes/player";
 import { CharacterState } from "./avatarSoft";
 import { chatRef } from "../../reactComponents/main";
 

@@ -1,7 +1,7 @@
 import { Engine, FollowCamera, Vector3 } from "babylonjs";
 import { username, wsClient } from "../connection/connectionClient";
 import { windowExists } from "../reactComponents/tools";
-import { Player } from "./avatars/heroes/player";
+import { Player } from "./avatars/classes/heroes/player";
 
 import { inializeInputListeners as initializeInputListeners, inputEffects } from "./avatars/inputListeners";
 import { adjustCameraPosition } from "./others/tools";

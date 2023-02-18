@@ -1,10 +1,10 @@
 import { Axis, Scene, Vector3 } from "babylonjs";
-import { wsClient } from "../../../connection/connectionClient";
-import { serverMessages } from "../../../connection/connectionSoft";
-import { sphere1 } from "../../main";
-import { ModelEnum } from "../../others/models";
-import { createBasicShape, isInCone } from "../../others/tools";
-import { Avatar } from "../avatarHeavy";
+import { wsClient } from "../../../../connection/connectionClient";
+import { serverMessages } from "../../../../connection/connectionSoft";
+import { sphere1 } from "../../../main";
+import { ModelEnum } from "../models";
+import { createBasicShape, isInCone } from "../../../others/tools";
+import { Avatar } from "../../avatarHeavy";
 
 export class Monster extends Avatar {
 

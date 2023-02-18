@@ -1,5 +1,5 @@
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
-import { intrinsicModelProperties } from "../others/models";
+import { intrinsicModelProperties } from "./classes/models";
 
 export type Health = {
   maxHealth?: number;

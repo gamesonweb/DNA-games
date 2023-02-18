@@ -1,7 +1,7 @@
 import { ModelShape, Vector3 } from "babylonjs";
 import { generate_zombie_wave } from "../../indexServer";
 import { AvatarFictive } from "../babylon/avatars/avatarFictif";
-import { ModelEnum } from "../babylon/others/models";
+import { ModelEnum } from "../babylon/avatars/classes/models";
 import { createBasicShape } from "../babylon/others/tools";
 import { SceneFictive } from "../babylon/scene/sceneFictive";
 import { ConnectionSoft, knockbackContent, receiveContent, serverMessages } from "./connectionSoft";

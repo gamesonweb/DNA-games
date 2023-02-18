@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
 import { Col, ProgressBar, Row } from "react-bootstrap";
-import { ModelEnum } from "../babylon/others/models";
+import { ModelEnum } from "../babylon/avatars/classes/models";
 import { SECTION } from "./main";
 
 type Props = { setSection: (section: SECTION) => void }

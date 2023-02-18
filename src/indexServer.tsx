@@ -1,8 +1,8 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
 import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
-import { ModelEnum } from "./clients/babylon/others/models";
-import { giveMonsterName } from "./clients/babylon/others/namesMonsters";
+import { ModelEnum } from "./clients/babylon/avatars/classes/models";
+import { giveMonsterName } from "./clients/babylon/avatars/classes/monsters/namesMonsters";
 import { createBasicShape, distance } from "./clients/babylon/others/tools";
 import { SceneFictive } from "./clients/babylon/scene/sceneFictive";
 import { ConnectionServer, ws } from "./clients/connection/connectionFictive";

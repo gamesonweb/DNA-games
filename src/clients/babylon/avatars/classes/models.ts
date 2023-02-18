@@ -1,10 +1,10 @@
 import 'babylonjs-loaders';
 import { AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
-import { engine, scene, startRenderLoop } from "../main";
-import { SceneClient } from "../scene/sceneClient";
-import { createFire, createFireAnimation } from "./particules";
-import { sendLogin, wsClient } from "../../connection/connectionClient";
-import { loadingRef } from '../../reactComponents/main';
+import { engine, scene, startRenderLoop } from "../../main";
+import { SceneClient } from "../../scene/sceneClient";
+import { createFire, createFireAnimation } from "../../others/particules";
+import { sendLogin, wsClient } from "../../../connection/connectionClient";
+import { loadingRef } from '../../../reactComponents/main';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 

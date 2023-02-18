@@ -1,15 +1,12 @@
 import { Axis, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
-import { ModelEnum } from "../../../others/models";
 import { isInCone } from "../../../others/tools";
-import { Player } from "../player";
+import { ModelEnum } from "../models";
+import { Player } from "./player";
 
 export class Warrior extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Warrior.intrinsicParameterMesh)
-
-        this.class = "Warrior"
-
         this.tableAttackcd[0] = 1500
         this.tableAttackcd[1] = 12000
     }

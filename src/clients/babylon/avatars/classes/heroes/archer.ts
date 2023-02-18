@@ -1,17 +1,14 @@
 import { Axis, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
-import { ModelEnum } from "../../../others/models";
+import { ModelEnum } from "../models";
 import { distance } from "../../../others/tools";
 import { Arrow } from "../../weapons/projectiles/arrow";
-import { Player } from "../player";
+import { Player } from "./player";
 
 export class Archer extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Archer.intrinsicParameterMesh)
-
-        this.class = "Archer"
-
         this.tableAttackcd[0] = 800
         this.tableAttackcd[1] = 9000
     }

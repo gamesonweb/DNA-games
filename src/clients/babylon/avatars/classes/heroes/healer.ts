@@ -1,16 +1,14 @@
 import { Axis, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene, sphere1 } from "../../../main";
-import { ModelEnum } from "../../../others/models";
 import { isInCone } from "../../../others/tools";
 import { Potion } from "../../weapons/projectiles/potion";
-import { Player } from "../player";
+import { ModelEnum } from "../models";
+import { Player } from "./player";
 
 export class Healer extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Healer.intrinsicParameterMesh)
-
-        this.class = "Healer"
 
         this.tableAttackcd[0] = 1200
         this.tableAttackcd[1] = 6000

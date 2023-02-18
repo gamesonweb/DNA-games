@@ -1,8 +1,8 @@
 import { Animation, Axis, Mesh, Vector3 } from "babylonjs";
 import { Avatar } from "../babylon/avatars/avatarHeavy";
-import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/heroes/classes/playerClasses";
-import { Player } from "../babylon/avatars/heroes/player";
-import { Monster } from "../babylon/avatars/monsters/monster";
+import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes";
+import { Player } from "../babylon/avatars/classes/heroes/player";
+import { Monster } from "../babylon/avatars/classes/monsters/monster";
 import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeid, playerClassCreator } from "../babylon/others/tools";

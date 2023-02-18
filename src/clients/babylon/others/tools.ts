@@ -4,15 +4,15 @@ import { wsClient } from "../../connection/connectionClient";
 import { windowExists } from "../../reactComponents/tools";
 import { Avatar } from "../avatars/avatarHeavy";
 import { AvatarSoft } from "../avatars/avatarSoft";
-import { Archer } from "../avatars/heroes/classes/archer";
-import { Assassin } from "../avatars/heroes/classes/assassin";
-import { Healer } from "../avatars/heroes/classes/healer";
-import { Mage } from "../avatars/heroes/classes/mage";
-import { PLAYER_CLASSES_TYPE } from "../avatars/heroes/classes/playerClasses";
-import { Warrior } from "../avatars/heroes/classes/warrior";
-import { Player } from "../avatars/heroes/player";
+import { Archer } from "../avatars/classes/heroes/archer";
+import { PLAYER_CLASSES_TYPE } from "../avatars/classes/classesTypes";
+import { Player } from "../avatars/classes/heroes/player";
 import { scene, sphere1 } from "../main";
-import { intrinsicModelProperties } from "./models";
+import { intrinsicModelProperties } from "../avatars/classes/models";
+import { Assassin } from "../avatars/classes/heroes/assassin";
+import { Healer } from "../avatars/classes/heroes/healer";
+import { Mage } from "../avatars/classes/heroes/mage";
+import { Warrior } from "../avatars/classes/heroes/warrior";
 
 export function makeid(length: number) {
     var result = '';

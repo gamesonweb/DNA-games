@@ -2,7 +2,7 @@ import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, Imag
 import { WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
-import { ModelEnum } from "../others/models";
+import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
 export var light: DirectionalLight;
