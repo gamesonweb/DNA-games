@@ -1,6 +1,6 @@
 import { Mesh, Scene, Vector3, } from "babylonjs";
 import { intrinsicModelProperties, shadowGeneratorCampfire } from "../others/models";
-import { createLabel } from "../others/tools";
+import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
 
@@ -10,8 +10,9 @@ export abstract class Avatar extends AvatarSoft {
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, model: Mesh, p: intrinsicModelProperties) {
+  constructor(scene: Scene, avatar_username: string, model: Mesh, p: intrinsicModelProperties) {
 
+    let shape = createBasicShape(avatar_username, scene);;
     super(scene, avatar_username, shape, p);
 
     let plane = createLabel(this.name, this, scene, p);

@@ -7,9 +7,8 @@ export abstract class Player extends Avatar {
     modelContainer: InstantiatedEntries
 
     constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
-        let shape = createShape(avatar_username, scene);
         var modelContainer = p.duplicateModel()
-        super(scene, avatar_username, shape, modelContainer.rootNodes[0] as Mesh, p)
+        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, p)
         this.modelContainer = modelContainer
     }
 
@@ -31,8 +30,4 @@ export abstract class Player extends Avatar {
     // updateBulletPosition() {
     //     this.bulletList.forEach(e => e.update())
     // }
-}
-
-function createShape(avatar_username: String, scene: Scene) {
-    return createBasicShape(avatar_username, scene);
 }
