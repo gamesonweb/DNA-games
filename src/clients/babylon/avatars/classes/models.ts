@@ -32,12 +32,12 @@ export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertie
 
 export class ModelEnum {
     // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.2, speedAttack1: 1500, speedAttack2: 8000 });
-    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.2, speedAttack1: 1500, speedAttack2: 12000 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.25, speedAttack1: 1500, speedAttack2: 8000 });
+    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.25, speedAttack1: 1500, speedAttack2: 12000 });
     static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25, speedAttack1: 1200, speedAttack2: 10000 });
     static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, speed: 0.25, speedAttack1: 800, speedAttack2: 9000 });
-    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, speed: 0.2, speedAttack1: 1200, speedAttack2: 6000 });
-    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.2 });
+    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, speed: 0.25, speedAttack1: 1200, speedAttack2: 6000 });
+    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.25 });
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, speed: 0.2 });
 

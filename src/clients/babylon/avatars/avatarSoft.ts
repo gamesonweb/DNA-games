@@ -12,7 +12,9 @@ export enum CharacterState {
   Punching,
   Swimming,
   Jumping,
-  Falling
+  Falling,
+  Dying,
+  TakingHit
 }
 
 export abstract class AvatarSoft extends MeshWithHealth {

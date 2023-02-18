@@ -16,6 +16,7 @@ type InputStates = {
     rotateLeft: boolean,
     attack_0: boolean,
     attack_1: boolean,
+    run: boolean
 }
 
 let createInputStates = (): InputStates => {
@@ -29,6 +30,7 @@ let createInputStates = (): InputStates => {
         rotateLeft: false,
         attack_0: false,
         attack_1: false,
+        run: false
     }
 }
 
@@ -80,6 +82,10 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
     }
     else if (evt.code === "KeyD") {
         inputStates.goRight = isPressed;
+    }
+
+    else if (evt.code === "ShiftLeft") {
+        inputStates.run = isPressed
     }
 
     // mega jump (development only)
@@ -162,9 +168,17 @@ export function inputEffects(player: Player) {
     if (player.canMove) {
         //forward/backward movement
         if (inputStates.goForward) {
-            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-            if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
-                player.update_status(CharacterState.Walking_fw)
+            if (inputStates.run) {
+                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+                    player.update_status(CharacterState.Running)
+                }
+            }
+            else {
+                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 2));
+                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+                    player.update_status(CharacterState.Walking_fw)
+                }
             }
         } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
         if (!inputStates.goForward && inputStates.goBackward) {

@@ -8,6 +8,7 @@ import { ModelEnum } from "../models";
 import { Player } from "./player";
 
 export class Mage extends Player {
+
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Ranger.intrinsicParameterMesh)
 
@@ -71,28 +72,34 @@ export class Mage extends Player {
         var animation_indice = -1
         switch (status) {
             case CharacterState.Walking_bw:
-                animation_indice = 7
+                animation_indice = 9
                 break
             case CharacterState.Walking_fw:
-                animation_indice = 6
+                animation_indice = 8
                 break
             case CharacterState.Running:
-                animation_indice = 4
+                animation_indice = 6
                 break
             case CharacterState.Falling:
-                animation_indice = 0
-                break
-            case CharacterState.Idle:
                 animation_indice = 1
                 break
-            case CharacterState.Jumping:
-                animation_indice = 0
-                break
-            case CharacterState.Punching:
+            case CharacterState.Idle:
                 animation_indice = 3
                 break
-            case CharacterState.Swimming:
+            case CharacterState.Jumping:
+                animation_indice = 4
+                break
+            case CharacterState.Punching:
                 animation_indice = 5
+                break
+            case CharacterState.Swimming:
+                animation_indice = 7
+                break
+            case CharacterState.Dying:
+                animation_indice = 0
+                break
+            case CharacterState.TakingHit:
+                animation_indice = 2
                 break
             default:
                 console.log("error animation: " + this.name + " in status " + this.status);
