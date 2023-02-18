@@ -25,6 +25,7 @@ type extensionType = "glb" | "gltf"
 export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertiesOptional>>
 
 export class ModelEnum {
+    // The className attribute is used to find the path of the object inside public/model/$className/$className
     static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.2 });
     static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.2 });
     static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25 });
