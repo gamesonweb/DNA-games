@@ -3,7 +3,7 @@ import { username, wsClient } from "../connection/connectionClient";
 import { windowExists } from "../reactComponents/tools";
 import { Player } from "./avatars/classes/heroes/player";
 
-import { initializeInputListeners as initializeInputListeners, inputEffects } from "./avatars/inputListeners";
+import { initializeInputListeners, inputEffects } from "./avatars/inputListeners";
 import { adjustCameraPosition } from "./others/tools";
 import { SceneClient } from "./scene/sceneClient";
 
@@ -94,25 +94,16 @@ export function setScene(e: SceneClient | undefined) {
   }
 }
 
-declare global {
-  interface Window {
-    playerList: Map<string, Player>,
-    scene: SceneClient,
-    engine: Engine
-    BABYLON: any;
-  }
-}
-
 function setWindowParams() {
   if (windowExists()) {
-    window.playerList = wsClient.player_list;
+    (window as any).playerList = wsClient.player_list;
 
     // Resize
-    window.addEventListener("resize", function () {
+    (window as any).addEventListener("resize", function () {
       engine.resize();
     });
-    window.engine = engine;
+    (window as any).engine = engine;
 
-    window.scene = scene;
+    (window as any).scene = scene;
   }
 }

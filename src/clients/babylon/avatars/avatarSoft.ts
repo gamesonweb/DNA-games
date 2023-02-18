@@ -35,7 +35,9 @@ export abstract class AvatarSoft extends MeshWithHealth {
   protected status: CharacterState;
   falling_counter: number;
 
+  // constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
   constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelProperties) {
+    // super(avatar_username, scene, createBasicShape(avatar_username, scene), p);
     super(avatar_username, scene, shape, p);
 
     this.gravity_acceleration = 0;

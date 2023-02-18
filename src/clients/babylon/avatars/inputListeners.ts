@@ -110,8 +110,7 @@ function mouseListener(evt: MouseEvent, isPressed: boolean) {
 }
 
 export function pointerLockAndMouseMove() {
-    canvas.requestPointerLock = canvas.requestPointerLock ||
-        canvas.mozRequestPointerLock; // || (<any>canvas).webkitPointerLockElement
+    canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
 
     //turret direction is responding to cursor movements
     canvas.addEventListener("mousemove", (evt) => {
@@ -143,7 +142,7 @@ export function pointerLockAndMouseMove() {
         }
     });
 
-    let isLocked = () => document.pointerLockElement === canvas; // || (<any>document).mozPointerLockElement === canvas
+    let isLocked = () => document.pointerLockElement === canvas; // 
 
     canvas.onpointerdown = function () {
         if (!isLocked()) canvas.requestPointerLock();

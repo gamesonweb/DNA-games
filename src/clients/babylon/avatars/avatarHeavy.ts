@@ -14,7 +14,8 @@ export abstract class Avatar extends AvatarSoft {
   statusStacks: { burn: number; poison: number; bleed: number; };
 
   constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
-    super(scene, avatar_username, createBasicShape(avatar_username, scene), p);
+    // super(scene, avatar_username, p);
+    super(scene, avatar_username, createBasicShape(avatar_username, scene), p)
 
     this.modelContainer = p.duplicateModel();
     this.model = this.modelContainer.rootNodes[0] as Mesh
