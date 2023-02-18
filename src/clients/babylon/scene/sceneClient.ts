@@ -266,7 +266,7 @@ export class SceneClient extends SceneSoft {
 
             /* POSITION TREES FROM STOCKED LIST */
 
-            this.treePositions.forEach((positionData) => {
+            this.treePositions.forEach((positionData, index) => {
                 let x = positionData.x
                 let z = positionData.z
                 let height = this.getHeightAtPoint(x, z);
@@ -274,7 +274,7 @@ export class SceneClient extends SceneSoft {
                 if (height !== undefined && model !== undefined && c1m && c2m) {
                     // let matrix = this.createThinInstance(c1m, x, height, z);
                     let matrix = this.createInstance(c1m, x, height, z)
-                    var collider = MeshBuilder.CreateCylinder("arbre", { height: 4, diameter: 0.6 }, scene)
+                    var collider = MeshBuilder.CreateCylinder("tree" + index, { height: 4, diameter: 0.6 }, scene)
                     collider.position = new Vector3(x, height + 1.2, z)
                     collider.checkCollisions = true
                     collider.isVisible = false

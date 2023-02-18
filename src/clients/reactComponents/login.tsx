@@ -81,7 +81,7 @@ export class ReactLogin extends Component<Props, State> {
             }}
           />
         </InputGroup>
-        <Button onClick={this.goToLoadingPanel} id="accessButton" className="btn-sm">Enter</Button>
+        <Button onClick={this.goToLoadingPanel.bind(this)} id="accessButton" className="btn-sm">Enter</Button>
       </Row>
     </Col>
   }
