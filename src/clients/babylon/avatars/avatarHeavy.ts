@@ -1,19 +1,26 @@
-import { Mesh, Scene, Vector3, } from "babylonjs";
+import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
 import { intrinsicModelProperties, shadowGeneratorCampfire } from "../others/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
 
 export abstract class Avatar extends AvatarSoft {
+  modelContainer: InstantiatedEntries
+  model: Mesh
+
   tableAttackcd: number[];
   tableAttackDate: number[];
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
-  constructor(scene: Scene, avatar_username: string, model: Mesh, p: intrinsicModelProperties) {
+  constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
 
-    let shape = createBasicShape(avatar_username, scene);;
+    let shape = createBasicShape(avatar_username, scene);
+    var modelContainer = p.duplicateModel();
     super(scene, avatar_username, shape, p);
+
+    this.modelContainer = modelContainer
+    this.model = modelContainer.rootNodes[0] as Mesh
 
     let plane = createLabel(this.name, this, scene, p);
     plane.isPickable = false;
@@ -21,10 +28,9 @@ export abstract class Avatar extends AvatarSoft {
 
     plane.position.y = p?.textYAbove || 1.3
 
-    this.shape.addChild(model);
-    shadowGenerator?.addShadowCaster(model);
+    this.shape.addChild(this.model);
+    shadowGenerator?.addShadowCaster(this.model);
     this.shape.isVisible = false;
-    this.model = model;
 
     shadowGeneratorCampfire.addShadowCaster(this.model);
 

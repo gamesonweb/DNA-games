@@ -9,7 +9,7 @@ import { Avatar } from "../avatarHeavy";
 export class Monster extends Avatar {
 
     constructor(scene: Scene, avatar_username: string) {
-        super(scene, avatar_username, ModelEnum.PumpkinMonster.rootMesh!.clone(), ModelEnum.PumpkinMonster.intrinsicParameterMesh)
+        super(scene, avatar_username, ModelEnum.PumpkinMonster.intrinsicParameterMesh)
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {

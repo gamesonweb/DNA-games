@@ -4,12 +4,9 @@ import { createBasicShape } from "../../others/tools";
 import { Avatar } from "../avatarHeavy";
 
 export abstract class Player extends Avatar {
-    modelContainer: InstantiatedEntries
 
     constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
-        var modelContainer = p.duplicateModel()
-        super(scene, avatar_username, modelContainer.rootNodes[0] as Mesh, p)
-        this.modelContainer = modelContainer
+        super(scene, avatar_username, p)
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
