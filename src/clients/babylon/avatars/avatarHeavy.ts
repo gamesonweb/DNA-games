@@ -16,11 +16,10 @@ export abstract class Avatar extends AvatarSoft {
   constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
 
     let shape = createBasicShape(avatar_username, scene);
-    var modelContainer = p.duplicateModel();
     super(scene, avatar_username, shape, p);
 
-    this.modelContainer = modelContainer
-    this.model = modelContainer.rootNodes[0] as Mesh
+    this.modelContainer = p.duplicateModel();
+    this.model = this.modelContainer.rootNodes[0] as Mesh
 
     let plane = createLabel(this.name, this, scene, p);
     plane.isPickable = false;

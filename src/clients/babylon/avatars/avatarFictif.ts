@@ -1,11 +1,8 @@
-import { Mesh, Scene, Vector3 } from "babylonjs";
-import { intrinsicModelProperties } from "./classes/models";
+import { Vector3 } from "babylonjs";
 import { AvatarSoft } from "./avatarSoft";
 
 export class AvatarFictive extends AvatarSoft {
-    constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelProperties) {
-        super(scene, avatar_username, shape, p);
-    }
+
     dispose(): void {
         super.dispose()
     }
