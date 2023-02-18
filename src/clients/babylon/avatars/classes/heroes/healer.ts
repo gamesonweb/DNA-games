@@ -9,9 +9,6 @@ import { Player } from "./player";
 export class Healer extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Healer.intrinsicParameterMesh)
-
-        this.tableAttackcd[0] = 1200
-        this.tableAttackcd[1] = 6000
     }
 
     attack_0(onlyDisplay = false) {

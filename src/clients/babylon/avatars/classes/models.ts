@@ -1,5 +1,5 @@
 import 'babylonjs-loaders';
-import { AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, IParticleSystem, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { engine, scene, startRenderLoop } from "../../main";
 import { SceneClient } from "../../scene/sceneClient";
 import { createFire, createFireAnimation } from "../../others/particules";
@@ -18,7 +18,12 @@ export type intrinsicModelPropertiesOptional = {
     className: ALL_CLASSES;
     health: number;
     speed: number;
-    duplicateModel?: () => InstantiatedEntries
+    weight?: number;
+    duplicateModel?: () => InstantiatedEntries;
+    speedAttack1?: number;
+    speedAttack2?: number;
+    speedAttack3?: number;
+    speedAttack4?: number;
 }
 
 type extensionType = "glb" | "gltf"
@@ -27,11 +32,11 @@ export type intrinsicModelProperties = Readonly<Required<intrinsicModelPropertie
 
 export class ModelEnum {
     // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.2 });
-    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.2 });
-    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25 });
-    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, speed: 0.25 });
-    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, speed: 0.2 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, speed: 0.2, speedAttack1: 1500, speedAttack2: 8000 });
+    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, speed: 0.2, speedAttack1: 1500, speedAttack2: 12000 });
+    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, speed: 0.25, speedAttack1: 1200, speedAttack2: 10000 });
+    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, speed: 0.25, speedAttack1: 800, speedAttack2: 9000 });
+    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, speed: 0.2, speedAttack1: 1200, speedAttack2: 6000 });
     static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, speed: 0.2 });
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, speed: 0.2 });
@@ -45,8 +50,6 @@ export class ModelEnum {
     private readonly extension: extensionType;
     private readonly scaling: number;
     rootMesh: Mesh | undefined
-    private readonly particules: IParticleSystem[] = [];
-    private readonly skeletons: Skeleton[] = [];
     private container: AssetContainer = new AssetContainer();
     readonly intrinsicParameterMesh: Readonly<Required<intrinsicModelProperties>>;
 
@@ -61,7 +64,8 @@ export class ModelEnum {
         this.extension = extension;
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
-            height: 0.15, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
+            speedAttack1: 1000, speedAttack2: 1000, speedAttack3: 1000, speedAttack4: 1000,
+            weight: 1, height: 0.15, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
             duplicateModel: () => this.duplicate(this.container)
         }
     }

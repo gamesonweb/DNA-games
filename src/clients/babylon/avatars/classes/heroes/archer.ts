@@ -9,8 +9,6 @@ import { Player } from "./player";
 export class Archer extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Archer.intrinsicParameterMesh)
-        this.tableAttackcd[0] = 800
-        this.tableAttackcd[1] = 9000
     }
 
     attack_0(onlyDisplay = false) {

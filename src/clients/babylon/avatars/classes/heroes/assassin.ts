@@ -8,8 +8,6 @@ import { Player } from "./player";
 export class Assassin extends Player {
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Assassin.intrinsicParameterMesh)
-        this.tableAttackcd[0] = 1200
-        this.tableAttackcd[1] = 10000
     }
 
     attack_0(onlyDisplay = false) {

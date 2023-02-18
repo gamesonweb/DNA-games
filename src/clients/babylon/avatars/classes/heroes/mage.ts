@@ -20,8 +20,6 @@ export class Mage extends Player {
                 animation.blendingSpeed = 0.08
             }
         }
-        this.tableAttackcd[0] = 1500
-        this.tableAttackcd[1] = 8000
     }
 
     attack_0(onlyDisplay = false) {

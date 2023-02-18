@@ -8,8 +8,8 @@ export abstract class Avatar extends AvatarSoft {
   modelContainer: InstantiatedEntries
   model: Mesh
 
-  tableAttackcd: number[];
-  tableAttackDate: number[];
+  private tableAttackCountDownList: number[];
+  private tableAttackDate: number[];
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
@@ -36,9 +36,9 @@ export abstract class Avatar extends AvatarSoft {
     this.tableAttackDate = [0, 0, 0, 0]
 
     //default attack cd, will be overrided for all usable attack
-    this.tableAttackcd = [0, 1000, 1000, 1000]
+    this.tableAttackCountDownList = [p.speedAttack1, p.speedAttack2, p.speedAttack3, p.speedAttack4]
 
-    this.weightCategory = 1
+    this.weightCategory = p.weight
 
     this.statusStacks = { burn: 0, poison: 0, bleed: 0 }
   }
@@ -69,7 +69,7 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   attackIsReady(id: number) {
-    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.tableAttackcd[id] < Date.now()) {
+    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.tableAttackCountDownList[id] < Date.now()) {
       this.tableAttackDate[id] = Date.now()
       return true
     }
