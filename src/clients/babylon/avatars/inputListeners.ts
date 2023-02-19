@@ -168,19 +168,20 @@ export function inputEffects(player: Player) {
     if (player.canMove) {
         //forward/backward movement
         if (inputStates.goForward) {
-            if (inputStates.run) {
-                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
-                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+            if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+                let coeff_course = 1
+                if (inputStates.run) {
                     player.update_status(CharacterState.Running)
                 }
-            }
-            else {
-                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal / 1.8));
-                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+                else {
+                    coeff_course = 1 / 1.8
                     player.update_status(CharacterState.Walking_fw)
                 }
+                player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal * coeff_course));
             }
-        } else { if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle) }
+        } else {
+            if (player.getStatus() === CharacterState.Walking_fw) player.update_status(CharacterState.Idle)
+        }
         if (!inputStates.goForward && inputStates.goBackward) {
             player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 3));
             if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
