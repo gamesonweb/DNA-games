@@ -65,6 +65,7 @@ export class Mage extends Player {
                 this.modelContainer.animationGroups[animation_indice].play()
                 this.modelContainer.animationGroups[animation_indice].loopAnimation = true
             }
+            this.didSomething = true
         }
     }
 

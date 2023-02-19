@@ -168,8 +168,11 @@ function sendPosition(player: Avatar) {
         maxHealth: player.maxHealth,
         direction: player.shape.getDirection(Axis.Z),
         class: player.class,
-        ydiroffset: player.offset_dir_y
+        ydiroffset: player.offset_dir_y,
+        status: player.getStatus()
     })
+
+    console.log("sending updated pos msg with status: " + player.getStatus());
 
     //console.log("sending " + position_player);
 
@@ -235,11 +238,14 @@ export function avatar_update_from_server(data: receiveContent, list: Map<String
 
         avatar_to_update.shape.computeWorldMatrix(true)
 
-
         //update the avatar health to the data received
         let health = data.health
         avatar_to_update.healthSet(health)
 
+        //update the avatar animation and state to the data received
+        if (typeof data.status !== 'undefined') {
+            avatar_to_update.update_status(data.status)
+        }
     }
 
     //for debugging, should NOT happen ever
