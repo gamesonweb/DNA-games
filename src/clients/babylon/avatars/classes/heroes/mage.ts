@@ -66,6 +66,7 @@ export class Mage extends Player {
                 this.modelContainer.animationGroups[animation_indice].loopAnimation = true
             }
         }
+        super.update_status(new_status)
     }
 
     get_status_indice(status: CharacterState) {

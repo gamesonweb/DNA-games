@@ -46,7 +46,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.name = avatar_username
     this.class = p.className as AVATAR_CLASSES
 
-    this.speed_coeff = p.speed;
+    this.speed_coeff = p.walkSpeed;
     this.didSomething = false;
 
     this.shape.position = new Vector3(0, 1, 0);
@@ -146,10 +146,22 @@ export abstract class AvatarSoft extends MeshWithHealth {
   }
 
   update_status(new_status: CharacterState) {
-    console.log("update_status not implemented here");
+    switch (new_status) {
+      case CharacterState.Running: this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
+      case CharacterState.Walking_fw: this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
+      case CharacterState.Walking_bw: this.speed_coeff = -this.intrinsicModelProperties.walkSpeed / 3; break;
+    }
   }
 
   get_status_indice(status: CharacterState) {
     console.log("get_status_indice not implemented here");
+  }
+
+  isInAir() {
+    return this.getStatus() === CharacterState.Falling || this.getStatus() === CharacterState.Jumping
+  }
+
+  isMoving() {
+    return this.getStatus() === CharacterState.Running || this.getStatus() === CharacterState.Walking_bw || this.getStatus() === CharacterState.Walking_fw
   }
 }

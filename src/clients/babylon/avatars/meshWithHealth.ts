@@ -14,10 +14,12 @@ export abstract class MeshWithHealth implements Health {
   healthBar: HealthBar;
   name: string;
   shape: Mesh;
+  intrinsicModelProperties: intrinsicModelProperties;
 
 
   constructor(name: string, scene: Scene, shape: Mesh, p: intrinsicModelProperties) {
     this.name = name;
+    this.intrinsicModelProperties = p;
     this.shape = shape;
     this.shape.name = this.name
     // this.shape.ellipsoid = new Vector3(0.5, 1, 0.5);
