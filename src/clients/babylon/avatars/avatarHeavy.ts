@@ -36,7 +36,7 @@ export abstract class Avatar extends AvatarSoft {
     this.tableAttackDate = [0, 0, 0, 0]
 
     //default attack cd, will be overrided for all usable attack
-    this.tableAttackCountDownList = [p.speedAttack1, p.speedAttack2, p.speedAttack3, p.speedAttack4]
+    this.tableAttackCountDownList = [p.speedAttack0, p.speedAttack1, p.speedAttack2, p.speedAttack3]
 
     this.weightCategory = p.weight
 
