@@ -33,12 +33,12 @@ export type intrinsicModelProperties = Required<intrinsicModelPropertiesOptional
 
 export class ModelEnum {
     // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, runningSpeed: 2, walkSpeed: 0.25, speedAttack0: 1500, speedAttack1: 8000 });
-    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, walkSpeed: 0.25, speedAttack0: 1500, speedAttack1: 12000 });
-    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.25, speedAttack0: 1200, speedAttack1: 10000 });
-    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.25, speedAttack0: 800, speedAttack1: 9000 });
-    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.25, speedAttack0: 1200, speedAttack1: 6000 });
-    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.25 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, walkSpeed: 0.15, speedAttack0: 1500, speedAttack1: 8000 });
+    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, walkSpeed: 0.15, speedAttack0: 1500, speedAttack1: 12000 });
+    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 10000 });
+    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.15, speedAttack0: 800, speedAttack1: 9000 });
+    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 6000 });
+    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.15 });
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
@@ -66,7 +66,7 @@ export class ModelEnum {
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
             speedAttack0: 1000, speedAttack1: 1000, speedAttack2: 1000, speedAttack3: 1000,
-            runningSpeed: 0.5,
+            runningSpeed: 0.25,
             weight: 1, height: 0.15, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
             duplicateModel: () => this.duplicate(this.container)
         }
