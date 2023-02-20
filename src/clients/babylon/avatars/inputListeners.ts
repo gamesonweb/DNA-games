@@ -168,28 +168,21 @@ export function inputEffects(player: Player) {
     if (player.canMove) {
         //forward/backward movement
         if (inputStates.goForward) {
-            let coeff_course = 1
-            if (inputStates.run) {
-                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
-                    player.update_status(CharacterState.Running)
-                }
+            if (!player.isInAir()) {
+                player.update_status(inputStates.run ? CharacterState.Running : CharacterState.Walking_fw)
             }
-            else {
-                coeff_course = 1 / 1.8
-                if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
-                    player.update_status(CharacterState.Walking_fw)
-                }
-            }
-            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal * coeff_course));
-        } else {
-            if (player.getStatus() === CharacterState.Walking_fw || player.getStatus() === CharacterState.Running) player.update_status(CharacterState.Idle)
-        }
-        if (!inputStates.goForward && inputStates.goBackward) {
-            player.shape.moveWithCollisions(direction.scale(-player.speed_coeff * coeff_diagonal / 3));
-            if (player.getStatus() !== CharacterState.Falling && player.getStatus() !== CharacterState.Jumping) {
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+        } else if (inputStates.goBackward) {
+            if (!player.isInAir()) {
                 player.update_status(CharacterState.Walking_bw)
             }
-        } else if (!inputStates.goBackward) { if (player.getStatus() === CharacterState.Walking_bw) player.update_status(CharacterState.Idle) }
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+        }
+
+        if (
+            ((inputStates.goForward || !inputStates.goBackward) && player.getStatus() === CharacterState.Walking_bw) ||
+            (!inputStates.goForward && (player.getStatus() === CharacterState.Walking_fw || player.getStatus() === CharacterState.Running))
+        ) player.update_status(CharacterState.Idle)
     }
 
     //player rotation

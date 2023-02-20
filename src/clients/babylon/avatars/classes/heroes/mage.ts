@@ -67,6 +67,7 @@ export class Mage extends Player {
             }
             this.didSomething = true
         }
+        super.update_status(new_status)
     }
 
     get_status_indice(status: CharacterState) {
