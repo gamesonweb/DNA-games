@@ -1,7 +1,7 @@
 import { Axis, FollowCamera } from "babylonjs";
 import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
-import { canvas, scene, sphere1 } from "../main";
+import { canvas, renderTimeRatio, scene, sphere1 } from "../main";
 import { Player } from "./classes/heroes/player";
 import { CharacterState } from "./avatarSoft";
 import { chatRef } from "../../reactComponents/main";
@@ -162,21 +162,18 @@ export function inputEffects(player: Player) {
 
     let direction = player.shape.getDirection(Axis.Z)
 
-    let coeff_diagonal = 1
-    if ((inputStates.goForward || inputStates.goBackward) && (inputStates.goLeft || inputStates.goRight)) coeff_diagonal = Math.PI / 4;
-
     if (player.canMove) {
         //forward/backward movement
         if (inputStates.goForward) {
             if (!player.isInAir()) {
                 player.update_status(inputStates.run ? CharacterState.Running : CharacterState.Walking_fw)
             }
-            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * renderTimeRatio));
         } else if (inputStates.goBackward) {
             if (!player.isInAir()) {
                 player.update_status(CharacterState.Walking_bw)
             }
-            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * coeff_diagonal));
+            player.shape.moveWithCollisions(direction.scale(player.speed_coeff * renderTimeRatio));
         }
 
         if (

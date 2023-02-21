@@ -11,24 +11,28 @@ export var canvas: HTMLCanvasElement;
 export var engine: Engine;
 export var scene: SceneClient;
 export var sphere1: Player | undefined;
+export var renderTimeRatio: number = 1;
 
 let doneOnce = false;
 
 export var startRenderLoop = function (engine: Engine) {
+
   setInterval(() => {
     console.log(engine.getFps().toFixed() + " fps")
     console.log("state: " + sphere1?.getStatus());
-
   }, 2000)
+
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();
+      renderTimeRatio = engine.getDeltaTime() / (1000 / 60)
+      // console.log(engine.getFps().toFixed() + " fps");
       scene.projectileList.forEach(e => e.update())
       if (sphere1) inputEffects(sphere1)
       if (sphere1) adjustCameraPosition(scene, sphere1)
-      // console.log(engine.getFps().toFixed() + " fps");
     }
-  });
+  })
+
   engine.resize()
 }
 

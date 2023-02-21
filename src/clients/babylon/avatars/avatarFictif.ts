@@ -1,5 +1,6 @@
 import { Vector3 } from "babylonjs";
 import { Scene } from "babylonjs/scene";
+import { renderTimeRatio } from "../main";
 import { createBasicShape } from "../others/tools";
 import { AvatarSoft } from "./avatarSoft";
 import { intrinsicModelProperties } from "./classes/models";
@@ -25,7 +26,7 @@ export class AvatarFictive extends AvatarSoft {
             this.canMove = false;
 
             let intervalKnockBack = setInterval(() => {
-                if (this && this.shape) this.shape.moveWithCollisions(scaledDirection)
+                if (this && this.shape) this.shape.moveWithCollisions(scaledDirection.scale(renderTimeRatio))
             }, 100 / 6)
             setTimeout(() => { clearInterval(intervalKnockBack) }, 150 * power)
             setTimeout(() => { if (this) this.canMove = true }, 150 * power + 100)

@@ -3,6 +3,7 @@ import { intrinsicModelProperties } from "./classes/models";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
 import { AVATAR_CLASSES } from "./classes/classesTypes";
+import { renderTimeRatio } from "../main";
 
 export enum CharacterState {
   Idle,
@@ -99,7 +100,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     } else {
       this.falling_counter--
       if (this.falling_counter <= 0) this.update_status(CharacterState.Falling)
-      this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale, 0));
+      this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
       // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2 * scale;
     }
@@ -135,7 +136,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       this.canMove = false;
 
       let intervalKnockBack = setInterval(() => {
-        if (this && this.shape) this.shape.moveWithCollisions(scaledDirection)
+        if (this && this.shape) this.shape.moveWithCollisions(scaledDirection.scale(renderTimeRatio))
       }, 100 / 6)
       setTimeout(() => { clearInterval(intervalKnockBack); if (this) this.canMove = true }, 150 * power)
     }

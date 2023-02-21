@@ -1,5 +1,6 @@
 import { Axis, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
+import { renderTimeRatio } from "../../../main";
 import { isInCone, distance } from "../../../others/tools";
 import { ModelEnum } from "../models";
 import { Monster } from "../monsters/monster";
@@ -49,7 +50,7 @@ export class Assassin extends Player {
             var gotHit: Monster[] = []
 
             var movingInterval = setInterval(() => {
-                this.shape.moveWithCollisions(this.shape.getDirection(Axis.Z).normalize())
+                this.shape.moveWithCollisions(this.shape.getDirection(Axis.Z).normalize().scale(renderTimeRatio))
             }, 100 / 6)
 
             var damageInterval = setInterval(() => {

@@ -1,6 +1,6 @@
 import { AbstractMesh, Axis, Mesh, Vector3 } from "babylonjs";
 import { meshes } from "../../../connection/connectionClient";
-import { scene } from "../../main";
+import { renderTimeRatio, scene } from "../../main";
 import { distance, removeFromList } from "../../others/tools";
 import { AvatarSoft } from "../avatarSoft";
 
@@ -66,7 +66,7 @@ export abstract class Projectile {
       console.log("DEBUG: projectile ", this.name, " is too slow (", this.speedCoeff, "), is disposed.");
       this.dispose();
     }
-    this.shape.moveWithCollisions(this.angle.scale(this.speedCoeff))
+    this.shape.moveWithCollisions(this.angle.scale(this.speedCoeff * renderTimeRatio))
     if (distance(this.shape.position, this.originalPositionBullet) > this.range) {
       this.dispose()
     }
