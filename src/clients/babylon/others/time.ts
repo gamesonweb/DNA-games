@@ -7,15 +7,16 @@ export var hour: number;
 export var skyDefined: boolean = false;
 
 export function updateHour(hourInput: number) {
-    // console.log("updating time to " + hour);
     if (scene && typeof scene !== 'undefined' && !skyDefined) {
         createDayNightCycle(hourInput);
         skyDefined = true;
     }
     hour = hourInput;
 
-    if (false && skyDefined) {
-        if (hour === 0 || hour === 12) syncAnimGroup(hour)
+    //if (hour % 1 == 0) console.log("updating time to " + hour);
+
+    if (skyDefined) {
+        if (hour == 12 || hour == 0) syncAnimGroup(hour)
     }
 
     //tue les monstres de nuit si il fait jour

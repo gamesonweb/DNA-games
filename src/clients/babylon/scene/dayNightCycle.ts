@@ -2,13 +2,16 @@ import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "../main";
 import { hemiLight, light, water } from "./sceneClient";
 import { hour } from "../others/time";
-export const ratio = 1.2;
+export const ratio = 0.6;
 export var animations: AnimationGroup;
 export function createDayNightCycle(origin: number): AnimationGroup {
-    //s = Time Interval Server 24h => 24 * 4 * 0.5 sec = 48 sec
+
+    // ATTENTION AJUSTER RATIO SI TEMPS HEURES SERVEUR MODIFIEE
+
+    //s = Time Interval Server 24h => 24 * 1 sec = 24 sec
     //c = Time Interval Client 24h => 2400/60 sec = 40 sec
-    //Ratio = s/c = 1.2
-    // var ratio = 1.2;
+    //Ratio = s/c = 0.6
+    // var ratio = 0.6
 
     //Sky color
     var animationSky = createSkyAnimation();

@@ -172,8 +172,6 @@ function sendPosition(player: Avatar) {
         status: player.getStatus()
     })
 
-    console.log("sending updated pos msg with status: " + player.getStatus());
-
     //console.log("sending " + position_player);
 
     wsClient.send(
