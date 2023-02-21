@@ -2,7 +2,7 @@ import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "../main";
 import { hemiLight, light, water } from "./sceneClient";
 import { hour } from "../others/time";
-export const ratio = 0.6;
+export const ratio = 0.65;
 export var animations: AnimationGroup;
 export function createDayNightCycle(origin: number): AnimationGroup {
 
@@ -65,10 +65,14 @@ export function createDayNightCycle(origin: number): AnimationGroup {
 }
 
 export function syncAnimGroup(time: number) {
-    animations.reset();
-    animations.goToFrame(hour * 100 * ratio);
+    //animations.reset();
+    var animHourOffset = (animations.children[0].animation.runtimeAnimations[0].currentFrame / (100 * ratio) - hour)
+    if (animHourOffset > 0.5 || animHourOffset < -0.5) {
+        console.log("day night adjusted (was unsync of " + animHourOffset + " hour");
+        animations.goToFrame(hour * 100 * ratio);
+    }
 
-    animations.play(true)
+    //animations.play(true)
 }
 
 function createSkyAnimation(): Animation {
