@@ -147,6 +147,10 @@ export abstract class AvatarSoft extends MeshWithHealth {
   }
 
   update_status(new_status: CharacterState) {
+    if (new_status !== this.status) {
+      this.status = new_status
+      this.didSomething = true
+    }
     switch (new_status) {
       case CharacterState.Running: this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
       case CharacterState.Walking_fw: this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
@@ -156,6 +160,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
   get_status_indice(status: CharacterState) {
     console.log("get_status_indice not implemented here");
+    return -1
   }
 
   isInAir() {

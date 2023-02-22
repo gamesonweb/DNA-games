@@ -2,7 +2,7 @@ import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
 import { intrinsicModelProperties, shadowGeneratorCampfire } from "./classes/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
-import { AvatarSoft } from "./avatarSoft";
+import { AvatarSoft, CharacterState } from "./avatarSoft";
 
 export abstract class Avatar extends AvatarSoft {
   modelContainer: InstantiatedEntries
@@ -15,7 +15,7 @@ export abstract class Avatar extends AvatarSoft {
 
   constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
     // super(scene, avatar_username, p);
-    super(scene, avatar_username, createBasicShape(avatar_username, scene), p)
+    super(scene, avatar_username, createBasicShape(avatar_username, scene, p), p)
 
     this.modelContainer = p.duplicateModel();
     this.model = this.modelContainer.rootNodes[0] as Mesh
@@ -41,6 +41,16 @@ export abstract class Avatar extends AvatarSoft {
     this.weightCategory = p.weight
 
     this.statusStacks = { burn: 0, poison: 0, bleed: 0 }
+
+    for (let aniCounter = 0; aniCounter < this.modelContainer.animationGroups.length; aniCounter++) {
+      console.log("set up animation transition for groupe " + aniCounter + " (" + this.modelContainer.animationGroups[aniCounter].name);
+
+      for (let index = 0; index < this.modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
+        let animation = this.modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
+        animation.enableBlending = true
+        animation.blendingSpeed = 0.08
+      }
+    }
   }
 
   dispose(): void {
@@ -139,6 +149,22 @@ export abstract class Avatar extends AvatarSoft {
       default:
         console.log(statut, " effect does not exist");
     }
+  }
+
+  update_status(new_status: CharacterState) {
+    if (new_status !== this.status) {
+      var animation_indice = this.get_status_indice(this.status)
+      if (animation_indice !== -1) {
+        this.modelContainer.animationGroups[animation_indice].stop()
+      }
+      animation_indice = this.get_status_indice(new_status)
+      if (animation_indice !== -1) {
+        this.modelContainer.animationGroups[animation_indice].reset()
+        this.modelContainer.animationGroups[animation_indice].play()
+        this.modelContainer.animationGroups[animation_indice].loopAnimation = true
+      }
+    }
+    super.update_status(new_status)
   }
 
 }

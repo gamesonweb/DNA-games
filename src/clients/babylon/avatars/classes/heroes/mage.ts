@@ -11,16 +11,6 @@ export class Mage extends Player {
 
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Ranger.intrinsicParameterMesh)
-
-        for (let aniCounter = 0; aniCounter < this.modelContainer.animationGroups.length; aniCounter++) {
-            console.log("set up animation transition for groupe " + aniCounter + " (" + this.modelContainer.animationGroups[aniCounter].name);
-
-            for (let index = 0; index < this.modelContainer.animationGroups[aniCounter].targetedAnimations.length; index++) {
-                let animation = this.modelContainer.animationGroups[aniCounter].targetedAnimations[index].animation
-                animation.enableBlending = true
-                animation.blendingSpeed = 0.08
-            }
-        }
     }
 
     attack_0(onlyDisplay = false) {
@@ -50,24 +40,6 @@ export class Mage extends Player {
                 }
             })
         }
-    }
-
-    update_status(new_status: CharacterState) {
-        if (new_status !== this.status) {
-            var animation_indice = this.get_status_indice(this.status)
-            if (animation_indice !== -1) {
-                this.modelContainer.animationGroups[animation_indice].stop()
-            }
-            this.status = new_status
-            animation_indice = this.get_status_indice(new_status)
-            if (animation_indice !== -1) {
-                this.modelContainer.animationGroups[animation_indice].reset()
-                this.modelContainer.animationGroups[animation_indice].play()
-                this.modelContainer.animationGroups[animation_indice].loopAnimation = true
-            }
-            this.didSomething = true
-        }
-        super.update_status(new_status)
     }
 
     get_status_indice(status: CharacterState) {

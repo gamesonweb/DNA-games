@@ -19,7 +19,7 @@ export var startRenderLoop = function (engine: Engine) {
 
   setInterval(() => {
     console.log(engine.getFps().toFixed() + " fps")
-    console.log("state: " + sphere1?.getStatus());
+    //console.log("state: " + sphere1?.getStatus());
   }, 2000)
 
   engine.runRenderLoop(function () {
