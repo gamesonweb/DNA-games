@@ -71,17 +71,20 @@ class HealthBar {
   healthBarMaterial: StandardMaterial | undefined;
   height: number;
   width: number;
+  healthbar_height: number;
+  healthbar_width: number;
 
   constructor(parent: Mesh, scene: Scene, p: intrinsicModelProperties) {
     this.height = p.height;
     this.width = p.width;
-    let [width, height] = [this.width, this.height]
+    this.healthbar_height = 0.15;
+    this.healthbar_width = 1;
     // the healthBarContainer
     var healthBarContainerMaterial = new StandardMaterial(parent.name + "hb2mat", scene);
     healthBarContainerMaterial.emissiveColor = Color3.White();
     healthBarContainerMaterial.backFaceCulling = false;
 
-    var healthBarContainer = MeshBuilder.CreatePlane(parent.name + "hb2", { width, height }, scene);
+    var healthBarContainer = MeshBuilder.CreatePlane(parent.name + "hb2", { width: this.healthbar_width, height: this.healthbar_height }, scene);
     healthBarContainer.position = new Vector3(0, p?.healthYAbove || 1.2, 0);     // Position above player.
     healthBarContainer.parent = parent;
     healthBarContainer.material = healthBarContainerMaterial;
@@ -89,7 +92,7 @@ class HealthBar {
     healthBarContainer.isPickable = false
 
     // The healthBar
-    var healthBar = MeshBuilder.CreatePlane(parent.name + "hb1", { width, height }, scene);
+    var healthBar = MeshBuilder.CreatePlane(parent.name + "hb1", { width: this.healthbar_width, height: this.healthbar_height }, scene);
     healthBar.position = new Vector3(0, 0, -0.01);
     var healthBarMaterial = new StandardMaterial(parent.name + "hb1mat", scene);
     healthBarMaterial.backFaceCulling = false;
@@ -108,7 +111,7 @@ class HealthBar {
   updateHealthBar(healthPercentage: number) {
     if (this.healthBar === undefined) return
     this.healthBar.scaling.x = healthPercentage;
-    this.healthBar.position.x = -(this.width * (1 - healthPercentage) / 2);
+    this.healthBar.position.x = -(this.healthbar_width * (1 - healthPercentage) / 2);
 
     if (healthPercentage > 2 / 3) {
       this.healthBarMaterial!.emissiveColor = HealthBar.colorHealthHigh;

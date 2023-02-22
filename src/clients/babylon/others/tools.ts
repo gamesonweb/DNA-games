@@ -97,8 +97,8 @@ export function createWall(scene: Scene) {
     return wall
 }
 
-export function createBasicShape(avatar_username: String, scene: Scene) {
-    let model = MeshBuilder.CreateCylinder(avatar_username.toString(), { diameter: 1, height: 2 }, scene);
+export function createBasicShape(avatar_username: String, scene: Scene, p: intrinsicModelProperties) {
+    let model = MeshBuilder.CreateCylinder(avatar_username.toString(), { diameter: p.width ? p.width : 1, height: p.height ? p.height : 2 }, scene);
     // let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     var myMaterial = new StandardMaterial("myMaterial", scene);

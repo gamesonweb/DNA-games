@@ -29,6 +29,7 @@ struct MoveMonsterData {
     pos_y: f32,
     pos_z: f32,
     direction: String,
+    status: i8,
 }
 
 #[derive(Deserialize, Debug)]
@@ -266,6 +267,7 @@ fn update_position(move_data: MoveMonsterData, monster_list: MonsterList) {
                 r#" {{\"_isDirty\":{},\"_x\":{},\"_y\":{},\"_z\":{}}} "#,
                 direction._isDirty, direction._x, direction._y, direction._z
             );
+            new_data.status = move_data.status;
         }
         None => {
             println!("ERROR: TRIED TO MOVE A ZOMBIE THAT DOES NOT EXIST");

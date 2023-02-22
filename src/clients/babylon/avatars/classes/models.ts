@@ -42,6 +42,8 @@ export class ModelEnum {
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
+    static Nightmonster = new ModelEnum("glb", 1, { className: "Nightmonster", height: 2, width: 2, healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 })
+
     static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, walkSpeed: 2 });
     static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, walkSpeed: 2 });
     static Tree = new ModelEnum("gltf", 1, { className: "PineTree", health: 50, walkSpeed: 2 });
@@ -67,7 +69,7 @@ export class ModelEnum {
         this.intrinsicParameterMesh = {
             speedAttack0: 1000, speedAttack1: 1000, speedAttack2: 1000, speedAttack3: 1000,
             runningSpeed: 0.25,
-            weight: 1, height: 0.15, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
+            weight: 1, height: 2, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
             duplicateModel: () => this.duplicate(this.container)
         }
     }
@@ -142,6 +144,16 @@ export class ModelEnum {
                 right_eye.position = new Vector3(-0.11, 1.08, 0.15)
                 break;
 
+            case "Nightmonster":
+                this.rootMesh.rotate(Axis.Y, Math.PI)
+                this.rootMesh.scaling = new Vector3(2, 2, 2)
+                meshes.forEach(m => {
+                    m.isPickable = false;
+                    m.checkCollisions = false;
+                });
+                animations[0].stop();
+                break;
+
             case "Campfire":
                 this.rootMesh.position = new Vector3(5, -0.5, 5);
 
@@ -213,7 +225,7 @@ export class ModelEnum {
     static createAllModels(scene: SceneClient) {
         var allModels = [
             this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
-            this.PumpkinMonster, this.Grass, this.Campfire, this.Tree
+            this.PumpkinMonster, this.Nightmonster, this.Grass, this.Campfire, this.Tree
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));

@@ -8,7 +8,7 @@ import { intrinsicModelProperties } from "./classes/models";
 export class AvatarFictive extends AvatarSoft {
 
     constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
-        super(scene, avatar_username, createBasicShape(avatar_username, scene), p)
+        super(scene, avatar_username, createBasicShape(avatar_username, scene, p), p)
     }
 
     dispose(): void {

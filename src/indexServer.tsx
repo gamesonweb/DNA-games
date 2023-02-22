@@ -1,6 +1,6 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
-import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
+import { AvatarSoft, CharacterState } from "./clients/babylon/avatars/avatarSoft";
 import { ModelEnum } from "./clients/babylon/avatars/classes/models";
 import { giveMonsterName } from "./clients/babylon/avatars/classes/monsters/namesMonsters";
 import { distance } from "./clients/babylon/others/tools";
@@ -66,7 +66,8 @@ function make_pos_list_msg() {
         pos_x: monster.shape.position.x,
         pos_y: monster.shape.position.y,
         pos_z: monster.shape.position.z,
-        direction: JSON.stringify(monster.shape.getDirection(Axis.Z))
+        direction: JSON.stringify(monster.shape.getDirection(Axis.Z)),
+        status: monster.getStatus()
       })
     )
   }
@@ -79,12 +80,6 @@ function make_pos_list_msg() {
 
 function zombie_apply_AI(monster: AvatarSoft) {
 
-  //moves the zombie forward if possible
-  if (monster.canMove) {
-    var direction = monster.shape.getDirection(Axis.Z);
-    monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
-  }
-
   monster.setRayPosition()
 
   let player_to_target: AvatarSoft | null = nearest_player(monster);
@@ -92,7 +87,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
     //zombie looks at the nearest player
     monster.shape.lookAt(new Vector3(player_to_target.shape.position.x, monster.shape.position.y, player_to_target.shape.position.z));
     //zombie hit if the nearest player is in his range
-    if (monster.canHit && distance(monster.shape.position, player_to_target.shape.position) < 1.5) {
+    if (monster.canHit && distance(monster.shape.position, player_to_target.shape.position) < 2.5) {
       ws.send(
         JSON.stringify({
           route: serverMessages.MONSTER_HIT,
@@ -102,10 +97,17 @@ function zombie_apply_AI(monster: AvatarSoft) {
           })
         })
       )
+      monster.update_status(CharacterState.Punching)
       monster.canHit = false;
+      monster.canMove = false;
       setTimeout(() => {
         if (monster) monster.canHit = true
+        if (monster) monster.canMove = true
       }, 2000)
+    } else if (monster.canMove && distance(monster.shape.position, player_to_target.shape.position) > 2.5) {
+      var direction = monster.shape.getDirection(Axis.Z);
+      monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
+      monster.update_status(CharacterState.Running)
     }
   }
   monster.shape.computeWorldMatrix(true);
@@ -135,7 +137,7 @@ export function generate_zombie_wave() {
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let name = giveMonsterName()
   // TODO : here we should pass the monster class
-  let generated_zombie = new AvatarFictive(scene, name, ModelEnum.PumpkinMonster.intrinsicParameterMesh);
+  let generated_zombie = new AvatarFictive(scene, name, ModelEnum.Nightmonster.intrinsicParameterMesh);
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);
