@@ -43,7 +43,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     // super(avatar_username, scene, createBasicShape(avatar_username, scene), p);
     super(avatar_username, scene, shape, p);
 
-    this.gravity_acceleration = 0;
+    this.gravity_acceleration = SceneSoft.gravityIntensity;
     this.name = avatar_username
     this.class = p.className as AVATAR_CLASSES
 
@@ -102,7 +102,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       if (this.falling_counter <= 0) this.update_status(CharacterState.Falling)
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
       // this.position.y += this.gravity_acceleration * 2;
-      this.gravity_acceleration += SceneSoft.gravityIntensity * 0.2 * scale;
+      this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
     }
   }
 
