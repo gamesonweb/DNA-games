@@ -42,7 +42,7 @@ export class ModelEnum {
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
-    static Nightmonster = new ModelEnum("glb", 1, { className: "Nightmonster", height: 2, width: 2, healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 })
+    static Nightmonster = new ModelEnum("glb", 1, { className: "Nightmonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2 })
 
     static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, walkSpeed: 2 });
     static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, walkSpeed: 2 });
