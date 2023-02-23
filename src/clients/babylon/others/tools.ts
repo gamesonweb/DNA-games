@@ -206,8 +206,7 @@ export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: s
             return new Assassin(scene, username)
         case "Healer":
             return new Healer(scene, username)
-        default: //throw new Error("Class player not implemented")
-            return new Mage(scene, username)
+        default: throw new Error("Class player not implemented")
     }
 }
 
