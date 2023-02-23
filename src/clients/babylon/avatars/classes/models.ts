@@ -42,7 +42,7 @@ export class ModelEnum {
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
-    static Nightmonster = new ModelEnum("glb", 1, { className: "Nightmonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2 })
+    static NightMonster = new ModelEnum("glb", 1, { className: "NightMonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2 })
 
     static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, walkSpeed: 2 });
     static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, walkSpeed: 2 });
@@ -144,7 +144,7 @@ export class ModelEnum {
                 right_eye.position = new Vector3(-0.11, 1.08, 0.15)
                 break;
 
-            case "Nightmonster":
+            case "NightMonster":
                 this.rootMesh.rotate(Axis.Y, Math.PI)
                 this.rootMesh.scaling = new Vector3(2, 2, 2)
                 meshes.forEach(m => {
@@ -225,7 +225,7 @@ export class ModelEnum {
     static createAllModels(scene: SceneClient) {
         var allModels = [
             this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
-            this.PumpkinMonster, this.Nightmonster, this.Grass, this.Campfire, this.Tree
+            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.Tree
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));

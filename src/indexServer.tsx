@@ -137,7 +137,7 @@ export function generate_zombie_wave() {
 function spawn_zombie({ pos_x, pos_y, pos_z }: position) {
   let name = giveMonsterName()
   // TODO : here we should pass the monster class
-  let generated_zombie = new AvatarFictive(scene, name, ModelEnum.Nightmonster.intrinsicParameterMesh);
+  let generated_zombie = new AvatarFictive(scene, name, ModelEnum.NightMonster.intrinsicParameterMesh);
   generated_zombie.shape.position = new Vector3(pos_x, pos_y, pos_z);
   ws.monster_list.set(generated_zombie.name, generated_zombie);
   generated_zombie.shape.computeWorldMatrix(true);

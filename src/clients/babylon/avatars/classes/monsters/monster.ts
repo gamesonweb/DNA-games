@@ -10,7 +10,7 @@ import { CharacterState } from "../../avatarSoft";
 export class Monster extends Avatar {
 
     constructor(scene: Scene, avatar_username: string) {
-        super(scene, avatar_username, ModelEnum.Nightmonster.intrinsicParameterMesh)
+        super(scene, avatar_username, ModelEnum.NightMonster.intrinsicParameterMesh)
     }
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
