@@ -4,12 +4,14 @@ import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft, CharacterStatus } from "./avatarSoft";
 
+export type ATTACK_TYPE = "ATTACK_0" | "ATTACK_1" | "ATTACK_2" | "ATTACK_3"
+
 export abstract class Avatar extends AvatarSoft {
   modelContainer: InstantiatedEntries
   model: Mesh
 
-  private tableAttackCountDownList: number[];
-  private tableAttackDate: number[];
+  private tableAttackDate: Record<ATTACK_TYPE, number>;
+  private attackDict: Record<ATTACK_TYPE, (onlyDisplay?: boolean) => void>
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
@@ -33,10 +35,13 @@ export abstract class Avatar extends AvatarSoft {
     shadowGeneratorCampfire.addShadowCaster(this.model);
 
     //initialize date of last instance for each attack type
-    this.tableAttackDate = [0, 0, 0, 0]
-
-    //default attack cd, will be overrided for all usable attack
-    this.tableAttackCountDownList = [p.speedAttack0, p.speedAttack1, p.speedAttack2, p.speedAttack3]
+    this.tableAttackDate = { "ATTACK_0": 0, "ATTACK_1": 0, "ATTACK_2": 0, "ATTACK_3": 0 }
+    this.attackDict = {
+      "ATTACK_0": this.attack_0.bind(this),
+      "ATTACK_1": this.attack_1.bind(this),
+      "ATTACK_2": this.attack_2.bind(this),
+      "ATTACK_3": this.attack_3.bind(this)
+    }
 
     this.weightCategory = p.weight
 
@@ -57,29 +62,13 @@ export abstract class Avatar extends AvatarSoft {
     super.dispose()
   }
 
-  hit(hitmode_id: number, onlyDisplay = false) {
-    if (!this.attackIsReady(hitmode_id) || this.canHit === false) return
-    switch (hitmode_id) {
-      case 0:
-        this.attack_0(onlyDisplay)
-        break
-      case 1:
-        this.attack_1(onlyDisplay)
-        break
-      case 2:
-        this.attack_2(onlyDisplay)
-        break
-      case 3:
-        this.attack_3(onlyDisplay)
-        break
-      default:
-        console.log("ERROR: tried to call hit(", hitmode_id, ") on avatar ", this);
-
-    }
+  hit(hitModeId: ATTACK_TYPE, onlyDisplay = false) {
+    if (!this.attackIsReady(hitModeId) || this.canHit === false) return
+    this.attackDict[hitModeId](onlyDisplay)
   }
 
-  attackIsReady(id: number) {
-    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.tableAttackCountDownList[id] < Date.now()) {
+  attackIsReady(id: ATTACK_TYPE) {
+    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.intrinsicModelProperties.attackSpeed[id] < Date.now()) {
       this.tableAttackDate[id] = Date.now()
       return true
     }

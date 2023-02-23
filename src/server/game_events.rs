@@ -12,7 +12,7 @@ pub async fn game_events(
     monster_list: MonsterList,
     monster_action: SharedMessages,
 ) {
-    let mut hour = 20.0;
+    let mut hour = 15.0;
 
     loop {
         sleep(Duration::from_millis(100)).await;

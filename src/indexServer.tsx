@@ -93,7 +93,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
           route: serverMessages.MONSTER_HIT,
           content: JSON.stringify({
             username: monster.name,
-            hitmode: 0
+            hitmode: "ATTACK_0"
           })
         })
       )

@@ -58,8 +58,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
       ws.send(JSON.stringify({
         route: serverMessages.KILL_ALL_NIGHT_MONSTER,
         content: ""
-      }
-      ))
+      }))
     }
     if (hour === "22") {
       generate_zombie_wave()

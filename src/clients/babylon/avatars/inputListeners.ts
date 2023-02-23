@@ -191,14 +191,14 @@ export function inputEffects(player: Player) {
     //player's attack_0
     if (inputStates.attack_0) {
         // player fires the correspondng hit (not onlyDisplay)
-        player.hit(0)
+        player.hit("ATTACK_0")
         // we send it so server
         wsClient.send(
             JSON.stringify({
                 route: serverMessages.PLAYER_HIT,
                 content: JSON.stringify({
                     username: player.name,
-                    hitmode: 0
+                    hitmode: "ATTACK_0"
                 })
             })
         )
@@ -207,14 +207,14 @@ export function inputEffects(player: Player) {
     //player's attack_1
     if (inputStates.attack_1) {
         // player fires the correspondng hit (not onlyDisplay)
-        player.hit(1)
+        player.hit("ATTACK_1")
         // we send it so server
         wsClient.send(
             JSON.stringify({
                 route: serverMessages.PLAYER_HIT,
                 content: JSON.stringify({
                     username: player.name,
-                    hitmode: 1
+                    hitmode: "ATTACK_1"
                 })
             })
         )

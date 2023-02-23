@@ -8,6 +8,7 @@ import { loadingRef } from '../../../reactComponents/main';
 import { ALL_CLASSES } from './classesTypes';
 import { windowExists } from '../../../reactComponents/tools';
 import { CharacterStatus } from '../avatarSoft';
+import { ATTACK_TYPE } from '../avatarHeavy';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
@@ -22,18 +23,21 @@ export type intrinsicModelPropertiesOptional = {
     runningSpeed?: number;
     weight?: number;
     duplicateModel?: () => InstantiatedEntries;
-    speedAttack0?: number;
-    speedAttack1?: number;
-    speedAttack2?: number;
-    speedAttack3?: number;
+    attackSpeed?: Record<ATTACK_TYPE, number>
     animations?: Record<CharacterStatus, number>
 }
 
 type extensionType = "glb" | "gltf"
 
-let buildStatusDict = (p: { [x: string]: number }) => {
+let buildStatusDict = (p: { [x in CharacterStatus]?: number }) => {
     let statusDict: Record<CharacterStatus, number> = { "Idle": -1, "Dying": -1, "Falling": -1, "Jumping": -1, "Punching": -1, "Running": -1, "Walking_bw": -1, "Walking_fw": -1, "Swimming": -1, "TakingHit": -1, }
-    Object.keys(p).forEach(x => { statusDict[x as CharacterStatus] = p[x] })
+    Object.keys(p).forEach(x => { statusDict[x as CharacterStatus] = p[x as CharacterStatus]! })
+    return statusDict
+}
+
+let buildAttackSpeed = (p: { [x in ATTACK_TYPE]?: number }) => {
+    let statusDict: Record<ATTACK_TYPE, number> = { "ATTACK_0": 1000, "ATTACK_1": 1000, "ATTACK_2": 1000, "ATTACK_3": 1000 }
+    Object.keys(p).forEach((x) => { statusDict[x as ATTACK_TYPE] = p[x as ATTACK_TYPE]! })
     return statusDict
 }
 
@@ -41,11 +45,11 @@ export type intrinsicModelProperties = Required<intrinsicModelPropertiesOptional
 
 export class ModelEnum {
     // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, walkSpeed: 0.15, speedAttack0: 1500, speedAttack1: 8000 });
-    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, walkSpeed: 0.15, speedAttack0: 1500, speedAttack1: 12000 });
-    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 10000 });
-    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.15, speedAttack0: 800, speedAttack1: 9000 });
-    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 6000 });
+    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1500, "ATTACK_1": 1000 }) });
+    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1500, "ATTACK_1": 12000 }) });
+    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1200, "ATTACK_1": 10000 }) });
+    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 800, "ATTACK_1": 9000 }) });
+    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1200, "ATTACK_1": 6000 }) });
     static Ranger = new ModelEnum("glb", 1, {
         className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.15, animations: { "Walking_bw": 9, "Walking_fw": 8, "Running": 6, "Falling": 1, "Idle": 3, "Jumping": 1, "Punching": 5, "Swimming": 7, "Dying": 0, "TakingHit": 2, }
     });
@@ -79,7 +83,7 @@ export class ModelEnum {
         this.extension = extension;
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
-            speedAttack0: 1000, speedAttack1: 1000, speedAttack2: 1000, speedAttack3: 1000,
+            attackSpeed: buildAttackSpeed({}),
             runningSpeed: 0.25, animations: buildStatusDict({}),
             weight: 1, height: 2, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
             duplicateModel: () => this.duplicate(this.container)
