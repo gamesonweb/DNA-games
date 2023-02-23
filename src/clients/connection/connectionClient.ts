@@ -99,7 +99,7 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     hour(messageReceived: any): void {
-        updateHour(messageReceived.content)
+        updateHour(parseInt(messageReceived.content))
     }
 
     spawn_monster(messageReceived: any): void {
