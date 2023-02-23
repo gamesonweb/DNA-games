@@ -1,11 +1,11 @@
-import { AbstractMesh, Axis, BoundingBoxGizmo, Color3, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Axis, BoundingBoxGizmo, Color3, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
-import { ModelEnum } from "../models";
-import { isInCone, isInHitzone } from "../../../others/tools";
+import { isInHitzone } from "../../../others/tools";
 import { Avatar } from "../../avatarHeavy";
 import { CharacterState } from "../../avatarSoft";
+import { ModelEnum } from "../models";
 
 export class Monster extends Avatar {
 

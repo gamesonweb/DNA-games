@@ -16,7 +16,7 @@ export function updateHour(hourInput: number) {
     //if (hour % 1 == 0) console.log("updating time to " + hour);
 
     if (skyDefined) {
-        if (hour == 12 || hour == 0) syncAnimGroup(hour)
+        if (hour === 12 || hour === 0) syncAnimGroup(hour)
     }
 
     //tue les monstres de nuit si il fait jour
