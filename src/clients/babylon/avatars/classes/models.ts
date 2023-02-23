@@ -7,6 +7,7 @@ import { sendLogin, wsClient } from "../../../connection/connectionClient";
 import { loadingRef } from '../../../reactComponents/main';
 import { ALL_CLASSES } from './classesTypes';
 import { windowExists } from '../../../reactComponents/tools';
+import { CharacterStatus } from '../avatarSoft';
 export var shadowGeneratorCampfire: ShadowGenerator;
 
 
@@ -25,9 +26,16 @@ export type intrinsicModelPropertiesOptional = {
     speedAttack1?: number;
     speedAttack2?: number;
     speedAttack3?: number;
+    animations?: Record<CharacterStatus, number>
 }
 
 type extensionType = "glb" | "gltf"
+
+let buildStatusDict = (p: { [x: string]: number }) => {
+    let statusDict: Record<CharacterStatus, number> = { "Idle": -1, "Dying": -1, "Falling": -1, "Jumping": -1, "Punching": -1, "Running": -1, "Walking_bw": -1, "Walking_fw": -1, "Swimming": -1, "TakingHit": -1, }
+    Object.keys(p).forEach(x => { statusDict[x as CharacterStatus] = p[x] })
+    return statusDict
+}
 
 export type intrinsicModelProperties = Required<intrinsicModelPropertiesOptional>
 
@@ -38,11 +46,15 @@ export class ModelEnum {
     static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 10000 });
     static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.15, speedAttack0: 800, speedAttack1: 9000 });
     static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.15, speedAttack0: 1200, speedAttack1: 6000 });
-    static Ranger = new ModelEnum("glb", 1, { className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.15 });
+    static Ranger = new ModelEnum("glb", 1, {
+        className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.15, animations: { "Walking_bw": 9, "Walking_fw": 8, "Running": 6, "Falling": 1, "Idle": 3, "Jumping": 1, "Punching": 5, "Swimming": 7, "Dying": 0, "TakingHit": 2, }
+    });
 
     static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
-    static NightMonster = new ModelEnum("glb", 1, { className: "NightMonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2 })
+    static NightMonster = new ModelEnum("glb", 1, {
+        className: "NightMonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2, animations: buildStatusDict({ "Running": 3, "Falling": 1, "Punching": 2, "Dying": 0, })
+    })
 
     static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, walkSpeed: 2 });
     static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, walkSpeed: 2 });
@@ -68,7 +80,7 @@ export class ModelEnum {
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
             speedAttack0: 1000, speedAttack1: 1000, speedAttack2: 1000, speedAttack3: 1000,
-            runningSpeed: 0.25,
+            runningSpeed: 0.25, animations: buildStatusDict({}),
             weight: 1, height: 2, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
             duplicateModel: () => this.duplicate(this.container)
         }

@@ -2,7 +2,6 @@ import { Axis, Scene } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
 import { isInCone, distance } from "../../../others/tools";
-import { CharacterState } from "../../avatarSoft";
 import { Fireball } from "../../weapons/projectiles/fireball";
 import { ModelEnum } from "../models";
 import { Player } from "./player";
@@ -17,10 +16,10 @@ export class Mage extends Player {
         console.log("mage ", this.name, " casts normal attack");
         scene.projectileList.push(new Fireball(this, onlyDisplay, {}))
         this.canMove = false;
-        this.update_status(CharacterState.Punching)
+        this.update_status("Punching")
         setTimeout(() => {
             this.canMove = true
-            this.update_status(CharacterState.Idle)
+            this.update_status("Idle")
         }, 1000)
     }
 
@@ -40,44 +39,5 @@ export class Mage extends Player {
                 }
             })
         }
-    }
-
-    get_status_indice(status: CharacterState) {
-        var animation_indice = -1
-        switch (status) {
-            case CharacterState.Walking_bw:
-                animation_indice = 9
-                break
-            case CharacterState.Walking_fw:
-                animation_indice = 8
-                break
-            case CharacterState.Running:
-                animation_indice = 6
-                break
-            case CharacterState.Falling:
-                animation_indice = 1
-                break
-            case CharacterState.Idle:
-                animation_indice = 3
-                break
-            case CharacterState.Jumping:
-                animation_indice = 1
-                break
-            case CharacterState.Punching:
-                animation_indice = 5
-                break
-            case CharacterState.Swimming:
-                animation_indice = 7
-                break
-            case CharacterState.Dying:
-                animation_indice = 0
-                break
-            case CharacterState.TakingHit:
-                animation_indice = 2
-                break
-            default:
-                console.log("error animation: " + this.name + " in status " + this.status);
-        }
-        return animation_indice
     }
 }

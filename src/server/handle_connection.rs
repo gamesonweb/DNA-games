@@ -29,7 +29,7 @@ struct MoveMonsterData {
     pos_y: f32,
     pos_z: f32,
     direction: String,
-    status: i8,
+    status: String,
 }
 
 #[derive(Deserialize, Debug)]

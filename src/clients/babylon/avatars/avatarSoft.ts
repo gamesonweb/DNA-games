@@ -5,18 +5,7 @@ import { MeshWithHealth } from "./meshWithHealth";
 import { AVATAR_CLASSES } from "./classes/classesTypes";
 import { renderTimeRatio } from "../main";
 
-export enum CharacterState {
-  Idle,
-  Walking_fw,
-  Walking_bw,
-  Running,
-  Punching,
-  Swimming,
-  Jumping,
-  Falling,
-  Dying,
-  TakingHit
-}
+export type CharacterStatus = "Idle" | "Walking_fw" | "Walking_bw" | "Running" | "Punching" | "Swimming" | "Jumping" | "Falling" | "Dying" | "TakingHit"
 
 export abstract class AvatarSoft extends MeshWithHealth {
   speed_coeff: number;
@@ -35,7 +24,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   model: Mesh | undefined;
   readonly class: AVATAR_CLASSES;
   offset_dir_y: number;
-  protected status: CharacterState;
+  protected status: CharacterStatus;
   falling_counter: number;
 
   // constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
@@ -65,7 +54,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.canMove = true;
     this.takeHits = true;
 
-    this.status = CharacterState.Idle
+    this.status = "Idle"
 
     this.falling_counter = 20;
   }
@@ -89,9 +78,9 @@ export abstract class AvatarSoft extends MeshWithHealth {
       if (hit !== null && hit.pickedPoint && this.shape.position.y > hit.pickedPoint.y + 1.2) {
         this.shape.position.y += this.gravity_acceleration + SceneSoft.gravityIntensity * (scale - 1);
       } else {
-        if (this.status === CharacterState.Falling) {
+        if (this.status === "Falling") {
           this.falling_counter = 20
-          this.update_status(CharacterState.Idle)
+          this.update_status("Idle")
         }
         this.gravity_acceleration = SceneSoft.gravityIntensity;
         this.canJump = true;
@@ -99,7 +88,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       //else above the void
     } else {
       this.falling_counter--
-      if (this.falling_counter <= 0) this.update_status(CharacterState.Falling)
+      if (this.falling_counter <= 0) this.update_status("Falling")
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
       // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
@@ -142,32 +131,31 @@ export abstract class AvatarSoft extends MeshWithHealth {
     }
   }
 
-  getStatus(): CharacterState {
+  getStatus(): CharacterStatus {
     return this.status
   }
 
-  update_status(new_status: CharacterState) {
+  update_status(new_status: CharacterStatus) {
     if (new_status !== this.status) {
       this.status = new_status
       this.didSomething = true
     }
     switch (new_status) {
-      case CharacterState.Running: this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
-      case CharacterState.Walking_fw: this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
-      case CharacterState.Walking_bw: this.speed_coeff = -this.intrinsicModelProperties.walkSpeed / 3; break;
+      case "Running": this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
+      case "Walking_fw": this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
+      case "Walking_bw": this.speed_coeff = -this.intrinsicModelProperties.walkSpeed / 3; break;
     }
   }
 
-  get_status_indice(status: CharacterState) {
-    console.log("get_status_indice not implemented here");
-    return -1
+  get_status_indice(status: CharacterStatus) {
+    return this.intrinsicModelProperties.animations[status]
   }
 
   isInAir() {
-    return this.getStatus() === CharacterState.Falling || this.getStatus() === CharacterState.Jumping
+    return this.getStatus() === "Falling" || this.getStatus() === "Jumping"
   }
 
   isMoving() {
-    return this.getStatus() === CharacterState.Running || this.getStatus() === CharacterState.Walking_bw || this.getStatus() === CharacterState.Walking_fw
+    return this.getStatus() === "Running" || this.getStatus() === "Walking_bw" || this.getStatus() === "Walking_fw"
   }
 }

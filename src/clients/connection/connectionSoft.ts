@@ -1,5 +1,5 @@
 import { Scene, Vector3 } from "babylonjs"
-import { AvatarSoft } from "../babylon/avatars/avatarSoft"
+import { AvatarSoft, CharacterStatus } from "../babylon/avatars/avatarSoft"
 import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes"
 
 export const serverMessages = {
@@ -27,7 +27,7 @@ export type receiveContent = {
     pos_x: number, pos_y: number, pos_z: number,
     username: string, direction: Vector3, class: PLAYER_CLASSES_TYPE, ydiroffset: number,
     health?: number, maxHealth?: number,
-    status?: number
+    status?: CharacterStatus
 }
 
 export type knockbackContent = {

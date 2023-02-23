@@ -4,7 +4,6 @@ import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
 import { isInHitzone } from "../../../others/tools";
 import { Avatar } from "../../avatarHeavy";
-import { CharacterState } from "../../avatarSoft";
 import { ModelEnum } from "../models";
 
 export class Monster extends Avatar {
@@ -65,26 +64,5 @@ export class Monster extends Avatar {
         },
             1400
         )
-    }
-
-    get_status_indice(status: CharacterState) {
-        var animation_indice = -1
-        switch (status) {
-            case CharacterState.Running:
-                animation_indice = 3
-                break
-            case CharacterState.Falling:
-                animation_indice = 1
-                break
-            case CharacterState.Punching:
-                animation_indice = 2
-                break
-            case CharacterState.Dying:
-                animation_indice = 0
-                break
-            default:
-                console.log("error animation: " + this.name + " in status " + this.status);
-        }
-        return animation_indice
     }
 }

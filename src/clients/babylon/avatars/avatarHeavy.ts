@@ -2,7 +2,7 @@ import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
 import { intrinsicModelProperties, shadowGeneratorCampfire } from "./classes/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
-import { AvatarSoft, CharacterState } from "./avatarSoft";
+import { AvatarSoft, CharacterStatus } from "./avatarSoft";
 
 export abstract class Avatar extends AvatarSoft {
   modelContainer: InstantiatedEntries
@@ -151,7 +151,7 @@ export abstract class Avatar extends AvatarSoft {
     }
   }
 
-  update_status(new_status: CharacterState) {
+  update_status(new_status: CharacterStatus) {
     if (new_status !== this.status) {
       var animation_indice = this.get_status_indice(this.status)
       if (animation_indice !== -1) {

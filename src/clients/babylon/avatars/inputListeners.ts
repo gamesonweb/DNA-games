@@ -3,7 +3,6 @@ import { wsClient } from "../../connection/connectionClient";
 import { serverMessages } from "../../connection/connectionSoft";
 import { canvas, renderTimeRatio, scene, sphere1 } from "../main";
 import { Player } from "./classes/heroes/player";
-import { CharacterState } from "./avatarSoft";
 import { chatRef } from "../../reactComponents/main";
 
 type InputStates = {
@@ -166,20 +165,20 @@ export function inputEffects(player: Player) {
         //forward/backward movement
         if (inputStates.goForward) {
             if (!player.isInAir()) {
-                player.update_status(inputStates.run ? CharacterState.Running : CharacterState.Walking_fw)
+                player.update_status(inputStates.run ? "Running" : "Walking_fw")
             }
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * renderTimeRatio));
         } else if (inputStates.goBackward) {
             if (!player.isInAir()) {
-                player.update_status(CharacterState.Walking_bw)
+                player.update_status("Walking_bw")
             }
             player.shape.moveWithCollisions(direction.scale(player.speed_coeff * renderTimeRatio));
         }
 
         if (
-            ((inputStates.goForward || !inputStates.goBackward) && player.getStatus() === CharacterState.Walking_bw) ||
-            (!inputStates.goForward && (player.getStatus() === CharacterState.Walking_fw || player.getStatus() === CharacterState.Running))
-        ) player.update_status(CharacterState.Idle)
+            ((inputStates.goForward || !inputStates.goBackward) && player.getStatus() === "Walking_bw") ||
+            (!inputStates.goForward && (player.getStatus() === "Walking_fw" || player.getStatus() === "Running"))
+        ) player.update_status("Idle")
     }
 
     //player rotation
@@ -223,13 +222,13 @@ export function inputEffects(player: Player) {
 
     //jump
     if (inputStates.jump) {
-        if (player.canJump && player.getStatus() !== CharacterState.Punching) {
+        if (player.canJump && player.getStatus() !== "Punching") {
             player.isJumping = true;
-            player.update_status(CharacterState.Jumping)
+            player.update_status("Jumping")
             player.canJump = false
             setTimeout(() => {
                 player.isJumping = false
-                if (player.getStatus() === CharacterState.Jumping) player.update_status(CharacterState.Falling)
+                if (player.getStatus() === "Jumping") player.update_status("Falling")
             }, player.timeJumping)
             // setTimeout(() => {
             //   this.canJump = true

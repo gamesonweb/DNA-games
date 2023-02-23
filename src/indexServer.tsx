@@ -1,6 +1,6 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
-import { AvatarSoft, CharacterState } from "./clients/babylon/avatars/avatarSoft";
+import { AvatarSoft, CharacterStatus } from "./clients/babylon/avatars/avatarSoft";
 import { ModelEnum } from "./clients/babylon/avatars/classes/models";
 import { giveMonsterName } from "./clients/babylon/avatars/classes/monsters/namesMonsters";
 import { distance } from "./clients/babylon/others/tools";
@@ -97,7 +97,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
           })
         })
       )
-      monster.update_status(CharacterState.Punching)
+      monster.update_status("Punching")
       monster.canHit = false;
       monster.canMove = false;
       setTimeout(() => {
@@ -107,7 +107,7 @@ function zombie_apply_AI(monster: AvatarSoft) {
     } else if (monster.canMove && distance(monster.shape.position, player_to_target.shape.position) > 2.5) {
       var direction = monster.shape.getDirection(Axis.Z);
       monster.shape.moveWithCollisions(direction.scale(monster.speed_coeff * 6));
-      monster.update_status(CharacterState.Running)
+      monster.update_status("Running")
     }
   }
   monster.shape.computeWorldMatrix(true);

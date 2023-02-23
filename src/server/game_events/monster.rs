@@ -27,7 +27,7 @@ pub fn monster_spawner(
         ),
         health,
         max_health: health.clone(),
-        status: 0,
+        status: "Idle".to_owned(),
     };
 
     //push it into the monster list
@@ -42,7 +42,7 @@ pub fn clear_all_monsters(monster_list: Arc<Mutex<HashMap<String, MonsterData>>>
 
 pub fn monster_message_data(monster_data: &MonsterData) -> String {
     return format!(
-        r#" {{"route": "monster_data", "content": "{{\"pos_x\": {}, \"pos_y\": {}, \"pos_z\": {}, \"username\": \"{}\", \"health\": \"{}\", \"maxHealth\": \"{}\", \"direction\": {}, \"status\": {}}}"}} "#,
+        r#" {{"route": "monster_data", "content": "{{\"pos_x\": {}, \"pos_y\": {}, \"pos_z\": {}, \"username\": \"{}\", \"health\": \"{}\", \"maxHealth\": \"{}\", \"direction\": {}, \"status\": \"{}\"}}"}} "#,
         monster_data.pos_x,
         monster_data.pos_y,
         monster_data.pos_z,
