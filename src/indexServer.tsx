@@ -1,6 +1,6 @@
 import { Axis, Engine, NullEngine, PointLight, Vector3 } from "babylonjs";
 import { AvatarFictive } from "./clients/babylon/avatars/avatarFictif";
-import { AvatarSoft, CharacterStatus } from "./clients/babylon/avatars/avatarSoft";
+import { AvatarSoft } from "./clients/babylon/avatars/avatarSoft";
 import { ModelEnum } from "./clients/babylon/avatars/classes/models";
 import { giveMonsterName } from "./clients/babylon/avatars/classes/monsters/namesMonsters";
 import { distance } from "./clients/babylon/others/tools";
