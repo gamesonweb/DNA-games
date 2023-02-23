@@ -1,9 +1,9 @@
-import { Axis, Scene, Vector3 } from "babylonjs";
+import { AbstractMesh, Axis, BoundingBoxGizmo, Color3, Mesh, MeshBuilder, Nullable, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
-import { sphere1 } from "../../../main";
+import { scene, sphere1 } from "../../../main";
 import { ModelEnum } from "../models";
-import { isInCone } from "../../../others/tools";
+import { isInCone, isInHitzone } from "../../../others/tools";
 import { Avatar } from "../../avatarHeavy";
 import { CharacterState } from "../../avatarSoft";
 
@@ -38,18 +38,32 @@ export class Monster extends Avatar {
 
     //The monster hit in front of him. The hit is represented by a hitbox (an invisible mesh), which damage the player if they interesect
     attack_0(onlyDisplay = false) {
-        //ANIMATION
-
         //DAMAGE (DELAYED: GIVE PLAYER TIME TO REACT + SYNC WITH AI POSITION - MUST BE >= 100)
         setTimeout(() => {
             if (this) {
-                if (isInCone(sphere1?.shape.position!, this.shape.position, 4, this.shape.getDirection(Axis.Z), 1, Math.PI / 4)) {
-                    // console.log("Successful hit");
+                var hitzone = MeshBuilder.CreateBox("hitzone" + this.name, { width: 4, height: 3, depth: 4 }, scene)
+                hitzone.position = this.shape.position.add(this.shape.getDirection(Axis.Z).normalize().scale(3))
+                hitzone.rotation = this.shape.rotation
+                hitzone.checkCollisions = false
+                hitzone.isPickable = false
+                hitzone.isVisible = false
+
+                //display hitzone bounding box
+                var bboxGizmo = new BoundingBoxGizmo()
+                bboxGizmo.attachedMesh = hitzone
+                bboxGizmo.setColor(new Color3(1, 0, 0))
+                setTimeout(() => { bboxGizmo.dispose() }, 1000)
+
+                hitzone.computeWorldMatrix(true);
+                if (sphere1 && isInHitzone(sphere1.shape, hitzone)) {
                     sphere1?.take_damage(this.shape.position, 10);
+                    //set bounding box color to green if it hits the player
+                    bboxGizmo.setColor(new Color3(0, 1, 0))
                 }
+                hitzone.dispose()
             }
         },
-            120
+            1400
         )
     }
 

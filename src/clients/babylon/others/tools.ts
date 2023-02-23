@@ -99,15 +99,11 @@ export function createWall(scene: Scene) {
 
 export function createBasicShape(avatar_username: String, scene: Scene, p: intrinsicModelProperties) {
     let model = MeshBuilder.CreateCylinder(avatar_username.toString(), { diameter: p.width ? p.width : 1, height: p.height ? p.height : 2 }, scene);
-    // let queue = MeshBuilder.CreateSphere(avatar_username + "sp2", { segments: 16, diameter: 0.3 }, scene);
 
     var myMaterial = new StandardMaterial("myMaterial", scene);
 
     myMaterial.diffuseColor = new Color3(0.3, 0.5, 1);
     model.material = myMaterial;
-    // model.addChild(queue)
-    // queue.position = new Vector3(0, 0, -0.3);
-    // queue.isPickable = false;
     return model
 }
 
@@ -171,6 +167,10 @@ export function getAvatarByName(name: string, lists = [wsClient.monster_list, ws
         avatar = list.get(name);
         if (avatar) return avatar;
     }
+}
+
+export function isInHitzone(target: AbstractMesh, hitzone: AbstractMesh) {
+    return hitzone.intersectsMesh(target)
 }
 
 export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: number, direction: Vector3, hauteur: number, angle: number) {
