@@ -20,7 +20,7 @@ export class Mage extends Player {
                 var hitzone = MeshBuilder.CreateBox("hitzone" + this.name, { width: 2, height: 2, depth: 2 }, scene)
                 hitzone.position = this.shape.position.add(this.shape.getDirection(Axis.Z).normalize().scale(2))
                 hitzone.position.y += 0.8
-                hitzone.rotation = this.shape.rotation
+                hitzone.setDirection(this.shape.getDirection(Axis.Z))
                 hitzone.checkCollisions = false
                 hitzone.isPickable = false
                 hitzone.isVisible = false

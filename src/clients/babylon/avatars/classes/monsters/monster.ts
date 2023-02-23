@@ -42,7 +42,7 @@ export class Monster extends Avatar {
             if (this) {
                 var hitzone = MeshBuilder.CreateBox("hitzone" + this.name, { width: 4, height: 3, depth: 4 }, scene)
                 hitzone.position = this.shape.position.add(this.shape.getDirection(Axis.Z).normalize().scale(3))
-                hitzone.rotation = this.shape.rotation
+                hitzone.setDirection(this.shape.getDirection(Axis.Z))
                 hitzone.checkCollisions = false
                 hitzone.isPickable = false
                 hitzone.isVisible = false
