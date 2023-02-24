@@ -45,19 +45,19 @@ export class Monster extends Avatar {
                 hitzone.setDirection(this.shape.getDirection(Axis.Z))
                 hitzone.checkCollisions = false
                 hitzone.isPickable = false
-                hitzone.isVisible = false
+                //hitzone.isVisible = false
 
                 //display hitzone bounding box
-                var bboxGizmo = new BoundingBoxGizmo()
-                bboxGizmo.attachedMesh = hitzone
-                bboxGizmo.setColor(new Color3(1, 0, 0))
-                setTimeout(() => { bboxGizmo.dispose() }, 1000)
+                // var bboxGizmo = new BoundingBoxGizmo()
+                // bboxGizmo.attachedMesh = hitzone
+                // bboxGizmo.setColor(new Color3(1, 0, 0))
+                // setTimeout(() => { bboxGizmo.dispose() }, 1000)
 
                 hitzone.computeWorldMatrix(true);
                 if (sphere1 && isInHitzone(sphere1.shape, hitzone)) {
                     sphere1?.take_damage(this.shape.position, 10);
                     //set bounding box color to green if it hits the player
-                    bboxGizmo.setColor(new Color3(0, 1, 0))
+                    // bboxGizmo.setColor(new Color3(0, 1, 0))
                 }
                 hitzone.dispose()
             }
