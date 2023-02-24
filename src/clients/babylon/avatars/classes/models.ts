@@ -1,5 +1,5 @@
 import 'babylonjs-loaders';
-import { AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
+import { AbstractMesh, AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
 import { engine, scene, startRenderLoop } from "../../main";
 import { SceneClient } from "../../scene/sceneClient";
 import { createFire, createFireAnimation } from "../../others/particules";
@@ -91,151 +91,138 @@ export class ModelEnum {
     }
 
     createModel(scene: SceneClient) {
-        // SceneLoader.ImportMesh("", "models/" + this.name + "/", this.name + "." + this.extension, scene, (loadedMeshes, loadedParticleSystems, loadedSkeletons, loadedAnimationGroups) => {
-        //     this.callback(loadedMeshes, loadedSkeletons, loadedAnimationGroups)
-        // })
         SceneLoader.LoadAssetContainer("models/" + this.className + "/", this.className + "." + this.extension, scene, (container) => {
-            this.callback(container, container.meshes, container.skeletons, container.animationGroups)
+            let meshes = container.meshes as Mesh[]
+            let animations = container.animationGroups
+            this.container = container;
+            this.rootMesh = meshes[0] as Mesh;
+            this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
+            this.rootMesh.name = this.className;
+
+            let model;
+
+            ModelEnum.loadingDone();
+
+            switch (this.className) {
+                case "Grass":
+                    meshes.forEach(m => {
+                        if (m.material) {
+                            m.material.backFaceCulling = true;
+                            m.flipFaces(true);
+                        }
+                    })
+                    meshes.shift();
+
+                    //Merging of all twig of grass in an unique mesh
+                    model = Mesh.MergeMeshes(meshes, false);
+                    if (model) {
+                        this.rootMesh = model;
+                        scene.setUpForGrass();
+                    }
+                    break;
+
+                case "Pumpkin":
+                    this.rootMesh.position.y -= 0.5;
+                    this.rootMesh.rotate(Axis.Y, Math.PI)
+
+                    //left eye
+                    let left_eye = MeshBuilder.CreateSphere(this.className + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
+                    left_eye.position = new Vector3(0.122, 1.108, 0.125);
+                    left_eye.parent = this.rootMesh;
+
+                    var eyeMaterial = new StandardMaterial(this.className + "_material", scene);
+
+                    eyeMaterial.diffuseColor = new Color3(1, 0.5, 0);
+                    eyeMaterial.emissiveColor = new Color3(1, 0.5, 0);
+                    left_eye.material = eyeMaterial;
+
+                    //right eye
+                    let right_eye = left_eye.clone(this.className + "_right_eye");
+                    right_eye.position = new Vector3(-0.11, 1.08, 0.15)
+                    break;
+
+                case "NightMonster":
+                    this.rootMesh.rotate(Axis.Y, Math.PI)
+                    this.rootMesh.scaling = new Vector3(2, 2, 2)
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    animations[0].stop();
+                    break;
+
+                case "Campfire":
+                    this.rootMesh.position = new Vector3(5, -0.5, 5);
+
+                    //campfire light
+                    let campfireLight = new PointLight(this.className + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
+                    campfireLight.diffuse = new Color3(1, 0.5, 0);
+                    campfireLight.specular = new Color3(1, 0.5, 0);
+                    campfireLight.range = 15;
+                    campfireLight.intensity = 1;
+                    campfireLight.parent = this.rootMesh;
+
+                    //campfire shadow (only over the player)
+                    shadowGeneratorCampfire = new ShadowGenerator(128, campfireLight);
+                    shadowGeneratorCampfire.filteringQuality = ShadowGenerator.QUALITY_LOW;
+                    shadowGeneratorCampfire.darkness = 0;
+
+                    //campfire light animation
+                    let animFireLight = createFireAnimation();
+                    campfireLight.animations.push(animFireLight);
+                    scene.beginAnimation(campfireLight, 0, 100, true);
+
+                    //fire effect
+                    createFire(this.rootMesh);
+                    break;
+
+                case "Mage":
+                    this.rootMesh.rotate(Axis.Y, Math.PI);
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    break;
+
+                case "Ranger":
+                    this.rootMesh.rotate(Axis.Y, Math.PI);
+                    this.rootMesh.scaling = new Vector3(1.5, 1.5, 1.5)
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    animations[0].stop();
+                    break;
+
+                case "Warrior":
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    break;
+
+                case "Rogue":
+                    this.rootMesh.rotate(Axis.Y, Math.PI);
+                    this.rootMesh.scaling = new Vector3(0.8, 0.8, 0.8)
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    break;
+
+                case "PineTree":
+                    scene.setUpForTree();
+                    break;
+
+                default:
+                    break;
+            }
         })
     }
 
     duplicate(container: AssetContainer) {
         let entries = container.instantiateModelsToScene(undefined, false, { doNotInstantiate: true });
         return entries;
-    }
-
-    callback(container: AssetContainer, meshes: any[], skeletons: Skeleton[], animations: AnimationGroup[]) {
-        this.container = container;
-        this.rootMesh = meshes[0] as Mesh;
-        this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
-        this.rootMesh.name = this.className;
-
-
-        let all_meshes = [...meshes];
-        let model;
-
-        ModelEnum.loadingDone();
-
-        switch (this.className) {
-            case "Grass":
-                all_meshes.forEach(m => {
-                    if (m.material) {
-                        m.material.backFaceCulling = true;
-                        m.flipFaces(true);
-                        //m.material.transparencyMode = 1;
-                    }
-                })
-                all_meshes.shift();
-
-                //Merging of all twig of grass in an unique mesh
-                model = Mesh.MergeMeshes(all_meshes, false);
-                if (model) {
-                    this.rootMesh = model;
-                    scene.setUpForGrass();
-                }
-                break;
-
-            case "Pumpkin":
-                this.rootMesh.position.y -= 0.5;
-                this.rootMesh.rotate(Axis.Y, Math.PI)
-
-                //TODO (monster will have cylinder as hitbox like Player currently)
-                // meshes.forEach(m => {
-                //     m.isPickable = false
-                // });
-
-                //left eye
-                let left_eye = MeshBuilder.CreateSphere(this.className + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
-                left_eye.position = new Vector3(0.122, 1.108, 0.125);
-                left_eye.parent = this.rootMesh;
-
-                var eyeMaterial = new StandardMaterial(this.className + "_material", scene);
-
-                eyeMaterial.diffuseColor = new Color3(1, 0.5, 0);
-                eyeMaterial.emissiveColor = new Color3(1, 0.5, 0);
-                left_eye.material = eyeMaterial;
-
-                //right eye
-                let right_eye = left_eye.clone(this.className + "_right_eye");
-                right_eye.position = new Vector3(-0.11, 1.08, 0.15)
-                break;
-
-            case "NightMonster":
-                this.rootMesh.rotate(Axis.Y, Math.PI)
-                this.rootMesh.scaling = new Vector3(2, 2, 2)
-                meshes.forEach(m => {
-                    m.isPickable = false;
-                    m.checkCollisions = false;
-                });
-                animations[0].stop();
-                break;
-
-            case "Campfire":
-                this.rootMesh.position = new Vector3(5, -0.5, 5);
-
-                //campfire light
-                let campfireLight = new PointLight(this.className + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
-                campfireLight.diffuse = new Color3(1, 0.5, 0);
-                campfireLight.specular = new Color3(1, 0.5, 0);
-                campfireLight.range = 15;
-                campfireLight.intensity = 1;
-                campfireLight.parent = this.rootMesh;
-
-                //campfire shadow (only over the player)
-                shadowGeneratorCampfire = new ShadowGenerator(128, campfireLight);
-                shadowGeneratorCampfire.filteringQuality = ShadowGenerator.QUALITY_LOW;
-                shadowGeneratorCampfire.darkness = 0;
-
-                //campfire light animation
-                let animFireLight = createFireAnimation();
-                campfireLight.animations.push(animFireLight);
-                scene.beginAnimation(campfireLight, 0, 100, true);
-
-                //fire effect
-                createFire(this.rootMesh);
-                break;
-
-            case "Mage":
-                this.rootMesh.rotate(Axis.Y, Math.PI);
-                meshes.forEach(m => {
-                    m.isPickable = false;
-                    m.checkCollisions = false;
-                });
-                break;
-
-            case "Ranger":
-                this.rootMesh.rotate(Axis.Y, Math.PI);
-                this.rootMesh.scaling = new Vector3(1.5, 1.5, 1.5)
-                meshes.forEach(m => {
-                    m.isPickable = false;
-                    m.checkCollisions = false;
-                });
-                animations[0].stop();
-                break;
-
-            case "Warrior":
-                meshes.forEach(m => {
-                    m.isPickable = false;
-                    m.checkCollisions = false;
-                });
-                break;
-
-            case "Rogue":
-                this.rootMesh.rotate(Axis.Y, Math.PI);
-                this.rootMesh.scaling = new Vector3(0.8, 0.8, 0.8)
-                meshes.forEach(m => {
-                    m.isPickable = false;
-                    m.checkCollisions = false;
-                });
-                break;
-
-            case "PineTree":
-                scene.setUpForTree();
-                break;
-
-            default:
-                break;
-        }
     }
 
     static createAllModels(scene: SceneClient) {

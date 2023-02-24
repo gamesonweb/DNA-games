@@ -11,7 +11,7 @@ import { scene, sphere1 } from "../main";
 import { intrinsicModelProperties } from "../avatars/classes/models";
 import { Assassin } from "../avatars/classes/heroes/assassin";
 import { Healer } from "../avatars/classes/heroes/healer";
-import { Mage } from "../avatars/classes/heroes/mage";
+import { Mage, Mage as Ranger } from "../avatars/classes/heroes/mage";
 import { Warrior } from "../avatars/classes/heroes/warrior";
 
 export function makeId(length: number) {
@@ -195,18 +195,23 @@ export function isInCone(positionTarget: Vector3, centerHitbox: Vector3, rayon: 
 }
 
 export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: string): Player {
+    console.log(playerClass);
+
     switch (playerClass) {
+        case "Mage":
+            return new Healer(scene, username)
         case "Warrior":
             return new Warrior(scene, username)
-        case "Mage":
-            return new Mage(scene, username)
         case "Archer":
             return new Archer(scene, username)
         case "Assassin":
             return new Assassin(scene, username)
+        case "Rogue":
+            return new Healer(scene, username)
+        case "Ranger":
+            return new Ranger(scene, username)
         case "Healer":
             return new Healer(scene, username)
-        default: throw new Error("Class player not implemented")
     }
 }
 

@@ -1,4 +1,4 @@
-export const PLAYER_CLASSES_LIST = ["Mage", "Warrior", "Archer", "Assassin", "Healer", "Rogue", "Ranger"] as const;
+export const PLAYER_CLASSES_LIST = ["Ranger", "Mage", "Warrior", "Archer", "Assassin", "Healer", "Rogue"] as const;
 export type PLAYER_CLASSES_TYPE = (typeof PLAYER_CLASSES_LIST)[number];
 
 export const MONSTER_CLASSES_LIST = ["Pumpkin", "NightMonster", "Warrior", "Archer", "Assassin", "Healer"] as const;
