@@ -1,11 +1,10 @@
 import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
-import { intrinsicModelProperties } from "./classes/models";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
 import { AVATAR_CLASSES } from "./classes/classesTypes";
 import { renderTimeRatio } from "../main";
-
-export type CharacterStatus = "Idle" | "Walking_fw" | "Walking_bw" | "Running" | "Punching" | "Swimming" | "Jumping" | "Falling" | "Dying" | "TakingHit"
+import { CharacterStatus } from "./classes/intrinsicProp";
+import { intrinsicModelPropertiesD } from "./classes/models";
 
 export abstract class AvatarSoft extends MeshWithHealth {
   speed_coeff: number;
@@ -28,7 +27,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   falling_counter: number;
 
   // constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
-  constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelProperties) {
+  constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelPropertiesD) {
     // super(avatar_username, scene, createBasicShape(avatar_username, scene), p);
     super(avatar_username, scene, shape, p);
 

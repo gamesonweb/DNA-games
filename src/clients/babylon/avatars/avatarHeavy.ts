@@ -1,10 +1,9 @@
 import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
-import { intrinsicModelProperties, shadowGeneratorCampfire } from "./classes/models";
+import { intrinsicModelPropertiesD, shadowGeneratorCampfire } from "./classes/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
-import { AvatarSoft, CharacterStatus } from "./avatarSoft";
-
-export type ATTACK_TYPE = "ATTACK_0" | "ATTACK_1" | "ATTACK_2" | "ATTACK_3"
+import { AvatarSoft } from "./avatarSoft";
+import { ATTACK_TYPE, CharacterStatus } from "./classes/intrinsicProp";
 
 export abstract class Avatar extends AvatarSoft {
   modelContainer: InstantiatedEntries
@@ -15,7 +14,7 @@ export abstract class Avatar extends AvatarSoft {
   weightCategory: number;
   statusStacks: { burn: number; poison: number; bleed: number; };
 
-  constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
+  constructor(scene: Scene, avatar_username: string, p: intrinsicModelPropertiesD) {
     // super(scene, avatar_username, p);
     super(scene, avatar_username, createBasicShape(avatar_username, scene, p), p)
 

@@ -8,11 +8,11 @@ import { Archer } from "../avatars/classes/heroes/archer";
 import { PLAYER_CLASSES_TYPE } from "../avatars/classes/classesTypes";
 import { Player } from "../avatars/classes/heroes/player";
 import { scene, sphere1 } from "../main";
-import { intrinsicModelProperties } from "../avatars/classes/models";
 import { Assassin } from "../avatars/classes/heroes/assassin";
 import { Healer } from "../avatars/classes/heroes/healer";
-import { Mage, Mage as Ranger } from "../avatars/classes/heroes/mage";
 import { Warrior } from "../avatars/classes/heroes/warrior";
+import { intrinsicModelProperties } from "../avatars/classes/intrinsicProp";
+import { Ranger } from "../avatars/classes/heroes/ranger";
 
 export function makeId(length: number) {
     var result = '';

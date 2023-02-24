@@ -3,11 +3,12 @@ import { Scene } from "babylonjs/scene";
 import { renderTimeRatio } from "../main";
 import { createBasicShape } from "../others/tools";
 import { AvatarSoft } from "./avatarSoft";
-import { intrinsicModelProperties } from "./classes/models";
+import { intrinsicModelProperties } from "./classes/intrinsicProp";
+import { intrinsicModelPropertiesD } from "./classes/models";
 
 export class AvatarFictive extends AvatarSoft {
 
-    constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
+    constructor(scene: Scene, avatar_username: string, p: intrinsicModelPropertiesD) {
         super(scene, avatar_username, createBasicShape(avatar_username, scene, p), p)
     }
 

@@ -6,7 +6,7 @@ import { isInCone, distance, isInHitzone } from "../../../others/tools";
 import { ModelEnum } from "../models";
 import { Player } from "./player";
 
-export class Mage extends Player {
+export class Ranger extends Player {
 
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Ranger.intrinsicParameterMesh)

@@ -227,7 +227,7 @@ export class SceneClient extends SceneSoft {
 
     private treeGeneration() {
         ModelEnum.addLoadingTask(1);
-        var model = ModelEnum.Tree.rootMesh;
+        var model = ModelEnum.PineTree.rootMesh;
 
         if (model !== undefined) {
             let childs = model.getChildMeshes() as Mesh[];

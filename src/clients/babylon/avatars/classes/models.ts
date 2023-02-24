@@ -1,76 +1,43 @@
+import { AssetContainer, Axis, Color3, InstantiatedEntries, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, StandardMaterial, Vector3 } from "babylonjs";
 import 'babylonjs-loaders';
-import { AbstractMesh, AnimationGroup, AssetContainer, Axis, Color3, InstantiatedEntries, Mesh, MeshBuilder, PointLight, SceneLoader, ShadowGenerator, Skeleton, StandardMaterial, Vector3 } from "babylonjs";
-import { engine, scene, startRenderLoop } from "../../main";
-import { SceneClient } from "../../scene/sceneClient";
-import { createFire, createFireAnimation } from "../../others/particules";
 import { sendLogin, wsClient } from "../../../connection/connectionClient";
 import { loadingRef } from '../../../reactComponents/main';
-import { ALL_CLASSES } from './classesTypes';
 import { windowExists } from '../../../reactComponents/tools';
-import { CharacterStatus } from '../avatarSoft';
-import { ATTACK_TYPE } from '../avatarHeavy';
+import { engine, startRenderLoop } from "../../main";
+import { createFire, createFireAnimation } from "../../others/particules";
+import { SceneClient } from "../../scene/sceneClient";
+import { ALL_CLASSES } from './classesTypes';
+import { intrinsicModelProperties, intrinsicModelPropertiesOptional, intrinsicProperties } from './intrinsicProp';
+
 export var shadowGeneratorCampfire: ShadowGenerator;
 
+interface duplicateModel { duplicateModel: () => InstantiatedEntries }
 
-export type intrinsicModelPropertiesOptional = {
-    height?: number;
-    width?: number;
-    healthYAbove?: number;
-    textYAbove?: number;
-    className: ALL_CLASSES;
-    health: number;
-    walkSpeed: number;
-    runningSpeed?: number;
-    weight?: number;
-    duplicateModel?: () => InstantiatedEntries;
-    attackSpeed?: Record<ATTACK_TYPE, number>
-    animations?: Record<CharacterStatus, number>
-}
-
-type extensionType = "glb" | "gltf"
-
-let buildStatusDict = (p: { [x in CharacterStatus]?: number }) => {
-    let statusDict: Record<CharacterStatus, number> = { "Idle": -1, "Dying": -1, "Falling": -1, "Jumping": -1, "Punching": -1, "Running": -1, "Walking_bw": -1, "Walking_fw": -1, "Swimming": -1, "TakingHit": -1, }
-    Object.keys(p).forEach(x => { statusDict[x as CharacterStatus] = p[x as CharacterStatus]! })
-    return statusDict
-}
-
-let buildAttackSpeed = (p: { [x in ATTACK_TYPE]?: number }) => {
-    let statusDict: Record<ATTACK_TYPE, number> = { "ATTACK_0": 1000, "ATTACK_1": 1000, "ATTACK_2": 1000, "ATTACK_3": 1000 }
-    Object.keys(p).forEach((x) => { statusDict[x as ATTACK_TYPE] = p[x as ATTACK_TYPE]! })
-    return statusDict
-}
-
-export type intrinsicModelProperties = Required<intrinsicModelPropertiesOptional>
+export type intrinsicModelPropertiesD = Readonly<Required<intrinsicModelProperties>> & duplicateModel
 
 export class ModelEnum {
     // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("gltf", 1.2, { className: "Mage", health: 90, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1500, "ATTACK_1": 1000 }) });
-    static Warrior = new ModelEnum("gltf", 1, { className: "Warrior", health: 120, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1500, "ATTACK_1": 12000 }) });
-    static Assassin = new ModelEnum("gltf", 1, { className: "Rogue", health: 90, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1200, "ATTACK_1": 10000 }) });
-    static Archer = new ModelEnum("gltf", 1, { className: "Mage", health: 80, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 800, "ATTACK_1": 9000 }) });
-    static Healer = new ModelEnum("gltf", 1, { className: "Mage", health: 100, walkSpeed: 0.15, attackSpeed: buildAttackSpeed({ "ATTACK_0": 1200, "ATTACK_1": 6000 }) });
-    static Ranger = new ModelEnum("glb", 1, {
-        className: "Ranger", healthYAbove: 2, textYAbove: 2.3, health: 90, walkSpeed: 0.15, animations: { "Walking_bw": 9, "Walking_fw": 8, "Running": 6, "Falling": 1, "Idle": 3, "Jumping": 1, "Punching": 5, "Swimming": 7, "Dying": 0, "TakingHit": 2, }
-    });
+    static Mage = new ModelEnum("Mage", 1.2, intrinsicProperties.Mage);
+    static Warrior = new ModelEnum("Warrior", 1, intrinsicProperties.Warrior);
+    static Assassin = new ModelEnum("Rogue", 1, intrinsicProperties.Assassin);
+    static Archer = new ModelEnum("Mage", 1, intrinsicProperties.Archer);
+    static Healer = new ModelEnum("Mage", 1, intrinsicProperties.Healer);
+    static PumpkinMonster = new ModelEnum("PumpkinMonster", 2, intrinsicProperties.PumpkinMonster);
 
-    static PumpkinMonster = new ModelEnum("gltf", 2, { className: "Pumpkin", healthYAbove: 1.4, textYAbove: 1.7, health: 100, walkSpeed: 0.2 });
 
-    static NightMonster = new ModelEnum("glb", 1, {
-        className: "NightMonster", height: 2, width: 2, healthYAbove: 2.8, textYAbove: 3.1, health: 100, walkSpeed: 0.2, animations: buildStatusDict({ "Running": 3, "Falling": 1, "Punching": 2, "Dying": 0, })
-    })
-
-    static Campfire = new ModelEnum("gltf", 0.25, { className: "Campfire", health: 50, walkSpeed: 2 });
-    static Grass = new ModelEnum("gltf", 0.02, { className: "Grass", health: 50, walkSpeed: 2 });
-    static Tree = new ModelEnum("gltf", 1, { className: "PineTree", health: 50, walkSpeed: 2 });
-    // static Terrain = new ModelEnum("terrain", "gltf", 10);
+    static Campfire = new ModelEnum("Campfire", 0.25, intrinsicProperties.Campfire);
+    static Grass = new ModelEnum("Grass", 0.02, intrinsicProperties.Grass);
+    static PineTree = new ModelEnum("PineTree", 1, intrinsicProperties.PineTree);
+    static Ranger = new ModelEnum("Ranger", 1, intrinsicProperties.Ranger);
+    static NightMonster = new ModelEnum("NightMonster", 1, intrinsicProperties.NightMonster)
 
     private readonly className: ALL_CLASSES;
-    private readonly extension: extensionType;
+    private readonly extension: string;
     private readonly scaling: number;
     rootMesh: Mesh | undefined
     private container: AssetContainer = new AssetContainer();
-    readonly intrinsicParameterMesh: Readonly<Required<intrinsicModelProperties>>;
+
+    readonly intrinsicParameterMesh: intrinsicModelPropertiesD;
 
     //Grounds + Water texture + All models + Grass generation
     static totalLoad: number = 0;
@@ -78,14 +45,12 @@ export class ModelEnum {
 
 
 
-    constructor(extension: extensionType, scaling: number, p: intrinsicModelPropertiesOptional) {
-        this.className = p.className;
-        this.extension = extension;
+    constructor(className: ALL_CLASSES, scaling: number, p: intrinsicModelPropertiesOptional) {
+        this.className = className;
+        this.extension = p.fileExtension;
         this.scaling = scaling;
         this.intrinsicParameterMesh = {
-            attackSpeed: buildAttackSpeed({}),
-            runningSpeed: 0.25, animations: buildStatusDict({}),
-            weight: 1, height: 2, width: 1, healthYAbove: 1, textYAbove: 1.3, ...p,
+            ...p,
             duplicateModel: () => this.duplicate(this.container)
         }
     }
@@ -121,7 +86,7 @@ export class ModelEnum {
                     }
                     break;
 
-                case "Pumpkin":
+                case "PumpkinMonster":
                     this.rootMesh.position.y -= 0.5;
                     this.rootMesh.rotate(Axis.Y, Math.PI)
 
@@ -201,20 +166,8 @@ export class ModelEnum {
                     });
                     break;
 
-                case "Rogue":
-                    this.rootMesh.rotate(Axis.Y, Math.PI);
-                    this.rootMesh.scaling = new Vector3(0.8, 0.8, 0.8)
-                    meshes.forEach(m => {
-                        m.isPickable = false;
-                        m.checkCollisions = false;
-                    });
-                    break;
-
                 case "PineTree":
                     scene.setUpForTree();
-                    break;
-
-                default:
                     break;
             }
         })
@@ -228,7 +181,7 @@ export class ModelEnum {
     static createAllModels(scene: SceneClient) {
         var allModels = [
             this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
-            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.Tree
+            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
