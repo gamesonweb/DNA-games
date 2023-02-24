@@ -88,7 +88,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       //else above the void
     } else {
       this.falling_counter--
-      if (this.falling_counter <= 0) this.update_status("Falling")
+      if (this.falling_counter <= 0 && this.getStatus() !== "TakingHit") this.update_status("Falling")
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
       // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
@@ -123,11 +123,12 @@ export abstract class AvatarSoft extends MeshWithHealth {
       let scaledDirection = direction.scale(power / 2)
       // console.log("knockback direction: ", scaledDirection);
       this.canMove = false;
+      this.canHit = false
 
       let intervalKnockBack = setInterval(() => {
         if (this && this.shape) this.shape.moveWithCollisions(scaledDirection.scale(renderTimeRatio))
       }, 100 / 6)
-      setTimeout(() => { clearInterval(intervalKnockBack); if (this) this.canMove = true }, 150 * power)
+      setTimeout(() => { clearInterval(intervalKnockBack); if (this) { this.canMove = true; this.canHit = true } }, 150 * power)
     }
   }
 

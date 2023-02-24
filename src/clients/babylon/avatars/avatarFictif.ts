@@ -24,12 +24,13 @@ export class AvatarFictive extends AvatarSoft {
             let scaledDirection = direction.scale(power / 2)
             // console.log("knockback direction: ", scaledDirection);
             this.canMove = false;
+            this.canHit = false
 
             let intervalKnockBack = setInterval(() => {
                 if (this && this.shape) this.shape.moveWithCollisions(scaledDirection.scale(renderTimeRatio))
             }, 100 / 6)
             setTimeout(() => { clearInterval(intervalKnockBack) }, 150 * power)
-            setTimeout(() => { if (this) this.canMove = true }, 150 * power + 100)
+            setTimeout(() => { if (this) { this.canMove = true; this.canHit = true } }, 150 * power + 100)
         }
     }
 }

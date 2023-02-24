@@ -1,8 +1,8 @@
 import { Axis, BoundingBoxGizmo, Color3, MeshBuilder, Scene } from "babylonjs";
+import { Vector3 } from "babylonjs/index";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
 import { isInCone, distance, isInHitzone } from "../../../others/tools";
-import { Fireball } from "../../weapons/projectiles/fireball";
 import { ModelEnum } from "../models";
 import { Player } from "./player";
 
@@ -71,5 +71,14 @@ export class Mage extends Player {
                 }
             })
         }
+    }
+
+    take_damage(source: Vector3, amount: number, knockback_power?: number): void {
+        if (!this.takeHits) return
+        this.update_status("TakingHit")
+        setTimeout(() => {
+            if (this && this.getStatus() === "TakingHit") this.update_status("Idle")
+        }, 300)
+        super.take_damage(source, amount, knockback_power)
     }
 }
