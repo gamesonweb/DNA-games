@@ -1,6 +1,6 @@
 import { Animation, AnimationGroup, Color3, Vector3 } from "babylonjs";
 import { scene } from "../main";
-import { hemiLight, light, skyMaterial, water } from "./sceneClient";
+import { hemiLight, light, nightskyMaterial, skyMaterial, water } from "./sceneClient";
 import { hour } from "../others/time";
 export const ratio = 0.65;
 export var animations: AnimationGroup;
@@ -29,6 +29,9 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     //Light shit
     var animationLightShift = createLightShift();
 
+    //night sky alpha
+    var animationNightAlpha = createNightSkyAlphaAnimation();
+
     //HemiLigh intensity
     var animationHemiLight = createHemiLightAnimation();
 
@@ -44,6 +47,7 @@ export function createDayNightCycle(origin: number): AnimationGroup {
     animationGroup.addTargetedAnimation(animationLightSpecularColor, light);
     animationGroup.addTargetedAnimation(animationLightDiffuseColor, light);
     animationGroup.addTargetedAnimation(animationLightShift, light);
+    animationGroup.addTargetedAnimation(animationNightAlpha, nightskyMaterial);
     animationGroup.addTargetedAnimation(animationHemiLight, hemiLight);
     animationGroup.addTargetedAnimation(animationTide, water);
     animationGroup.normalize(0, 2400 * ratio);
@@ -199,6 +203,22 @@ function createLightShift() {
 
     animationLight.setKeys(keys);
     return animationLight
+}
+
+function createNightSkyAlphaAnimation() {
+    var animationHemiLight = new Animation("animationNightAlpha", "alpha", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    var keys = [];
+
+    keys.push({ frame: 0, value: 1 });
+    keys.push({ frame: 400 * ratio, value: 1 });
+    keys.push({ frame: 600 * ratio, value: 0 });
+    keys.push({ frame: 1800 * ratio, value: 0 });
+    keys.push({ frame: 2000 * ratio, value: 0 });
+    keys.push({ frame: 2400 * ratio, value: 1 });
+
+    animationHemiLight.setKeys(keys);
+    return animationHemiLight
 }
 
 function createHemiLightAnimation() {

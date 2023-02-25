@@ -1,11 +1,11 @@
-import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
+import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Material, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
 import { SkyMaterial, WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
 import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
-import { TextureDome } from "babylonjs/Helpers/textureDome";
+
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var water: Mesh;
@@ -18,6 +18,7 @@ export var pos_volcan: Vector3
 export var pos_mossy: Vector3
 
 export var skyMaterial: SkyMaterial
+export var nightskyMaterial: StandardMaterial
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
@@ -43,6 +44,7 @@ export class SceneClient extends SceneSoft {
         this.fogDensity = 0.0005;
 
         this.createSkybox();
+        this.createNightBox();
 
         // this.createSprites();
 
@@ -105,8 +107,20 @@ export class SceneClient extends SceneSoft {
 
         const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, this);
         skybox.material = skyMaterial;
-
         skybox.applyFog = false
+    }
+
+    createNightBox() {
+        nightskyMaterial = new StandardMaterial("skyBox", this);
+        nightskyMaterial.backFaceCulling = false;
+        nightskyMaterial.reflectionTexture = new Texture("./img/NightSkybox.png", scene, true);
+        nightskyMaterial.reflectionTexture.coordinatesMode = Texture.FIXED_EQUIRECTANGULAR_MODE;
+        nightskyMaterial.disableLighting = true;
+        nightskyMaterial.alpha = 0
+
+        const nightbox = MeshBuilder.CreateBox("nightsky", { size: 8000.0 }, this);
+        nightbox.material = nightskyMaterial;
+        nightbox.applyFog = false
     }
 
     createLight() {
