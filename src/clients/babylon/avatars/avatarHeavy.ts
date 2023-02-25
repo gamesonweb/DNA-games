@@ -62,12 +62,12 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   hit(hitModeId: ATTACK_TYPE, onlyDisplay = false) {
-    if (!this.attackIsReady(hitModeId) || this.canHit === false) return
+    if (!this.attackIsReady(hitModeId)) return
     this.attackDict[hitModeId](onlyDisplay)
   }
 
   attackIsReady(id: ATTACK_TYPE) {
-    if (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.intrinsicModelProperties.attackSpeed[id] < Date.now()) {
+    if (this.canHit && !this.isInAir() && (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.intrinsicModelProperties.attackSpeed[id] < Date.now())) {
       this.tableAttackDate[id] = Date.now()
       return true
     }
