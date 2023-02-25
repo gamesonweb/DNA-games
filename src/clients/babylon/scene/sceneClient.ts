@@ -1,10 +1,11 @@
 import { Axis, BlurPostProcess, DirectionalLight, Engine, HemisphericLight, ImageProcessingPostProcess, Matrix, Mesh, MeshBuilder, Quaternion, SceneLoader, ShadowGenerator, Sprite, SpriteManager, StandardMaterial, Texture, Vector2, Vector3 } from "babylonjs";
-import { WaterMaterial } from "babylonjs-materials";
+import { SkyMaterial, WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
 import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
+import { TextureDome } from "babylonjs/Helpers/textureDome";
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
 export var water: Mesh;
@@ -15,6 +16,8 @@ export var pos_snow: Vector3
 // export var pos_lowPo: Vector3
 export var pos_volcan: Vector3
 export var pos_mossy: Vector3
+
+export var skyMaterial: SkyMaterial
 
 export class SceneClient extends SceneSoft {
     shadowGenerator: ShadowGenerator | null;
@@ -35,6 +38,12 @@ export class SceneClient extends SceneSoft {
         this.shadowGenerator = this.createShadows();
         this.shadowGenerator.addShadowCaster(createWall(this));
         shadowGenerator = this.shadowGenerator;
+
+        this.fogMode = BABYLON.Scene.FOGMODE_EXP;
+        this.fogDensity = 0.0005;
+
+        this.createSkybox();
+
         // this.createSprites();
 
         ModelEnum.createAllModels(this);
@@ -87,6 +96,18 @@ export class SceneClient extends SceneSoft {
 
         return assetsManager;
     }*/
+
+    createSkybox() {
+        skyMaterial = new SkyMaterial("skyMaterial", this);
+        skyMaterial.backFaceCulling = false;
+        skyMaterial.inclination = 0
+        skyMaterial.rayleigh = 10
+
+        const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, this);
+        skybox.material = skyMaterial;
+
+        skybox.applyFog = false
+    }
 
     createLight() {
         light = new DirectionalLight("light1", new Vector3(-1, -2, -1), this);
