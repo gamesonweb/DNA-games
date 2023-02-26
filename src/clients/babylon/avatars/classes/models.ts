@@ -28,6 +28,8 @@ export class ModelEnum {
     static Campfire = new ModelEnum("Campfire", 0.25, intrinsicProperties.Campfire);
     static Grass = new ModelEnum("Grass", 0.02, intrinsicProperties.Grass);
     static PineTree = new ModelEnum("PineTree", 1, intrinsicProperties.PineTree);
+    static Cactus = new ModelEnum("Cactus", 0.4, intrinsicProperties.Cactus)
+
     static Ranger = new ModelEnum("Ranger", 1, intrinsicProperties.Ranger);
     static NightMonster = new ModelEnum("NightMonster", 1, intrinsicProperties.NightMonster)
 
@@ -169,6 +171,10 @@ export class ModelEnum {
                 case "PineTree":
                     scene.setUpForTree();
                     break;
+
+                case "Cactus":
+                    scene.setUpForCactus();
+                    break;
             }
         })
     }
@@ -181,7 +187,7 @@ export class ModelEnum {
     static createAllModels(scene: SceneClient) {
         var allModels = [
             this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
-            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree
+            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));

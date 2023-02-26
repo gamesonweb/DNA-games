@@ -1,4 +1,5 @@
-import { Vector3 } from "babylonjs";
+import { ImageProcessingPostProcess, Vector3 } from "babylonjs";
+import { scene } from "../../../main";
 import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
@@ -7,7 +8,9 @@ export abstract class Player extends Avatar {
         if (!this.takeHits) return
         this.healthMinus(amount);
         let direction = this.shape.position.subtract(source)
-        this.knockback(direction, knockback_power / this.weightCategory)
+        this.knockback(direction.normalize(), knockback_power / this.weightCategory)
+
+        scene.triggerVignetteHit()
     }
 
     // addBullet(displayOnly = false) {

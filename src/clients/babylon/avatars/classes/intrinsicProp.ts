@@ -105,6 +105,12 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     walkSpeed: 2
   },
 
+  Cactus: {
+    fileExtension: "glb",
+    health: 50,
+    walkSpeed: 2
+  },
+
   Ranger: {
     fileExtension: "glb",
     healthYAbove: 2,

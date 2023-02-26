@@ -5,6 +5,7 @@ import { scene, sphere1 } from "../main";
 import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
+import { Animation, AnimationGroup } from "babylonjs";
 
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -26,8 +27,11 @@ export class SceneClient extends SceneSoft {
     waterMaterial: WaterMaterial | undefined;
     waterBlurPostProcess: BlurPostProcess | undefined;
     waterBluePostProcess: ImageProcessingPostProcess | undefined;
+    hitVignetteAnimation: AnimationGroup | undefined;
+    hitRedPostProcess: ImageProcessingPostProcess | undefined;
     grassTaskCounter: number;
     treeTaskCounter: number;
+    cactusTaskCounter: number;
     projectileList: Projectile[];
 
     constructor(engine: Engine) {
@@ -53,6 +57,7 @@ export class SceneClient extends SceneSoft {
         this.collisionsEnabled = true;
         this.grassTaskCounter = 0;
         this.treeTaskCounter = 0;
+        this.cactusTaskCounter = 0;
 
         this.beforeRender = () => {
             if (sphere1) {
@@ -78,7 +83,11 @@ export class SceneClient extends SceneSoft {
                         this.waterBlurPostProcess.dispose();
                         this.waterBlurPostProcess = undefined;
                     }
-                    if (this.waterBluePostProcess !== undefined) this.waterBluePostProcess.vignetteEnabled = false;
+                    if (this.waterBluePostProcess !== undefined) {
+                        this.waterBluePostProcess.vignetteEnabled = false;
+                        this.waterBluePostProcess.dispose();
+                        this.waterBluePostProcess = undefined;
+                    }
                 }
             }
         }
@@ -236,6 +245,10 @@ export class SceneClient extends SceneSoft {
         if (!(++this.treeTaskCounter < 1)) this.treeGeneration()
     }
 
+    setUpForCactus() {
+        if (!(++this.cactusTaskCounter < 1)) this.cactusGeneration()
+    }
+
     private grassGeneration() {
         ModelEnum.addLoadingTask(1);
         var model = ModelEnum.Grass.rootMesh;
@@ -355,6 +368,49 @@ export class SceneClient extends SceneSoft {
 
     }
 
+    private cactusGeneration() {
+        ModelEnum.addLoadingTask(1);
+        var model = ModelEnum.Cactus.rootMesh;
+
+        if (model !== undefined) {
+            let childs = model.getChildMeshes() as Mesh[];
+
+            let mergedmodel = Mesh.MergeMeshes(childs);
+
+            mergedmodel?.simplify(
+                [
+                    { quality: 0.2, distance: 50, optimizeMesh: true },
+                    { quality: 0.05, distance: 100, optimizeMesh: true },
+                ],
+                false,
+                BABYLON.SimplificationType.QUADRATIC,
+                function () {
+                    console.log("LOD cactus finished");
+                },
+            );
+
+            /* GENERATE RANDOM CACTUS POSITION */
+
+            for (let i = 0; i < 10; i++) {
+                let x = Math.random() * 150 - 75 + 400;
+                let z = Math.random() * 150 - 75 + 100;
+                let height = this.getHeightAtPoint(x, z);
+                console.log("{ x: ", (Math.round(x * 100) / 100).toFixed(2), ", z: ", (Math.round(z * 100) / 100).toFixed(2), " }");
+
+                if (height !== undefined && model !== undefined && mergedmodel) {
+                    this.createInstance(mergedmodel, x, height, z)
+                    var collider = MeshBuilder.CreateCylinder("cactus", { height: 2, diameter: 2 }, scene)
+                    collider.position = new Vector3(x, height + 1, z)
+                    collider.checkCollisions = true
+                    collider.isVisible = false
+                }
+
+            }
+
+            ModelEnum.loadingDone();
+        }
+    }
+
     private createThinInstance(model: Mesh, x: number, height: number, z: number, transformMatrix?: Matrix): Matrix {
         if (transformMatrix !== undefined) {
             model.thinInstanceAdd(transformMatrix);
@@ -397,5 +453,41 @@ export class SceneClient extends SceneSoft {
         instance.doNotSyncBoundingInfo = true;
 
         return { scale: scalingVector, rotation: rotationQuaternion };
+    }
+
+    createVignetteHitAnimation() {
+        var animationVignette = new Animation("animationVignette", "vignetteWeight", 60, Animation.ANIMATIONTYPE_FLOAT,
+            Animation.ANIMATIONLOOPMODE_CYCLE);
+
+        var keys = [];
+
+        keys.push({ frame: 0, value: 0 });
+        keys.push({ frame: 8, value: 3 });
+        keys.push({ frame: 10, value: 0 });
+
+        animationVignette.setKeys(keys);
+        return animationVignette
+    }
+
+    triggerVignetteHit() {
+        if (this.waterBluePostProcess !== undefined) return
+
+        this.hitRedPostProcess?.dispose()
+        this.hitVignetteAnimation?.dispose()
+
+        this.hitRedPostProcess = new ImageProcessingPostProcess("processing", 1.0, this.activeCamera);
+        this.hitRedPostProcess.vignetteWeight = 0;
+        this.hitRedPostProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
+        this.hitRedPostProcess.vignetteEnabled = true;
+
+        this.hitVignetteAnimation = new AnimationGroup("vignetteHitAnimGroup");
+        this.hitVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation(), this.hitRedPostProcess);
+
+        this.hitVignetteAnimation.goToFrame(0)
+        this.hitVignetteAnimation.play(false)
+        this.hitVignetteAnimation.onAnimationGroupEndObservable.add(() => {
+            this.hitVignetteAnimation?.dispose()
+            this.hitRedPostProcess?.dispose()
+        })
     }
 }
