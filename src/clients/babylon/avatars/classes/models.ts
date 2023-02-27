@@ -6,7 +6,6 @@ import { windowExists } from '../../../reactComponents/tools';
 import { engine, startRenderLoop } from "../../main";
 import { createFire, createFireAnimation } from "../../others/particules";
 import { SceneClient } from "../../scene/sceneClient";
-import { ALL_CLASSES } from './classesTypes';
 import { intrinsicModelProperties, intrinsicModelPropertiesOptional, intrinsicProperties } from './intrinsicProp';
 
 export var shadowGeneratorCampfire: ShadowGenerator;
@@ -16,26 +15,22 @@ interface duplicateModel { duplicateModel: () => InstantiatedEntries }
 export type intrinsicModelPropertiesD = Readonly<Required<intrinsicModelProperties>> & duplicateModel
 
 export class ModelEnum {
-    // The className attribute is used to find the path of the object inside public/model/$className/$className
-    static Mage = new ModelEnum("Mage", 1.2, intrinsicProperties.Mage);
-    static Warrior = new ModelEnum("Warrior", 1, intrinsicProperties.Warrior);
-    static Assassin = new ModelEnum("Rogue", 1, intrinsicProperties.Assassin);
-    static Archer = new ModelEnum("Mage", 1, intrinsicProperties.Archer);
-    static Healer = new ModelEnum("Mage", 1, intrinsicProperties.Healer);
-    static PumpkinMonster = new ModelEnum("PumpkinMonster", 2, intrinsicProperties.PumpkinMonster);
+    static Mage = new ModelEnum(intrinsicProperties.Mage);
+    static Warrior = new ModelEnum(intrinsicProperties.Warrior);
+    // static Assassin = new ModelEnum(intrinsicProperties.Assassin);
+    // static Archer = new ModelEnum(intrinsicProperties.Archer);
+    // static Healer = new ModelEnum(intrinsicProperties.Healer);
+    static PumpkinMonster = new ModelEnum(intrinsicProperties.PumpkinMonster);
 
 
-    static Campfire = new ModelEnum("Campfire", 0.25, intrinsicProperties.Campfire);
-    static Grass = new ModelEnum("Grass", 0.02, intrinsicProperties.Grass);
-    static PineTree = new ModelEnum("PineTree", 1, intrinsicProperties.PineTree);
-    static Cactus = new ModelEnum("Cactus", 0.4, intrinsicProperties.Cactus)
+    static Campfire = new ModelEnum(intrinsicProperties.Campfire);
+    static Grass = new ModelEnum(intrinsicProperties.Grass);
+    static PineTree = new ModelEnum(intrinsicProperties.PineTree);
+    static Cactus = new ModelEnum(intrinsicProperties.Cactus)
 
-    static Ranger = new ModelEnum("Ranger", 1, intrinsicProperties.Ranger);
-    static NightMonster = new ModelEnum("NightMonster", 1, intrinsicProperties.NightMonster)
+    static Ranger = new ModelEnum(intrinsicProperties.Ranger);
+    static NightMonster = new ModelEnum(intrinsicProperties.NightMonster)
 
-    private readonly className: ALL_CLASSES;
-    private readonly extension: string;
-    private readonly scaling: number;
     rootMesh: Mesh | undefined
     private container: AssetContainer = new AssetContainer();
 
@@ -47,10 +42,7 @@ export class ModelEnum {
 
 
 
-    constructor(className: ALL_CLASSES, scaling: number, p: intrinsicModelPropertiesOptional) {
-        this.className = className;
-        this.extension = p.fileExtension;
-        this.scaling = scaling;
+    constructor(p: intrinsicModelPropertiesOptional) {
         this.intrinsicParameterMesh = {
             ...p,
             duplicateModel: () => this.duplicate(this.container)
@@ -58,19 +50,20 @@ export class ModelEnum {
     }
 
     createModel(scene: SceneClient) {
-        SceneLoader.LoadAssetContainer("models/" + this.className + "/", this.className + "." + this.extension, scene, (container) => {
+        const { className, scaling, fileExtension } = this.intrinsicParameterMesh
+        SceneLoader.LoadAssetContainer("models/" + className + "/", className + "." + fileExtension, scene, (container) => {
             let meshes = container.meshes as Mesh[]
             let animations = container.animationGroups
             this.container = container;
             this.rootMesh = meshes[0] as Mesh;
-            this.rootMesh.scaling = new Vector3(this.scaling, this.scaling, this.scaling);
-            this.rootMesh.name = this.className;
+            this.rootMesh.scaling = new Vector3(scaling, scaling, scaling);
+            this.rootMesh.name = className;
 
             let model;
 
             ModelEnum.loadingDone();
 
-            switch (this.className) {
+            switch (className) {
                 case "Grass":
                     meshes.forEach(m => {
                         if (m.material) {
@@ -93,18 +86,18 @@ export class ModelEnum {
                     this.rootMesh.rotate(Axis.Y, Math.PI)
 
                     //left eye
-                    let left_eye = MeshBuilder.CreateSphere(this.className + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
+                    let left_eye = MeshBuilder.CreateSphere(className + "_left_eye", { segments: 8, diameter: 0.06 }, scene);
                     left_eye.position = new Vector3(0.122, 1.108, 0.125);
                     left_eye.parent = this.rootMesh;
 
-                    var eyeMaterial = new StandardMaterial(this.className + "_material", scene);
+                    var eyeMaterial = new StandardMaterial(className + "_material", scene);
 
                     eyeMaterial.diffuseColor = new Color3(1, 0.5, 0);
                     eyeMaterial.emissiveColor = new Color3(1, 0.5, 0);
                     left_eye.material = eyeMaterial;
 
                     //right eye
-                    let right_eye = left_eye.clone(this.className + "_right_eye");
+                    let right_eye = left_eye.clone(className + "_right_eye");
                     right_eye.position = new Vector3(-0.11, 1.08, 0.15)
                     break;
 
@@ -122,7 +115,7 @@ export class ModelEnum {
                     this.rootMesh.position = new Vector3(5, -0.5, 5);
 
                     //campfire light
-                    let campfireLight = new PointLight(this.className + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
+                    let campfireLight = new PointLight(className + "_light", this.rootMesh.position.add(new Vector3(0, 0.5, 0.8)), scene);
                     campfireLight.diffuse = new Color3(1, 0.5, 0);
                     campfireLight.specular = new Color3(1, 0.5, 0);
                     campfireLight.range = 15;
@@ -186,7 +179,8 @@ export class ModelEnum {
 
     static createAllModels(scene: SceneClient) {
         var allModels = [
-            this.Mage, this.Warrior, this.Assassin, this.Archer, this.Healer, this.Ranger,
+            this.Mage, this.Warrior, this.Ranger,
+            // this.Assassin, this.Archer, this.Healer, 
             this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus
         ];
         ModelEnum.addLoadingTask(allModels.length)

@@ -24,13 +24,14 @@ interface intrinsicModelPropertiesOptional1 {
   healthYAbove?: number;
   textYAbove?: number;
   health: number;
-  walkSpeed: number;
+  walkSpeed?: number;
   runningSpeed?: number;
   weight?: number;
   attackSpeed?: { [x in ATTACK_TYPE]?: number }
   animations?: { [x in CharacterStatus]?: number },
   fileExtension: string,
-  className?: ALL_CLASSES
+  className?: ALL_CLASSES,
+  scaling: number
 }
 
 interface recordAttackAnimation {
@@ -48,67 +49,77 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     className: "Mage",
     health: 90,
     walkSpeed: 0.15,
-    attackSpeed: { ATTACK_0: 1500, ATTACK_1: 1000 }
+    attackSpeed: { ATTACK_0: 1500, ATTACK_1: 1000 },
+    scaling: 1.2
   },
 
   Warrior: {
     fileExtension: "gltf",
     health: 120,
     walkSpeed: 0.15,
-    attackSpeed: buildAttackSpeed({ ATTACK_0: 1500, ATTACK_1: 12000 })
+    attackSpeed: { ATTACK_0: 1500, ATTACK_1: 12000 },
+    scaling: 1
   },
 
-  Assassin: {
-    fileExtension: "gltf",
-    health: 90,
-    walkSpeed: 0.15,
-    attackSpeed: { ATTACK_0: 1200, ATTACK_1: 10000 }
-  },
+  // Assassin: {
+  //   fileExtension: "gltf",
+  //   health: 90,
+  //   walkSpeed: 0.15,
+  //   attackSpeed: { ATTACK_0: 1200, ATTACK_1: 10000 },
+  //   scaling: 1
+  // },
 
-  Archer: {
-    fileExtension: "gltf",
-    health: 80,
-    walkSpeed: 0.15,
-    attackSpeed: { ATTACK_0: 800, ATTACK_1: 9000 }
-  },
+  // Archer: {
+  //   fileExtension: "gltf",
+  //   health: 80,
+  //   walkSpeed: 0.15,
+  //   attackSpeed: { ATTACK_0: 800, ATTACK_1: 9000 },
+  //   scaling: 1
+  // },
 
-  Healer: {
-    fileExtension: "gltf",
-    health: 100,
-    walkSpeed: 0.15,
-    attackSpeed: { ATTACK_0: 1200, ATTACK_1: 6000 }
-  },
+  // Healer: {
+  //   fileExtension: "gltf",
+  //   health: 100,
+  //   walkSpeed: 0.15,
+  //   attackSpeed: { ATTACK_0: 1200, ATTACK_1: 6000 },
+  //   scaling: 1
+  // },
 
   PumpkinMonster: {
     fileExtension: "gltf",
     healthYAbove: 1.4,
     textYAbove: 1.7,
     health: 100,
-    walkSpeed: 0.2
+    walkSpeed: 0.2,
+    scaling: 2
   },
 
   Campfire: {
     fileExtension: "gltf",
     health: 50,
-    walkSpeed: 2
+    walkSpeed: 2,
+    scaling: 0.25
   },
 
   Grass: {
     fileExtension: "gltf",
     health: 50,
-    walkSpeed: 2
+    walkSpeed: 2,
+    scaling: 0.02
   },
 
   PineTree: {
     fileExtension: "gltf",
     health: 50,
-    walkSpeed: 2
+    walkSpeed: 2,
+    scaling: 1
   },
 
   Cactus: {
     fileExtension: "glb",
     health: 50,
-    walkSpeed: 2
+    walkSpeed: 2,
+    scaling: 0.4
   },
 
   Ranger: {
@@ -121,7 +132,8 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
       Walking_bw: 9, Walking_fw: 8, Running: 6,
       Falling: 1, Idle: 3, Jumping: 1, Punching: 5,
       Swimming: 7, Dying: 0, TakingHit: 2,
-    }
+    },
+    scaling: 1
   },
 
   NightMonster: {
@@ -134,19 +146,21 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     walkSpeed: 0.2,
     animations: {
       Running: 3, Falling: 1, Punching: 2, Dying: 0,
-    }
+    },
+    scaling: 1
   },
 
-  Rogue: {
-    fileExtension: "gltf",
-    health: 90,
-    walkSpeed: 0.15,
-    attackSpeed: { "ATTACK_0": 1200, "ATTACK_1": 10000 }
-  }
+  // Rogue: {
+  //   fileExtension: "gltf",
+  //   health: 90,
+  //   walkSpeed: 0.15,
+  //   attackSpeed: { "ATTACK_0": 1200, "ATTACK_1": 10000 },
+  //   scaling: 1
+  // }
 }
 
 let defaultValues: intrinsicModelProperties = {
-  attackSpeed: buildAttackSpeed({}),
+  scaling: 1, attackSpeed: buildAttackSpeed({}),
   runningSpeed: 0.25, animations: buildStatusDict({}),
   weight: 1, height: 2, width: 1, healthYAbove: 1, textYAbove: 1.3,
   walkSpeed: 3, health: 2000, fileExtension: "glb", className: "Mage"

@@ -4,15 +4,13 @@ import { wsClient } from "../../connection/connectionClient";
 import { windowExists } from "../../reactComponents/tools";
 import { Avatar } from "../avatars/avatarHeavy";
 import { AvatarSoft } from "../avatars/avatarSoft";
-import { Archer } from "../avatars/classes/heroes/archer";
 import { PLAYER_CLASSES_TYPE } from "../avatars/classes/classesTypes";
 import { Player } from "../avatars/classes/heroes/player";
 import { scene, sphere1 } from "../main";
-import { Assassin } from "../avatars/classes/heroes/assassin";
-import { Healer } from "../avatars/classes/heroes/healer";
 import { Warrior } from "../avatars/classes/heroes/warrior";
 import { intrinsicModelProperties } from "../avatars/classes/intrinsicProp";
 import { Ranger } from "../avatars/classes/heroes/ranger";
+import { Mage } from "../avatars/classes/heroes/mage";
 
 export function makeId(length: number) {
     var result = '';
@@ -199,19 +197,11 @@ export function playerClassCreator(playerClass: PLAYER_CLASSES_TYPE, username: s
 
     switch (playerClass) {
         case "Mage":
-            return new Healer(scene, username)
+            return new Mage(scene, username)
         case "Warrior":
             return new Warrior(scene, username)
-        case "Archer":
-            return new Archer(scene, username)
-        case "Assassin":
-            return new Assassin(scene, username)
-        case "Rogue":
-            return new Healer(scene, username)
         case "Ranger":
             return new Ranger(scene, username)
-        case "Healer":
-            return new Healer(scene, username)
     }
 }
 

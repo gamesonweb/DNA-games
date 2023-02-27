@@ -1,4 +1,4 @@
-import { ImageProcessingPostProcess, Vector3 } from "babylonjs";
+import { Vector3 } from "babylonjs";
 import { scene } from "../../../main";
 import { Avatar } from "../../avatarHeavy";
 

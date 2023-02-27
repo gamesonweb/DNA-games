@@ -1,4 +1,4 @@
-import { Axis, BoundingBoxGizmo, Color3, MeshBuilder, Scene, Vector3 } from "babylonjs";
+import { Axis, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
