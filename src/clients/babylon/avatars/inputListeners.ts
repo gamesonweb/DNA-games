@@ -121,11 +121,11 @@ export function pointerLockAndMouseMove() {
     canvas.addEventListener("mousemove", (evt) => {
         if (sphere1) {
             if (evt.movementX > 0) {
-                sphere1.shape.rotate(Axis.Y, Math.sqrt(evt.movementX) / 200);
+                sphere1.rotatePlayer(Axis.Y, Math.sqrt(evt.movementX) / 200);
                 sphere1.didSomething = true;
             }
             if (evt.movementX < 0) {
-                sphere1.shape.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
+                sphere1.rotatePlayer(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
                 sphere1.didSomething = true;
             }
         }
@@ -183,9 +183,9 @@ export function inputEffects(player: Player) {
 
     //player rotation
     if (inputStates.rotateRight || inputStates.goRight) {
-        player.shape.rotate(Axis.Y, +0.03)
+        player.rotatePlayer(Axis.Y, +0.03)
     } else if (inputStates.rotateLeft || inputStates.goLeft) {
-        player.shape.rotate(Axis.Y, -0.03)
+        player.rotatePlayer(Axis.Y, -0.03)
     }
 
     //player's attack_0

@@ -139,7 +139,8 @@ export abstract class Avatar extends AvatarSoft {
     }
   }
 
-  update_status(new_status: CharacterStatus) {
+  update_status(new_status: CharacterStatus, loopAnim = true, force = false) {
+    if (!force && this.status === "Dying") return
     if (new_status !== this.status) {
       var animation_indice = this.get_status_indice(this.status)
       if (animation_indice !== -1) {
@@ -149,7 +150,7 @@ export abstract class Avatar extends AvatarSoft {
       if (animation_indice !== -1) {
         this.modelContainer.animationGroups[animation_indice].reset()
         this.modelContainer.animationGroups[animation_indice].play()
-        this.modelContainer.animationGroups[animation_indice].loopAnimation = true
+        this.modelContainer.animationGroups[animation_indice].loopAnimation = loopAnim
       }
     }
     super.update_status(new_status)

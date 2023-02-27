@@ -53,7 +53,8 @@ export abstract class MeshWithHealth implements Health {
   }
 
   healthSet(newHealth: number | undefined) {
-    this.currentHealth = Math.min(this.maxHealth, Math.max(this.minHealth, newHealth || this.currentHealth))
+    if (newHealth === undefined) newHealth = this.currentHealth
+    this.currentHealth = Math.min(this.maxHealth, Math.max(this.minHealth, newHealth))
     this.healthBar.updateHealthBar(this.healthPercentage())
     return this.currentHealth;
   }

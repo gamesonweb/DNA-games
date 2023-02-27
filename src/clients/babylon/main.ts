@@ -85,7 +85,6 @@ export function set_my_sphere() {
     // cameraBuilder.maxZ = 100;
     scene.activeCamera = cameraBuilder;
 
-
   }
 }
 
