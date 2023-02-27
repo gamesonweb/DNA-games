@@ -10,18 +10,21 @@ export abstract class Player extends Avatar {
         let direction = this.shape.position.subtract(source)
         this.knockback(direction.normalize(), knockback_power / this.weightCategory)
 
-        scene.triggerVignetteHit()
+        scene.triggerPostProcessAnimation("hit", scene.hitVignetteAnimation)
 
         if (this.currentHealth <= 0) {
             this.update_status("Dying", false)
             this.takeHits = false
-            setTimeout(() => { if (this) this.respawn() }, 5000)
+            setTimeout(() => { if (scene) scene.triggerPostProcessAnimation("fadin", scene.fadinVignetteAnimation) }, 3000)
+            setTimeout(() => { if (this) this.respawn() }, 8000)
         }
     }
 
     respawn() {
         this.healthSet(this.maxHealth)
         this.takeHits = true
+        let spawnPosHeight = scene.getHeightAtPoint(0, 0)
+        this.shape.setAbsolutePosition(new Vector3(0, spawnPosHeight ? spawnPosHeight + 2 : 2, 0))
         this.update_status("Idle", true, true)
     }
 

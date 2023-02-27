@@ -6,6 +6,7 @@ import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
 import { Animation, AnimationGroup } from "babylonjs";
+import { IAnimationKey } from "babylonjs/Animations/animationKey";
 
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -28,7 +29,10 @@ export class SceneClient extends SceneSoft {
     waterBlurPostProcess: BlurPostProcess | undefined;
     waterBluePostProcess: ImageProcessingPostProcess | undefined;
     hitVignetteAnimation: AnimationGroup | undefined;
-    hitRedPostProcess: ImageProcessingPostProcess | undefined;
+    // hitRedPostProcess: ImageProcessingPostProcess | undefined;
+    fadinVignetteAnimation: AnimationGroup | undefined;
+    // fadinPostProcess: ImageProcessingPostProcess | undefined;
+    postProcess: ImageProcessingPostProcess | undefined;
     grassTaskCounter: number;
     treeTaskCounter: number;
     cactusTaskCounter: number;
@@ -456,42 +460,62 @@ export class SceneClient extends SceneSoft {
     }
 
     setPostProcessFilters() {
-        this.hitRedPostProcess = new ImageProcessingPostProcess("processing", 1.0, this.activeCamera);
-        this.hitRedPostProcess.vignetteWeight = 0;
-        this.hitRedPostProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
-        this.hitRedPostProcess.vignetteEnabled = true;
-
-        this.hitVignetteAnimation = new AnimationGroup("vignetteHitAnimGroup");
-        this.hitVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation(), this.hitRedPostProcess);
+        //Post Process when taking damage
+        this.postProcess = new ImageProcessingPostProcess("postProcess", 1.0, this.activeCamera);
 
         this.executeWhenReady(() => {
-            this.switchPostProcessStatus(this.hitRedPostProcess, false)
+            this.switchPostProcessStatus(this.postProcess, false)
         })
+
+        this.hitVignetteAnimation = new AnimationGroup("vignetteHitAnimGroup");
+        this.hitVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation([{ frame: 0, value: 0 }, { frame: 8, value: 3 }, { frame: 10, value: 0 }], "vignetteWeight"), this.postProcess);
+
+        this.fadinVignetteAnimation = new AnimationGroup("vignetteFadinAnimGroup");
+        this.fadinVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation([{ frame: 0, value: 1 }, { frame: 240, value: 0 }, { frame: 360, value: 0 }, { frame: 500, value: 1 }], "exposure"), this.postProcess);
     }
 
-    createVignetteHitAnimation() {
-        var animationVignette = new Animation("animationVignette", "vignetteWeight", 60, Animation.ANIMATIONTYPE_FLOAT,
+    setPostProcessTo(type: string) {
+        if (this.postProcess === undefined) return
+        switch (type) {
+            case "fadin":
+                this.postProcess.vignetteWeight = 0;
+                this.postProcess.vignetteStretch = 50
+                this.postProcess.vignetteColor = new BABYLON.Color4(0, 0, 0, 0);
+                this.postProcess.vignetteEnabled = true;
+                break;
+            case "hit":
+                this.postProcess.vignetteWeight = 0;
+                this.postProcess.vignetteStretch = 2
+                this.postProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
+                this.postProcess.vignetteEnabled = true;
+                break;
+            default:
+                console.log("error try to setPostProcessTo(" + type + ")");
+        }
+    }
+
+    createVignetteHitAnimation(values: { frame: number, value: number }[], effect: string) {
+        var animationVignette = new Animation("animationVignette", effect, 60, Animation.ANIMATIONTYPE_FLOAT,
             Animation.ANIMATIONLOOPMODE_CYCLE);
 
-        var keys = [];
+        var keys: { frame: number; value: number; }[] = [];
 
-        keys.push({ frame: 0, value: 0 });
-        keys.push({ frame: 8, value: 3 });
-        keys.push({ frame: 10, value: 0 });
+        values.forEach(value => keys.push(value))
 
         animationVignette.setKeys(keys);
         return animationVignette
     }
 
-    triggerVignetteHit() {
+    triggerPostProcessAnimation(postProcessType: string, animations: AnimationGroup | undefined) {
         if (this.waterBluePostProcess !== undefined) return
-        if (this.hitVignetteAnimation !== undefined) {
-            this.switchPostProcessStatus(this.hitRedPostProcess, true)
-            this.hitVignetteAnimation.goToFrame(0)
-            this.hitVignetteAnimation.play(false)
-            this.hitVignetteAnimation.onAnimationGroupEndObservable.add(() => {
+        if (animations !== undefined) {
+            this.setPostProcessTo(postProcessType)
+            this.switchPostProcessStatus(this.postProcess, true)
+            animations.goToFrame(0)
+            animations.play(false)
+            animations.onAnimationGroupEndObservable.add(() => {
                 if (this && this.activeCamera !== undefined) {
-                    this.switchPostProcessStatus(this.hitRedPostProcess, false)
+                    this.switchPostProcessStatus(this.postProcess, false)
                 }
             })
         }
