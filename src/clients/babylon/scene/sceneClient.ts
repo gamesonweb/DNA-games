@@ -455,6 +455,20 @@ export class SceneClient extends SceneSoft {
         return { scale: scalingVector, rotation: rotationQuaternion };
     }
 
+    setPostProcessFilters() {
+        this.hitRedPostProcess = new ImageProcessingPostProcess("processing", 1.0, this.activeCamera);
+        this.hitRedPostProcess.vignetteWeight = 0;
+        this.hitRedPostProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
+        this.hitRedPostProcess.vignetteEnabled = true;
+
+        this.hitVignetteAnimation = new AnimationGroup("vignetteHitAnimGroup");
+        this.hitVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation(), this.hitRedPostProcess);
+
+        this.executeWhenReady(() => {
+            this.switchPostProcessStatus(this.hitRedPostProcess, false)
+        })
+    }
+
     createVignetteHitAnimation() {
         var animationVignette = new Animation("animationVignette", "vignetteWeight", 60, Animation.ANIMATIONTYPE_FLOAT,
             Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -471,23 +485,24 @@ export class SceneClient extends SceneSoft {
 
     triggerVignetteHit() {
         if (this.waterBluePostProcess !== undefined) return
-
-        this.hitRedPostProcess?.dispose()
-        this.hitVignetteAnimation?.dispose()
-
-        this.hitRedPostProcess = new ImageProcessingPostProcess("processing", 1.0, this.activeCamera);
-        this.hitRedPostProcess.vignetteWeight = 0;
-        this.hitRedPostProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
-        this.hitRedPostProcess.vignetteEnabled = true;
-
-        this.hitVignetteAnimation = new AnimationGroup("vignetteHitAnimGroup");
-        this.hitVignetteAnimation.addTargetedAnimation(this.createVignetteHitAnimation(), this.hitRedPostProcess);
-
-        this.hitVignetteAnimation.goToFrame(0)
-        this.hitVignetteAnimation.play(false)
-        this.hitVignetteAnimation.onAnimationGroupEndObservable.add(() => {
-            this.hitVignetteAnimation?.dispose()
-            this.hitRedPostProcess?.dispose()
-        })
+        if (this.hitVignetteAnimation !== undefined) {
+            this.switchPostProcessStatus(this.hitRedPostProcess, true)
+            this.hitVignetteAnimation.goToFrame(0)
+            this.hitVignetteAnimation.play(false)
+            this.hitVignetteAnimation.onAnimationGroupEndObservable.add(() => {
+                if (this && this.activeCamera !== undefined) {
+                    this.switchPostProcessStatus(this.hitRedPostProcess, false)
+                }
+            })
+        }
     }
+
+    switchPostProcessStatus(postProcess: ImageProcessingPostProcess | undefined, on: boolean) {
+        if (postProcess) {
+            if (on) this.switchPostProcessStatus(postProcess, false)
+            on ? this.activeCamera?.attachPostProcess(postProcess) : this.activeCamera?.detachPostProcess(postProcess)
+            postProcess.imageProcessingConfiguration.isEnabled = on;
+        }
+    }
+
 }

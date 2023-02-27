@@ -84,7 +84,7 @@ export function set_my_sphere() {
     cameraBuilder.rotationOffset = 180;
     // cameraBuilder.maxZ = 100;
     scene.activeCamera = cameraBuilder;
-
+    scene.setPostProcessFilters()
   }
 }
 
