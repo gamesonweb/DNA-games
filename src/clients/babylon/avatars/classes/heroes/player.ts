@@ -1,5 +1,5 @@
-import { Axis, Vector3 } from "babylonjs";
-import { scene, set_my_sphere } from "../../../main";
+import { Vector3 } from "babylonjs";
+import { scene } from "../../../main";
 import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
@@ -14,10 +14,6 @@ export abstract class Player extends Avatar {
 
         if (this.currentHealth <= 0) {
             this.update_status("Dying", false)
-            this.canMove = false
-            this.canHit = false
-            this.canHit = false
-            this.canRotate = false
             this.takeHits = false
             setTimeout(() => { if (this) this.respawn() }, 5000)
         }
@@ -25,16 +21,8 @@ export abstract class Player extends Avatar {
 
     respawn() {
         this.healthSet(this.maxHealth)
-        this.canMove = true
-        this.canHit = true
-        this.canHit = true
-        this.canRotate = true
         this.takeHits = true
         this.update_status("Idle", true, true)
-    }
-
-    rotatePlayer(axis: Vector3, amount: number) {
-        if (this.canRotate) this.shape.rotate(axis, amount)
     }
 
     // addBullet(displayOnly = false) {

@@ -119,13 +119,13 @@ export function pointerLockAndMouseMove() {
 
     //turret direction is responding to cursor movements
     canvas.addEventListener("mousemove", (evt) => {
-        if (sphere1) {
+        if (sphere1 && sphere1.getStatus() !== "Dying") {
             if (evt.movementX > 0) {
-                sphere1.rotatePlayer(Axis.Y, Math.sqrt(evt.movementX) / 200);
+                sphere1.shape.rotate(Axis.Y, Math.sqrt(evt.movementX) / 200);
                 sphere1.didSomething = true;
             }
             if (evt.movementX < 0) {
-                sphere1.rotatePlayer(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
+                sphere1.shape.rotate(Axis.Y, - Math.sqrt(-evt.movementX) / 200);
                 sphere1.didSomething = true;
             }
         }
@@ -156,6 +156,8 @@ export function pointerLockAndMouseMove() {
 
 export function inputEffects(player: Player) {
 
+    if (player.getStatus() === "Dying") return
+
     if (inputStates.goRight || inputStates.goLeft || inputStates.goBackward || inputStates.goForward || inputStates.rotateRight || inputStates.rotateLeft || inputStates.attack_0)
         player.didSomething = true;
 
@@ -183,9 +185,9 @@ export function inputEffects(player: Player) {
 
     //player rotation
     if (inputStates.rotateRight || inputStates.goRight) {
-        player.rotatePlayer(Axis.Y, +0.03)
+        player.shape.rotate(Axis.Y, +0.03)
     } else if (inputStates.rotateLeft || inputStates.goLeft) {
-        player.rotatePlayer(Axis.Y, -0.03)
+        player.shape.rotate(Axis.Y, -0.03)
     }
 
     //player's attack_0

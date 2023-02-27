@@ -19,7 +19,6 @@ export abstract class AvatarSoft extends MeshWithHealth {
   gravity_acceleration: number;
   canHit: boolean;
   canMove: boolean;
-  canRotate: boolean;
   takeHits: boolean;
   model: Mesh | undefined;
   readonly class: AVATAR_CLASSES;
@@ -52,7 +51,6 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     this.canHit = true;
     this.canMove = true;
-    this.canRotate = true;
     this.takeHits = true;
 
     this.status = "Idle"
