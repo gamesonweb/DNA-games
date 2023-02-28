@@ -144,6 +144,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       case "Running": this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
       case "Walking_fw": this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
       case "Walking_bw": this.speed_coeff = -this.intrinsicModelProperties.walkSpeed / 3; break;
+      case "Swimming": this.speed_coeff = this.intrinsicModelProperties.walkSpeed / 1.5; break;
     }
   }
 

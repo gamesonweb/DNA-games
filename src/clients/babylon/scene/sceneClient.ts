@@ -6,7 +6,6 @@ import { ModelEnum } from "../avatars/classes/models";
 import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
 import { Animation, AnimationGroup } from "babylonjs";
-import { IAnimationKey } from "babylonjs/Animations/animationKey";
 
 export var light: DirectionalLight;
 export var hemiLight: HemisphericLight;
@@ -27,12 +26,9 @@ export class SceneClient extends SceneSoft {
     water: Mesh;
     waterMaterial: WaterMaterial | undefined;
     waterBlurPostProcess: BlurPostProcess | undefined;
-    waterBluePostProcess: ImageProcessingPostProcess | undefined;
-    hitVignetteAnimation: AnimationGroup | undefined;
-    // hitRedPostProcess: ImageProcessingPostProcess | undefined;
-    fadinVignetteAnimation: AnimationGroup | undefined;
-    // fadinPostProcess: ImageProcessingPostProcess | undefined;
     postProcess: ImageProcessingPostProcess | undefined;
+    hitVignetteAnimation: AnimationGroup | undefined;
+    fadinVignetteAnimation: AnimationGroup | undefined;
     grassTaskCounter: number;
     treeTaskCounter: number;
     cactusTaskCounter: number;
@@ -67,31 +63,17 @@ export class SceneClient extends SceneSoft {
             if (sphere1) {
                 sphere1.isJumping ? sphere1.applyJump() : sphere1.applyGravity();
             }
-            if (scene.activeCamera) {
-                if (scene.activeCamera.position.y < water.position.y) {
+            if (scene.activeCamera && sphere1) {
+                if (sphere1.shape.position.y + 0.5 < water.position.y) {
                     if (this.waterBlurPostProcess === undefined) this.waterBlurPostProcess = new BlurPostProcess("Horizontal blur", new Vector2(1.0, 0), 64, 1.0, scene.activeCamera);
-
-                    if (this.waterBluePostProcess === undefined) {
-                        this.waterBluePostProcess = new ImageProcessingPostProcess("processing", 1.0, scene.activeCamera);
-                        this.waterBluePostProcess.vignetteWeight = 40;
-                        this.waterBluePostProcess.vignetteStretch = 1;
-                        this.waterBluePostProcess.vignetteColor = new BABYLON.Color4(0, 0, 1, 0);
-                        this.waterBluePostProcess.vignetteEnabled = true;
-                        console.log("testt")
-                    } else {
-                        this.waterBluePostProcess.vignetteEnabled = true;
-                    }
+                    sphere1.underwater(true)
 
                 } else {
                     if (this.waterBlurPostProcess !== undefined) {
                         this.waterBlurPostProcess.dispose();
                         this.waterBlurPostProcess = undefined;
                     }
-                    if (this.waterBluePostProcess !== undefined) {
-                        this.waterBluePostProcess.vignetteEnabled = false;
-                        this.waterBluePostProcess.dispose();
-                        this.waterBluePostProcess = undefined;
-                    }
+                    sphere1.underwater(false)
                 }
             }
         }
@@ -489,6 +471,11 @@ export class SceneClient extends SceneSoft {
                 this.postProcess.vignetteColor = new BABYLON.Color4(255 / 255, 0, 0, 0);
                 this.postProcess.vignetteEnabled = true;
                 break;
+            case "underwater":
+                this.postProcess.vignetteWeight = 40;
+                this.postProcess.vignetteStretch = 1;
+                this.postProcess.vignetteColor = new BABYLON.Color4(0, 0, 1, 0);
+                this.postProcess.vignetteEnabled = true;
             default:
                 console.log("error try to setPostProcessTo(" + type + ")");
         }
@@ -507,7 +494,6 @@ export class SceneClient extends SceneSoft {
     }
 
     triggerPostProcessAnimation(postProcessType: string, animations: AnimationGroup | undefined) {
-        if (this.waterBluePostProcess !== undefined) return
         if (animations !== undefined) {
             this.setPostProcessTo(postProcessType)
             this.switchPostProcessStatus(this.postProcess, true)

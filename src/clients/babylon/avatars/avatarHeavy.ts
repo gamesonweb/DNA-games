@@ -62,12 +62,13 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   hit(hitModeId: ATTACK_TYPE, onlyDisplay = false) {
-    if (!this.attackIsReady(hitModeId)) return
+    if (!this.attackIsReady(hitModeId)) return false
     this.attackDict[hitModeId](onlyDisplay)
+    return true
   }
 
   attackIsReady(id: ATTACK_TYPE) {
-    if (this.canHit && !this.isInAir() && (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.intrinsicModelProperties.attackSpeed[id] < Date.now())) {
+    if (this.canHit && !this.isInAir() && this.getStatus() !== "Swimming" && (!this.tableAttackDate[id] || this.tableAttackDate[id] + this.intrinsicModelProperties.attackSpeed[id] < Date.now())) {
       this.tableAttackDate[id] = Date.now()
       return true
     }
@@ -140,7 +141,7 @@ export abstract class Avatar extends AvatarSoft {
   }
 
   update_status(new_status: CharacterStatus, loopAnim = true, force = false) {
-    if (!force && this.status === "Dying") return
+    if (!force && (this.status === "Dying" || this.status === "Swimming")) return
     if (new_status !== this.status) {
       var animation_indice = this.get_status_indice(this.status)
       if (animation_indice !== -1) {

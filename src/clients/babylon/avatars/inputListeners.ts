@@ -193,7 +193,7 @@ export function inputEffects(player: Player) {
     //player's attack_0
     if (inputStates.attack_0) {
         // player fires the correspondng hit (not onlyDisplay)
-        player.hit("ATTACK_0")
+        if (!player.hit("ATTACK_0")) return
         // we send it so server
         wsClient.send(
             JSON.stringify({
@@ -209,7 +209,7 @@ export function inputEffects(player: Player) {
     //player's attack_1
     if (inputStates.attack_1) {
         // player fires the correspondng hit (not onlyDisplay)
-        player.hit("ATTACK_1")
+        if (!player.hit("ATTACK_1")) return
         // we send it so server
         wsClient.send(
             JSON.stringify({
@@ -224,7 +224,7 @@ export function inputEffects(player: Player) {
 
     //jump
     if (inputStates.jump) {
-        if (player.canJump && player.getStatus() !== "Punching") {
+        if (player.canJump && player.getStatus() !== "Punching" && player.getStatus() !== "Swimming") {
             player.isJumping = true;
             player.update_status("Jumping")
             player.canJump = false
