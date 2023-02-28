@@ -35,7 +35,7 @@ export class Ranger extends Player {
 
                 wsClient.monster_list.forEach(monster => {
                     if (isInHitzone(monster.shape, hitzone)) {
-                        monster.take_damage(this.shape.position, 10);
+                        monster.take_damage(this.shape.position, 30);
                         //set bounding box color to green if it hits something
                         bboxGizmo.setColor(new Color3(0, 1, 0))
                     }

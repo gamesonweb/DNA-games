@@ -77,6 +77,20 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
         avatar_update_from_server(messageContent, this.monster_list, 100, true);
     }
 
+    kill_monster(messageReceived: any) {
+        let monster_to_kill = this.monster_list.get(messageReceived.content);
+        this.monster_list.delete(messageReceived.content);
+        if (monster_to_kill) {
+            monster_to_kill.healthSet(0)
+            monster_to_kill.update_status("Dying", false, true)
+            monster_to_kill.takeHits = false
+            setTimeout(() => {
+                if (monster_to_kill !== undefined) monster_to_kill.dispose();
+            }, 4000)
+        }
+
+    }
+
     kill_all_night_monster(messageReceived: any) {
         for (const value of wsClient.monster_list.values()) {
             value.dispose();

@@ -35,6 +35,7 @@ export class Monster extends Avatar {
         }
     }
 
+
     //The monster hit in front of him. The hit is represented by a hitbox (an invisible mesh), which damage the player if they interesect
     attack_0(onlyDisplay = false) {
         //DAMAGE (DELAYED: GIVE PLAYER TIME TO REACT + SYNC WITH AI POSITION - MUST BE >= 100)
