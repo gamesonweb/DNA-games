@@ -39,7 +39,7 @@ interface recordAttackAnimation {
   animations?: Record<CharacterStatus, number>,
 }
 
-export type intrinsicModelPropertiesOptional = Required<intrinsicModelPropertiesOptional1> & Required<recordAttackAnimation>
+export type intrinsicModelPropertiesOptional = Readonly<Required<intrinsicModelPropertiesOptional1> & Required<recordAttackAnimation>>
 
 export interface intrinsicModelProperties extends intrinsicModelPropertiesOptional { }
 
@@ -178,4 +178,4 @@ Object.keys(intrinsicProperties1).forEach(element => {
   }
 })
 
-export const intrinsicProperties = intrinsicProperties1 as Record<ALL_CLASSES, intrinsicModelPropertiesOptional>
+export const intrinsicProperties = intrinsicProperties1 as Readonly<Record<ALL_CLASSES, intrinsicModelPropertiesOptional>>
