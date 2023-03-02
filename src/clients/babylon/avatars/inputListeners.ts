@@ -224,7 +224,7 @@ export function inputEffects(player: Player) {
 
     //jump
     if (inputStates.jump) {
-        if (player.canJump && player.getStatus() !== "Punching" && player.getStatus() !== "Swimming") {
+        if (player.canJump && player.getStatus() !== "Punching" && player.getStatus() !== "Swimming" && !player.isInAir()) {
             player.isJumping = true;
             player.update_status("Jumping")
             player.canJump = false
@@ -232,9 +232,6 @@ export function inputEffects(player: Player) {
                 player.isJumping = false
                 if (player.getStatus() === "Jumping") player.update_status("Falling")
             }, player.timeJumping)
-            // setTimeout(() => {
-            //   this.canJump = true
-            // }, this.timeJumping)
         }
     }
 }
