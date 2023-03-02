@@ -230,7 +230,10 @@ export function inputEffects(player: Player) {
             player.canJump = false
             setTimeout(() => {
                 player.isJumping = false
-                if (player.getStatus() === "Jumping") player.update_status("Falling")
+                if (player.getStatus() === "Jumping") {
+                    player.update_status("Falling")
+                    player.updateLastGround()
+                }
             }, player.timeJumping)
         }
     }

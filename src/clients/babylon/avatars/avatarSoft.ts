@@ -2,7 +2,7 @@ import { Mesh, Ray, Scene, Vector3 } from "babylonjs";
 import { SceneSoft } from "../scene/sceneSoft";
 import { MeshWithHealth } from "./meshWithHealth";
 import { AVATAR_CLASSES } from "./classes/classesTypes";
-import { renderTimeRatio } from "../main";
+import { renderTimeRatio, sphere1 } from "../main";
 import { CharacterStatus } from "./classes/intrinsicProp";
 import { intrinsicModelPropertiesD } from "./classes/models";
 
@@ -25,6 +25,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
   offset_dir_y: number;
   protected status: CharacterStatus;
   falling_counter: number;
+  lastTouchGroundTime: number;
+  lastTouchGroundHeight: number;
 
   // constructor(scene: Scene, avatar_username: string, p: intrinsicModelProperties) {
   constructor(scene: Scene, avatar_username: string, shape: Mesh, p: intrinsicModelPropertiesD) {
@@ -56,6 +58,8 @@ export abstract class AvatarSoft extends MeshWithHealth {
     this.status = "Idle"
 
     this.falling_counter = 20;
+    this.lastTouchGroundTime = Date.now()
+    this.lastTouchGroundHeight = this.shape.position.y
   }
 
   dispose(): void {
@@ -63,40 +67,38 @@ export abstract class AvatarSoft extends MeshWithHealth {
   }
 
   applyGravity(scale = 1) {
-    // mesh.moveWithCollisions(new Vector3(0, -0.5, 0))
     var hits = this.shape.getScene().multiPickWithRay(this.ray, (m) => { return m.isPickable });
-
     var filtered = hits?.filter(e => (e.pickedMesh?.name !== this.shape?.name) && (e.pickedMesh?.name !== this.shape.getChildMeshes()[0].name))
 
-    // console.log("filtered: ", filtered);
-    // console.log("filtered: ");
-
-    //if object detected but to high
     if (filtered !== undefined && filtered.length > 0) {
-      var hit = filtered[0]
-      if (hit !== null && hit.pickedPoint && this.shape.position.y > hit.pickedPoint.y + 1.2) {
-        this.shape.position.y += this.gravity_acceleration + SceneSoft.gravityIntensity * (scale - 1);
-      } else {
-        if (this.status === "Falling") {
-          this.falling_counter = 20
-          this.update_status("Idle")
+      //var hit = filtered[0]
+      if (this.status === "Falling") {
+        this.falling_counter = 20
+        this.update_status("Idle")
+        if (sphere1 && this.name === sphere1.name) {
+          let heightFall = this.lastTouchGroundHeight - this.shape.position.y
+          let durationInS = (Date.now() - this.lastTouchGroundTime) / 1000
+          //console.log("heightfall, duration: " + heightFall + ", " + durationInS);
+          if (heightFall > 16 && heightFall / durationInS > 16) sphere1.take_damage(sphere1.shape.position, heightFall / 2, 0)
         }
-        this.gravity_acceleration = SceneSoft.gravityIntensity;
-        this.canJump = true;
       }
+      this.gravity_acceleration = SceneSoft.gravityIntensity;
+      this.canJump = true;
+
       //else above the void
     } else {
       this.falling_counter--
-      if (this.falling_counter <= 0 && this.getStatus() !== "TakingHit") this.update_status("Falling")
+      if (this.falling_counter <= 0 && this.getStatus() !== "TakingHit" && this.getStatus() !== "Falling") {
+        this.updateLastGround()
+        this.update_status("Falling")
+      }
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
-      // this.position.y += this.gravity_acceleration * 2;
       this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
     }
   }
 
   applyJump() {
     var hits = this.shape.getScene().multiPickWithRay(this.jumpRay, (m) => { return m.isPickable });
-
     var filtered = (hits?.filter(e => (this?.shape !== undefined) && e.pickedMesh?.name !== this?.shape.name))
 
     if (filtered !== undefined && filtered.length > 0) {
@@ -111,6 +113,12 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
   setRayPosition() {
     this.ray.origin = this.shape.position
+  }
+
+  updateLastGround() {
+    this.lastTouchGroundTime = Date.now()
+    this.lastTouchGroundHeight = this.shape.position.y
+    //console.log("update last touch ground");
   }
 
   knockback(direction: Vector3, power: number, cumulate = false) {
