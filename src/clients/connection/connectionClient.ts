@@ -105,13 +105,8 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     damage_player(messageReceived: any): void {
-        console.log("entering damage_player function in connectionClient");
         let messageContent = JSON.parse(messageReceived.content)
-        console.log("target: " + messageContent + ", this: " + sphere1?.name);
-
         if (sphere1 && messageContent.username === sphere1.name) {
-            console.log("player to dmg is current player");
-
             sphere1.take_damage(sphere1.shape.position, messageContent.amount, 0)
         }
     }
@@ -268,7 +263,7 @@ export function avatar_update_from_server(data: receiveContent, list: Map<String
 
         //update the avatar animation and state to the data received
         if (typeof data.status !== 'undefined') {
-            avatar_to_update.update_status(data.status)
+            avatar_to_update.update_status(data.status, true, true)
         }
     }
 

@@ -143,6 +143,7 @@ export abstract class Avatar extends AvatarSoft {
   update_status(new_status: CharacterStatus, loopAnim = true, force = false) {
     if (!force && (this.status === "Dying" || this.status === "Swimming")) return
     if (new_status !== this.status) {
+      if (new_status === "Dying") loopAnim = false
       var animation_indice = this.get_status_indice(this.status)
       if (animation_indice !== -1) {
         this.modelContainer.animationGroups[animation_indice].stop()

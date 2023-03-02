@@ -1,7 +1,7 @@
 import { Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
-import { scene } from "../../../main";
+import { scene, sphere1 } from "../../../main";
 import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
@@ -27,10 +27,12 @@ export abstract class Player extends Avatar {
     healthSet(newHealth: number | undefined): number {
         let hs = super.healthSet(newHealth)
         if (this.currentHealth <= 0) {
-            this.update_status("Dying", false, true)
             this.takeHits = false
-            setTimeout(() => { if (scene) scene.triggerPostProcessAnimation("fadin", scene.fadinVignetteAnimation) }, 3000)
-            setTimeout(() => { if (this) this.respawn() }, 8000)
+            if (this === sphere1) {
+                this.update_status("Dying", false, true)
+                setTimeout(() => { if (scene) scene.triggerPostProcessAnimation("fadin", scene.fadinVignetteAnimation) }, 3000)
+                setTimeout(() => { if (this) this.respawn() }, 8000)
+            }
         }
         return hs
     }
