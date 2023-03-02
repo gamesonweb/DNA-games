@@ -72,7 +72,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
 
     if (filtered !== undefined && filtered.length > 0) {
       //var hit = filtered[0]
-      if (this.status === "Falling") {
+      if (this.status === "Falling" || this.status === "Gliding") {
         this.falling_counter = 20
         this.update_status("Idle")
         if (sphere1 && this.name === sphere1.name) {
@@ -88,12 +88,12 @@ export abstract class AvatarSoft extends MeshWithHealth {
       //else above the void
     } else {
       this.falling_counter--
-      if (this.falling_counter <= 0 && this.getStatus() !== "TakingHit" && this.getStatus() !== "Falling") {
+      if (this.falling_counter <= 0 && this.getStatus() !== "TakingHit" && this.getStatus() !== "Falling" && this.getStatus() !== "Gliding") {
         this.updateLastGround()
         this.update_status("Falling")
       }
       this.shape.moveWithCollisions(new Vector3(0, this.gravity_acceleration * scale * renderTimeRatio, 0));
-      this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
+      if (this.getStatus() !== "Gliding") this.gravity_acceleration -= 0.009 * scale * renderTimeRatio;
     }
   }
 
@@ -153,6 +153,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
       case "Walking_fw": this.speed_coeff = this.intrinsicModelProperties.walkSpeed; break;
       case "Walking_bw": this.speed_coeff = -this.intrinsicModelProperties.walkSpeed / 3; break;
       case "Swimming": this.speed_coeff = this.intrinsicModelProperties.walkSpeed / 1.5; break;
+      case "Gliding": this.speed_coeff = this.intrinsicModelProperties.runningSpeed; break;
     }
   }
 
@@ -161,7 +162,7 @@ export abstract class AvatarSoft extends MeshWithHealth {
   }
 
   isInAir() {
-    return this.getStatus() === "Falling" || this.getStatus() === "Jumping"
+    return this.getStatus() === "Falling" || this.getStatus() === "Jumping" || this.getStatus() === "Gliding"
   }
 
   isMoving() {

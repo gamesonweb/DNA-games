@@ -22,6 +22,10 @@ export var startRenderLoop = function (engine: Engine) {
     //console.log("state: " + sphere1?.getStatus());
   }, 2000)
 
+  setInterval(() => {
+    console.log("state: " + sphere1?.getStatus());
+  }, 200)
+
   engine.runRenderLoop(function () {
     if (scene && scene.activeCamera) {
       scene.render();

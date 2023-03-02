@@ -2,6 +2,7 @@ import { Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
+import { SceneSoft } from "../../../scene/sceneSoft";
 import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
@@ -55,6 +56,20 @@ export abstract class Player extends Avatar {
         } else {
             this.oxygen = 1000
             if (this.getStatus() === "Swimming") this.update_status("Idle", true, true)
+        }
+    }
+
+    switchGlide() {
+        if (this.getStatus() !== "Falling" && this.getStatus() !== "Gliding") return
+        if (this.getStatus() !== "Gliding") {
+            //USE RAYCAST TO CHECK IF GROUND IS FAR ENOUGH
+            this.update_status("Gliding")
+            this.updateLastGround()
+            //SPAWN GLIDER AND ANIMATE PLAYER
+            this.gravity_acceleration = SceneSoft.gravityIntensity
+        } else {
+            this.updateLastGround()
+            this.update_status("Falling")
         }
     }
 }

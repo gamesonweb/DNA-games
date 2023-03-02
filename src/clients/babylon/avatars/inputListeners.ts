@@ -68,6 +68,7 @@ function keyListener(evt: KeyboardEvent, isPressed: boolean) {
     // jump
     if (evt.code === "Space") {
         inputStates.jump = isPressed;
+        if (isPressed && sphere1 && sphere1.isInAir()) sphere1.switchGlide()
     }
     // movements
     else if (evt.code === "KeyW") {
