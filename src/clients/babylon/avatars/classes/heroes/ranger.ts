@@ -14,6 +14,7 @@ export class Ranger extends Player {
 
     attack_0(onlyDisplay = false) {
         console.log("mage ", this.name, " casts normal attack");
+        if (onlyDisplay) return
 
         setTimeout(() => {
             if (this) {

@@ -10,8 +10,10 @@ export abstract class Player extends Avatar {
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
         if (!this.takeHits) return
         this.healthMinus(amount);
-        let direction = this.shape.position.subtract(source)
-        this.knockback(direction.normalize(), knockback_power / this.weightCategory)
+        if (knockback_power) {
+            let direction = this.shape.position.subtract(source)
+            this.knockback(direction.normalize(), knockback_power / this.weightCategory)
+        }
 
         scene.triggerPostProcessAnimation("hit", scene.hitVignetteAnimation)
     }

@@ -107,7 +107,9 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     damage_player(messageReceived: any): void {
         let messageContent = JSON.parse(messageReceived.content)
         if (sphere1 && messageContent.username === sphere1.name) {
-            sphere1.take_damage(sphere1.shape.position, messageContent.amount, 0)
+            console.log("you take damage because other player hit you with " + messageContent.damage + "dmg");
+
+            sphere1.take_damage(sphere1.shape.position, messageContent.damage, 0)
         }
     }
 
