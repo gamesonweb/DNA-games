@@ -16,6 +16,7 @@ export const serverMessages = {
     KILL_ALL_NIGHT_MONSTER: "kill_all_night_monster",
     MOVE_MONSTER: "move_monster",
     DAMAGE_MONSTER: "damage_monster",
+    DAMAGE_PLAYER: "damage_player",
     HOUR: "hour",
     SPAWN_MONSTER: "spawn_monster",
     MONSTER_HIT: "monster_hit",
@@ -152,6 +153,11 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
                     break;
                 }
 
+                case serverMessages.DAMAGE_PLAYER: {
+                    this.damage_player(messageReceived)
+                    break;
+                }
+
                 //default: the route received does not exist. Should not happen, look for debugging!
                 default: throw new Error("Error : this functionality is to be implemented")
             }
@@ -216,6 +222,10 @@ export abstract class ConnectionSoft<T extends AvatarSoft, S extends AvatarSoft,
 
     abstract move_monster(messageReceived: any): void;
     abstract damage_monster(messageReceived: any): void;
+
+    damage_player(messageReceived: any) {
+        return
+    }
 
     /**
      * route fireBullet: fireBullet with sender's avatar if the ender is not ourselves

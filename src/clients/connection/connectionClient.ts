@@ -4,7 +4,7 @@ import { Avatar } from "../babylon/avatars/avatarHeavy";
 import { PLAYER_CLASSES_TYPE } from "../babylon/avatars/classes/classesTypes";
 import { Player } from "../babylon/avatars/classes/heroes/player";
 import { Monster } from "../babylon/avatars/classes/monsters/monster";
-import { initFunction, scene, setScene, set_my_sphere } from "../babylon/main";
+import { initFunction, scene, setScene, set_my_sphere, sphere1 } from "../babylon/main";
 import { updateHour } from "../babylon/others/time";
 import { getTimeToString, isVector3Equal, makeId, playerClassCreator } from "../babylon/others/tools";
 import { SceneClient } from "../babylon/scene/sceneClient";
@@ -102,6 +102,18 @@ export class ConnectionClient extends ConnectionSoft<Player, Monster, SceneClien
     }
 
     damage_monster(messageReceived: any): void {
+    }
+
+    damage_player(messageReceived: any): void {
+        console.log("entering damage_player function in connectionClient");
+        let messageContent = JSON.parse(messageReceived.content)
+        console.log("target: " + messageContent + ", this: " + sphere1?.name);
+
+        if (sphere1 && messageContent.username === sphere1.name) {
+            console.log("player to dmg is current player");
+
+            sphere1.take_damage(sphere1.shape.position, messageContent.amount, 0)
+        }
     }
 
     knockback_monster(messageReceived: any): void {

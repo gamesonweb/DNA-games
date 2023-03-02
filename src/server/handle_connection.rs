@@ -181,6 +181,10 @@ pub async fn handle_connection(
                                 }
                             }
                         }
+                        "damage_player" => {
+                            shared_messages.lock().unwrap().push(msg.clone());
+                            println!("!!!!!!!!! received damage_player route")
+                        }
                         "move_monster" => {
                             let move_data: MoveMonsterData =
                                 serde_json::from_str(json["content"].as_str().unwrap()).unwrap();

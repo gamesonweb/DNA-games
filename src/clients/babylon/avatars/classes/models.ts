@@ -179,7 +179,7 @@ export class ModelEnum {
 
     static createAllModels(scene: SceneClient) {
         var allModels = [
-            this.Mage, this.Warrior, this.Ranger,
+            this.Ranger, //this.Mage, this.Warrior, 
             // this.Assassin, this.Archer, this.Healer, 
             this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus
         ];

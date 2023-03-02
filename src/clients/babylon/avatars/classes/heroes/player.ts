@@ -1,4 +1,6 @@
 import { Vector3 } from "babylonjs";
+import { wsClient } from "../../../../connection/connectionClient";
+import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene } from "../../../main";
 import { Avatar } from "../../avatarHeavy";
 
@@ -12,6 +14,14 @@ export abstract class Player extends Avatar {
         this.knockback(direction.normalize(), knockback_power / this.weightCategory)
 
         scene.triggerPostProcessAnimation("hit", scene.hitVignetteAnimation)
+    }
+
+    send_this_take_damage(amount: number) {
+        wsClient.send(
+            JSON.stringify({
+                route: serverMessages.DAMAGE_PLAYER,
+                content: JSON.stringify({ username: this.name, damage: amount })
+            }))
     }
 
     healthSet(newHealth: number | undefined): number {
