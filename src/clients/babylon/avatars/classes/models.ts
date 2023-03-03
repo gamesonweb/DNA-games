@@ -27,6 +27,7 @@ export class ModelEnum {
     static Grass = new ModelEnum(intrinsicProperties.Grass);
     static PineTree = new ModelEnum(intrinsicProperties.PineTree);
     static Cactus = new ModelEnum(intrinsicProperties.Cactus)
+    static Glider = new ModelEnum(intrinsicProperties.Glider)
 
     static Ranger = new ModelEnum(intrinsicProperties.Ranger);
     static NightMonster = new ModelEnum(intrinsicProperties.NightMonster)
@@ -154,6 +155,14 @@ export class ModelEnum {
                     animations[0].stop();
                     break;
 
+                case "Glider":
+                    this.rootMesh.scaling = new Vector3(0.025, 0.025, 0.025)
+                    meshes.forEach(m => {
+                        m.isPickable = false;
+                        m.checkCollisions = false;
+                    });
+                    break;
+
                 case "Warrior":
                     meshes.forEach(m => {
                         m.isPickable = false;
@@ -181,7 +190,7 @@ export class ModelEnum {
         var allModels = [
             this.Ranger, //this.Mage, this.Warrior, 
             // this.Assassin, this.Archer, this.Healer, 
-            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus
+            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus, this.Glider
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));

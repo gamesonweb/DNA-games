@@ -1,9 +1,10 @@
-import { Ray, Vector3 } from "babylonjs";
+import { Mesh, Ray, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
 import { SceneSoft } from "../../../scene/sceneSoft";
 import { Avatar } from "../../avatarHeavy";
+import { ModelEnum } from "../models";
 
 export abstract class Player extends Avatar {
     oxygen = 1000;
@@ -16,7 +17,6 @@ export abstract class Player extends Avatar {
             let direction = this.shape.position.subtract(source)
             this.knockback(direction.normalize(), knockback_power / this.weightCategory)
         }
-
         scene.triggerPostProcessAnimation("hit", scene.hitVignetteAnimation)
     }
 
@@ -81,6 +81,24 @@ export abstract class Player extends Avatar {
             this.gravity_acceleration = SceneSoft.gravityIntensity * 3
 
             //SPAWN GLIDER AND ANIMATE PLAYER
+
+            // let gliderModel = ModelEnum.Glider.rootMesh as Mesh;
+            // console.log(gliderModel);
+            // let childs = gliderModel.getChildMeshes() as Mesh[];
+            // console.log(childs);
+            // let mergedmodel = Mesh.MergeMeshes(childs) as Mesh;
+
+            let modelContainer = ModelEnum.Glider.intrinsicParameterMesh.duplicateModel();
+            let rootModel = modelContainer.rootNodes[0] as Mesh
+            console.log(rootModel);
+
+            let gliderInstance = rootModel.createInstance("glider_" + this.name)
+            gliderInstance.position = this.shape.position.add(new Vector3(0, 2, 0))
+            gliderInstance.computeWorldMatrix(true);
+            gliderInstance.isPickable = false
+            gliderInstance.checkCollisions = false
+            //this.shape.addChild(gliderInstance)
+            console.log("you: ", this.shape.position, ", glider: ", gliderInstance.position);
 
         } else {
             this.updateLastGround()
