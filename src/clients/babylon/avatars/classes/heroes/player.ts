@@ -1,4 +1,4 @@
-import { Mesh, Ray, Vector3 } from "babylonjs";
+import { Axis, Mesh, Ray, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
@@ -95,7 +95,9 @@ export abstract class Player extends Avatar {
             let gliderInstance = mergedmodel.createInstance("glider_" + this.name)
             gliderInstance.isPickable = false
             gliderInstance.checkCollisions = false
-            gliderInstance.position = this.shape.position.add(new Vector3(0, 1.5, 0))
+            gliderInstance.setDirection(this.shape.getDirection(Axis.Z))
+            gliderInstance.position = this.shape.position.add(new Vector3(0, 1.5, 0)).subtract(this.shape.getDirection(Axis.Z).normalize().scale(0.5))
+            // gliderInstance.position = this.shape.position.subtract(this.shape.getDirection(Axis.Y).normalize().scale(0.5))
             gliderInstance.computeWorldMatrix(true);
             this.shape.addChild(gliderInstance)
             console.log("you: ", this.shape.position, ", glider: ", gliderInstance.position);
