@@ -1,4 +1,4 @@
-import { Vector3 } from "babylonjs";
+import { Ray, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
@@ -7,6 +7,7 @@ import { Avatar } from "../../avatarHeavy";
 
 export abstract class Player extends Avatar {
     oxygen = 1000;
+    gliderRay = new Ray(this.shape.position, new Vector3(0, -1, 0), 6);
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
         if (!this.takeHits) return
@@ -62,11 +63,18 @@ export abstract class Player extends Avatar {
     switchGlide() {
         if (this.getStatus() !== "Falling" && this.getStatus() !== "Gliding") return
         if (this.getStatus() !== "Gliding") {
-            //USE RAYCAST TO CHECK IF GROUND IS FAR ENOUGH
+            //USE RAYCAST TO CHECK IF GROUND IS FAR ENOUGH.
+            var hits = this.shape.getScene().multiPickWithRay(this.gliderRay, (m) => { return m.isPickable });
+            var filtered = hits?.filter(e => (e.pickedMesh?.name !== this.shape?.name) && (e.pickedMesh?.name !== this.shape.getChildMeshes()[0].name))
+            if (filtered !== undefined && filtered.length > 0) { return }
+
+            //UPDATE STATUS AND UPDATE LASTGROUND POINT FOR FALL DAMAGE
             this.update_status("Gliding")
             this.updateLastGround()
+            this.gravity_acceleration = SceneSoft.gravityIntensity * 3
+
             //SPAWN GLIDER AND ANIMATE PLAYER
-            this.gravity_acceleration = SceneSoft.gravityIntensity
+
         } else {
             this.updateLastGround()
             this.update_status("Falling")
