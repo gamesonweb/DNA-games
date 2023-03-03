@@ -156,6 +156,7 @@ export class ModelEnum {
                     break;
 
                 case "Glider":
+                    this.rootMesh.rotate(Axis.Y, Math.PI);
                     this.rootMesh.scaling = new Vector3(0.025, 0.025, 0.025)
                     meshes.forEach(m => {
                         m.isPickable = false;

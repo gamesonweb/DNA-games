@@ -82,22 +82,22 @@ export abstract class Player extends Avatar {
 
             //SPAWN GLIDER AND ANIMATE PLAYER
 
-            // let gliderModel = ModelEnum.Glider.rootMesh as Mesh;
-            // console.log(gliderModel);
-            // let childs = gliderModel.getChildMeshes() as Mesh[];
-            // console.log(childs);
-            // let mergedmodel = Mesh.MergeMeshes(childs) as Mesh;
+            let gliderModel = ModelEnum.Glider.rootMesh?.clone() as Mesh;
+            console.log(gliderModel);
+            let childs = gliderModel.getChildMeshes() as Mesh[];
+            console.log(childs);
+            let mergedmodel = Mesh.MergeMeshes(childs) as Mesh;
 
-            let modelContainer = ModelEnum.Glider.intrinsicParameterMesh.duplicateModel();
-            let rootModel = modelContainer.rootNodes[0] as Mesh
-            console.log(rootModel);
+            // let modelContainer = ModelEnum.Glider.intrinsicParameterMesh.duplicateModel();
+            // let rootModel = modelContainer.rootNodes[0] as Mesh
+            // console.log(rootModel);
 
-            let gliderInstance = rootModel.createInstance("glider_" + this.name)
-            gliderInstance.position = this.shape.position.add(new Vector3(0, 2, 0))
-            gliderInstance.computeWorldMatrix(true);
+            let gliderInstance = mergedmodel.createInstance("glider_" + this.name)
             gliderInstance.isPickable = false
             gliderInstance.checkCollisions = false
-            //this.shape.addChild(gliderInstance)
+            gliderInstance.position = this.shape.position.add(new Vector3(0, 1.5, 0))
+            gliderInstance.computeWorldMatrix(true);
+            this.shape.addChild(gliderInstance)
             console.log("you: ", this.shape.position, ", glider: ", gliderInstance.position);
 
         } else {
