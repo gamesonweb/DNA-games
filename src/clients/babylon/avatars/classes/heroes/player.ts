@@ -70,6 +70,13 @@ export abstract class Player extends Avatar {
 
             //UPDATE STATUS AND UPDATE LASTGROUND POINT FOR FALL DAMAGE
             this.update_status("Gliding")
+            this.shape.onCollide = function (mesh) {
+                console.log("collide while gliding");
+                if (sphere1) {
+                    if (sphere1.getStatus() !== "Gliding") sphere1.shape.onCollide = function (mesh) { return }
+                    else sphere1.switchGlide()
+                }
+            }
             this.updateLastGround()
             this.gravity_acceleration = SceneSoft.gravityIntensity * 3
 
@@ -77,6 +84,7 @@ export abstract class Player extends Avatar {
 
         } else {
             this.updateLastGround()
+            this.shape.onCollide = function (mesh) { return }
             this.update_status("Falling")
         }
     }
