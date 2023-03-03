@@ -122,6 +122,13 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     scaling: 0.4
   },
 
+  Glider: {
+    fileExtension: "glb",
+    health: 50,
+    walkSpeed: 2,
+    scaling: 1
+  },
+
   Ranger: {
     fileExtension: "glb",
     healthYAbove: 2,
@@ -129,10 +136,10 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     health: 90,
     walkSpeed: 0.15,
     animations: {
-      Walking_bw: 9, Walking_fw: 8, Running: 6,
-      Falling: 1, Idle: 3, Jumping: 1, Punching: 5,
-      Swimming: 7, Dying: 0, TakingHit: 2,
-      Gliding: 1,
+      Walking_bw: 10, Walking_fw: 9, Running: 7,
+      Falling: 1, Idle: 4, Jumping: 1, Punching: 6,
+      Swimming: 8, Dying: 0, TakingHit: 2,
+      Gliding: 3,
     },
     scaling: 1
   },
