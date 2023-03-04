@@ -1,14 +1,14 @@
-import { Axis, Mesh, Ray, Vector3 } from "babylonjs";
+import { Ray, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { serverMessages } from "../../../../connection/connectionSoft";
 import { scene, sphere1 } from "../../../main";
-import { SceneSoft } from "../../../scene/sceneSoft";
 import { Avatar } from "../../avatarHeavy";
-import { ModelEnum } from "../models";
+import { Glider } from "../../tools/glider";
+import { CharacterStatus } from "../intrinsicProp";
 
 export abstract class Player extends Avatar {
     oxygen = 1000;
-    gliderRay = new Ray(this.shape.position, new Vector3(0, -1, 0), 6);
+    glider: Glider | undefined = new Glider(this)
 
     take_damage(source: Vector3, amount: number, knockback_power = 1) {
         if (!this.takeHits) return
@@ -60,52 +60,18 @@ export abstract class Player extends Avatar {
         }
     }
 
-    switchGlide() {
-        if (this.getStatus() !== "Falling" && this.getStatus() !== "Gliding") return
-        if (this.getStatus() !== "Gliding") {
-            //USE RAYCAST TO CHECK IF GROUND IS FAR ENOUGH.
-            var hits = this.shape.getScene().multiPickWithRay(this.gliderRay, (m) => { return m.isPickable });
-            var filtered = hits?.filter(e => (e.pickedMesh?.name !== this.shape?.name) && (e.pickedMesh?.name !== this.shape.getChildMeshes()[0].name))
-            if (filtered !== undefined && filtered.length > 0) { return }
-
-            //UPDATE STATUS AND UPDATE LASTGROUND POINT FOR FALL DAMAGE
-            this.update_status("Gliding")
-            this.shape.onCollide = function (mesh) {
-                console.log("collide while gliding");
-                if (sphere1) {
-                    if (sphere1.getStatus() !== "Gliding") sphere1.shape.onCollide = function (mesh) { return }
-                    else sphere1.switchGlide()
-                }
-            }
-            this.updateLastGround()
-            this.gravity_acceleration = SceneSoft.gravityIntensity * 3
-
-            //SPAWN GLIDER AND ANIMATE PLAYER
-
-            let gliderModel = ModelEnum.Glider.rootMesh?.clone() as Mesh;
-            console.log(gliderModel);
-            let childs = gliderModel.getChildMeshes() as Mesh[];
-            console.log(childs);
-            let mergedmodel = Mesh.MergeMeshes(childs) as Mesh;
-
-            // let modelContainer = ModelEnum.Glider.intrinsicParameterMesh.duplicateModel();
-            // let rootModel = modelContainer.rootNodes[0] as Mesh
-            // console.log(rootModel);
-
-            let gliderInstance = mergedmodel.createInstance("glider_" + this.name)
-            gliderInstance.isPickable = false
-            gliderInstance.checkCollisions = false
-            gliderInstance.setDirection(this.shape.getDirection(Axis.Z))
-            gliderInstance.position = this.shape.position.add(new Vector3(0, 1.5, 0)).subtract(this.shape.getDirection(Axis.Z).normalize().scale(0.5))
-            // gliderInstance.position = this.shape.position.subtract(this.shape.getDirection(Axis.Y).normalize().scale(0.5))
-            gliderInstance.computeWorldMatrix(true);
-            this.shape.addChild(gliderInstance)
-            console.log("you: ", this.shape.position, ", glider: ", gliderInstance.position);
-
-        } else {
-            this.updateLastGround()
-            this.shape.onCollide = function (mesh) { return }
-            this.update_status("Falling")
+    update_status(new_status: CharacterStatus, loopAnim?: boolean, force?: boolean): void {
+        let currStatus = this.getStatus()
+        if (currStatus === new_status) return
+        if (this.glider) {
+            if (currStatus === "Gliding") this.glider.deployGlider(false)
+            else if (new_status === "Gliding") this.glider.deployGlider(true)
         }
+        super.update_status(new_status, loopAnim, force)
+    }
+
+    switchGlide() {
+        if (!this.glider) return
+        this.glider.switchGlide()
     }
 }
