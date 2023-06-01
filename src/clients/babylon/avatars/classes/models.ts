@@ -32,6 +32,8 @@ export class ModelEnum {
     static Ranger = new ModelEnum(intrinsicProperties.Ranger);
     static NightMonster = new ModelEnum(intrinsicProperties.NightMonster)
 
+    static Plant = new ModelEnum(intrinsicProperties.Plant)
+
     rootMesh: Mesh | undefined
     private container: AssetContainer = new AssetContainer();
 
@@ -76,6 +78,7 @@ export class ModelEnum {
 
                     //Merging of all twig of grass in an unique mesh
                     model = Mesh.MergeMeshes(meshes, false);
+                    model?.setAbsolutePosition(new Vector3(0, -100, -100))
                     if (model) {
                         this.rootMesh = model;
                         scene.setUpForGrass();
@@ -110,6 +113,10 @@ export class ModelEnum {
                         m.checkCollisions = false;
                     });
                     animations[0].stop();
+                    break;
+
+                case "Plant":
+
                     break;
 
                 case "Campfire":
@@ -189,9 +196,10 @@ export class ModelEnum {
 
     static createAllModels(scene: SceneClient) {
         var allModels = [
-            this.Ranger, //this.Mage, this.Warrior, 
-            // this.Assassin, this.Archer, this.Healer, 
-            this.PumpkinMonster, this.NightMonster, this.Grass, this.Campfire, this.PineTree, this.Cactus, this.Glider
+            this.Ranger,
+            //this.Mage, this.Warrior, this.Campfire, 
+            // this.Assassin, this.Archer, this.Healer, this.PumpkinMonster,  
+            this.NightMonster, this.Grass, this.PineTree, this.Cactus, this.Glider, this.Plant
         ];
         ModelEnum.addLoadingTask(allModels.length)
         allModels.forEach(m => m.createModel(scene));
@@ -208,9 +216,11 @@ export class ModelEnum {
             loadingRef.current!.updateContent()
 
             if (ModelEnum.remainingLoad === 0) {
-                wsClient.setEventListener()
-                sendLogin();
-                startRenderLoop(engine);
+                setTimeout(() => {
+                    wsClient.setEventListener()
+                    sendLogin();
+                    startRenderLoop(engine);
+                }, 5000);
             }
         }
     }

@@ -7,7 +7,7 @@ import { ConnectionSoft, knockbackContent, receiveContent, serverMessages } from
 
 export let ws: ConnectionServer;
 
-export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictive, SceneFictive>{
+export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictive, AvatarFictive, SceneFictive>{
   constructor(scene: SceneFictive, port: string) {
     super("ws://127.0.0.1:" + port, scene)
   }
@@ -60,7 +60,7 @@ export class ConnectionServer extends ConnectionSoft<AvatarFictive, AvatarFictiv
         content: ""
       }))
     }
-    if (hour === "22") {
+    if (hour === "22" || hour === "1" || hour === "4") {
       generate_zombie_wave()
     }
     // console.log(hour);

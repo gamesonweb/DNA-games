@@ -1,5 +1,5 @@
 import { InstantiatedEntries, Mesh, Scene, Vector3, } from "babylonjs";
-import { intrinsicModelPropertiesD, shadowGeneratorCampfire } from "./classes/models";
+import { intrinsicModelPropertiesD } from "./classes/models";
 import { createBasicShape, createLabel } from "../others/tools";
 import { shadowGenerator } from "../scene/sceneClient";
 import { AvatarSoft } from "./avatarSoft";
@@ -21,17 +21,22 @@ export abstract class Avatar extends AvatarSoft {
     this.modelContainer = p.duplicateModel();
     this.model = this.modelContainer.rootNodes[0] as Mesh
 
-    let plane = createLabel(this.name, this, scene, p);
-    plane.isPickable = false;
-    this.shape.addChild(plane)
+    if (!this.name.includes("plant")) {
+      let plane = createLabel(this.name, this, scene, p);
+      plane.isPickable = false;
+      this.shape.addChild(plane)
 
-    plane.position.y = p?.textYAbove || 1.3
+      plane.position.y = p?.textYAbove || 1.3
+
+      shadowGenerator?.addShadowCaster(this.model);
+
+    }
 
     this.shape.addChild(this.model);
-    shadowGenerator?.addShadowCaster(this.model);
     this.shape.isVisible = false;
 
-    shadowGeneratorCampfire.addShadowCaster(this.model);
+
+    //shadowGeneratorCampfire.addShadowCaster(this.model);
 
     //initialize date of last instance for each attack type
     this.tableAttackDate = { "ATTACK_0": 0, "ATTACK_1": 0, "ATTACK_2": 0, "ATTACK_3": 0 }

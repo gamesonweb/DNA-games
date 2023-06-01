@@ -3,7 +3,6 @@ import { SkyMaterial, WaterMaterial } from "babylonjs-materials";
 import { Projectile } from "../avatars/weapons/projectile";
 import { scene, sphere1 } from "../main";
 import { ModelEnum } from "../avatars/classes/models";
-import { createWall } from "../others/tools";
 import { SceneSoft } from "./sceneSoft";
 import { Animation, AnimationGroup } from "babylonjs";
 
@@ -41,7 +40,7 @@ export class SceneClient extends SceneSoft {
         this.water = this.createSea();
 
         this.shadowGenerator = this.createShadows();
-        this.shadowGenerator.addShadowCaster(createWall(this));
+        //this.shadowGenerator.addShadowCaster(createWall(this));
         shadowGenerator = this.shadowGenerator;
 
         this.fogMode = BABYLON.Scene.FOGMODE_EXP;
@@ -271,6 +270,8 @@ export class SceneClient extends SceneSoft {
 
             let c1m = Mesh.MergeMeshes([c1]);
             let c2m = Mesh.MergeMeshes([c2]);
+            c1m?.setAbsolutePosition(new Vector3(0, -100, -100))
+            c2m?.setAbsolutePosition(new Vector3(0, -100, -100))
 
             c1m?.simplify(
                 [
@@ -362,6 +363,7 @@ export class SceneClient extends SceneSoft {
             let childs = model.getChildMeshes() as Mesh[];
 
             let mergedmodel = Mesh.MergeMeshes(childs);
+            mergedmodel?.setAbsolutePosition(new Vector3(0, -100, -100))
 
             mergedmodel?.simplify(
                 [

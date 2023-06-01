@@ -1,8 +1,8 @@
-import { Axis, BoundingBoxGizmo, Color3, MeshBuilder, Scene } from "babylonjs";
-import { Vector3 } from "babylonjs/index";
+import { Axis, MeshBuilder, Scene, Vector3 } from "babylonjs";
 import { wsClient } from "../../../../connection/connectionClient";
 import { scene } from "../../../main";
-import { isInCone, distance, isInHitzone } from "../../../others/tools";
+import { isInHitzone } from "../../../others/tools";
+import { StoneProjectile } from "../../weapons/projectiles/stoneProjectile";
 import { ModelEnum } from "../models";
 import { Player } from "./player";
 
@@ -10,6 +10,7 @@ export class Ranger extends Player {
 
     constructor(scene: Scene, avatar_username: string) {
         super(scene, avatar_username, ModelEnum.Ranger.intrinsicParameterMesh)
+        this.spawn()
     }
 
     attack_0(onlyDisplay = false) {
@@ -27,26 +28,33 @@ export class Ranger extends Player {
                 hitzone.isVisible = false
 
                 //display hitzone bounding box
-                var bboxGizmo = new BoundingBoxGizmo()
+                /*var bboxGizmo = new BoundingBoxGizmo()
                 bboxGizmo.attachedMesh = hitzone
                 bboxGizmo.setColor(new Color3(1, 0, 0))
-                setTimeout(() => { bboxGizmo.dispose() }, 1000)
+                setTimeout(() => { bboxGizmo.dispose() }, 1000)*/
 
                 hitzone.computeWorldMatrix(true);
 
                 wsClient.monster_list.forEach(monster => {
                     if (isInHitzone(monster.shape, hitzone)) {
-                        monster.take_damage(this.shape.position, 30);
+                        monster.take_damage(this.shape.position, 20);
                         //set bounding box color to green if it hits a monster
-                        bboxGizmo.setColor(new Color3(0, 1, 0))
+                        //bboxGizmo.setColor(new Color3(0, 1, 0))
                     }
                 })
 
                 wsClient.player_list.forEach(player => {
                     if (player !== this && isInHitzone(player.shape, hitzone)) {
-                        player.send_this_take_damage(30);
+                        player.send_this_take_damage(20);
                         //set bounding box color to blue if it hits a player
-                        bboxGizmo.setColor(new Color3(0, 0, 1))
+                        //bboxGizmo.setColor(new Color3(0, 0, 1))
+                    }
+                })
+
+                wsClient.plant_list.forEach(plant => {
+                    if (isInHitzone(plant.shape, hitzone)) {
+                        this.healthAdd(10)
+                        plant.take_damage(this.shape.position, 20);
                     }
                 })
 
@@ -65,21 +73,20 @@ export class Ranger extends Player {
     }
 
     attack_1(onlyDisplay = false) {
-        //long cone infligeant un burst de degats et l'etat brulure, poussant les ennemis
-        console.log("mage ", this.name, " casts special attack");
+        //throw a stone
+        console.log("ranger  ", this.name, " casts special attack");
 
-        //ANIMATION (TODO)
+        //ANIMATION
+        this.canMove = false;
+        this.update_status("Throw")
+        setTimeout(() => {
+            this.canMove = true
+            this.update_status("Idle")
+        }, 2000)
 
         //DAMAGE
-        if (!onlyDisplay) {
-            wsClient.monster_list.forEach(monster => {
-                if (isInCone(monster.shape.position, this.shape.position, 10, this.shape.getDirection(Axis.Z), 1, Math.PI / 3)) {
-                    console.log("distance Mage-Monstre: ", distance(this.shape.position, monster.shape.position));
-                    monster.take_damage(this.shape.position, 10, (10 - distance(this.shape.position, monster.shape.position, true)) / 2);
-                    monster.triggerStatus("burn");
-                }
-            })
-        }
+        setTimeout(() => scene.projectileList.push(new StoneProjectile(this, onlyDisplay, {})), 1200)
+
     }
 
     take_damage(source: Vector3, amount: number, knockback_power?: number): void {

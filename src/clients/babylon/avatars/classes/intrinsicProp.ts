@@ -3,7 +3,8 @@ import { ALL_CLASSES } from "./classesTypes";
 let buildStatusDict = (p: { [x in CharacterStatus]?: number }) => {
   let statusDict: Record<CharacterStatus, number> = {
     Idle: -1, Dying: -1, Falling: -1, Jumping: -1, Punching: -1, Running: -1,
-    Walking_bw: -1, Walking_fw: -1, Swimming: -1, TakingHit: -1, Gliding: -1
+    Walking_bw: -1, Walking_fw: -1, Swimming: -1, TakingHit: -1, Gliding: -1,
+    Spawn: -1, Throw: -1
   }
   Object.keys(p).forEach(x => { statusDict[x as CharacterStatus] = p[x as CharacterStatus]! })
   return statusDict
@@ -16,7 +17,7 @@ let buildAttackSpeed = (p: { [x in ATTACK_TYPE]?: number }) => {
 }
 
 export type ATTACK_TYPE = "ATTACK_0" | "ATTACK_1" | "ATTACK_2" | "ATTACK_3"
-export type CharacterStatus = "Idle" | "Walking_fw" | "Walking_bw" | "Running" | "Punching" | "Swimming" | "Jumping" | "Falling" | "Dying" | "TakingHit" | "Gliding"
+export type CharacterStatus = "Idle" | "Walking_fw" | "Walking_bw" | "Running" | "Punching" | "Swimming" | "Jumping" | "Falling" | "Dying" | "TakingHit" | "Gliding" | "Spawn" | "Throw"
 
 interface intrinsicModelPropertiesOptional1 {
   height?: number;
@@ -133,10 +134,10 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     fileExtension: "glb",
     healthYAbove: 2,
     textYAbove: 2.3,
-    health: 90,
+    health: 60,
     walkSpeed: 0.15,
     animations: {
-      Walking_bw: 10, Walking_fw: 9, Running: 7,
+      Walking_bw: 11, Walking_fw: 10, Throw: 9, Running: 7,
       Falling: 1, Idle: 4, Jumping: 1, Punching: 6,
       Swimming: 8, Dying: 0, TakingHit: 2,
       Gliding: 3,
@@ -150,12 +151,23 @@ export const intrinsicProperties1: Record<ALL_CLASSES, intrinsicModelPropertiesO
     width: 2,
     healthYAbove: 2.8,
     textYAbove: 3.1,
-    health: 100,
+    health: 30,
     walkSpeed: 0.2,
     animations: {
       Running: 3, Falling: 1, Punching: 2, Dying: 0,
     },
     scaling: 1
+  },
+
+  Plant: {
+    fileExtension: "glb",
+    height: 2,
+    width: 1,
+    healthYAbove: 2.8,
+    textYAbove: 3.1,
+    health: 1,
+    walkSpeed: 0,
+    scaling: 3
   },
 
   // Rogue: {
