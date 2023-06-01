@@ -45,7 +45,9 @@ A third student, VENTURELLI Antoine, was originally included in the project and 
 
 # How to play the game
 
-First of all, you can launch the game simply by clicking [this link](https://dna-game-production.github.io/GamesOnWeb2023/). You will be asked to enter a name for your character and you're good to go !
+First of all, you can launch the game simply by clicking [this link](https://dna-game-production.github.io/GamesOnWeb2023/). You will be asked to enter a name for your character and you're good to go ! 
+
+<details>the game was tested on Google Chrome, where it works perfectly. There seem to be input issues with Firefox</details>
 
 Because of humanity's *greed* and *avidity*, the planet ran out of resources and society collapsed. Your are a survivor who took refuge on an archipelago and have nothing but your will and body to defend yourself. Your goal is to survive the hostile environment and, in particular, monsters that will spawn at night.
 
@@ -160,7 +162,7 @@ For the deployment, we chose to use Heroku for the server and Github Pages for t
 
 To be able to control our server's environment, we therefore used *Docker* to make a containerize the game. Once Dockerized, heberging the container is a lot easier and more controlled than trying to directly heberge our backend code. Using Docker also allowed us to only heberge the file needed.
 
-The process of building the frontend and the backend code, creating the docker container, pushing onto our repository, and updating the backend on Heroku was very long and tedious. In order to make our workflow easier and faster, and constantly update wrt our online version, we set up a continuous integration pipeline. In this way, a simple push on the game repository would automatically do all the tasks described above. This was a huge quality of life improvement for us and we'll be sure to incorporate it from the start in our future projects.
+The process of building the frontend and the backend code, creating the docker container, pushing onto our repository, and updating the backend on Heroku was very long and tedious. In order to make our workflow easier and faster, and constantly update with reference to our online version, we set up a continuous integration pipeline. In this way, a simple push on the game repository would automatically do all the tasks described above. This was a huge quality of life improvement for us and we'll be sure to incorporate it from the start in our future projects.
 
 
 ## Step 9 : Finalization
@@ -205,7 +207,7 @@ While the project is deployed on heroku and playable simply by clicking on [this
 - *cargo run* to launch the rust server.
 - *npm run client* to launch the javascript client
 
-> Note: To run the project, you will need to install cargo and nodejs to respectively execute the server (coded in rust) and the client (coded in javascript)
+> Note: To run the project locally, you will need to install cargo and nodejs to respectively execute the server (coded in rust) and the client (coded in javascript)
 
 # Used Libraries/Frameworks
 
